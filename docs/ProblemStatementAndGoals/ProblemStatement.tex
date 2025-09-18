@@ -1,5 +1,5 @@
 \documentclass{article}
-
+\usepackage{natbib}
 \usepackage{tabularx}
 \usepackage{booktabs}
 
@@ -22,7 +22,7 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
+September 17th, 2025 & Matthew & Added 1.1, 1.2 and References\\
 Date2 & Name(s) & Description of changes\\
 ... & ... & ...\\
 \bottomrule
@@ -31,19 +31,27 @@ Date2 & Name(s) & Description of changes\\
 
 \section{Problem Statement}
 
-\wss{You should check your problem statement with the
-\href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/ProbState-Checklist.pdf}
-{problem statement checklist}.} 
-
-\wss{You can change the section headings, as long as you include the required
-information.}
-
 \subsection{Problem}
+
+From the Global Burden of Diseases, Injuries and Risk Factors study performed in 2019, 
+individuals that would benefit from physical rehabilitation at least once in their 
+lifetime is upwards of 2.41 billion globally \citep{CiezaEtAl2021}.
+Furthermore, a study indicating the perception of access to physiotherapy based on 
+socio-demographic factors yielded that approximately 1 in 4 participants 
+felt they had limited access to physiotherapy as a results of cost, wait-times or 
+location \citep{BathEtAl2016}. Those with access to a physiotherapist experienced a 
+disconnect with performing a movement with proper time-under-tension (TUT) and 
+correct form \citep{FaberEtAl2015}. While a physiotherapist can advise these individuals
+during assessment and proceeding follow-up appointments, the efficacy of rehabilitation
+depends heavily on the individual. In turn, this creates a need for a tool that helps users 
+adjust exercise form unsupervised. This project aims to develop a tool that can 
+provides feedback and correction during physical rehabilitation exercise.
 
 \subsection{Inputs and Outputs}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
+\textbf{Inputs:} A recording of the user performing their physical rehabilitation exercise.\\
+\textbf{Outputs:} Feedback or corrections of the demonstrated movement, along with adjustments
+to the form as needed. 
 
 \subsection{Stakeholders}
 
@@ -85,5 +93,8 @@ over the course of the term.}
     they are suitable for a Capstone project (not overly ambitious but also of
     appropriate complexity for a senior design project)?
 \end{enumerate}  
+
+\bibliographystyle {plainnat}
+\bibliography{../../refs/References}
 
 \end{document}
