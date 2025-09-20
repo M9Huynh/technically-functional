@@ -22,8 +22,11 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
+September 16th, 2025 & Maham & Added preliminary stakeholder information\\
 September 17th, 2025 & Matthew & Added 1.1, 1.2 and References\\
 September 17th, 2025 & Vaisnavi & Added onto 1.2 and Reflection\\
+September 18th, 2025 & All members & TA meeting and feedback\\
+September 19th, 2025 & Maham & Edits \\
 ... & ... & ...\\
 \bottomrule
 \end{tabularx}
@@ -33,19 +36,16 @@ September 17th, 2025 & Vaisnavi & Added onto 1.2 and Reflection\\
 
 \subsection{Problem}
 
-From the Global Burden of Diseases, Injuries and Risk Factors study performed in 2019, 
+According to the Global Burden of Diseases, Injuries and Risk Factors study performed in 2019, 
 individuals that would benefit from physical rehabilitation at least once in their 
 lifetime is upwards of 2.41 billion globally \citep{CiezaEtAl2021}.
-Furthermore, a study indicating the perception of access to physiotherapy based on 
-socio-demographic factors yielded that approximately 1 in 4 participants 
-felt they had limited access to physiotherapy as a results of cost, wait-times or 
-location \citep{BathEtAl2016}. Those with access to a physiotherapist experienced a 
-disconnect with performing a movement with proper time-under-tension (TUT) and 
+Those with access to a physiotherapist experienced a 
+disconnect with performing a required movement with proper time-under-tension (TUT) and 
 correct form \citep{FaberEtAl2015}. While a physiotherapist can advise these individuals
-during assessment and proceeding follow-up appointments, the efficacy of rehabilitation
-depends heavily on the individual. In turn, this creates a need for a tool that helps users 
-adjust exercise form unsupervised. This project aims to develop a tool that can 
-provides feedback and correction during physical rehabilitation exercise.
+during their assessments and proceeding follow-up appointments, the efficacy of rehabilitation
+depends heavily on the individual's correct performance of the exercise. In turn, this creates a need for a tool that can ensure users 
+correctly perform the exercise without supervision. This project aims to develop a tool that can 
+provide feedback and corrections for the prescribed physical rehabilitation exercise.
 
 \subsection{Inputs and Outputs}
 
@@ -53,10 +53,25 @@ provides feedback and correction during physical rehabilitation exercise.
 \textbf{Outputs:} Feedback or corrections of the demonstrated movement, along with highlighting targeted adjustments to the form as needed. 
 
 \subsection{Stakeholders}
+  \subsubsection{Primary Stakeholders}
+    \textbf{End users/Patients:} \\
+      The main audience for this application will be users who have been undergoing physiotherapy treatment for their right leg, and have been given a home exercise plan which outlines \textbf(exercise 1). \\    
+     
+  \subsubsection{Secondary Stakeholders}
+    \textbf{Physiotherapists:} \\
+      The application can be used as an adjunct tool for physiotherapists, allowing them to evaluate the patient's performance and provide appropriate feedback. 
+      
+  \subsubsection{Tertiary Stakeholders}
+    \textbf{Regulatory authorities:}
+      They will be ensuring and assessing that the application is working properly and providing accurate feedback. \\
+     \textbf{Other healthcare providers:}
+       Specialists such as physiatrists and registered massage therapists may benefit from the information provided by the application about their patients. 
 
 \subsection{Environment}
-
-\wss{Hardware and Software Environment}
+  \subsubsection{Software}
+    The application will be built using a Python environment, with the use of OpenCV and MediaPipe. \\
+  \subsubsection{Hardware}
+    The application will run on an iOS device with a camera recording ability.
 
 \section{Goals}
 
@@ -80,34 +95,39 @@ over the course of the term.}
 
 \section*{Appendix --- Reflection}
 
-\wss{Not required for CAS 741}
+
 
 \input{../Reflection.tex}
 
 \begin{enumerate}
     \item What went well while writing this deliverable? 
 
-    In terms of what went well throughout writing this deliverable, we were able to define the problem 
-    clearly by looking at research on access to physiotherapy. Having two members who were more knowledgeable 
-    about the topic helped guide our discussions while also peaking our interests as well. At the same time, the 
-    rest of the team put in a fair amount of research, which allowed us to fully understand the problem and align 
-    on realistic goals. Moreover, splitting up each of the deliverable sections also made it easier to combine 
+    'We were able to define the problem clearly' the problem was defined clearly by looking at research on 'access to physiotherapy' unsupervised performance of physiotherapy exercises. Having 
+    two members that were more knowledgeable 
+    about the topic helped guide 'our' discussions 'while also piquing our interests as well'. At the same time, the 
+    rest of the team 'put in a fair amount of research' did additional research of the topic, which 'allowed us to fully understand' aided in understanding the problem and align 
+    on realistic ''scope and'' goals. Moreover, splitting up each of the deliverable sections also made it easier to combine 
     different perspectives.
 
     \item What pain points did you experience during this deliverable, and how
     did you resolve them?
 
-    One of the major pain points was that our orignal scope was too broad, as we were trying to cover the entire body. To 
-    make the project more manageable, we decided to narrow our focus to a specific area of the body and concentrate on
-    measurable aspects such as time-under-tension and form correction.
+    One of the major pain points was that 'our original scope was too broad, as we were trying to cover the entire body' the entire body was too broad of a scope. To 
+    make the project more manageable, 'we decided to narrow our focus to a specific area of the body and concentrate on
+    measurable aspects such as time-under-tension and form correction.  the scope was narrowed to a specific body part where measurements such as time-under-tension
 
     \item How did you and your team adjust the scope of your goals to ensure
     they are suitable for a Capstone project (not overly ambitious but also of
     appropriate complexity for a senior design project)?
 
-    To ensure our scope of goals remained realistic within the bounds of our timeline, we decided to focus on a specific area 
+    'To ensure our scope of goals remained realistic within the bounds of our timeline, we decided to focus on a specific area 
     of the body rather than the entire thing. We also decided to stick to a small set of exercises to ensure that the project
-    can be completed within our timeline.
+    can be completed within our timeline.'
+    
+    As mentioned above, the focus was shifted to a singular body part as opposed the full body. This project involves the integration 
+    of multiple technologies related to computer vision into a functional application, which is a complex endeavour. 
+    
+    The goals listed above will become more specific and concrete over time as the project development progresses. 
 \end{enumerate}  
 
 \bibliographystyle {plainnat}
