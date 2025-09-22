@@ -140,9 +140,33 @@ for deadlines.}
 
 \section{Proof of Concept Demonstration Plan}
 
-What is the main risk, or risks, for the success of your project?  What will you
-demonstrate during your proof of concept demonstration to convince yourself that
-you will be able to overcome this risk?
+The application will follow the steps below (high-level):
+\begin{enumerate}
+  \item A user will record them performing a physio exercise (decide on body part?)
+  \item Determine if the exercise is “good” form or “bad” form based on requirements from the stakeholders
+  \item From the analysis, the application will provide guidance to improve the efficacy of the exercise
+\end{enumerate}
+
+
+Some potential risks from this process flow are:
+\begin{itemize}
+  \item Variations in how different users will record each video.
+  \begin{itemize}
+    \item Having a guide overlay to indicate where they should film the exercise from.
+  \end{itemize}  
+  \item Inaccuracies with depth or monitoring a 3D motion on a 2D plane
+  \begin{itemize}
+    \item Prompting the user to also perform the exercise from another angle and then analyzing two different recordings.
+  \end{itemize}
+  \item Hardware limitations - as the application would be easiest to use on a phone due to the camera already being on there, it may have limitations when processing the footage.
+  \begin{itemize}
+    \item Using a lightweight solution to process the recording to reduce lag.
+  \end{itemize}
+  \item Accuracy in the footage may be different in a non-controlled environment and lead to inaccurate assessment of the exercise. 
+  \begin{itemize}
+    \item A demonstration can consist of seeing if we are able to obtain the same feedback in different light levels/clothing to see if it will affect our input data.
+  \end{itemize} 
+\end{itemize}
 
 \section{Expected Technology}
 
