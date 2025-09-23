@@ -75,7 +75,15 @@ to chair meetings throughout the duration of the project.
 
 \section{Team Communication Plan}
 
-\wss{Issues on GitHub should be part of your communication plan.}
+Our team communication plan will be as follows:
+\begin{itemize}
+  \item Issues: GitHub/GitHub Projects
+  \item Weekly Meetings: In-person on campus
+  \item Meetings outside the weekly meetings: Teams
+  \item Meeting minutes: GitHub
+  \item Meetings with stakeholders: Zoom
+  \item Project discussion (asynchronous): Teams
+\end{itemize}
 
 
 \section{Team Member Roles}
@@ -152,9 +160,33 @@ for deadlines.}
 
 \section{Proof of Concept Demonstration Plan}
 
-What is the main risk, or risks, for the success of your project?  What will you
-demonstrate during your proof of concept demonstration to convince yourself that
-you will be able to overcome this risk?
+The application will follow the steps below (high-level):
+\begin{enumerate}
+  \item A user will record them performing a physio exercise (decide on body part?)
+  \item Determine if the exercise is “good” form or “bad” form based on requirements from the stakeholders
+  \item From the analysis, the application will provide guidance to improve the efficacy of the exercise
+\end{enumerate}
+
+
+Some potential risks from this process flow are:
+\begin{itemize}
+  \item Variations in how different users will record each video.
+  \begin{itemize}
+    \item Having a guide overlay to indicate where they should film the exercise from.
+  \end{itemize}  
+  \item Inaccuracies with depth or monitoring a 3D motion on a 2D plane
+  \begin{itemize}
+    \item Prompting the user to also perform the exercise from another angle and then analyzing two different recordings.
+  \end{itemize}
+  \item Hardware limitations - as the application would be easiest to use on a phone due to the camera already being on there, it may have limitations when processing the footage.
+  \begin{itemize}
+    \item Using a lightweight solution to process the recording to reduce lag.
+  \end{itemize}
+  \item Accuracy in the footage may be different in a non-controlled environment and lead to inaccurate assessment of the exercise. 
+  \begin{itemize}
+    \item A demonstration can consist of seeing if we are able to obtain the same feedback in different light levels/clothing to see if it will affect our input data.
+  \end{itemize} 
+\end{itemize}
 
 \section{Expected Technology}
 
@@ -216,6 +248,15 @@ The main advantage of CI/CD is a smoother integration of code while reducing the
 As for group disagreements, I do not think we had any. All members carefully listened to any input from their teammates and implemented any changes that were deemed to be beneficial. We were professional and respectful of each other’s opinions and gave equal importance to everyone’s feedback. \\
 
 
+\textbf{Matthew}\\
+I think it is important to create a development plan prior to starting the project because it helps our team navigate conflict down the line. Not everyone works the same and so this development plan acts as a formal document to communicate with the team and find common ground for everyone to perform well on. Furthermore, it is a form of having an awkward conversation now compared to down the line when this work wasn't done and there is no basis to critique a member's performance. 
+
+An advantage of CI/CD is the reduced manual effort to test and evaluate code. If there is a problem with one of our documents that we upload or a file that is incorrect, we can have the tests evaluate it and be flagged for issues with it. A downside of CI/CD is the overhead or the amount of time that it takes to set up. For a shorter project it will take a bit longer to set up and thus less time is put towards coding the features at the cost of automating the building and testing.
+
+The group did not have any disagreements during this deliverable. Everyone was able to communicate to each other and each meeting went with a plan and left with actionable items to complete. As the term gets busier and there are more deliverables for other classes I think that the team charter below will help guide us for the rest of the project.
+
+
+
 \newpage{}
 
 \section*{Appendix --- Team Charter}
@@ -226,37 +267,55 @@ As for group disagreements, I do not think we had any. All members carefully lis
 
 \subsection*{External Goals}
 
-\wss{What are your team's external goals for this project? These are not the
-goals related to the functionality or quality fo the project.  These are the
-goals on what the team wishes to achieve with the project.  Potential goals are
-to win a prize at the Capstone EXPO, or to have something to talk about in
-interviews, or to get an A+, etc.}
+Our group's primary goal is to create a project that we are proud to have our names
+on, can be talked about in interviews and to peers. It is important for us to build 
+a solution to our problem statement while also adhering to code quality such as 
+readability and documentation. Through this, we seek to develop our technical skills 
+through tackling a real world problem. Additionally, we are also aiming for above-average 
+grades as a secondary goal. 
 
 \subsection*{Attendance}
 
 \subsubsection*{Expectations}
 
-\wss{What are your team's expectations regarding meeting attendance (being on
-time, leaving early, missing meetings, etc.)?}
+Our team expects full attendance to meetings scheduled in advance for the entire duration 
+of the meeting. If a member cannot attend a meeting or is going to miss a portion of the meeting, 
+they must communicate it in advance to the team and catch-up on the missed portion of the meeting 
+(i.e. meeting minutes). Missing 3 meetings in a row when a deliverable is not the main point of 
+discussion will trigger a meeting with the rest of the team. Moreover, if a deliverable is the 
+main topic, 2 missed meetings will be the limit. These standards are for non-emergency situations. 
+For emergencies, see below. 
 
 \subsubsection*{Acceptable Excuse}
 
-\wss{What constitutes an acceptable excuse for missing a meeting or a deadline?
-What types of excuses will not be considered acceptable?}
+Acceptable excuses include: Academic sessions (classes, tutorials), academic requirements (due-dates
+prior to the capstone deliverable) and medical appointments. An advance notice for medical 
+appointments will be appreciated. It is the responsibility of the missing member to make up for a 
+missed meeting. Repeated excuses will not be acceptable; please refer to attendance expectations. 
+Please see below for emergency cases.
 
 \subsubsection*{In Case of Emergency}
 
-\wss{What process will team members follow if they have an emergency and cannot
-attend a team meeting or complete their individual work promised for a team
-deliverable?}
+In the event of an emergency case, the team member should contact the team. Extended cases of 
+emergency (more than 2 weeks or time taken off that impedes deliverables) should be brought to 
+the attention of the teaching staff to ensure the work load is manageable for the rest of the team.
 
 \subsection*{Accountability and Teamwork}
 
 \subsubsection*{Quality} 
 
-\wss{What are your team's expectations regarding the quality
-of team members' preparation for team meetings and the quality of the
-deliverables that members bring to the team?}
+In order to maintain consistent quality for deliverables, each weekly meeting will briefly go over 
+deliverable expectations. Each deliverable should be checked against the rubric [on avenue] and also 
+against the repository checklist by the individual that wrote that deliverable but also by a teammate. 
+
+
+Furthermore, for meetings, team members are expected to arrive, review relevant material and provide 
+any problems or status updates with their work to ensure the meeting stays on-topic and productive.
+
+Lastly, during weekly meetings we will discuss “what went well, what to change” to see if there is a 
+way to streamline communication to attain this quality. We also encourage each team member to ask for 
+help in our informal chat in a timely manner while being respectful of each person's time.
+
 
 \subsubsection*{Attitude}
 
@@ -287,7 +346,19 @@ The team will engage in social activities together if schedules allow. Team buil
 
 \subsubsection*{Decision Making} 
 
-\wss{How will you make decisions in your group? Consensus?  Vote? How will you
-handle disagreements? }
+When making a decision on the team, we will lean towards a unanimous vote. We 
+want each member of the team to feel their feedback is heard to improve the project 
+communication. In cases where this is not the case, we will hold a vote. Since there 
+are 5 members, no one can abstain that way a solution can be achieved. 
+
+
+Each member is allowed to voice their opinion to the team without interruption so 
+everyone is heard and we can reach an objective solution (without personal feelings 
+swaying the decision). 
+
+
+In the event that voting cannot be held properly, we will select a neutral mediator to 
+guide us further.
+
 
 \end{document}
