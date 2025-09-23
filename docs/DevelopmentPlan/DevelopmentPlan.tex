@@ -128,33 +128,130 @@ Github Wiki Manager & All & NA \\
 
 \section{Workflow Plan}
 
-We will primarily be using GitHub for managing the project files. \\
+\begin{itemize}
+	\item How will you be using git, including branches, pull request, etc.?
+
+  We will primarily be using GitHub for managing the project files. \\
 Each team member has their individual branches on which they will engage with. 
 The member should open a pull request after completion of their assigned task. If 
 multiple members are collaborating on the same task, they will use either member's branch. Once completed, 
 a pull request can be opened which will be reviewed by the other team members. \\
 
 Issues that focus on a single aspect of the project may be opened and will combine
-all relevant items. Sub-issues can be used if additional refinement is needed.
+all relevant items. Sub-issues can be used if additional refinement is needed. \\
+
+\textbf{Overall Workflow Plan}
+\begin{enumerate}
+ \item Issue Creation: For each deliverable, an issue will be opened to divide the respective sections and keep track of assigned tasks.
+ As mentioned above, sub-issues will be used if additional refinement or breakdown of work is needed.
+ \item Branching: Each team member will create a dedicated branch for themselves to work on their respective tasks. If multiple members
+ collaborate on the same task, they will work within either member’s branch to avoid merge conflicts.
+ \item Checklist: As each member is working through their respective sections, they will keep track of the checklist in our repository.
+ Once a specific task is complete, the member will check off the associated item.
+ \item Commit Process: All changes will be regularly committed to the respective branches.
+ \item Pull Requests (PRs): Once any issues have been resolved, a pull request on GitHub will be created. Changes must be reviewed for
+ any merge conflicts before merging to the main branch.
+ \item Team member review: Another team member will review the PR against the rubric and provide feedback through comments. The author
+ of the section should respond or implement any feedback provided by the member who reviewed the submission.
+ \item Merging: Once the PR has been reviewed, approved, and confirmed that all of the rubric criteria has been met, it will successfully
+ be merged into the main branch.
+\end{enumerate}
 
 
-\begin{itemize}
-	\item How will you be using git, including branches, pull request, etc.?
-	\item How will you be managing issues, including template issues, issue
-	classification, etc.?
-  \item Use of CI/CD
-\end{itemize}
+
+
+ \item How will you be managing issues, including template issues, issue
+ classification, etc.?
+
+
+\textbf{Issue management:}
+We will be using GitHub Issues to keep track of the following items: tasks, meetings, attendance, etc. GitHub Issues will be used as a project log (i.e. attendance, meeting minutes or code review) as well as a tracker (i.e. deliverables, bugs, enhancements).
+
+
+There are template issues readily available from our professor, as shown below, and we will be using these throughout our capstone. \\
+
+
+\textbf{Issue Templates Available:}
+Lectures: Used to track team details during lectures (i.e. important notes, attendance)
+Peer Review: Individuals outside of the team review one of our items
+Supervisor Meeting: Agenda template for meetings with supervisors/stakeholders
+TA Meeting: Agenda template for meetings with TA
+Team Meeting: Agenda template for weekly meetings with our team
+Blank Issue: Blank template to be used to create a new issue \\
+
+
+\textbf{Issue Labels Classification:}
+
+
+There are a set of labels in GitHub Issues that we can use when creating issues to organize them accordingly. Some of the labels we may use can be seen below with a description of when they may be used:
+Bug: Used for issues that indicate unexpected behaviour and require correction.
+Lecture: Used for lecture-related tasks/issues.
+TA Meeting: Used for issues that include meeting notes, feedback and actions from TA sessions.
+Team Meeting: Used for issues where team meeting discussions are noted.
+Supervisor Meeting: Used for issues related to the project supervisor, including follow-ups from discussions.
+Documentation/Deliverable: Used for issues corresponding to any work related sections of the deliverables.
+
+
+ \item Use of CI/CD
+
+
+ We will be using GitHub Actions as our CI/CD platform to ensure that all of our documentation and project files are being built,
+formatted, and reviewed properly before they are merged into the main branch of the project. Workflows which are defined in the
+YAML files will essentially trigger the workflows to run automatically on pushes and pull requests. Each run compiles the LaTeX
+document, checks formatting and structure, and lastly, also compiles a PDF with the latest changes. To ensure consistency across
+all files, merges require both teammate approval and passing CI checks. This forces errors to be caught early and also reinforces
+us as a team to follow industry-standard practices. Implementing these practices throughout the entire project will aid in
+achieving a consistent, polished and coherent final product and documentation.
+
+
+ \end{itemize}
+
 
 \section{Project Decomposition and Scheduling}
 
+
 \begin{itemize}
-  \item How will you be using GitHub projects?
-  \item Include a link to your GitHub project
+ \item How will you be using GitHub projects? \\
+Our team will be using GitHub Projects to keep track of and manage our tasks and deliverables. The board will be following a
+Kanban style where all issues will be presented by cards on the board and they will be moved across the board across various
+columns. The columns listed across the board will be as follows: Backlog $\rightarrow$ Ready $\rightarrow$ In Progress $\rightarrow$
+In Review $\rightarrow$ Done. There will
+also be custom fields set that you will see across the board which will be listed as: Milestone (M1 to M6), Type (task, meeting,
+bug, doc), Priority (High/Medium/Low), Assignee/Team Member, Deadline. All in all, each card will be linked to specific issues,
+milestones as well as fields to ensure we stay on track with the overall Capstone Schedule. \\
+
+
+Our big picture schedule follows the timeline and deadlines listed in the course outline. The deliverables outlined in the course
+outline have been grouped into six milestones (M1 to M6) for organizational purposes. These milestones align with major phases of the
+course and we have grouped them together based on similar timelines and tasks. The milestones mentioned above represent the
+following deliverables, listed below:
+
+
+ \begin{itemize}
+   \item M1 (Weeks 3 to 4): Problem Statement, Proof of Concept (POC) Plan, Development Plan, Team Charter
+   \item M2 (Weeks 5 to 6): Requirements Document (SRS) Revision 0, Hazard Analysis Revision 0, Design Document Revision -1
+   \item M3 (Week 7): Verification \& Validation (V\&V) Plan Revision 0
+   \item M4 (Weeks 8 to 9): Integrated Draft Document (Problem Statement, SRS, Hazard Analysis, V\&V Plan), Peer Reviews (whole document), Update draft with feedback
+   \item M5 (Weeks 10 to 12): Proof of Concept Demonstration (document + results), Design Document Revision 0, V\&V Report Revision 0, Refinement of SRS, Hazard Analysis, and V\&V Plan based on results and feedback
+   \item M6 (End of Term): Final Demonstration - Revision 1, EXPO Demonstration, Final Documentation Revision 1 (including Problem Statement, Development Plan, POC Plan, Requirements Document, Hazard Analysis, Design Document, V\&V Plan, V\&V Report, Extra Documentation 1, Extra Documentation 2 and Source Code)
+ \end{itemize}
+
+
+
+
+ \item Include a link to your GitHub project
+
+
+ \textbf{GitHub Project Link:} \url{https://github.com/users/M9Huynh/projects/2/views/1}
+
+
 \end{itemize}
+
 
 \wss{How will the project be scheduled?  This is the big picture schedule, not
 details. You will need to reproduce information that is in the course outline
 for deadlines.}
+
 
 \section{Proof of Concept Demonstration Plan}
 
@@ -241,8 +338,16 @@ I think it is important to create a development plan prior to starting the proje
 
 An advantage of CI/CD is the reduced manual effort to test and evaluate code. If there is a problem with one of our documents that we upload or a file that is incorrect, we can have the tests evaluate it and be flagged for issues with it. A downside of CI/CD is the overhead or the amount of time that it takes to set up. For a shorter project it will take a bit longer to set up and thus less time is put towards coding the features at the cost of automating the building and testing.
 
-The group did not have any disagreements during this deliverable. Everyone was able to communicate to each other and each meeting went with a plan and left with actionable items to complete. As the term gets busier and there are more deliverables for other classes I think that the team charter below will help guide us for the rest of the project.\\
+The group did not have any disagreements during this deliverable. Everyone was able to communicate to each other and each meeting went with a plan and left with actionable items to complete. As the term gets busier and there are more deliverables for other classes I think that the team charter below will help guide us for the rest of the project. \\
 
+\noindent \textbf{Vaisnavi} \\
+Creating a development plan before starting the project is extremely important as it allows us to map out all of our ideas and thoughts. As someone who is a visual learner, I have to see all the tasks written out before I start anything. Writing out a plan has always been something that aided me in successfully completing any task. Ultimately having a plan helps as it allows you to take a step back and see the entire picture and be able to map out every little thing in order to reach the final product.
+
+
+One of the main advantages of CI/CD is the fact that it is able to provide us with quick feedback. It directs our attention to a merge conflict from a PR right away, which allows us to eliminate that error immediately without it breaking our main branch. On the other hand, one of the main disadvantages is that although it does catch errors, sometimes there could be false positives in terms of if there is a simple formatting issue but the actual syntax and document is perfectly fine. This ultimately will harm us in terms of efficiency as it will hinder our progress if we are trying to find a bug that does not exist.
+
+
+No disagreements took place within this deliverable, everyone on the team was able to voice their concerns. All team members have been respectful and have been taking in the feedback and applying it. With that being said, we have had some suggestions come into play, specifically with our respective branches. We started off by having branches for each document we were working on, but we decided that it would be easier to keep track of each member having just one branch for their version of the document and from their multiple PR’s could be reviewed and approved. We discussed this during a team meeting and quickly came to this resolution, which showcases how key of a role communication plays in a team setting.
 
 \textbf{Cieran}\\
 The development plan sets the expectation for not only team members in their roles and responsibilities but also for the direction of the project as a whole. Creating the development plan prior to starting the project gives everyone a good idea, hopefully, of how to approach any foreseeable situation. I think it also makes everyone think of the project in advance and gets some of the team ‘storming’ out of the way early on.
