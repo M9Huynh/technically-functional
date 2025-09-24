@@ -31,7 +31,7 @@ September 22nd, 2025 & All & Added First Draft \\
 
 \newpage{}
 
-
+\section{Introduction}
 This document contains details pertaining to the proposed development plan by the team.
 Sections 1 - 3 contain legal and regulation information, sections 4 - 6 contain team dynamics related information and 
 section 7-10 contain timeline and technology logistics. The team charter is also included within this document. \\
@@ -85,26 +85,27 @@ Our team communication plan will be as follows:
 
 \section{Team Member Roles}
 
-See Table 2: Member Roles for team assignments.
+\textit{See Table 2: Member Roles for team assignments} \\
+\begin{flushleft}
+  \textbf{Editor}: This member will read through all deliverables throughout development and a final read-through before submission. They will be responsible for any
+  text alterations to ensure conciseness and effective communication within documents/code.
+ 
+  \textbf{Liaison}: This member will be responsible for communicating with all external parties and relaying their comments back to the team.
 
-\textbf{Editor}: This member will read through all deliverables throughout development and a final read-through before submission. They will be responsible for any
-text alterations to ensure conciseness and effective communication within documents/code.
+  \textbf{Researcher}: They will conduct initial research before the team commences a task and convey their findings to the rest of the team.
 
-\textbf{Liaison}: This member will be responsible for communicating with all external parties and relaying their comments back to the team.
+  \textbf{Task Manager}: They will decide how to allocate the workload between the members.
 
-\textbf{Researcher}: They will conduct initial research before the team commences a task and convey their findings to the rest of the team.
+  \textbf{Github Manager}: They will ensure that all proposed rules pertaining to the use of Github are followed and that information provided on the platform is complete and precise.
 
-\textbf{Task Manager}: They will decide how to allocate the workload between the members.
+  \textbf{Back-end developer}: They will be developing and ensuring that the backend is functional and up to code standards.
 
-\textbf{Github Manager}: They will ensure that all proposed rules pertaining to the use of Github are followed and that information provided on the platform is complete and precise.
+  \textbf{Front-end developer}: They will be responsible for development of a user friendly interface.
 
-\textbf{Back-end developer}: They will be developing and ensuring that the backend is functional and up to code standards.
+  \textbf{Comment Reviewer}: This member will review code and verify the presence of and clarity of comments. Maham will be reviewing the final version.
 
-\textbf{Front-end developer}: They will be responsible for development of a user friendly interface.
-
-\textbf{Comment Reviewer}: This member will review code and verify the presence of and clarity of comments. Maham will be reviewing the final version.
-
-\textbf{Github Wiki Manager}: This member is responsible for verifying the appropriateness of all content on the Github Wiki.
+  \textbf{Github Wiki Manager}: This member is responsible for verifying the appropriateness of all content on the Github Wiki.
+\end{flushleft}
 
 \begin{table}[H]
 \caption{Member Roles} \label{Proposed Assignments}
@@ -130,16 +131,13 @@ Github Wiki Manager & All & NA \\
 \section{Workflow Plan}
 
 \begin{itemize}
-	\item How will you be using git, including branches, pull request, etc.?
-
-  We will primarily be using GitHub for managing the project files. \\
+	\item \textbf{Git usage} :We will primarily be using GitHub for managing the project files.
 Each team member has their individual branches on which they will engage with. 
 The member should open a pull request after completion of their assigned task. If 
 multiple members are collaborating on the same task, they will use either member's branch. Once completed, 
-a pull request can be opened which will be reviewed by the other team members. \\
-
+a pull request can be opened which will be reviewed by the other team members. 
 Issues that focus on a single aspect of the project may be opened and will combine
-all relevant items. Sub-issues can be used if additional refinement is needed. \\
+all relevant items. Sub-issues can be used if additional refinement is needed. 
 
 \textbf{Overall Workflow Plan}
 \begin{enumerate}
@@ -157,13 +155,6 @@ all relevant items. Sub-issues can be used if additional refinement is needed. \
  \item Merging: Once the PR has been reviewed, approved, and confirmed that all of the rubric criteria has been met, it will successfully
  be merged into the main branch.
 \end{enumerate}
-
-
-
-
- \item How will you be managing issues, including template issues, issue
- classification, etc.?
-
 
 \textbf{Issue Management:}
 We will be using GitHub Issues to keep track of the following items: tasks, meetings, attendance, etc. GitHub Issues will be used as a project log (i.e. attendance, meeting minutes or code review) as well as a tracker (i.e. deliverables, bugs, enhancements).
@@ -196,17 +187,13 @@ There are a set of labels in GitHub Issues that we can use when creating issues 
   \item Documentation/Deliverable: Used for issues corresponding to any work related sections of the deliverables.
 \end{itemize}
 
- \item Use of CI/CD
-
-
- We will be using GitHub Actions as our CI/CD platform to ensure that all of our documentation and project files are being built,
+ \item \textbf{Use of CI/CD}: We will be using GitHub Actions as our CI/CD platform to ensure that all of our documentation and project files are being built,
 formatted, and reviewed properly before they are merged into the main branch of the project. Workflows which are defined in the
 YAML files will essentially trigger the workflows to run automatically on pushes and pull requests. Each run compiles the LaTeX
 document, checks formatting and structure, and lastly, also compiles a PDF with the latest changes. To ensure consistency across
 all files, merges require both teammate approval and passing CI checks. This forces errors to be caught early and also reinforces
 us as a team to follow industry-standard practices. Implementing these practices throughout the entire project will aid in
 achieving a consistent, polished and coherent final product and documentation.
-
 
  \end{itemize}
 
@@ -215,7 +202,7 @@ achieving a consistent, polished and coherent final product and documentation.
 
 
 \begin{itemize}
- \item How will you be using GitHub projects? \\
+ \item \textbf{GitHub Projects}
  
 Our team will be using GitHub Projects to keep track of and manage our tasks and deliverables. The board will be following a
 Kanban style where all issues will be presented by cards on the board and they will be moved across the board across various
@@ -226,7 +213,7 @@ bug, doc), Priority (High/Medium/Low), Assignee/Team Member, Deadline. All in al
 milestones as well as fields to ensure we stay on track with the overall Capstone Schedule. \\
 
 
-Our big picture schedule follows the timeline and deadlines listed in the course outline. The deliverables outlined in the course
+The project schedule follows the timeline and deadlines listed in the course outline. The deliverables outlined in the course
 outline have been grouped into six milestones (M1 to M6) for organizational purposes. These milestones align with major phases of the
 course and we have grouped them together based on similar timelines and tasks. The milestones mentioned above represent the
 following deliverables, listed below:
@@ -244,8 +231,7 @@ following deliverables, listed below:
 
 
 
- \item Include a link to your GitHub project
-
+ \item \textbf{Link to project}:
 
  \href{https://github.com/users/M9Huynh/projects/2/views/1}{\textbf{GitHub Project Link}}
 
@@ -256,7 +242,7 @@ following deliverables, listed below:
 
 The application will follow the steps below (high-level):
 \begin{enumerate}
-  \item A user will record them performing a physio exercise (decide on body part?)
+  \item A user will record them performing a physio exercise (TBD on body part and exercise)
   \item Determine if the exercise is “good” form or “bad” form based on requirements from the stakeholders
   \item From the analysis, the application will provide guidance to improve the efficacy of the exercise
 \end{enumerate}
@@ -313,8 +299,6 @@ Linters will be used within our development platforms to enforce the selected co
 \newpage{}
 
 \section*{Appendix --- Reflection}
-
-\input{../Reflection.tex}
 
 \begin{enumerate}
     \item Why is it important to create a development plan prior to starting the
@@ -420,11 +404,6 @@ help in our informal chat in a timely manner while being respectful of each pers
 
 
 \subsubsection*{Attitude}
-
-\wss{What are your team's expectations regarding team members' ideas,
-interactions with the team, cooperation, attitudes, and anything else regarding
-team member contributions?  Do you want to introduce a code of conduct?  Do you
-want a conflict resolution plan?  Can adopt existing codes of conduct.}
 
 For this project, the expected attitude from group members is to stay positive, respectful, and collaborative. Everyone should
 contribute their fair share, communicate openly, and be willing to listen to each other’s ideas. Mistakes and challenges will
