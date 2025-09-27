@@ -248,13 +248,13 @@ For reference the system will follow the steps below (high-level):
 \end{enumerate}
 
 
-\noindent We foresee a few major risks during our proof of concept demonstration:
+\noindent A few major risks in our proof of concept demonstration are:
 \begin{itemize}
-  \item First are risks associated with measuring a 3D motion with a 2D view/plane. Currently the scope includes patients who have exercises for the knee due to complexities with joints that are omni directional (i.e. shoulder, ankle, etc.). Despite the narrowed scope we wish to measure some success metrics in the POC demo:
+  \item First are risks associated with measuring a 3D motion with a 2D view/plane. Currently the scope includes patients who have exercises for the knee due to complexities with joints that are omni directional (i.e. shoulder, ankle, etc.).
   \begin{itemize}
-    \item One metric is whether a single camera is sufficient recording the movement on the sagittal plane or if there will be improved results from including other views (frontal/transverse)? We will measure this by observing the exercise from one view and then two views to compare the accuracy of results to the guided prompts (i.e. does a single view yield false positives? Does having two views change the accuracy achieved?).
+    \item To address this, one metric is whether a single camera is sufficient recording the movement on the sagittal plane or if there will be improved results from including other views (frontal/transverse)? This will be measured by observing the exercise from one view and then two views to compare the accuracy of results to the guided prompts (i.e. does a single view yield false positives? Does having two views change the accuracy achieved?).
   \end{itemize}  
-  \item The second is being able to measure metrics related to stretching and past history. This was identified as a key risk since range of motion is a key metric in physiotherapy and measuring it over time is a good indicator of exercise efficacy. Further, while talking with our advisor it was a common theme that patients are not “pushing themselves” into those ranges as they are post-op. 
+  \item The second is being able to measure metrics related to stretching and past history. This was identified as a key risk since range of motion is a key metric in physiotherapy and measuring it over time is a good indicator of exercise efficacy. Further, while talking with the advisor for the project it was a common theme that patients are not “pushing themselves” into those ranges as they are post-op. 
   \begin{itemize}
     \item This can be measured by testing the system to see if it can recognize marginal increase. The accuracy will help indicate the duration they are in their end ranges of motion and then the system can prompt the user for perceived effort.
   \end{itemize}
