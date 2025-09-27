@@ -240,23 +240,23 @@ following deliverables, listed below:
 
 \section{Proof of Concept Demonstration Plan}
 
-For reference the system will follow the steps below (high-level):
+The system will follow the steps below (high-level):
 \begin{enumerate}
   \item A user will record themselves performing a physio exercise (pertaining to the knee joint).
-  \item The system will determine if the exercise is being performed with proper form for their treatment plan based on requirements from a physiotherapist.
-  \item During the analysis of the knee exercise, the system will provide guidance to improve the efficacy of the exercise through on-screen prompts.
+  \item The system will determine if the exercise is being performed with proper form based on requirements from a physiotherapist.
+  \item During the analysis of the knee exercise, the system will provide guidance through on-screen prompts to improve the efficacy of the exercise.
 \end{enumerate}
 
 
 \noindent A few major risks in our proof of concept demonstration are:
 \begin{itemize}
-  \item First are risks associated with measuring a 3D motion with a 2D view/plane. Currently the scope includes patients who have exercises for the knee due to complexities with joints that are omni directional (i.e. shoulder, ankle, etc.).
+  \item Risks associated with measuring a 3D motion with a 2D view/plane. Currently the scope of the project includes patients with exercises to the knee joint due to complexities with joints that are omni-directional (i.e. shoulder, ankle, etc.).
   \begin{itemize}
-    \item To address this, one metric is whether a single camera is sufficient recording the movement on the sagittal plane or if there will be improved results from including other views (frontal/transverse)? This will be measured by observing the exercise from one view and then two views to compare the accuracy of results to the guided prompts (i.e. does a single view yield false positives? Does having two views change the accuracy achieved?).
+    \item To address this, the team will test how a single camera view is sufficient for recording the movement. This will be tested primarily on the sagittal view and compared with adding frontal and transverse views. The accuracy of video analysis will be measured by obtaining the results from each view and comparing the difference in guided prompts and verifying if they can adhere to the requirements of the exercise (i.e. does a single view yield false positives? Does having two views change the accuracy achieved?).
   \end{itemize}  
-  \item The second is being able to measure metrics related to stretching and past history. This was identified as a key risk since range of motion is a key metric in physiotherapy and measuring it over time is a good indicator of exercise efficacy. Further, while talking with the advisor for the project it was a common theme that patients are not “pushing themselves” into those ranges as they are post-op. 
+  \item The second is being able to measure metrics related to stretching and past history. This was identified as a key risk since range of motion is a key metric in physiotherapy and measuring it over time is a good indicator of exercise efficacy. Furthermore, while talking with the advisor for the project it was apparent that patients are not “pushing themselves” mobilizing their knee as much due to the post-operative condition.
   \begin{itemize}
-    \item This can be measured by testing the system to see if it can recognize marginal increase. The accuracy will help indicate the duration they are in their end ranges of motion and then the system can prompt the user for perceived effort.
+    \item This can be measured by testing the system to see if it can recognize any marginal increase within the exercise (i.e. incremental changes in the angle of knee flexion). This can help indicate the limitations of ranges of motion and measure exercise duration.
   \end{itemize}
 \end{itemize}
 
@@ -409,7 +409,7 @@ Furthermore, for meetings, team members are expected to arrive, review relevant 
 
 During weekly meetings we will discuss “what went well, what to change” to see if there is a way to streamline communication to attain this quality. We also encourage each team member to ask for help in our informal chat in a timely manner while being respectful of each person's time.
 
-Lastly, we have all agreed that deliverables are to be prepared and finalized two days prior to the deadline (internal deadline). This will give us time necessary to fix any problems that may arise, navigate any extenuating circumstances and overall to prepare the documents prior to the real deadline.
+Lastly, we have all agreed that deliverables are to be prepared and finalized two days prior to the deadline (internal deadline). This will give us time necessary to fix any problems that may arise, navigate any extenuating circumstances and prepare the documents prior to the real deadline.
 
 \subsubsection*{Attitude}
 
