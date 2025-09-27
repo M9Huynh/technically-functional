@@ -96,7 +96,7 @@ Our team communication plan will be as follows:
 
   \textbf{Task Manager}: They will decide how to allocate the workload between the members.
 
-  \textbf{Github Manager}: They will ensure that all proposed rules pertaining to the use of Github are followed and that information provided on the platform is complete and precise.
+  \textbf{GitHub Manager}: They will ensure that all proposed rules pertaining to the use of GitHub are followed and that information provided on the platform is complete and precise.
 
   \textbf{Back-end developer}: They will be developing and ensuring that the backend is functional and up to code standards.
 
@@ -104,7 +104,7 @@ Our team communication plan will be as follows:
 
   \textbf{Comment Reviewer}: This member will review code and verify the presence of and clarity of comments. Maham will be reviewing the final version.
 
-  \textbf{Github Wiki Manager}: This member is responsible for verifying the appropriateness of all content on the Github Wiki.
+  \textbf{GitHub Wiki Manager}: This member is responsible for verifying the appropriateness of all content on the GitHub Wiki.
 \end{flushleft}
 
 \begin{table}[H]
@@ -119,9 +119,9 @@ Researcher & All & Yes \\
 Task Manager & Eman A & Yes \\
 Front end developer & All & Yes \\
 Back end developer & All & NA \\
-Github Manager & Cieran D & Yes \\
+GitHub Manager & Cieran D & Yes \\
 Comment Reviewer & All & NA \\
-Github Wiki Manager & All & NA \\
+GitHub Wiki Manager & All & NA \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -240,32 +240,44 @@ following deliverables, listed below:
 
 \section{Proof of Concept Demonstration Plan}
 
-The application will follow the steps below (high-level):
+For reference the system will follow the steps below (high-level):
 \begin{enumerate}
-  \item A user will record them performing a physio exercise (TBD on body part and exercise)
-  \item Determine if the exercise is “good” form or “bad” form based on requirements from the stakeholders
-  \item From the analysis, the application will provide guidance to improve the efficacy of the exercise
+  \item A user will record themselves performing a physio exercise (pertaining to the knee joint).
+  \item The system will determine if the exercise is being performed with proper form for their treatment plan based on requirements from a physiotherapist.
+  \item During the analysis of the knee exercise, the system will provide guidance to improve the efficacy of the exercise through on-screen prompts.
 \end{enumerate}
 
 
-Some potential risks from this process flow are:
+\noindent We foresee a few major risks during our proof of concept demonstration:
 \begin{itemize}
-  \item Variations in how different users will record each video.
+  \item First are risks associated with measuring a 3D motion with a 2D view/plane. Currently the scope includes patients who have exercises for the knee due to complexities with joints that are omni directional (i.e. shoulder, ankle, etc.). Despite the narrowed scope we wish to measure some success metrics in the POC demo:
   \begin{itemize}
-    \item Having a guide overlay to indicate where they should film the exercise from.
+    \item One metric is whether a single camera is sufficient recording the movement on the sagittal plane or if there will be improved results from including other views (frontal/transverse)? We will measure this by observing the exercise from one view and then two views to compare the accuracy of results to the guided prompts (i.e. does a single view yield false positives? Does having two views change the accuracy achieved?).
   \end{itemize}  
-  \item Inaccuracies with depth or monitoring a 3D motion on a 2D plane
+  \item The second is being able to measure metrics related to stretching and past history. This was identified as a key risk since range of motion is a key metric in physiotherapy and measuring it over time is a good indicator of exercise efficacy. Further, while talking with our advisor it was a common theme that patients are not “pushing themselves” into those ranges as they are post-op. 
   \begin{itemize}
-    \item Prompting the user to also perform the exercise from another angle and then analyzing two different recordings.
+    \item This can be measured by testing the system to see if it can recognize marginal increase. The accuracy will help indicate the duration they are in their end ranges of motion and then the system can prompt the user for perceived effort.
   \end{itemize}
-  \item Hardware limitations - as the application would be easiest to use on a phone due to the camera already being on there, it may have limitations when processing the footage.
+\end{itemize}
+
+\noindent Addressing the major risks will help the team define metrics for success and goals to achieve for the proof of concept demonstration.
+
+
+\noindent Some additional risks that may be included if there is time prior to the proof of concept demo are: 
+
+\begin{itemize}
+  \item Variations in how different users will record each video 
   \begin{itemize}
-    \item Using a lightweight solution to process the recording to reduce lag.
+    \item A possible solution: Having a guide overlay to indicate where they should film the exercise from.
   \end{itemize}
-  \item Accuracy in the footage may be different in a non-controlled environment and lead to inaccurate assessment of the exercise. 
+  \item Hardware limitations with running the system on different devices (i.e. computer, phone, etc.)
   \begin{itemize}
-    \item A demonstration can consist of seeing if we are able to obtain the same feedback in different light levels/clothing to see if it will affect our input data.
+    \item A possible metric is measuring the classification accuracy and the granularity for which movements are measured. This ties into the first major risk of the number of views.
   \end{itemize} 
+  \item Accuracy of metric gathering may have environmental factors and lead to an inaccurate assessment of the exercise.
+  \begin{itemize}
+    \item Comparing differences in the feedback by testing it in different environments (i.e. high noise areas, plain backgrounds, etc.)
+  \end{itemize}
 \end{itemize}
 
 \section{Expected Technology}
@@ -311,7 +323,7 @@ Linters will be used within our development platforms to enforce the selected co
 \textbf{Maham:} \\
 Having a plan eliminates a lot of uncertainty, whether it is timeline, team roles or conflict resolution methodologies. It allows the team to focus on what is important without being bogged down by frivolous details. Plus, it allows effective allocation of resources. For example, if one person is better at front end development, members who do not want to be or cannot be involved in it, do not have to start from scratch and master a new skill within a small time frame. 
 
-The main advantage of CI/CD is a smoother integration of code while reducing the amount of mistakes and code conflicts that would need to be fixed at the end of the project. However, there is one troublesome disadvantage - conflicting merge requests (this is in the context of using github) and the very time consuming endeavour of fixing them. 
+The main advantage of CI/CD is a smoother integration of code while reducing the amount of mistakes and code conflicts that would need to be fixed at the end of the project. However, there is one troublesome disadvantage - conflicting merge requests (this is in the context of using GitHub) and the very time consuming endeavour of fixing them. 
 
 As for group disagreements, I do not think we had any. All members carefully listened to any input from their teammates and implemented any changes that were deemed to be beneficial. We were professional and respectful of each other’s opinions and gave equal importance to everyone’s feedback. \\
 
@@ -391,17 +403,13 @@ the attention of the teaching staff to ensure the work load is manageable for th
 \subsubsection*{Quality} 
 
 In order to maintain consistent quality for deliverables, each weekly meeting will briefly go over 
-deliverable expectations. Each deliverable should be checked against the rubric [on avenue] and also 
-against the repository checklist by the individual that wrote that deliverable but also by a teammate. 
+deliverable expectations. Each deliverable should be checked against the rubric [on avenue] and also against the repository checklist by the individual that wrote that deliverable but also by a teammate. 
 
+Furthermore, for meetings, team members are expected to arrive, review relevant material and provide any problems or status updates with their work to ensure the meeting stays on-topic and productive.
 
-Furthermore, for meetings, team members are expected to arrive, review relevant material and provide 
-any problems or status updates with their work to ensure the meeting stays on-topic and productive.
+During weekly meetings we will discuss “what went well, what to change” to see if there is a way to streamline communication to attain this quality. We also encourage each team member to ask for help in our informal chat in a timely manner while being respectful of each person's time.
 
-Lastly, during weekly meetings we will discuss “what went well, what to change” to see if there is a 
-way to streamline communication to attain this quality. We also encourage each team member to ask for 
-help in our informal chat in a timely manner while being respectful of each person's time.
-
+Lastly, we have all agreed that deliverables are to be prepared and finalized two days prior to the deadline (internal deadline). This will give us time necessary to fix any problems that may arise, navigate any extenuating circumstances and overall to prepare the documents prior to the real deadline.
 
 \subsubsection*{Attitude}
 
