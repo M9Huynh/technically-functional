@@ -1,5 +1,6 @@
 \documentclass{article}
 
+\usepackage{natbib}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
@@ -55,7 +56,10 @@ Date2 & Name(s) & Description of changes\\
 
 \section{Introduction}
 
-\wss{You can include your definition of what a hazard is here.}
+The team's definition of a hazard is an “unsafe” condition that may lead to an unintended event that causes an undesirable outcome \citep{IppolitoWallace1995}. In relation to software development, hazards can be understood as the underlying design decisions that result in potential harm. These risks become apparent when the hazards are not addressed prior to development. These hazards can include technical failures, privacy/security, usability and accessibility risks. 
+
+The project's goal is to develop a tool that provides guidance for a physiotherapist's prescribed home exercises. The user's form is analyzed and prompts for adjustments are given. While this can increase the rate and efficacy of recovery, it introduces several hazards. \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}{See the Section 3 in the Problem Statement document for more on project goals}. The purpose of this document is to identify those hazards, outline assumptions and propose solutions to limit their presence and their frequency.
+
 
 \section{Scope and Purpose of Hazard Analysis}
 
@@ -118,5 +122,8 @@ Which requirements will be implemented in the future?}
     appreciable risks of this form), list at least 2 other types of risk in
     software products. Why are they important to consider?
 \end{enumerate}
+
+\bibliographystyle {plainnat}
+\bibliography{../../refs/References}
 
 \end{document}
