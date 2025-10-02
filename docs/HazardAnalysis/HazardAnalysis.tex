@@ -78,11 +78,41 @@ The purpose of this document is to identify risks and their associated impact to
 
 \section{System Boundaries and Components}
 
-\wss{Dividing the system into components will help you brainstorm the hazards.
-You shouldn't do a full design of the components, just get a feel for the major
-ones.  For projects that involve hardware, the components will typically include
-each individual piece of hardware.  If your software will have a database, or an
-important library, these are also potential components.}
+To divide the system boundaries we outline the key functions of the application.
+
+\begin{itemize}
+    \item Authentication module
+    \begin{itemize}
+        \item The user will log in to the application to access prior user data.
+    \end{itemize}
+    \item Video streaming module
+    \begin{itemize}
+        \item The user will video stream themselves performing a physio exercise pertaining to the knee joint.
+    \end{itemize}
+    \item Analysis module
+    \begin{itemize}
+        \item The input of the user performing an exercise will be assessed against the requirements and guidelines defined in the backend.
+    \end{itemize}
+    \item Reporting module
+    \begin{itemize}
+        \item The system will generate analytics from the analysis module which packages the information to be viewed by the user or physiotherapist.
+        \end{itemize}
+\end{itemize}
+
+
+In addition we will consider the following within the hazard analysis: 
+
+\begin{itemize}
+    \item A device with a camera
+    \begin{itemize}
+        \item To allow users to record themselves during the motion and to receive feedback on the exercise performed.
+    \end{itemize}
+    \item A database where user data will be stored
+\end{itemize}
+
+
+These system boundaries outline what is covered within this hazard analysis.
+
 
 \section{Critical Assumptions}
 
