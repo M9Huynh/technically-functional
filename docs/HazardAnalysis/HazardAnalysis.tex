@@ -418,9 +418,7 @@ The system pulls incorrect patient data &
 This can lead to a security breach and improper access of other user data & 
 Prompts are confusing and use jargon in their instructions  & 
 A. The system provides a tutorial of the movement during feedback& 
-A.  \newline
-B. SR9 \newline
-C. NFR3.1 & 
+A. NFR2.1 & 
 H5-1 \\
 
 \cmidrule{1-7}
@@ -461,8 +459,74 @@ H5-4 \\
 
 \section{Safety and Security Requirements}
 
-\wss{Newly discovered requirements.  These should also be added to the SRS.  (A
-rationale design process how and why to fake it.)}
+SR1: The system shall enforce a 2FA when creating an account and logging in. The system will ensure 2FA through the email address of the user stored on the database.\\
+Rationale: Users who do are not properly authenticated could result in privacy breaches to personal and healthcare information.\\
+Risk: Medium \\
+Reference: H1-1\\
+
+
+\noindent
+SR2: The system shall test the connectivity to external libraries and database connectivity prior to release.\\
+Rationale: This can result in functionality issues with the application and also obtaining data from the incorrect account.\\
+Risk: High\\
+Reference: H1-2, H2-2, H5-2\\
+
+
+\noindent
+SR3: The system shall include an option to reset the password if too many (5) attempts are made with incorrect login.\\
+Rationale: Inability to access the user's profile can result in not having access to the application's functionality.\\
+Risk: Medium\\
+Reference: H2-1, H5-2\\
+
+
+\noindent
+SR4: The system shall prompt the user at the start of video streaming if there are obstructions or low-light levels and give the user a chance to change their environment prior to analysis.\\
+Rationale: System will be unable to decipher form if the surrounding environment is not correct.\\
+Risk: High\\
+Reference: H2-1, H2-2, H2-3, H3-1, H3-2, H3-3, H5-2\\
+
+
+\noindent
+SR5: The system shall prompt the user if the application does not have access to the camera or if there is an alternative program that is using the camera.\\
+Rationale: This can result in an inability to detect the user's form and the application will have nothing to process.\\
+Risk: Medium\\
+Reference: H2-1, H3-2\\
+
+
+\noindent
+SR6: The system shall monitor the smart device's battery life and prompt the user if it falls below a certain threshold to charge the device.\\
+Rationale: The system cannot function without proper access to power.\\
+Risk: Low\\
+Reference: H2-1, H2-3\\
+
+
+\noindent
+SR7: The system shall provide a guideline overlay when setting up the smart device so they are in-frame of the view and correct orientation.\\
+Rationale: In order to align the user to the camera and detect the user's posture throughout the exercise.\\
+Risk: High\\
+Reference: H3-1, H3-3\\
+
+
+\noindent
+SR8: The system shall support retry attempts if the patient's form has insufficient data.\\
+Rationale: The purpose is to provide analysis and if insufficient data is collected then it will notify the user to retry.\\
+Risk: High\\
+Reference: H3-1, H3-3, H4-1\\
+
+
+\noindent
+SR9: The system shall allow for physiotherapists to input daily/weekly limitations on the metrics measured by the application.\\
+Rationale: Exceeding the limits may result in improper or unsafe form and cause injury.\\
+Risk: High\\
+Reference: H4-2, H4-3, H4-4, H4-5\\
+
+
+\noindent
+SR10: The system shall provide an option to view the motion on an internal page on the application to help guide the motion during analysis.\\
+Rationale: Without this requirement, it may be difficult to replicate suggestions in words, having a visual cue may improve accessibility.\\
+Risk: Low\\
+Reference: H4-3, H4-4, H4-5\\
+
 
 \section{Roadmap}
 
