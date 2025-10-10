@@ -2,6 +2,7 @@
 
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{float}
 
 \title{Development Plan\\\progname}
 
@@ -22,15 +23,15 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+September 22nd, 2025 & All & Added First Draft \\
+September 26th + 27th, 2025 & Maham & Resolved issues \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \newpage{}
 
-
+\section{Introduction}
 This document contains details pertaining to the proposed development plan by the team.
 Sections 1 - 3 contain legal and regulation information, sections 4 - 6 contain team dynamics related information and 
 section 7-10 contain timeline and technology logistics. The team charter is also included within this document. \\
@@ -49,9 +50,7 @@ below.
 
 No additional creations requiring a trademark agreement or any further
 protection of intellectual property, such as logos or slogans, are foreseen
-at this point of the project. 
-
-
+at this point of the project.
 
 \section{Copyright License}
 The copyright license adopted by the team for this project is the MIT license.
@@ -61,17 +60,66 @@ that the copyright notice and permissions are provided in all copies of the soft
 
 The \href{https://github.com/M9Huynh/technically-functional/blob/f05da0acf59e6b8a08d67f9132471c1a17b5afef/LICENSE}{copyright license} for the project can be found in the team repository.
 
-
-
 \section{Team Meeting Plan}
 
-The team will be meeting in person on a weekly basis in a library at McMaster University. The time of the meetings
-needs to be adjusted in order to accommodate all the members' time constraints.
-Additional virtual meetings may be required when approaching a deliverable deadline.\\
-Industry supervisor meetings will be held virtually on a biweekly or as needed basis. \\
+The weekly meetings will be on Thursdays at 4:30 pm at any library at McMaster University. These meetings will be scheduled for an hour and the duration may be adjusted as required.
+Each member is required to have read the upcoming deliverable document and ready to address any comments or questions that other members can answer. Additional virtual meetings may be required when approaching a deliverable deadline. Industry supervisor meetings will be held virtually on a biweekly or as needed basis. All members will be encouraged to chair meetings and take minutes. The chair should use the template below to fill out the agenda prior to any meetings. \\
+\\
+\underline{Meeting agenda template} 
+\begin{itshape}
+  \begin{flushleft}
+    \begin{itemize}
+      \item Date, time   
+      \item Attendees 
+      \item Wellness check 
+      \item Purpose of meeting
+      \item Re-visit last deliverable submission: positives, negatives and improvements \\
+      \item Discuss any potential inquiries that need to be addressed by supervisor or professor \\
+      \item \textbf{If new deliverable:}  \\
+      Brief introduction to upcoming deliverable \\
+      Decide on division of labour \\
+      Assign tasks based on preference and availability \\
+      Tasks that are TBD - assign at least 2 members to complete if they finish their assigned tasks early. \\
+  \textbf{ELSE:} \\
+  Brief discussion of in progress deliverables. \\
+  Team member updates:\\
+  \hspace{0.5cm}
+  Completed tasks \\
+  \hspace{0.5cm}
+  Outstanding tasks \\
+  \hspace{0.5cm}
+  Tasks that require assistance (if any)\\
+  
+      \item Discuss any potential inquiries that need to be addressed by supervisor or professor \\
+      \item Ensure that all team members are satisfied with their tasks and will check in on a regular basis 
+     \end{itemize}
 
-Matthew H. will be in charge of the agenda. The rest of the team will be recording meeting minutes interchangeably. All members will be encouraged
-to chair meetings throughout the duration of the project. 
+  \end{flushleft}
+\end{itshape}
+
+\underline{Meeting minutes template}
+
+\begin{itshape}
+  \begin{flushleft}
+    \begin{itemize}
+      \item Date, time   
+      \item Introduction to meeting  
+      \item Positives/what went well
+      \item Negatives/what did not go well
+      \item Suggested Improvements 
+      \item Deliverable assignments/updates
+      \item Extra task assignments (non deliverables)
+      \item Confirm alignment on assignments for each member
+      \item Questions for the professor and/or supervisor (to be communicated by team liaison - Matthew H)
+      \item Extra comments or concerns, address whether another team meeting is needed before next scheduled meeting
+      
+     \end{itemize}
+
+  \end{flushleft}
+\end{itshape}
+
+
+
 
 \section{Team Communication Plan}
 
@@ -88,26 +136,29 @@ Our team communication plan will be as follows:
 
 \section{Team Member Roles}
 
-\textbf{Editor}: This member will read through all deliverables throughout development and a final read-through before submission. They will be responsible for any
-text alterations to ensure conciseness and effective communication within documents/code.
+\textit{See Table 2: Member Roles for team assignments} \\
+\begin{flushleft}
+  \textbf{Editor}: This member will read through all deliverables throughout development and a final read-through before submission. They will be responsible for any
+  text alterations to ensure conciseness and effective communication within documents/code.
+ 
+  \textbf{Liaison}: This member will be responsible for communicating with all external parties and relaying their comments back to the team.
 
-\textbf{Liaison}: This member will be responsible for communicating with all external parties and relaying their comments back to the team.
+  \textbf{Researcher}: They will conduct initial research before the team commences a task and convey their findings to the rest of the team.
 
-\textbf{Researcher}: They will conduct initial research before the team commences a task and convey their findings to the rest of the team.
+  \textbf{Task Manager}: They will decide how to allocate the workload between the members.
 
-\textbf{Task Manager}: They will decide how to allocate the workload between the members.
+  \textbf{GitHub Manager}: They will ensure that all proposed rules pertaining to the use of GitHub are followed and that information provided on the platform is complete and precise.
 
-\textbf{Github Manager}: They will ensure that all proposed rules pertaining to the use of Github are followed and that information provided on the platform is complete and precise.
+  \textbf{Back-end developer}: They will be developing and ensuring that the backend is functional and up to code standards.
 
-\textbf{Back-end developer}: They will be developing and ensuring that the backend is functional and up to code standards.
+  \textbf{Front-end developer}: They will be responsible for development of a user friendly interface.
 
-\textbf{Front-end developer}: They will be responsible for development of a user friendly interface.
+  \textbf{Comment Reviewer}: This member will review code and verify the presence of and clarity of comments. Maham will be reviewing the final version.
 
-\textbf{Comment Reviewer}: This member will review code and verify the presence of and clarity of comments. Maham will be reviewing the final version.
+  \textbf{GitHub Wiki Manager}: This member is responsible for verifying the appropriateness of all content on the GitHub Wiki.
+\end{flushleft}
 
-\textbf{Github Wiki Manager}: This member is responsible for verifying the appropriateness of all content on the Github Wiki.
-
-\begin{table}[hp]
+\begin{table}[H]
 \caption{Member Roles} \label{Proposed Assignments}
 \begin{tabularx}{\textwidth}{llX}
 \toprule
@@ -119,9 +170,9 @@ Researcher & All & Yes \\
 Task Manager & Eman A & Yes \\
 Front end developer & All & Yes \\
 Back end developer & All & NA \\
-Github Manager & Cieran D & Yes \\
+GitHub Manager & Cieran D & Yes \\
 Comment Reviewer & All & NA \\
-Github Wiki Manager & All & NA \\
+GitHub Wiki Manager & All & NA \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -130,107 +181,188 @@ Github Wiki Manager & All & NA \\
 
 \section{Workflow Plan}
 
-We will primarily be using GitHub for managing the project files. \\
+\begin{itemize}
+	\item \textbf{Git usage} :We will primarily be using GitHub for managing the project files.
 Each team member has their individual branches on which they will engage with. 
 The member should open a pull request after completion of their assigned task. If 
 multiple members are collaborating on the same task, they will use either member's branch. Once completed, 
-a pull request can be opened which will be reviewed by the other team members. \\
-
+a pull request can be opened which will be reviewed by the other team members. 
 Issues that focus on a single aspect of the project may be opened and will combine
-all relevant items. Sub-issues can be used if additional refinement is needed.
+all relevant items. Sub-issues can be used if additional refinement is needed. 
 
+\textbf{Overall Workflow Plan}
+\begin{enumerate}
+ \item Issue Creation: For each deliverable, an issue will be opened to divide the respective sections and keep track of assigned tasks.
+ As mentioned above, sub-issues will be used if additional refinement or breakdown of work is needed.
+ \item Branching: Each team member will create a dedicated branch for themselves to work on their respective tasks. If multiple members
+ collaborate on the same task, they will work within either member’s branch to avoid merge conflicts.
+ \item Checklist: As each member is working through their respective sections, they will keep track of the checklist in our repository.
+ Once a specific task is complete, the member will check off the associated item.
+ \item Commit Process: All changes will be regularly committed to the respective branches.
+ \item Pull Requests (PRs): Once any issues have been resolved, a pull request on GitHub will be created. Changes must be reviewed for
+ any merge conflicts before merging to the main branch.
+ \item Team member review: Another team member will review the PR against the rubric and provide feedback through comments. The author
+ of the section should respond or implement any feedback provided by the member who reviewed the submission.
+ \item Merging: Once the PR has been reviewed, approved, and confirmed that all of the rubric criteria has been met, it will successfully
+ be merged into the main branch.
+\end{enumerate}
+
+\textbf{Issue Management:}
+We will be using GitHub Issues to keep track of the following items: tasks, meetings, attendance, etc. GitHub Issues will be used as a project log (i.e. attendance, meeting minutes or code review) as well as a tracker (i.e. deliverables, bugs, enhancements).
+
+
+There are template issues readily available from our professor, as shown below, and we will be using these throughout our capstone. \\
+
+
+\textbf{Issue Templates Available:}
 
 \begin{itemize}
-	\item How will you be using git, including branches, pull request, etc.?
-	\item How will you be managing issues, including template issues, issue
-	classification, etc.?
-  \item Use of CI/CD
+  \item Lectures: Used to track team details during lectures (i.e. important notes, attendance)
+  \item Peer Review: Individuals outside of the team review one of our items
+  \item Supervisor Meeting: Agenda template for meetings with supervisors/stakeholders
+  \item TA Meeting: Agenda template for meetings with TA
+  \item Team Meeting: Agenda template for weekly meetings with our team
+  \item Blank Issue: Blank template to be used to create a new issue \\
 \end{itemize}
+
+\textbf{Issue Labels Classification:}
+
+There are a set of labels in GitHub Issues that we can use when creating issues to organize them accordingly. Some of the labels we may use can be seen below with a description of when they may be used:
+
+\begin{itemize}
+  \item Bug: Used for issues that indicate unexpected behaviour and require correction.
+  \item Feature: Used for issues that represent any new functionality or implementation of project features.
+  \item Lecture: Used for lecture-related tasks/issues.
+  \item TA Meeting: Used for issues that include meeting notes, feedback and actions from TA sessions.
+  \item Team Meeting: Used for issues where team meeting discussions are noted.
+  \item Supervisor Meeting: Used for issues related to the project supervisor, including follow-ups from discussions.
+  \item Documentation/Deliverable: Used for issues corresponding to any work related sections of the deliverables.
+\end{itemize}
+
+ \item \textbf{Use of CI/CD}: We will be using GitHub Actions as our CI/CD platform to ensure that all of our documentation and project files are being built,
+formatted, and reviewed properly before they are merged into the main branch of the project. Workflows which are defined in the
+YAML files will essentially trigger the workflows to run automatically on pushes and pull requests. Each run compiles the LaTeX
+document, checks formatting and structure, and lastly, also compiles a PDF with the latest changes. To ensure consistency across
+all files, merges require both teammate approval and passing CI checks. This forces errors to be caught early and also reinforces
+us as a team to follow industry-standard practices. Implementing these practices throughout the entire project will aid in
+achieving a consistent, polished and coherent final product and documentation.
+
+ \end{itemize}
+
 
 \section{Project Decomposition and Scheduling}
 
-\begin{itemize}
-  \item How will you be using GitHub projects?
-  \item Include a link to your GitHub project
-\end{itemize}
 
-\wss{How will the project be scheduled?  This is the big picture schedule, not
-details. You will need to reproduce information that is in the course outline
-for deadlines.}
+\begin{itemize}
+ \item \textbf{GitHub Projects}
+ 
+Our team will be using GitHub Projects to keep track of and manage our tasks and deliverables. The board will be following a
+Kanban style where all issues will be presented by cards on the board and they will be moved across the board across various
+columns. The columns listed across the board will be as follows: Backlog $\rightarrow$ Ready $\rightarrow$ In Progress $\rightarrow$
+In Review $\rightarrow$ Done. There will
+also be custom fields set that you will see across the board which will be listed as: Milestone (M1 to M6), Type (task, meeting,
+bug, doc), Priority (High/Medium/Low), Assignee/Team Member, Deadline. All in all, each card will be linked to specific issues,
+milestones as well as fields to ensure we stay on track with the overall Capstone Schedule. \\
+
+
+The project schedule follows the timeline and deadlines listed in the course outline. The deliverables outlined in the course
+outline have been grouped into six milestones (M1 to M6) for organizational purposes. These milestones align with major phases of the
+course and we have grouped them together based on similar timelines and tasks. The milestones mentioned above represent the
+following deliverables, listed below:
+
+
+ \begin{itemize}
+   \item M1 (Weeks 3 to 4): Problem Statement, Proof of Concept (POC) Plan, Development Plan, Team Charter
+   \item M2 (Weeks 5 to 6): Requirements Document (SRS) Revision 0, Hazard Analysis Revision 0, Design Document Revision -1
+   \item M3 (Week 7): Verification \& Validation (V\&V) Plan Revision 0
+   \item M4 (Weeks 8 to 9): Integrated Draft Document (Problem Statement, SRS, Hazard Analysis, V\&V Plan), Peer Reviews (whole document), Update draft with feedback
+   \item M5 (Weeks 10 to 12): Proof of Concept Demonstration (document + results), Design Document Revision 0, V\&V Report Revision 0, Refinement of SRS, Hazard Analysis, and V\&V Plan based on results and feedback
+   \item M6 (End of Term): Final Demonstration - Revision 1, EXPO Demonstration, Final Documentation Revision 1 (including Problem Statement, Development Plan, POC Plan, Requirements Document, Hazard Analysis, Design Document, V\&V Plan, V\&V Report, Extra Documentation 1, Extra Documentation 2 and Source Code)
+ \end{itemize}
+
+
+
+
+ \item \textbf{Link to project}:
+
+ \href{https://github.com/users/M9Huynh/projects/2/views/1}{\textbf{GitHub Project Link}}
+
+
+\end{itemize}
 
 \section{Proof of Concept Demonstration Plan}
 
-The application will follow the steps below (high-level):
+The system will follow the steps below (high-level):
 \begin{enumerate}
-  \item A user will record them performing a physio exercise (decide on body part?)
-  \item Determine if the exercise is “good” form or “bad” form based on requirements from the stakeholders
-  \item From the analysis, the application will provide guidance to improve the efficacy of the exercise
+  \item A user will record themselves performing a physio exercise (pertaining to the knee joint).
+  \item The system will determine if the exercise is being performed with proper form based on requirements from a physiotherapist.
+  \item During the analysis of the knee exercise, the system will provide guidance through on-screen prompts to improve the efficacy of the exercise.
 \end{enumerate}
 
 
-Some potential risks from this process flow are:
+\noindent A few major risks in our proof of concept demonstration are:
 \begin{itemize}
-  \item Variations in how different users will record each video.
+  \item Risks associated with measuring a 3D motion with a 2D view/plane. Currently the scope of the project includes patients with exercises to the knee joint due to complexities with joints that are omni-directional (i.e. shoulder, ankle, etc.).
   \begin{itemize}
-    \item Having a guide overlay to indicate where they should film the exercise from.
+    \item To address this, the team will test how a single camera view is sufficient for recording the movement. This will be tested primarily on the sagittal view and compared with adding frontal and transverse views. The accuracy of video analysis will be measured by obtaining the results from each view and comparing the difference in guided prompts and verifying if they can adhere to the requirements of the exercise (i.e. does a single view yield false positives? Does having two views change the accuracy achieved?).
   \end{itemize}  
-  \item Inaccuracies with depth or monitoring a 3D motion on a 2D plane
+  \item The second is being able to measure metrics related to stretching and past history. This was identified as a key risk since range of motion is a key metric in physiotherapy and measuring it over time is a good indicator of exercise efficacy. Furthermore, while talking with the advisor for the project it was apparent that patients are not “pushing themselves” mobilizing their knee as much due to the post-operative condition.
   \begin{itemize}
-    \item Prompting the user to also perform the exercise from another angle and then analyzing two different recordings.
+    \item This can be measured by testing the system to see if it can recognize any marginal increase within the exercise (i.e. incremental changes in the angle of knee flexion). This can help indicate the limitations of ranges of motion and measure exercise duration.
   \end{itemize}
-  \item Hardware limitations - as the application would be easiest to use on a phone due to the camera already being on there, it may have limitations when processing the footage.
+\end{itemize}
+
+\noindent Addressing the major risks will help the team define metrics for success and goals to achieve for the proof of concept demonstration.
+
+
+\noindent Some additional risks that may be included if there is time prior to the proof of concept demo are: 
+
+\begin{itemize}
+  \item Variations in how different users will record each video 
   \begin{itemize}
-    \item Using a lightweight solution to process the recording to reduce lag.
+    \item A possible solution: Having a guide overlay to indicate where they should film the exercise from.
   \end{itemize}
-  \item Accuracy in the footage may be different in a non-controlled environment and lead to inaccurate assessment of the exercise. 
+  \item Hardware limitations with running the system on different devices (i.e. computer, phone, etc.)
   \begin{itemize}
-    \item A demonstration can consist of seeing if we are able to obtain the same feedback in different light levels/clothing to see if it will affect our input data.
+    \item A possible metric is measuring the classification accuracy and the granularity for which movements are measured. This ties into the first major risk of the number of views.
   \end{itemize} 
+  \item Accuracy of metric gathering may have environmental factors and lead to an inaccurate assessment of the exercise.
+  \begin{itemize}
+    \item Comparing differences in the feedback by testing it in different environments (i.e. high noise areas, plain backgrounds, etc.)
+  \end{itemize}
 \end{itemize}
 
 \section{Expected Technology}
 
-\wss{What programming language or languages do you expect to use?  What external
-libraries?  What frameworks?  What technologies.  Are there major components of
-the implementation that you expect you will implement, despite the existence of
-libraries that provide the required functionality.  For projects with machine
-learning, will you use pre-trained models, or be training your own model?  }
+It’s important to note the technologies listed in this section are expected to be used within this project but are not set as requirements or bounding limitations on the technology for the project. See Table 3: Expected Technologies.
 
-\wss{The implementation decisions can, and likely will, change over the course
-of the project.  The initial documentation should be written in an abstract way;
-it should be agnostic of the implementation choices, unless the implementation
-choices are project constraints.  However, recording our initial thoughts on
-implementation helps understand the challenge level and feasibility of a
-project.  It may also help with early identification of areas where project
-members will need to augment their training.}
+\begin{table}[H]
+\caption{Expected Technology} \label{Projected Technologies}
+\begin{tabular}{ll|m{5cm}}
+\textbf{Technology Role} & \textbf{Name}    & \textbf{Explanation}                                                                        \\ \hline
+Repository               & GitHub           & Used to store project code and documentation for combined contributions.                    \\ \hline
+Project Management       & GitHub Projects  & Used to track timelines for deliverables, meetings, and specific issues for implementation. \\ \hline
+Language                 & Python           & Backend object-oriented programming language.                                               \\ \hline
+Linter                   & Pylint           & Linter for consistent formatting and coding standards.                                      \\ \hline
+Platform                 & VSCode           & Standard development platform for the team.                                                 \\ \hline
+Platform                 & Android Studio   & Platform for creating AndroidOS applications. Has integrated linter.                        \\ \hline
+Library                  & OpenCV           & Library for extracting data from video footage.                                             \\ \hline
+Plugin                   & Chaquopy         & Plugin for integrating Python with Android Studio applications.                             \\ \hline
+Unit Testing             & Python Extension & Plugin for additional Python support including unit testing and code coverage.              \\ \hline
+Unit Testing             & Pytest           & Specific unit testing software with more options.
+\end{tabular}
+\end{table}
 
-Topics to discuss include the following:
-
-\begin{itemize}
-\item Specific programming language
-\item Specific libraries
-\item Pre-trained models
-\item Specific linter tool (if appropriate)
-\item Specific unit testing framework
-\item Investigation of code coverage measuring tools
-\item Specific plans for Continuous Integration (CI), or an explanation that CI
-  is not being done
-\item Specific performance measuring tools (like Valgrind), if
-  appropriate
-\item Tools you will likely be using?
-\end{itemize}
-
-\wss{git, GitHub and GitHub projects should be part of your technology.}
+Continuous integration within the project will be used for simple checks like latex build success, compilation success, and simple test cases throughout the project to ensure to changes to the main branch break the project and cause unnecessary pain points for the team. Additionally, using continuous integration to enforce our coding standards makes sure our formatting and naming conventions stay consistent throughout the entire duration of the project.
 
 \section{Coding Standard}
 
-\wss{What coding standard will you adopt?}
+The coding standards used for this project will follow those made by the creators of the language. For example, if we proceed with using Python as the main development language for our project then PEP8 will be enforced as it was made by the language developers. Some standards made by developers lack clear cut rules in certain cases where developers didn’t intend for the language’s usage, but we will discuss as a team to negate any ambiguity in such cases.
+Linters will be used within our development platforms to enforce the selected coding standards, this will keep a clean and consistent format to the code as well as clear naming conventions for well manageable variables.
 
 \newpage{}
 
 \section*{Appendix --- Reflection}
-
-\input{../Reflection.tex}
 
 \begin{enumerate}
     \item Why is it important to create a development plan prior to starting the
@@ -240,30 +372,48 @@ Topics to discuss include the following:
     \item What disagreements did your group have in this deliverable, if any,
     and how did you resolve them?
 \end{enumerate}
-\textbf{Maham} \\
+\textbf{Maham:} \\
 Having a plan eliminates a lot of uncertainty, whether it is timeline, team roles or conflict resolution methodologies. It allows the team to focus on what is important without being bogged down by frivolous details. Plus, it allows effective allocation of resources. For example, if one person is better at front end development, members who do not want to be or cannot be involved in it, do not have to start from scratch and master a new skill within a small time frame. 
 
-The main advantage of CI/CD is a smoother integration of code while reducing the amount of mistakes and code conflicts that would need to be fixed at the end of the project. However, there is one troublesome disadvantage - conflicting merge requests (this is in the context of using github) and the very time consuming endeavour of fixing them. 
+The main advantage of CI/CD is a smoother integration of code while reducing the amount of mistakes and code conflicts that would need to be fixed at the end of the project. However, there is one troublesome disadvantage - conflicting merge requests (this is in the context of using GitHub) and the very time consuming endeavour of fixing them. 
 
 As for group disagreements, I do not think we had any. All members carefully listened to any input from their teammates and implemented any changes that were deemed to be beneficial. We were professional and respectful of each other’s opinions and gave equal importance to everyone’s feedback. \\
 
 
-\textbf{Matthew}\\
+\noindent \textbf{Matthew:}\\
 I think it is important to create a development plan prior to starting the project because it helps our team navigate conflict down the line. Not everyone works the same and so this development plan acts as a formal document to communicate with the team and find common ground for everyone to perform well on. Furthermore, it is a form of having an awkward conversation now compared to down the line when this work wasn't done and there is no basis to critique a member's performance. 
 
 An advantage of CI/CD is the reduced manual effort to test and evaluate code. If there is a problem with one of our documents that we upload or a file that is incorrect, we can have the tests evaluate it and be flagged for issues with it. A downside of CI/CD is the overhead or the amount of time that it takes to set up. For a shorter project it will take a bit longer to set up and thus less time is put towards coding the features at the cost of automating the building and testing.
 
-The group did not have any disagreements during this deliverable. Everyone was able to communicate to each other and each meeting went with a plan and left with actionable items to complete. As the term gets busier and there are more deliverables for other classes I think that the team charter below will help guide us for the rest of the project.
+The group did not have any disagreements during this deliverable. Everyone was able to communicate to each other and each meeting went with a plan and left with actionable items to complete. As the term gets busier and there are more deliverables for other classes I think that the team charter below will help guide us for the rest of the project. \\
+
+\noindent \textbf{Vaisnavi:} \\
+Creating a development plan before starting the project is extremely important as it allows us to map out all of our ideas and thoughts. As someone who is a visual learner, I have to see all the tasks written out before I start anything. Writing out a plan has always been something that aided me in successfully completing any task. Ultimately having a plan helps as it allows you to take a step back and see the entire picture and be able to map out every little thing in order to reach the final product.
 
 
+One of the main advantages of CI/CD is the fact that it is able to provide us with quick feedback. It directs our attention to a merge conflict from a PR right away, which allows us to eliminate that error immediately without it breaking our main branch. On the other hand, one of the main disadvantages is that although it does catch errors, sometimes there could be false positives in terms of if there is a simple formatting issue but the actual syntax and document is perfectly fine. This ultimately will harm us in terms of efficiency as it will hinder our progress if we are trying to find a bug that does not exist.
+
+
+No disagreements took place within this deliverable, everyone on the team was able to voice their concerns. All team members have been respectful and have been taking in the feedback and applying it. With that being said, we have had some suggestions come into play, specifically with our respective branches. We started off by having branches for each document we were working on, but we decided that it would be easier to keep track of each member having just one branch for their version of the document and from their multiple PR’s could be reviewed and approved. We discussed this during a team meeting and quickly came to this resolution, which showcases how key of a role communication plays in a team setting.
+
+\textbf{Eman}\\
+
+Before starting a project, it is essential to create a development plan because it gives the team a clear path forward. In my personal experience, it helps in assigning duties, defining the scope, outlining deliverables, and setting reasonable deadlines. Brainstorming a plan allows us to save wasted effort and lower risks by recognizing problems in the early stages of our project by narrowing down our scope. Additionally, it provides a way to make sure that everyone is on board with the project's objectives. 
+
+Faster development, early problem detection, and consistent code quality are some of the primary benefits of CI/CD. In this method, testing and deployment save time and push the release of updates faster. Although it is relatively time. A downside to CI/CD would be that frequent releases can be problematic if not handled properly, but generally speaking, the advantages exceed the disadvantages.
+
+The team members were respectful and professional in our first few conversations and meetings together. Everyone has had the chance to equally voice their opinion or thoughts and be taken into consideration. That being said, there were a few differences in preference for the focus of the project. While some members were leaning toward one project idea, others including myself were striving to choose another project idea. While both project ideas are meaningful and have potential, the group decided to put it to a vote. While my choice of project wasn’t favored by the majority, I was willing to take on my team member’s choice of project and everyone was very professional about it. \\
+
+\noindent \textbf{Cieran:}\\
+The development plan sets the expectation for not only team members in their roles and responsibilities but also for the direction of the project as a whole. Creating the development plan prior to starting the project gives everyone a good idea, hopefully, of how to approach any foreseeable situation. I think it also makes everyone think of the project in advance and gets some of the team ‘storming’ out of the way early on.
+
+The advantages of using CI/CD are excellent in my opinion; continually automatic test cases, compilation checks, and more are extra assurance for the team that the project is still moving forward. It makes it easier for developers on the team to contribute quickly and get assurance they haven’t dropped the ball on the way. The downsides are the setup and the upkeep; setting up the CI/CD isn’t hard but making sure it’s testing the right things takes more in-depth knowledge of the project. Same with upkeep, if you add a new method, how do you apply CI/CD to that now? It becomes trickier, but I do believe the pros outweigh the cons.
+
+There was some disagreement on which project to select initially and a lack of pushback on the team charter. We have group members that are passionate, and that’s great, but it felt bad to not be able to realize each person’s dream of their capstone project. We settled the former issue with a vote after exploring both options in further detail, and all group members were professional about the outcome. The latter issue is something I fear; ambiguity or oversight here could make future conflicts a little more awkward.
 
 \newpage{}
 
 \section*{Appendix --- Team Charter}
-
-\wss{borrows from
-\href{https://engineering.up.edu/industry_partnerships/files/team-charter.pdf}
-{University of Portland Team Charter}}
 
 \subsection*{External Goals}
 
@@ -305,44 +455,30 @@ the attention of the teaching staff to ensure the work load is manageable for th
 \subsubsection*{Quality} 
 
 In order to maintain consistent quality for deliverables, each weekly meeting will briefly go over 
-deliverable expectations. Each deliverable should be checked against the rubric [on avenue] and also 
-against the repository checklist by the individual that wrote that deliverable but also by a teammate. 
+deliverable expectations. Each deliverable should be checked against the rubric [on avenue] and also against the repository checklist by the individual that wrote that deliverable but also by a teammate. 
 
+Furthermore, for meetings, team members are expected to arrive, review relevant material and provide any problems or status updates with their work to ensure the meeting stays on-topic and productive.
 
-Furthermore, for meetings, team members are expected to arrive, review relevant material and provide 
-any problems or status updates with their work to ensure the meeting stays on-topic and productive.
+During weekly meetings we will discuss “what went well, what to change” to see if there is a way to streamline communication to attain this quality. We also encourage each team member to ask for help in our informal chat in a timely manner while being respectful of each person's time.
 
-Lastly, during weekly meetings we will discuss “what went well, what to change” to see if there is a 
-way to streamline communication to attain this quality. We also encourage each team member to ask for 
-help in our informal chat in a timely manner while being respectful of each person's time.
-
+Lastly, we have all agreed that deliverables are to be prepared and finalized two days prior to the deadline (internal deadline). This will give us time necessary to fix any problems that may arise, navigate any extenuating circumstances and prepare the documents prior to the real deadline.
 
 \subsubsection*{Attitude}
 
-\wss{What are your team's expectations regarding team members' ideas,
-interactions with the team, cooperation, attitudes, and anything else regarding
-team member contributions?  Do you want to introduce a code of conduct?  Do you
-want a conflict resolution plan?  Can adopt existing codes of conduct.}
+For this project, the expected attitude from group members is to stay positive, respectful, and collaborative. Everyone should
+contribute their fair share, communicate openly, and be willing to listen to each other’s ideas. Mistakes and challenges will
+come up, but approaching them with patience and a problem-solving mindset will keep the group moving forward smoothly.
 
 \subsubsection*{Stay on Track}
 
-\wss{What methods will be used to keep the team on track? How will your team
-ensure that members contribute as expected to the team and that the team
-performs as expected? How will your team reward members who do well and manage
-members whose performance is below expectations?  What are the consequences for
-someone not contributing their fair share?}
-
-\wss{You may wish to use the project management metrics collected for the TA and
-instructor for this.}
-
-\wss{You can set target metrics for attendance, commits, etc.  What are the
-consequences if someone doesn't hit their targets?  Do they need to bring the
-coffee to the next team meeting?  Does the team need to make an appointment with
-their TA, or the instructor?  Are there incentives for reaching targets early?}
+To stay on track, GitHub will be used to assign and organize tasks for each group member. This will clearly show the division of labour, 
+monitor progress in real time, and ensure deadlines are being met. By breaking down the work into smaller tasks and tracking them, we can stay organized, avoid confusion, and keep the project
+moving. Each task may be broken down into subtasks, which can allow progress to be tracked at various stages towards completion.  
 
 \subsubsection*{Team Building}
 
-The team will engage in social activities together if schedules allow. Team building activities will strongly be encouraged. There may be sessions of working together in person and spending some time together with any member that is available. This will also depend on work habits and preferences.
+The team will engage in social activities together if schedules allow. Team building activities will strongly be encouraged.
+There may be sessions of working together in person. This will also depend on work habits and preferences.
 
 \subsubsection*{Decision Making} 
 
