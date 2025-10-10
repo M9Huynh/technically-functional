@@ -77,21 +77,63 @@ Date 2 & 1.1 & Notes\\
 
 \section{Mandated Constraints}
 \subsection{Solution Constraints}
-\lips
+The system shall provide users access to their account and previous exercise information, provided a valid username and password.
+
+\textbf{Justification}: User data stored in the user database is important to the account, but should be safely guarded without validation.\\
+
+The system shall provide users with an overview of their exercises and data specific to individual exercises.
+
+\textbf{Justification}: Users should be able to look back on their progress and see data on their exercises over time.\\
+
+The system shall provide users the ability to upload video-feeds of them performing exercises, and return recommendations on their form.
+
+\textbf{Justification}: The primary function of the system, users must be able to get form recommendations to assist in proper recovery and boost confidence in correct form. The system must be able to accept the video as input and be capable of returning relevant recommendations to the user.
+
 \subsection{Implementation Environment of the Current System}
-\lips
+\begin{itemize}
+  \item \textbf{Back End} (Processing): Source code written in Python.
+  \item \textbf{Front End} (GUI): Source code written in platform specific application studio (EG. Android Studio).
+  \item \textbf{OpenCV}: Library used to analyze user video-streams for required data.
+  \item \textbf{Database}: Remotely accessible storage for user data.
+\end{itemize}
+
 \subsection{Partner or Collaborative Applications}
-\lips
+Physiotherapist scheduling, management, and patient-oriented softwares could be used in tandem, however the system is not designed with collaborative applications in mind.
+
 \subsection{Off-the-Shelf Software}
-\lips
+\begin{itemize}
+  \item \textbf{Database} software is previously implemented and simply interfaced by the system.
+  \item \textbf{OpenCV} software is unmodified and only interfaced by the system.
+\end{itemize}
+
 \subsection{Anticipated Workplace Environment}
-\lips
+\begin{itemize}
+  \item Physiotherapist patients in their residences or private spaces.
+  \item Physiotherapists in their offices or assigned exercise spaces.
+\end{itemize}
+
 \subsection{Schedule Constraints}
-\lips
+As per the \href{https://github.com/M9Huynh/technically-functional/blob/7ff500c1d16686d4d7926d96109d83b87b307b87/docs/DevelopmentPlan/DevelopmentPlan.pdf}{Development Plan}:
+\begin{itemize}
+  \item Proof of Concept must be developed by November 17th, 2025.
+  \begin{itemize}
+    \item Demonstrations: November 17th - 28th.
+  \end{itemize}
+  \item Revision 0 must be developed by February 2nd, 2026.
+  \begin{itemize}
+    \item Demonstrations: February 2nd - 13th.
+  \end{itemize}
+  \item Revision 1 must be developed by March 23rd, 2026.
+  \begin{itemize}
+    \item Demonstrations: March 23rd - 29th.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Budget Constraints}
-\lips
+The development of the system must remain less than \$125 or the team begins paying out of pocket for development tools. Ideally the implementation remains free and open to use.
+
 \subsection{Enterprise Constraints}
-\lips
+The system will attempt to mimic standards set by professional physiotherapists across Canada. Due to the nature of health care and physiotherapy market within Canada, the system will not provide medical care or medical assistance, simply wellbeing advice similar to that of a gym companion application.
 
 \section{Naming Conventions and Terminology}
 \subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
