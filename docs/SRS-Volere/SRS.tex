@@ -9,6 +9,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{natbib}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -52,18 +53,29 @@ Date 2 & 1.1 & Notes\\
 ~\\
 
 ~\newpage
+\noindent \textbf{\large Introduction} \\
+	The software requirements specification (SRS) document describes the functional and non-functional requirements, scope and functionality of the application. It formally outlines key measures relevant to all the different stages of the software development lifecycle. This document is constructed using the Volere Software Requirements Specification template %\citep{robertson2012volere}
 \section{Purpose of the Project}
 \subsection{User Business}
 \lips
 \subsection{Goals of the Project}
 \lips
+\section{Naming Conventions and Terminology}
+\lips
 \section{Stakeholders}
+The stakeholders for this project are parties with a vested interest in the end product. They will be consulted on their requirements and opinions throughout the development process. Their impact will be foundational for correctness of the product. This section outlines the various types and levels of stakeholders, the personas, user participation (towards application development) and any users that will be responsible for the product’s maintenance. 
 \subsection{Client}
-\lips
+There are two categories of clients that are the target audience for this product. The first category of end users is the patients. The application is being designed for patients who are undergoing physiotherapy treatment and have been given a home exercise program to aid in their rehabilitation. For the purpose of this system, the exercise and the joint selected was recommended by one of our stakeholders. The knee and a straight leg raise were chosen.
+
+The second category of the clients are the physiotherapists who are treating the users on the application. It will integrate the physiotherapist’s patient list and their corresponding performance statistics. The application allows physiotherapists to gain insight into how their patients’ are progressing. Furthermore, it will enable the assessment of the suitability of the prescribed exercise, as well as gauging whether any additional modifications are required (number of repetitions, degree of complexity etc.).
+
 \subsection{Customer}
-\lips
+The application is being developed for a Canadian market with its governing standards and regulations in mind. Although this version of the application does not have any customers, it can prospectively be purchased by any healthcare provider and be incorporated into their patient care structure. 
 \subsection{Other Stakeholders}
-\lips
+The primary and secondary stakeholders are described above (clients and customers).
+
+Other stakeholders may include regulatory authorities or other healthcare specialists, such as physiatrists or massage therapists. The regulatory authorities will be allowed access to conduct audits and ensure that any disclosed patient information is being handled in an ethical manner. In addition, they will verify the accuracy and quality of care being delivered. Other healthcare providers may  benefit from any insights or information that is being provided, which may be used to tailor their own care of the patient. Lastly, support workers may use this application to assist their clients with their home exercises. 
+
 \subsection{Hands-On Users of the Project}
 \lips
 \subsection{Personas}
