@@ -11,6 +11,7 @@
 \usepackage{hyperref}
 \usepackage{array}
 \usepackage{float}
+\usepackage{graphicx}
 
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
@@ -230,13 +231,39 @@ Furthermore, any data will not be shared without any explicit consent and will b
 
 \section{The Scope of the Work}
 \subsection{The Current Situation}
-\lips
+Current at-home solutions for patients requiring physiotherapy, namely post-operative patients, are paid solutions that connect you to a physiotherapist to speak with or suggest to you a series of exercises based on some generically entered data. Patients are lacking a self-help tool to not only ensure they’re completing their exercises, but completing them correctly and safely as well.
+
+Computer vision is being used in select places in the market to analyze form and give feedback, this exists for things like golf and tennis form analysis. However a stand-alone form-analyzing application which provides feedback independent of domain experts could scale far better and reach people who need it.
+
 \subsection{The Context of the Work}
-\lips
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{Context_Diagram.png}
+  \caption{Work Context Diagram}
+\end{figure}
+
 \subsection{Work Partitioning}
-\lips
+\begin{table}[H]
+\centering
+\begin{tabular}{|m{3cm}|m{3cm}|m{8cm}|}
+  \hline
+  \textbf{Event} & \textbf{System Action} & \textbf{Description} \\ \hline
+  User Requests Login & Login Request (in) & Compare user’s entered data with user database. \\ \hline
+  Login Result Return & Login Result (out) & Return result, login or fail, to user based on data comparison. \\ \hline
+  User Requests Display & Display Request (in) & Generate display with data from the user database. \\ \hline
+  Display Return & Display Return (out) & Send the generated display to the user's GUI. \\ \hline
+  User Submits Video & Form Feedback Request (in) & The user submits a video-feed for form analysis. \\ \hline
+  Form Feedback Return & Form Feedback Return (out) & The system analyzes the form in the user’s video feed. The system generates form feedback and an overview from the analyzed information. The system generates a display with the newly added overview. The system sends the form feedback and the new display to the user. \\ \hline  
+\end{tabular}
+\caption{Work Partitioning}
+\end{table}
+
 \subsection{Specifying a Business Use Case (BUC)}
-\lips
+A user (patient) is prescribed exercises by a physiotherapist and uses the app to ensure they are doing the exercises correctly. This use case assumes the user is already logged in, and thus skips the login steps.
+
+\begin{figure}[H]
+\includegraphics[width=\linewidth]{BUC.png}
+\caption{Business Use Case Diagram}
+\end{figure}
 
 \section{Business Data Model and Data Dictionary}
 \subsection{Business Data Model}
