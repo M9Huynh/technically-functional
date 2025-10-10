@@ -9,6 +9,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{longtable}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -209,6 +210,84 @@ involved in the Project}
 \lips
 \subsection{Standards Compliance Requirements}
 \lips
+\section{Traceability from Requirements to Use Cases}
+This section maps each of the requirements to one or more of the use cases listed and defined above.
+\begin{longtable}{p{2.5cm}p{11cm}}
+    \caption{Traceability from Requirements to Use Cases}\label{tab:req_uc}\\
+    \toprule
+    \textbf{Requirement} & \textbf{Use Case(s)} \\
+    \midrule
+    \endfirsthead
+    
+    \multicolumn{2}{c}%
+    {{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+    \toprule
+    \textbf{Requirement} & \textbf{Use Case(s)} \\
+    \midrule
+    \endhead
+    
+    \midrule
+    \multicolumn{2}{r}{{Continued on next page}} \\
+    \endfoot
+    
+    \bottomrule
+    \endlastfoot
+
+    FR1 & PUC3, PUC10 \\
+    FR2 & PUC1 \\
+    FR3 & PUC3 \\
+    FR4 & PUC10 \\
+    FR5 & PUC8 \\
+    FR6 & PUC10 \\
+    FR7 & PUC5 \\
+    FR8 & PUC7 \\
+    FR9 & PUC9 \\
+    FR10 & PUC4, PUC8 \\
+    FR11 & PUC11 \\
+    FR12 & PUC11 \\
+    FR13 & PUC11, PUC12 \\
+    FR14 & PUC6 \\
+    FR15 & PUC7 \\
+    FR16 & PUC7 \\
+    FR17 & PUC8, PUC10 \\
+    FR18 & PUC10 \\
+    FR19 & PUC9 \\
+    FR20 & PUC10 \\
+    FR21 & PUC13 \\
+    FR22 & PUC10, PUC13 \\
+    FR23 & PUC1, PUC13 \\
+    FR24 & PUC13 \\
+    FR25 & PUC8, PUC10 \\
+    LFR-AP1 & All PUCs \\
+    LFR-ST1 & PUC4, PUC6, PUC8 \\
+    UHR-EOU1 & All PUCs \\
+    UHR-EOU2 & PUC6 \\
+    UHR-LRN1 & PUC5, PUC8 \\
+    UHR-UPL1 & PUC6 \\
+    PR-SL1 & PUC5 \\
+    PR-SL2 & PUC6 \\
+    PR-PAR1 & PUC11 \\
+    PR-PAR2 & PUC11, PUC12 \\
+    PR-RFT1 & PUC5 \\
+    PR-RFT2 & PUC5 \\
+    PR-RFT3 & All PUCs \\
+    PR-CR1 & All PUCs \\
+    PR-SER1 & PUC11, PUC12 \\
+    OER-EP1 & PUC5, PUC11 \\
+    OER-WE1 & All PUCs \\
+    OER-WE2 & All PUCs \\
+    MS-MNT1 & PUC13 \\
+    MS-AD1 & PUC5, PUC8 \\
+    SR-AR1 & PUC1 \\
+    SR-AR2 & PUC3 \\
+    SR-AR3 & PUC2 \\
+    SR-IR1 & PUC13 \\
+    SR-PR1 & PUC1, PUC13 \\
+    SR-PR2 & PUC13 \\
+
+
+\end{longtable}
+
 
 \section{Open Issues}
 
