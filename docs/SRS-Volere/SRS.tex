@@ -6,6 +6,23 @@
 % Risks are removed because they are covered by the Hazard Analysis
 \documentclass[12pt]{article}
 
+% ----- Requirements formatting helpers -----
+\usepackage{enumitem}
+
+% A tidy description-style list for requirements
+\newlist{reqlist}{description}{1}
+\setlist[reqlist]{%
+	style=nextline,
+	leftmargin=3.2cm,
+	labelsep=0.6cm,
+	font=\normalfont\bfseries
+}
+
+% Inline helpers for rationale/fit criterion
+\newcommand{\rationale}[1]{\par\emph{Rationale:} #1}
+\newcommand{\fitcrit}[1]{\par\emph{Fit Criterion:} #1}
+% -------------------------------------------
+
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
@@ -130,85 +147,384 @@ involved in the Project}
 \subsection{Individual Product Use Cases (PUC's)}
 \lips
 
-\section{Functional Requirements}
-\subsection{Functional Requirements}
-\lips
+\section{9 Functional Requirements}
 
-\section{Look and Feel Requirements}
-\subsection{Appearance Requirements}
-\lips
-\subsection{Style Requirements}
-\lips
+\begin{reqlist}
+	
+	\item[FR 1.] The system shall require returning users to log in with unique credentials before accessing any exercise or dashboard features.
+	\rationale{Authentication ensures that patient data remains private and that exercise programs are accessed only by the intended individual, maintaining accountability for treatment compliance.}
+	\fitcrit{The system prevents access to any exercise or dashboard features without successful authentication. Unauthorized access attempts are rejected 100\% of the time.}
+	
+	\item[FR 1.1] The system shall require a new user to create an account with unique credentials as the appropriate user role (Physiotherapist Admin or Patient) and complete all the required fields to verify account creation.
+	\rationale{Role-based account creation ensures that users are granted appropriate access permissions from the outset, preventing unauthorized access to administrative or clinical features. Requiring all fields to be completed ensures that essential information needed for system functionality and regulatory compliance is collected during registration, reducing incomplete profiles and data quality issues.}
+	\fitcrit{The system rejects account creation attempts with missing required fields or duplicate credentials. All new accounts are successfully assigned to the correct user role (PT or Patient) with appropriate permissions activated upon creation.}
+	
+	\item[FR 1.2] The system shall require a physiotherapist user to provide a PT license from their provincial regulatory body, a government ID, registration number/client ID, and location and ID of their practicing clinic in order to join the clinic’s organization on the app.
+	\rationale{Verifying PT credentials through provincial regulatory body information ensures that only licensed, qualified healthcare professionals can provide clinical services through the system. This protects patient safety, maintains professional standards, ensures regulatory compliance, and reduces liability by preventing unauthorized individuals from accessing patient data or prescribing treatment. Linking PTs to specific clinics enables proper organizational management and accountability.}
+	\fitcrit{The system requires all four credential fields (PT license, government ID, registration number, clinic location/ID) to be completed before allowing PT access. Incomplete credential submissions are rejected, and PTs without verified credentials cannot access patient data or clinical features.}
+	
+	\item[FR 1.3] The system shall require a user to enter a unique code provided by their Physiotherapist in order to join the correct organization and interact with their PT through the system.
+	\rationale{A unique access code creates a secure connection between patients and their specific physiotherapist within the correct clinic organization. This prevents patients from accidentally joining the wrong organization or connecting with an incorrect PT, ensures proper care continuity, and maintains organizational boundaries. The code-based approach provides a simple yet effective authentication method that doesn't require complex user verification processes while maintaining security.}
+	\fitcrit{Patients cannot join an organization without entering a valid unique code. Invalid or expired codes are rejected 100\% of the time. Each code successfully links the patient to exactly one PT and one organization.}
+	
+	\item[FR 2.] The system shall allow a physiotherapist user (PT) to create, initialize, and manage patient accounts, including assigning patients a code to join their own organization.
+	\rationale{Physiotherapists are licensed medical professionals responsible for patient care and must maintain control over who accesses the system to ensure proper supervision and treatment oversight.}
+	\fitcrit{PTs can successfully create patient accounts, generate unique access codes, and perform account management functions (edit, disable, reset) for all patients under their care. All PT-initiated account actions are logged and executed without errors.}
+	
+	\item[FR 3.] The system shall restrict patients from joining a clinic’s organization independently; all accounts must be authorized by a physiotherapist.
+	\rationale{This prevents unauthorized access to medical treatment tools and ensures that only patients under active care can use the system, maintaining professional oversight and reducing liability.}
+	\fitcrit{Patient attempts to join an organization without PT authorization (valid unique code) are rejected 100\% of the time. All active patient accounts can be traced back to a PT-initiated authorization.}
+	
+	\item[FR 4.] The system shall allow physiotherapists to reset or disable patient accounts if misuse or inactivity is detected.
+	\rationale{Account management capabilities enable PTs to respond to security concerns, terminate care when treatment is complete, and maintain system integrity.}
+	\fitcrit{PTs can successfully reset passwords and disable patient accounts within 60 seconds. Disabled accounts immediately lose access to all system features. All reset and disable actions are logged with timestamps and PT identifiers.}
+	
+	\item[FR 5.] The system shall provide patients with guided exercise instructions for the knee joint (first iteration).
+	\rationale{Focusing on knee joint exercises for the initial release allows the development team to create a robust, well-tested foundation before expanding to other joint types, reducing complexity and time-to-market.}
+	\fitcrit{The system includes a complete library of at least 10 common knee rehabilitation exercises with step-by-step instructions, demonstration videos or images, and proper form guidelines. Instructions are accessible to all authorized patients.}
+	
+	\item[FR 6.] The system shall allow physiotherapists to assign, customize, and update prescribed exercises (e.g., number of sets, reps, rest time).
+	\rationale{Each patient has unique needs and progress rates. Customization enables PTs to tailor treatment plans to individual capabilities, injuries, and recovery stages for optimal therapeutic outcomes.}
+	\fitcrit{PTs can modify at least three parameters (sets, reps, rest time) for any assigned exercise. Changes are saved and immediately reflected in the patient's exercise program. The system tracks all modifications with timestamps.}
+	
+	\item[FR 7.] The system shall allow patients to record their exercise attempts through video capture.
+	\rationale{Video recording provides objective documentation of patient performance, enabling both real-time computer vision analysis and later review by physiotherapists for comprehensive assessment.}
+	\fitcrit{Patients can successfully initiate and complete video recording of exercise attempts using their device camera. Videos are captured at minimum 720p resolution and 30fps, and are stored for PT review.}
+	
+	\item[FR 8.] The system shall support retry attempts if the patient's form does not meet alignment requirements.
+	\rationale{Allowing retries encourages patients to achieve correct form, which is essential for injury prevention, therapeutic effectiveness, and building proper movement patterns.}
+	\fitcrit{When form deviations are detected, the system prompts the patient to retry and allows unlimited retry attempts until correct form is achieved or the patient chooses to stop. Each retry attempt is recorded separately.}
+	
+	\item[FR 9.] The system shall prompt the user to provide feedback on the level of difficulty of the exercise, effectiveness, and the patient's satisfaction with the given exercise.
+	\rationale{Patient feedback provides valuable qualitative data that complements quantitative performance metrics, helping PTs adjust treatment plans based on patient experience and perceived progress.}
+	\fitcrit{After each exercise session, the system prompts patients to rate difficulty, effectiveness, and satisfaction on a defined scale (e.g., 1--5 or 1--10). Feedback is captured and stored with the exercise session data. The system prevents session completion until feedback is provided or explicitly skipped.}
+	
+	\item[FR 10.] The system shall provide patients with an overview of completed and pending exercises, including suggested progressions.
+	\rationale{Progress visibility motivates patients, helps them understand their treatment trajectory, and promotes adherence by showing accomplishments and next steps.}
+	\fitcrit{The patient dashboard displays a complete list of assigned exercises showing completion status, completion dates, and suggested next exercises. The overview updates in real-time as exercises are completed.}
+	
+	\item[FR 11.] The system shall capture exercise metadata such as frequency, duration, number of repetitions, rest periods, and pain scores.
+	\rationale{Comprehensive metadata enables PTs to track adherence, identify patterns, assess progress objectively, and make data-driven decisions about treatment modifications.}
+	\fitcrit{For each exercise session, the system automatically captures and stores at least five metadata fields (frequency, duration, repetitions, rest periods, pain scores). All metadata is timestamped and associated with the correct patient and exercise.}
+	
+	\item[FR 12.] The system shall analyze captured video streams using computer vision to compute biomechanical features (e.g., joint angle, range of motion, time-under-tension).
+	\rationale{Automated biomechanical analysis provides objective, quantitative measurements that would be difficult or impossible to obtain manually, enabling precise assessment of exercise execution quality.}
+	\fitcrit{The system successfully computes at least three biomechanical measurements (joint angle, range of motion) from video with $\pm5^\circ$ accuracy for angles and $\pm10\%$ accuracy for time measurements when compared to manual expert assessment.}
+	
+	\item[FR 13.] The system shall compare patient performance against reference exercise models to verify correctness of form.
+	\rationale{Comparing against validated reference models ensures that the system's feedback is based on established therapeutic standards and best practices for each exercise type.}
+	\fitcrit{The system compares patient performance metrics against stored reference models and generates a form correctness score or pass/fail determination for each exercise attempt. Comparison results are provided to both patient and PT.}
+	
+	\item[FR 14.] The system shall provide corrective feedback highlighting deviations (e.g., insufficient bend, poor alignment, incorrect tempo).
+	\rationale{Specific, actionable feedback helps patients understand and correct mistakes in real-time, improving exercise quality and reducing the risk of injury or ineffective treatment.}
+	\fitcrit{When form deviations are detected, the system provides specific feedback identifying the type of deviation (e.g., ``insufficient knee bend,'' ``poor hip alignment'') within 1 second of detection. Feedback includes both visual and audible cues.}
+	
+	\item[FR 15.] The system shall allow patients to review recorded exercise attempts before submission.
+	\rationale{Self-review empowers patients to evaluate their own performance, promotes self-awareness of movement quality, and allows them to decide whether to retry before submitting to their PT.}
+	\fitcrit{Patients can replay their recorded exercise video immediately after completion and before submission. The review interface includes playback controls (play, pause, rewind) and displays form analysis results alongside the video.}
+	
+	\item[FR 16.] The system shall prompt patients to retry until correct alignment is achieved.
+	\rationale{Persistent prompting ensures that patients develop correct movement patterns and don't reinforce poor form, which is critical for therapeutic success and injury prevention.}
+	\fitcrit{After each failed attempt, the system displays a retry prompt with specific guidance on what to correct. The system continues prompting until the patient achieves passing form or manually chooses to end the session.}
+	
+	\item[FR 17.] The system shall generate session-based and daily progress reports for physiotherapists.
+	\rationale{Regular automated reports enable PTs to efficiently monitor multiple patients, identify trends, and intervene quickly when issues arise without manually reviewing all exercise attempts.}
+	\fitcrit{The system automatically generates reports after each session and compiles daily summaries by end of day. Reports include completion rates, form scores, pain levels, and patient feedback. PTs can access reports within 5 seconds of generation.}
+	
+	\item[FR 18.] The system shall provide physiotherapists with dashboards listing patients, their progress, and flagged cases.
+	\rationale{Centralized dashboards allow PTs to prioritize their attention, quickly identify patients who need intervention, and manage their caseload efficiently.}
+	\fitcrit{The PT dashboard displays all patients in the PT's caseload with summary statistics (adherence rate, average form score, days since last session). Cases requiring attention are visually flagged and sortable. Dashboard loads within 2 seconds.}
+	
+	\item[FR 19.] The system shall allow physiotherapists to leave feedback on patient submissions.
+	\rationale{Direct PT feedback provides personalized guidance, reinforces correct behavior, addresses specific concerns, and maintains the therapeutic relationship in a remote care setting.}
+	\fitcrit{PTs can view any patient submission and add text or voice feedback. Feedback is immediately visible to the patient and timestamped. The system supports feedback of at least 500 characters or 2 minutes of voice recording.}
+	
+	\item[FR 20.] The system shall alert physiotherapists if a patient repeatedly fails to complete exercises correctly.
+	\rationale{Automatic alerts ensure that PTs are notified of potential issues requiring intervention, preventing patients from continuing ineffective or potentially harmful exercise patterns.}
+	\fitcrit{The system generates an alert to the PT when a patient fails the same exercise 3 consecutive times or fails to achieve passing form in 5 attempts across any exercises within a 7-day period. Alerts appear prominently on the PT dashboard.}
+	
+	\item[FR 21.] The system shall securely store all patient data, including personal details, medical history, and exercise logs.
+	\rationale{Comprehensive data storage is necessary for continuity of care, legal documentation, treatment planning, and compliance with medical record-keeping requirements.}
+	\fitcrit{All patient data (personal information, medical history, exercise logs, videos) is stored in the database with no data loss. Data retrieval succeeds 99.9\% of the time. Storage implements encryption at rest and backup procedures.}
+	
+	\item[FR 22.] The system shall allow physiotherapists to update and manage patient records.
+	\rationale{PTs need the ability to maintain accurate, up-to-date records as patient conditions change, treatments progress, and new information becomes available.}
+	\fitcrit{PTs can successfully edit patient information fields, add medical history notes, and update treatment plans. All changes are saved with timestamps and version history. Updates are reflected immediately in the patient record.}
+	
+	\item[FR 23.] The system shall restrict patients to accessing only their own data.
+	\rationale{Data access restrictions protect patient privacy, comply with healthcare privacy regulations, and prevent unauthorized disclosure of sensitive medical information.}
+	\fitcrit{Patients can only view and interact with data associated with their own account. Attempts to access other patients' data through URL manipulation or other means are blocked 100\% of the time.}
+	
+	\item[FR 24.] The system shall allow video storage (locally or database), ensuring compliance with data retention and privacy requirements.
+	\rationale{Video evidence is crucial for PT review and treatment decisions, but must be stored in compliance with healthcare regulations regarding retention periods and privacy protection.}
+	
+	\item[FR 25.] The system shall ensure video and performance data are available for PT review and decision-making.
+	\rationale{Timely access to performance data enables PTs to make informed clinical decisions, adjust treatment plans appropriately, and provide evidence-based care.}
+	\fitcrit{PTs can access patient videos and performance data within 5 seconds of request. Data availability is maintained at 99\% uptime. Videos and data are synchronized and viewable within 1 minute of patient submission.}
+	
+	\item[FR 26.] The system shall support retry attempts if the patient's form has insufficient data.
+	\rationale{Insufficient data (due to occlusion, poor camera angle, or movement out of frame) prevents accurate form assessment and makes corrective feedback impossible. Allowing retries when data is incomplete gives patients another opportunity to capture usable video rather than submitting unusable attempts to their PT. This improves data quality, ensures that PTs receive meaningful performance information, and prevents patients from being incorrectly flagged for poor form when the issue was actually technical rather than performance-based.}
+	\fitcrit{When video analysis detects insufficient data (e.g., patient out of frame, excessive occlusion), the system alerts the patient with a specific reason and prompts for retry. The system allows unlimited retries until sufficient data quality is achieved.}
+	
+	\item[FR 27.] The system shall allow for physiotherapists to input daily/weekly limitations on the metrics measured by the application.
+	\rationale{Patient recovery is progressive, and safe exercise parameters change over time based on healing, pain levels, and functional improvement. Allowing PTs to set temporal limitations (e.g., ``no more than 3 sets per day this week'' or ``maintain knee flexion under 90 degrees for the next 5 days'') enables precise, time-bound treatment modifications that adapt to patient progress. This supports clinical best practices of gradual progression, helps prevent overexertion during vulnerable recovery phases, and gives PTs fine-grained control over treatment intensity.}
+	\fitcrit{PTs can set time-bound parameter limits (daily/weekly) for at least three metrics (sets, reps, range of motion thresholds). The system enforces these limits automatically, preventing patients from exceeding them. Limits can be modified or removed at any time by the PT.}
+	
+\end{reqlist}
 
-\section{Usability and Humanity Requirements}
-\subsection{Ease of Use Requirements}
-\lips
-\subsection{Personalization and Internationalization Requirements}
-\lips
-\subsection{Learning Requirements}
-\lips
-\subsection{Understandability and Politeness Requirements}
-\lips
-\subsection{Accessibility Requirements}
-\lips
+\section{10 Look and Feel Requirements}
 
-\section{Performance Requirements}
-\subsection{Speed and Latency Requirements}
-\lips
-\subsection{Safety-Critical Requirements}
-\lips
-\subsection{Precision or Accuracy Requirements}
-\lips
-\subsection{Robustness or Fault-Tolerance Requirements}
-\lips
-\subsection{Capacity Requirements}
-\lips
-\subsection{Scalability or Extensibility Requirements}
-\lips
-\subsection{Longevity Requirements}
-\lips
+\subsection{10.1 Appearance Requirements}
+\begin{reqlist}
+	\item[LFR-AP 1.] The system shall maintain consistent navigation and design across all interfaces.
+	\rationale{Consistency reduces cognitive load, minimizes learning time, and prevents user confusion when navigating between different features of the application.}
+	\fitcrit{All interfaces use the same navigation structure, color scheme, typography, and button styles. User testing confirms that 90\% of users can navigate between features without assistance after a 5-minute introduction.}
+\end{reqlist}
 
-\section{Operational and Environmental Requirements}
-\subsection{Expected Physical Environment}
-\lips
-\subsection{Wider Environment Requirements}
-\lips
-\subsection{Requirements for Interfacing with Adjacent Systems}
-\lips
-\subsection{Productization Requirements}
-\lips
-\subsection{Release Requirements}
-\lips
+\subsection{10.2 Style Requirements}
+\begin{reqlist}
+	\item[LFR-ST 1.] The system shall provide a user-friendly interface with clear instructions and visual cues.
+	\rationale{Many patients and some PTs may have limited technical expertise. A clear, intuitive interface ensures that the technology doesn't become a barrier to receiving or providing care.}
+	\fitcrit{User testing with participants of varying technical skill levels shows that 80\% can complete common tasks (start exercise, view progress, leave feedback) without external help. All critical actions have visible instructions and visual indicators.}
+\end{reqlist}
 
-\section{Maintainability and Support Requirements}
-\subsection{Maintenance Requirements}
-\lips
-\subsection{Supportability Requirements}
-\lips
-\subsection{Adaptability Requirements}
-\lips
+\section{11 Usability and Humanity Requirements}
 
-\section{Security Requirements}
-\subsection{Access Requirements}
-\lips
-\subsection{Integrity Requirements}
-\lips
-\subsection{Privacy Requirements}
-\lips
-\subsection{Audit Requirements}
-\lips
-\subsection{Immunity Requirements}
-\lips
+\subsection{11.1 Ease of Use Requirements}
+\begin{reqlist}
+	\item[UHR-EOU 1.] The system shall be accessible to users with limited technical skills.
+	\rationale{The patient population includes individuals of all ages and technical abilities. The system must accommodate users who may not be comfortable with complex technology to ensure broad accessibility.}
+	\fitcrit{User testing with participants aged 18--75 with varying technical proficiency shows that 80\% can complete basic tasks (login, start exercise, submit video) within 10 minutes without training.}
+	
+	\item[UHR-EOU 2.] The system shall provide patients with real-time corrective feedback (audible/visual cues) while performing exercises.
+	\rationale{Immediate feedback during exercise execution allows patients to correct their form in real-time, maximizing therapeutic benefit and reducing the risk of injury from improper technique.}
+	\fitcrit{Corrective feedback (both audible prompts and visual indicators) is delivered within 1 second of detecting form deviation. Feedback is synchronized with patient movement throughout the exercise session.}
+	
+	\item[UHR-EOU 3.] The system shall prompt the user at the start of video streaming if there are obstructions or low-light levels and give the user a chance to change their environment prior to analysis.
+	\rationale{Proactive environmental checks prevent wasted exercise sessions due to poor video quality. By alerting users to obstructions or lighting issues before they begin, the system helps ensure that computer vision analysis will be accurate and that corrective feedback will be meaningful. This improves user satisfaction by preventing frustration from having to repeat exercises due to technical issues rather than form problems, and it ensures the quality of data collected for PT review.}
+	\fitcrit{The system detects low-light conditions and obstructions before exercise begins. Detection occurs within 3 seconds of camera activation. Users receive clear prompts with suggestions for improvement.}
+	
+	\item[UHR-EOU 4.] The system shall prompt the user if the application does not have access to the camera or if there is an alternative program that is using the camera.
+	\rationale{Camera access is fundamental to the system's functionality. Clear prompts help users quickly identify and resolve permission issues or conflicts with other applications, preventing confusion and technical support calls. Many users may not understand why video capture isn't working without explicit notification. This guidance enables users to troubleshoot independently, reducing barriers to system use and improving the overall user experience.}
+	\fitcrit{When camera access is denied or the camera is in use by another application, the system displays a specific error message within 2 seconds explaining the issue and providing resolution steps. The prompt includes platform-specific instructions for granting camera permissions.}
+	
+	\item[UHR-EOU 5.] The system shall provide a guideline overlay when setting up the smart device so they are in-frame of the view and correct orientation.
+	\rationale{Proper camera positioning and device orientation are critical for accurate computer vision analysis of exercise form. A visual guideline overlay (such as body outline or positioning markers) helps users set up their device correctly without trial and error. This reduces setup frustration, ensures consistent data quality across sessions, improves the accuracy of biomechanical analysis, and helps users understand the spatial requirements for effective system operation.}
+	\fitcrit{The system displays a visual overlay (body outline or frame markers) during setup. The overlay provides real-time feedback when the user is correctly positioned (green indicator) or needs adjustment (red/yellow indicator with directional guidance).}
+	
+	\item[UHR-EOU 6.] The system shall provide an option to view the motion on an internal page on the application to help guide the motion during analysis.
+	\rationale{Real-time visual feedback showing patients their own movement as the system analyzes it helps them understand what the computer vision system ``sees'' and make immediate adjustments. This self-awareness tool bridges the gap between feeling correct and actually performing correctly, particularly useful for proprioceptive deficits common after injury. Seeing themselves on screen helps patients correlate system feedback with their actual movement, improving form correction accuracy and building better movement patterns through visual-kinesthetic integration.}
+	\fitcrit{Patients can activate a live video feed view showing themselves during exercise execution. The view is available as an optional toggle on the exercise interface and updates in real-time throughout the session.}
+\end{reqlist}
 
-\section{Cultural Requirements}
-\subsection{Cultural Requirements}
-\lips
+\subsection{11.2 Personalization and Internationalization Requirements}
+% (No items provided)
 
-\section{Compliance Requirements}
-\subsection{Legal Requirements}
-\lips
-\subsection{Standards Compliance Requirements}
-\lips
+\subsection{11.3 Learning Requirements}
+\begin{reqlist}
+	\item[UHR-LRN 1.] The system shall provide clear instructions for exercise execution and system navigation.
+	\rationale{Clear instructions reduce the learning curve, improve user confidence, ensure exercises are performed correctly, and minimize the need for external support.}
+	\fitcrit{Each exercise includes written instructions (maximum 8th-grade reading level) and visual demonstrations. Navigation instructions are available on first use.}
+\end{reqlist}
+
+\subsection{11.4 Understandability and Politeness Requirements}
+\begin{reqlist}
+	\item[UHR-UPL 1.] The system shall provide corrective feedback in a clear and constructive manner.
+	\rationale{Constructive, respectful feedback maintains patient motivation and engagement. Harsh or confusing feedback could discourage patients from continuing their treatment program.}
+	\fitcrit{All feedback messages use positive, instructive language (e.g., ``Try bending your knee a bit more'' rather than ``Wrong'').}
+\end{reqlist}
+
+\subsection{11.5 Accessibility Requirements}
+\begin{reqlist}
+	\item[UHR-AR 1.] The system shall provide both visual and audible cues.
+	\rationale{The system providing different methods to indicate whether a patient is correctly performing exercises or not ensures accessibility to users who benefit in understanding the functionalities and instructions given by the application.}
+	\fitcrit{All critical feedback and instructions are available in both visual (on-screen text/graphics) and audible (spoken) formats.}
+\end{reqlist}
+
+\section{12 Performance Requirements}
+
+\subsection{12.1 Speed and Latency Requirements}
+\begin{reqlist}
+	\item[PR-SL 1.] The system shall load the exercise interface within 2 seconds under normal network conditions.
+	\rationale{Fast loading times prevent user frustration and abandonment. Patients are more likely to complete exercises when the system responds quickly, maintaining treatment adherence.}
+	\fitcrit{The exercise interface loads completely (all elements interactive) within 2 seconds on a standard connection.}
+	
+	\item[PR-SL 2.] The system shall process video feedback and deliver corrective cues within 1 second of detected motion.
+	\rationale{Real-time feedback requires minimal latency to be effective. Delayed feedback may occur after the patient has already moved to the next repetition, making corrections impossible to implement immediately.}
+	\fitcrit{From the moment a form deviation is detected in the video stream, corrective feedback (visual and audible) is delivered within 1 second in 95\% of cases. Latency is measured from deviation occurrence to feedback display.}
+\end{reqlist}
+
+\subsection{12.2 Safety-Critical Requirements}
+\begin{reqlist}
+	\item[PR-SCR 1.] The system shall not allow patients to proceed with exercises if critical form violations are detected that could result in injury.
+	\rationale{Preventing exercise execution when dangerous form is detected protects patients from potential injury, particularly when performing unsupervised exercises at home. This overrides the general principle of allowing retries to prioritize immediate safety.}
+	\fitcrit{When critical form violations (defined as deviations $>30^\circ$ from safe range or joint stress indicators) are detected, the system immediately halts the exercise with a warning message. The system prevents continuation until the violation is corrected.}
+\end{reqlist}
+
+\subsection{12.3 Precision or Accuracy Requirements}
+\begin{reqlist}
+	\item[PR-PAR 1.] The system shall accurately compute biomechanical features (e.g., joint angle, range of motion) with sufficient precision to detect form deviations.
+	\rationale{Accurate measurements are essential for providing valid feedback and tracking progress. Inaccurate measurements could lead to inappropriate corrections or missed therapeutic opportunities.}
+	\fitcrit{Joint angle measurements are accurate within $\pm5^\circ$ compared to manual goniometer measurements by a trained physiotherapist. Range of motion calculations are within $\pm10\%$ of expert assessment in 90\% of test cases.}
+	
+	\item[PR-PAR 2.] The system shall compare patient performance against reference exercise models with sufficient accuracy to verify correctness of form.
+	\rationale{Form verification accuracy directly impacts therapeutic effectiveness and patient safety. False positives or negatives could reinforce poor form or discourage correct performance.}
+	\fitcrit{Form verification achieves minimum 85\% accuracy (correctly identifies both correct and incorrect form) when compared to expert PT assessment. False positive rate is below 10\%, and false negative rate is below 15\%.}
+\end{reqlist}
+
+\subsection{12.4 Robustness or Fault-Tolerance Requirements}
+\begin{reqlist}
+	\item[PR-RFT 1.] The system shall recover from unexpected failures within 5 minutes.
+	\rationale{Quick recovery minimizes disruption to patient exercise sessions and prevents data loss. Extended downtime could cause patients to miss treatment windows or lose confidence in the system.}
+	\fitcrit{System recovery from crashes or errors completes within 5 minutes, with all patient data preserved. Recovery success rate is 95\%. Users can resume their session without re-entering data or repeating completed exercises.}
+	
+	\item[PR-RFT 2.] The system shall queue and re-attempt submissions if internet connectivity fails during video upload.
+	\rationale{Home internet connections may be unreliable. Automatic retry mechanisms ensure that patient work is not lost and PTs receive all performance data despite temporary connectivity issues.}
+	\fitcrit{Failed uploads are automatically queued locally and retry every 30 seconds until successful.}
+	
+	\item[PR-RFT 3.] The system shall maintain an uptime of at least 99\% during operational hours.
+	\rationale{High availability ensures that patients can access their treatment programs when scheduled. Frequent downtime could disrupt treatment adherence and patient outcomes.}
+	
+	\item[PR-RFT 4.] The system shall monitor the smart device's battery life and prompt the user if it falls below a certain threshold to charge the device.
+	\rationale{Exercise sessions interrupted by device power loss result in lost data, incomplete PT records, and user frustration. Proactive battery monitoring allows users to charge their device or complete a shorter session before power runs out. This is particularly important for video recording and analysis, which can drain the battery quickly. Preventing mid-session failures improves data completeness, user experience, and treatment adherence by ensuring sessions can be completed successfully.}
+\end{reqlist}
+
+\subsection{12.5 Capacity Requirements}
+\begin{reqlist}
+	\item[PR-CR 1.] The system shall support at least 100 concurrent users without degradation in performance.
+	\rationale{High availability ensures that patients can access their treatment programs when scheduled. Frequent downtime could disrupt treatment adherence and patient outcomes.}
+	\fitcrit{Load testing confirms the system supports 100 simultaneous active sessions with response times remaining within specified limits (2-second interface load, 1-second feedback delivery). No crashes or errors occur under maximum load conditions.}
+\end{reqlist}
+
+\subsection{12.6 Scalability or Extensibility Requirements}
+\begin{reqlist}
+	\item[PR-SER 1.] The system architecture shall support future expansion to additional joint types beyond the knee.
+	\rationale{Starting with knee exercises but planning for expansion ensures the system can grow to serve broader treatment needs without requiring complete architectural redesign.}
+	\fitcrit{System architecture uses modular, joint-agnostic design patterns. Adding a new joint type (e.g., shoulder, ankle) requires only new exercise definitions and reference models, not core system changes.}
+\end{reqlist}
+
+\subsection{12.7 Longevity Requirements}
+\noindent N/A \\
+\textit{Reason:} Longevity requirements have been addressed in the previous iteration and are now covered under requirements 12.7.1 and 12.7.2, which specify a minimum 5-year operational lifespan and the use of widely-supported, non-proprietary technologies. No additional longevity requirements are necessary at this stage of the project.
+
+\section{13 Operational and Environmental Requirements}
+
+\subsection{13.1 Expected Physical Environment}
+\begin{reqlist}
+	\item[OER-EP 1.] The system shall function in typical home and clinical environments where patients perform physiotherapy exercises.
+	\rationale{Patients will use the system in diverse settings with varying lighting, space constraints, and background conditions. The system must be robust enough to function reliably in non-laboratory environments.}
+	\fitcrit{Computer vision analysis functions accurately in lighting conditions from 200--1000 lux, with backgrounds containing typical home elements (furniture, walls, patterns). Testing in 5 diverse home environments shows successful exercise capture and analysis in 90\% of cases.}
+\end{reqlist}
+
+\subsection{13.2 Wider Environment Requirements}
+\begin{reqlist}
+	\item[OER-WE 1.] The system shall be compatible with major operating systems (Windows, iOS, Android).
+	\rationale{Patients and PTs use diverse devices and operating systems. Cross-platform compatibility ensures maximum accessibility and prevents the system from excluding users based on their device choices.}
+	\fitcrit{The system installs and runs without errors on Windows 10+, iOS 14+, and Android 10+. All core features function identically across platforms. Cross-platform testing shows 95\% feature parity.}
+	
+	\item[OER-WE 2.] The system shall adapt to both mobile and desktop screen resolutions.
+	\rationale{Users may prefer different devices based on context (e.g., mobile for exercises, desktop for PT review). Responsive design ensures usability across all common screen sizes.}
+	\fitcrit{The interface adapts to screen sizes from 5-inch mobile devices to 27-inch desktop monitors. All interface elements remain accessible and readable. No horizontal scrolling is required. Testing on 10 different screen sizes shows full functionality on all devices.}
+\end{reqlist}
+
+\subsection{13.3 Requirements for Interfacing with Adjacent Systems}
+\noindent N/A \\
+\textit{Reason:} Interface requirements have been addressed in the previous iteration and are now covered under requirements 13.3.1 and 13.3.2, which specify API integration capabilities for EMR systems and standardized data export formats. The first iteration of the system focuses on core functionality as a standalone application.
+
+\subsection{13.4 Productization Requirements}
+\begin{reqlist}
+	\item[OER-PR 1.] The system shall include comprehensive user documentation for both patients and physiotherapists, including setup guides, troubleshooting instructions, and feature explanations.
+	\rationale{Thorough documentation reduces support burden, enables self-service problem resolution, facilitates user onboarding, and increases user confidence in the system. This is essential for product adoption in clinical settings.}
+	\fitcrit{Documentation includes setup guides, troubleshooting FAQ (minimum 15 common issues), and feature explanations for all major functions. Documentation is available in-app and as downloadable PDFs. User testing shows 80\% can resolve common issues using documentation alone.}
+\end{reqlist}
+
+\subsection{13.5 Release Requirements}
+\begin{reqlist}
+	\item[OER-RL 1.] The system shall follow a phased release approach, beginning with knee joint exercises before expanding to additional joint types.
+	\rationale{Phased releases allow the development team to validate the core platform with a focused feature set, gather real-world user feedback, identify and resolve issues in a controlled scope, and demonstrate value before expanding functionality. This reduces risk and enables iterative improvement.}
+	
+	\item[OER-RL 2.] The system shall test the connectivity to external libraries and database connectivity prior to release.
+	\rationale{Pre-release connectivity testing ensures that all external dependencies (libraries, databases) are properly configured and functional before the system reaches end users. This prevents deployment failures, reduces post-release bugs, and ensures that critical functionality is available from day one. Testing connectivity in the release process catches integration issues early when they are less costly and disruptive to fix.}
+\end{reqlist}
+
+\section{14 Maintainability and Support Requirements}
+
+\subsection{14.1 Maintenance Requirements}
+\begin{reqlist}
+	\item[MS-MNT 1.] The system shall automatically back up patient data once every 24 hours.
+	\rationale{Regular backups protect against data loss from hardware failures, software bugs, or security incidents. Daily backups balance data protection with system resource usage.}
+\end{reqlist}
+
+\subsection{14.2 Supportability Requirements}
+% (No items provided)
+
+\subsection{14.3 Adaptability Requirements}
+\begin{reqlist}
+	\item[MS-AD 1.] The system shall support both online and limited offline modes, caching exercise instructions for use without internet.
+	\rationale{Internet connectivity may be temporarily unavailable in some home environments. Offline capability with cached instructions ensures patients can continue exercises and sync data when connectivity is restored.}
+	\fitcrit{Exercise instructions, demonstration videos, and patient's current exercise plan are cached locally and accessible without internet connection. Cached content updates automatically when online. Users can view current exercises and instructions when offline.}
+\end{reqlist}
+
+\section{15 Security Requirements}
+
+\subsection{15.1 Access Requirements}
+\begin{reqlist}
+	\item[SR-AR 1.] The system shall enforce secure login using unique credentials for each user.
+	\rationale{Unique credentials ensure accountability, enable proper access control, and comply with healthcare privacy regulations requiring authenticated access to patient information.}
+	\fitcrit{Each user account has unique credentials (username/email + password). Duplicate credentials are rejected. Authentication succeeds only with valid credentials. All access to patient data requires an authenticated session with appropriate role permissions.}
+	
+	\item[SR-AR 2.] The system shall enforce password rules (e.g., minimum length, complexity) and validate them before account creation.
+	\rationale{Strong password requirements protect against unauthorized access through brute force or dictionary attacks, safeguarding sensitive patient health information.}
+	
+	\item[SR-AR 3.] The system shall automatically log out users after 60 minutes of inactivity.
+	\rationale{Automatic logout prevents unauthorized access if a user leaves their device unattended, protecting patient privacy particularly in shared home or clinical environments.}
+	
+	\item[SR-AR 4.] The system shall enforce a 2FA when creating an account and logging in. The system will ensure 2FA through the email address of the user stored on the database.
+	\rationale{Two-factor authentication (2FA) adds an additional layer of security beyond passwords, significantly reducing the risk of unauthorized account access from compromised credentials. Using email-based 2FA provides a balance between security and usability, as most users have ready access to email on separate devices. This is especially critical for protecting sensitive patient health information and ensuring compliance with healthcare data protection regulations.}
+	
+	\item[SR3.] The system shall include an option to reset the password if too many (5) attempts are made with incorrect login.
+	\rationale{Limiting login attempts to five protects accounts from brute force attacks where attackers systematically try multiple password combinations. Offering a password reset option after failed attempts balances security with user convenience, allowing legitimate users who have forgotten their password to regain access without being permanently locked out. This threshold is high enough to accommodate normal user errors but low enough to deter automated attacks.}
+\end{reqlist}
+
+\subsection{15.2 Integrity Requirements}
+\begin{reqlist}
+	\item[SR-IR 1.] The system shall encrypt all sensitive patient data at rest and in transit.
+	\rationale{Encryption protects patient privacy and complies with healthcare data protection regulations. It prevents unauthorized access even if data is intercepted or storage media is compromised.}
+\end{reqlist}
+
+\subsection{15.3 Privacy Requirements}
+\begin{reqlist}
+	\item[SR-PR 1.] The system shall restrict patients to accessing only their own data.
+	\rationale{Privacy restrictions prevent patients from viewing others' medical information, complying with healthcare privacy laws and maintaining trust in the system's data protection capabilities.}
+	
+	\item[SR-PR 2.] The system shall ensure video and performance data storage complies with data retention and privacy requirements.
+	\rationale{Healthcare regulations mandate specific retention periods and privacy protections for medical records. Compliance prevents legal liability and protects patient rights.}
+\end{reqlist}
+
+\subsection{15.4 Audit Requirements}
+\noindent N/A \\
+\textit{Reason:} While audit trails are best practice for healthcare systems, explicit audit requirements are not mandated for the first iteration of this application. The system's access controls (Section 15.1), data integrity measures (Section 15.2), and privacy restrictions (Section 15.3) provide adequate security for the initial release. Comprehensive audit logging capabilities (tracking who accessed what data and when) will be considered for future iterations based on regulatory guidance, clinic feedback, and compliance requirements that emerge during pilot deployment.
+
+\subsection{15.5 Immunity Requirements}
+\noindent N/A \\
+\textit{Reason:} Immunity requirements (protection against specific types of attacks such as SQL injection, cross-site scripting, or denial-of-service attacks) are implicitly addressed through requirement 17.2.4, which mandates compliance with OWASP Top 10 security best practices. Rather than listing specific attack vectors as separate requirements, the system's security posture is comprehensively covered through adherence to industry-standard security frameworks and the security requirements outlined in Section 15.1 (Access), 15.2 (Integrity), and 15.3 (Privacy).
+
+\section{16 Cultural Requirements}
+
+\subsection{16.1 Cultural Requirements}
+\noindent N/A \\
+\textit{Reason:} The first iteration of the system is being developed for deployment within Canada, specifically targeting English-speaking physiotherapy clinics and patients. The system uses standard physiotherapy terminology and neutral instructional language that does not contain culturally-specific references, idioms, or imagery that would require cultural adaptation. Cultural and internationalization requirements will be assessed when expanding to multicultural user bases, non-English speaking populations, or international markets in future releases.
+
+\section{17 Compliance Requirements}
+
+\subsection{17.1 Legal Requirements}
+\noindent N/A \\
+\textit{Reason:} Legal compliance requirements have been addressed in the previous iteration and are now covered under requirements 17.1.1 through 17.1.4, which specify compliance with PIPEDA, provincial health information acts, AODA/WCAG accessibility standards, patient consent legislation, and telemedicine regulations. These requirements comprehensively address the legal obligations for a healthcare application operating in the Canadian context.
+
+\subsection{17.2 Standards Compliance Requirements}
+\noindent N/A \\
+\textit{Reason:} The system will follow industry best practices and security standards as they apply to the implementation, but specific standards compliance certifications (such as ISO 27001, HL7 FHIR, or SOC 2) are not required for the initial release targeting small to medium physiotherapy clinics. Compliance with accessibility standards (WCAG) is addressed under legal requirements (AODA compliance in 17.1.2). Additional standards compliance requirements will be evaluated based on market demands and enterprise client needs in future iterations.
+
 
 \section{Open Issues}
 \lips
