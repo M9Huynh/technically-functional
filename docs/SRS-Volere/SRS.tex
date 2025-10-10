@@ -9,6 +9,8 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{array}
+
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -138,7 +140,27 @@ The system will attempt to mimic standards set by professional physiotherapists 
 \section{Naming Conventions and Terminology}
 \subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
 involved in the Project}
-\lips
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l m{10cm}|}
+  \hline
+  \textbf{Term} & \textbf{Description} \\
+  \hline \hline
+  \textit{Flexion} & The act of contracting the muscles to bend the targeted joint, creating a smaller angle across the joint. \\ \hline
+  \textit{Extension} & The act of contracting the muscles to unbend the targeted joint, creating a larger angle across the joint. \\ \hline
+  \textit{Adduction} & The act of moving a part of the body towards the body’s midline. \\ \hline
+  \textit{Abduction} & The act of moving a part of the body away from the body’s midline. \\ \hline
+  \textit{Joint} & The connection between two bones which allows bending and movements of the limbs. In this document, this term mainly refers to the knee. \\ \hline
+  \textit{Time Under Tension} & The time during an exercise where the targeted muscles are under strain. \\ \hline
+  \textit{Range of Motion} or \textit{ROM} & The range of angles within which the user can move their joint from maximum stretching of the joint to maximum contraction of the joint. \\ \hline
+  \textit{Form} & An all inclusive term referring to the position of body parts, their range of motion, and how they are coupled to execute the correct movement. \\ \hline
+  \textit{Repetition} or \textit{Rep} & A single complete movement of an exercise from start to finish. \\ \hline
+  \textit{Effectiveness} & Relevant to user-based goals to measure their own progress towards their recovery. (ie effectiveness in mobility increase, effectiveness in pain relief, etc.) \\ \hline
+  \textit{Computer Vision} & The ability for the system to ‘see’ the user and extract relevant information. \\ \hline
+  \textit{CI/CD} & Continuous integration/continuous deployment which automates building and limited testing of methods in our project. \\ \hline
+\end{tabular}
+\caption{Table of Project Terminology}
+\end{table}
 
 \section{Relevant Facts And Assumptions}
 \subsection{Relevant Facts}
