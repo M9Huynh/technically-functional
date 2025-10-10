@@ -276,11 +276,95 @@ For the same reasons above, the data structures and specific metadata required f
 
 \section{The Scope of the Product}
 \subsection{Product Boundary}
-\lips
+Refer to the Work Context Diagram for the boundaries of the system’s operations.
 \subsection{Product Use Case Table}
-\lips
+\begin{figure}[H]
+  \includegraphics[width=13cm]{PUC.png}
+  \caption{Product Use Case Table}
+\end{figure}
 \subsection{Individual Product Use Cases (PUC's)}
-\lips
+Where not specified, user is assumed to be user (patient).\\ \\
+PUC1: Login\\
+Event: User enters username and password and requests login.\\
+Preconditions: User is not logged in.\\
+Actors: User, System, Database\\
+Normal Flow: User enters a valid username and password confirmed within the database and successfully accesses their pre-existing account.\\
+Alternative Flow: User enters an invalid username and password which don’t verify in the database and the user is returned an error for invalid login information.\\ \\
+PUC2: Logout\\
+Event: User requests to logout of their account.\\
+Preconditions: User is logged in.\\
+Actors: User, System\\
+Normal Flow: User requests to log out of their account. The system moves the user to the login page.\\
+Alternative Flow: N/A\\ \\
+PUC3: Create Account\\
+Event: User requests to create an account.\\
+Precondition: User is not logged in.\\
+Actors: User, System, Database\\
+Normal Flow: User enters an email, username, and password combination not already contained within the database. Email and username must be unique. The system creates an account for the user, stores the account information in the user database, and logs them into their account.\\
+Alternative Flow: User enters an email or username that already exists within the user database, or a password which does not meet minimum requirements. The system returns an error and prompts the user to re-enter incorrect fields.\\ \\
+PUC4: Request Analytics Display\\
+Event: User refreshes analytics display (home page), user logs into their account, user returns to home page after an exercise.
+Precondition: User is logged in and on the home page.\\
+Actors: User, System\\
+Normal Flow: After any of the events, the system uses all the stored user exercise overviews to refresh the analytics display.\\
+Alternative Flow: If there are no stored exercise overviews for the user, the system prompts them to complete an exercise.\\ \\
+PUC5: Submit Video for Analysis\\
+Event: User submits a video-feed for form analysis.\\
+Precondition: User is logged in and on the video submission screen.\\
+Actors: User, System\\
+Normal Flow: User submits a video-feed to the system for form analysis. The system accepts the video and recognizes the patient (user) within the video.\\
+Alternative Flow: The system doesn’t recognize a patient within the video and prompts the user to fix any issues with their video-feed.\\ \\
+PUC6: Receive Form Recommendations\\
+Event: User is logged in and has submitted a video-feed for form analysis.\\
+Precondition: User is logged in and the system has recognized them within the video-feed.\\
+Actors: User, System\\
+Normal Flow: System returns form recommendations based on data pulled from the video-feed and formulates the data into readable language recommendations which are displayed to the user.\\
+Alternative Flow: System fails to draw analytical information from the video-feed and fails to create form recommendations for the patient (user).\\ \\
+PUC7: Review Video Submission\\
+Event: User has ended the video-feed upload.\\
+Precondition: User is logged in, has submitted a video-feed for analysis, and has successfully received form recommendations.\\
+Actors: User, System\\
+Normal Flow: User can rewatch their video-feed submission with form recommendations in real-time before finally exiting the video submission screen.\\
+Alternative Flow: User can cancel or request to redo their video-feed submission, taking them back to PUC5.\\ \\
+PUC8: Receive Overview\\
+Event: User has submitted and exited a video-feed submission.\\
+Precondition: User has successfully submitted a video-feed submission, received recommendations, and exited the submission screen.\\
+Actors: User (Patient), User (Physiotherapist), System\\
+Normal Flow: System generates an overview of the exercise just submitted by the user and provides in natural language an overview to the user.\\
+Alternative Flow: If the user didn’t submit their video-feed but exited and cancelled instead, no overview is created.\\ \\
+PUC9: Comment on Exercise\\
+Event: User creates a comment on an exercise.\\
+Precondition: User (Patient) must be logged in and have completed one exercise, or, user (Physiotherapist) must be logged in and have at least one patient that has completed one exercise.\\
+Actors: User (Patient), User (Physiotherapist), System\\
+Normal Flow: User requests to create a comment on an exercise overview. User enters their own information into a text field and submits the comment. This comment is now visible to all users with access to that exercise overview.\\
+Alternative Flow: User cancels their comment creation, and no comment is saved alongside the exercise overview.\\ \\
+PUC10: Request Patient List\\
+Event: User (Physiotherapist) requests or refreshes the patient list on their homepage.\\
+Precondition: User (Physiotherapist) is logged in.\\
+Actors: User (Physiotherapist), System\\
+Normal Flow: System returns the list of all patients tied to the respective user (Physiotherapist) account, with access to their exercise overviews.\\
+Alternative Flow: If the user (Physiotherapist) has no patients connected to their account, the system prompts them to add at least one patient.\\ \\
+PUC11: Extract Data from Video\\
+Event: System receives a video-feed from a user.\\
+Precondition: User is recognizable in the video-feed.\\
+Actors: System\\
+Normal Flow: The system uses a CV library to extract necessary data relevant to the user’s form, storing the information locally for generating form recommendations, analytics displays, and overviews.\\ \\
+PUC12: Create Form Recommendation\\
+Event: System has extracted necessary form data from a video-feed.\\
+Precondition: The video-feed was successfully analyzed by the CV library and received the necessary information.\\
+Actors: System\\
+Normal Flow: The system takes the form data and generates a naturally worded recommendation for the user’s form.\\ \\
+PUC13: Store Exercise Overview\\
+Event: Exercise overview has been created, comment has been submitted.\\
+Precondition: Exercise overview or comment was successfully created, not cancelled.\\
+Actors: System, Database\\
+Normal Flow: The exercise overview is stored in the user database tied to the user’s account.\\
+
+\subsection{System State Diagram}
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{FSM.png}
+  \caption{System State Diagram (State Machine)}
+\end{figure}
 
 \section{Functional Requirements}
 \subsection{Functional Requirements}
@@ -367,11 +451,17 @@ For the same reasons above, the data structures and specific metadata required f
 
 \section{Off-the-Shelf Solutions}
 \subsection{Ready-Made Products}
-\lips
+Existing physiotherapy companion apps and other sport-specific or sports-medicine applications exist on the market, however they fail to do what this system intends. Existing physiotherapy companion apps either use human input on the other side of a submission, reducing scalability and increasing possibilities of human error. Some apps even require linking with hardware worn on the patient’s body to draw relevant form information for creating recommendations.
+
+Existing form apps with computer-vision are used for very specific purposes, but not for physiotherapy recovery uses.
+
 \subsection{Reusable Components}
-\lips
+The computer-vision aspects of form recommendation apps for sports, such as golf swings, tennis swings, or baseball batting practice, can be observed and mimicked for the computer-vision aspects of the application.
+
+Some physiotherapy app systems that confirm users with physiotherapists, or confirm validity of physiotherapists, can also be mimicked to model the user database.
+
 \subsection{Products That Can Be Copied}
-\lips
+There are no products that can be directly copied, but as mentioned in 20.2 there are parts of different existing applications that can be spliced to assist the implementation of the system.
 
 \section{New Problems}
 \subsection{Effects on the Current Environment}
@@ -394,20 +484,36 @@ Inhibit the New Product}
 
 \section{Migration to the New Product}
 \subsection{Requirements for Migration to the New Product}
-\lips
+As the system isn’t a migration from an older system, there are no changes needed to be made at a level any deeper than user onboarding. This means the requirements here are limited to onboarding patients in need of physiotherapy advice and physiotherapists who wish to ensure their patients are completing their exercises outside of appointments.
 \subsection{Data That Has to be Modified or Translated for the New System}
-\lips
+N/A
+
+As mentioned in 23.1, there is no change required on a level deeper than onboarding, this puts the data level out-of-scope for migration.
+
 
 \section{Costs}
 \lips
 \section{User Documentation and Training}
 \subsection{User Documentation Requirements}
-\lips
+Users, both patients and physiotherapists, will receive system prompts for next steps upon first usage of each of the system’s features. In addition to the prompts, first-time utilization will also come with help dialogue that lets the user know at a high level what the system is doing with inputs.
+
+After first-time utilization, help buttons will remain to allow users to re-open this help dialogue if users are ever confused on system utilization.
+
 \subsection{Training Requirements}
-\lips
+N/A
+
+Users, both patients and physiotherapists, will learn all they need to through system prompts and help dialogue and will require no additional training to utilize the system.
+
 
 \section{Waiting Room}
-\lips
+There are currently no updates planned to occur after the completion of the system outlined within this document. However, there are functionalities that would be pursued if the system was carried beyond the scope of this document.\\ \\
+These additional features include, but are not limited to, the following:
+\begin{itemize}
+  \item Additional joints and exercises for physiotherapy advice and form recommendations.
+  \item Additional security features such as two-factor authentication.
+  \item Physiotherapist access to full-length patient video-streams (rather than just overview access).
+  \item Advanced metrics and exercise information such as muscle activation.
+\end{itemize}
 
 \section{Ideas for Solution}
 \lips
