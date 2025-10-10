@@ -50,9 +50,11 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-October 4, 2025 & Matthew Huynh & Added initial draft of HA\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+September 29, 2025 & Maham S, Matthew H & Initial table input \\
+October 4, 2025 & Matthew H & Added initial draft of HA\\
+October 5, 2025 & Maham S & Table additions \\
+October 8, 2025 & Matthew H & Table mods \\
+October 9, 2025 & Maham S & Final edits \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -67,7 +69,7 @@ Date2 & Name(s) & Description of changes\\
 
 \section{Introduction}
 
-The team's definition of a hazard is an “unsafe” condition that may lead to an unintended event that causes an undesirable outcome \citep{IppolitoWallace1995}. In relation to software development, hazards can be understood as the underlying design decisions that result in potential harm. These risks become apparent when the hazards are not addressed prior to development. These hazards can include technical failures, privacy/security, usability and accessibility risks. 
+The team's definition of a hazard is an “unsafe” condition that may lead to an unintended event that causes an undesirable outcome \citep{IppolitoWallace1995}. In relation to software development, hazards can be understood as the underlying design decisions that result in potential harm. If these hazards remain unaddressed prior to development, they may become a source of risk. Hazards can include technical failures, privacy/security, usability and accessibility risks. 
 
 The project's goal is to develop a tool that provides guidance for a physiotherapist's prescribed home exercises. The user's form is analyzed and prompts for adjustments are given. While this can increase the rate and efficacy of recovery, it introduces several hazards. \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}{See the Section 3 in the Problem Statement document for more on project goals}. The purpose of this document is to identify those hazards, outline assumptions and propose solutions to limit their presence and their frequency.
 
@@ -130,10 +132,11 @@ These system boundaries outline what is covered within this hazard analysis.
     \end{itemize}
     \item Assume that only one user is within the frame of the smart device.
     \item Assume that the user is receptive to feedback.
-    \item Assume that the user knows how to use the smart device and generally how to navigate it when human-centered interfaces are used.
+    \item Assume that the user is familiar with and able to navigate the smart device.
     \item Assume that the user has a stable connection to the internet.
     \item Assume that the user is undergoing physiotherapy and was advised to perform the exercise at home.
-    \item Assume that the device used meets the minimum requirements of our system to function.
+    \item Assume that the device being used meets the minimum requirements for our system to function.
+    \item Assume that the physiotherapists using the application are licensed.
 \end{itemize}
 \begin{landscape}
 
@@ -581,6 +584,14 @@ The requirements that will be implemented in the future include:
     
 \end{enumerate}  
 
+\subsection*{Maham - Reflection}
+\begin{enumerate}
+    \item The process of ensuring that all team members are on the same wavelength in terms of what the application is supposed to do was very interesting. Throughout the deliverable, everyone communicated their understanding well and I was impressed with how quickly we were able to sync up. In addition, all members were able to hop on and assist anyone that needed any. This was only possible because we would conduct team meetings very often and check in on where we were with our assignment, That helped stay on track with the schedule as well. 
+     \item I think the most important pain point was the constant juggling between priorities for each member. Everyone had assignments and midterms to complete, and that required very nuanced scheduling (to do list). I work by dividing up everything I have to do into small chunks and switch between tasks after a certain amount of time. I think most members on my team were also doing something similar to this and did not leave the bulk of their work for last minute. 
+    \item I think the risks we thought of before working on the deliverable were quite vague and unspecific (eg. user data security). Hazards and risks were thought of, but not solution or fixes. Once we started completing the deliverable, there were some processing hazards that we had not thought of come to light. Thinking of all the things that are possible to go wrong made it imperative to address, and we started developing fixes, whether they were similar to any others already present in the table etc.
+    \item As mentioned above, security risks should be considered. Patients are providing the application important and private information (e.g. videos) and they should be handled ethically. A second risk that comes to mind is the potential of the application being misused. In the context of our application, we designed it so any of the physiotherapists that are registering on the app are licensed. If not, then anyone posing as a physiotherapist can potentially use the application and create liability issues for the developers.
+    
+\end{enumerate}  
 
 \bibliographystyle {plainnat}
 \bibliography{../../refs/References}
