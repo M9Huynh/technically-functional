@@ -26,6 +26,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{longtable}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -525,9 +526,115 @@ involved in the Project}
 \noindent N/A \\
 \textit{Reason:} The system will follow industry best practices and security standards as they apply to the implementation, but specific standards compliance certifications (such as ISO 27001, HL7 FHIR, or SOC 2) are not required for the initial release targeting small to medium physiotherapy clinics. Compliance with accessibility standards (WCAG) is addressed under legal requirements (AODA compliance in 17.1.2). Additional standards compliance requirements will be evaluated based on market demands and enterprise client needs in future iterations.
 
+\section{Compliance Requirements}
+\subsection{Legal Requirements}
+\lips
+\subsection{Standards Compliance Requirements}
+\lips
+\section{Traceability from Requirements to Use Cases}
+This section maps each of the requirements to one or more of the use cases listed and defined above in previous sections.
+\begin{longtable}{p{2.5cm}p{11cm}}
+    \caption{Traceability from Requirements to Use Cases}\label{tab:req_uc}\\
+    \toprule
+    \textbf{Requirement} & \textbf{Use Case(s)} \\
+    \midrule
+    \endfirsthead
+    
+    \multicolumn{2}{c}%
+    {{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+    \toprule
+    \textbf{Requirement} & \textbf{Use Case(s)} \\
+    \midrule
+    \endhead
+    
+    \midrule
+    \multicolumn{2}{r}{{Continued on next page}} \\
+    \endfoot
+    
+    \bottomrule
+    \endlastfoot
+
+    FR1 & PUC3, PUC10 \\
+    FR2 & PUC1 \\
+    FR3 & PUC3 \\
+    FR4 & PUC10 \\
+    FR5 & PUC8 \\
+    FR6 & PUC10 \\
+    FR7 & PUC5 \\
+    FR8 & PUC7 \\
+    FR9 & PUC9 \\
+    FR10 & PUC4, PUC8 \\
+    FR11 & PUC11 \\
+    FR12 & PUC11 \\
+    FR13 & PUC11, PUC12 \\
+    FR14 & PUC6 \\
+    FR15 & PUC7 \\
+    FR16 & PUC7 \\
+    FR17 & PUC8, PUC10 \\
+    FR18 & PUC10 \\
+    FR19 & PUC9 \\
+    FR20 & PUC10 \\
+    FR21 & PUC13 \\
+    FR22 & PUC10, PUC13 \\
+    FR23 & PUC1, PUC13 \\
+    FR24 & PUC13 \\
+    FR25 & PUC8, PUC10 \\
+    LFR-AP1 & All PUCs \\
+    LFR-ST1 & PUC4, PUC6, PUC8 \\
+    UHR-EOU1 & All PUCs \\
+    UHR-EOU2 & PUC6 \\
+    UHR-LRN1 & PUC5, PUC8 \\
+    UHR-UPL1 & PUC6 \\
+    UHR-AR1 & PUC5, PUC6, PUC7 \\
+    PR-SL1 & PUC5 \\
+    PR-SL2 & PUC6 \\
+    PR-SCR1 & PUC6, PUC7 \\
+    PR-PAR1 & PUC11 \\
+    PR-PAR2 & PUC11, PUC12 \\
+    PR-RFT1 & PUC5 \\
+    PR-RFT2 & PUC5 \\
+    PR-RFT3 & All PUCs \\
+    PR-CR1 & All PUCs \\
+    PR-SER1 & PUC11, PUC12 \\
+    OER-EP1 & PUC5, PUC11 \\
+    OER-WE1 & All PUCs \\
+    OER-WE2 & All PUCs \\
+    OER-PR1 & PUC1, PUC3, PUC5, PUC6, PUC8, PUC10 \\
+    OER-RL1 & PUC5, PUC11, PUC12 \\ 
+    MS-MNT1 & PUC13 \\
+    MS-AD1 & PUC5, PUC8 \\
+    SR-AR1 & PUC1 \\
+    SR-AR2 & PUC3 \\
+    SR-AR3 & PUC2 \\
+    SR-IR1 & PUC13 \\
+    SR-PR1 & PUC1, PUC13 \\
+    SR-PR2 & PUC13 \\
+
+
+\end{longtable}
+
 
 \section{Open Issues}
-\lips
+
+This section discusses the open issues in this project. In detail, we will highlight the primary uncertainties and 
+open questions that are present throughout the process of developing our physiotherapy app. Ultimately, these issues 
+represent the challenges we may face throughout the development of our app. Addressing these issues will aid us in ensuring 
+the app is efficient, accurate and reliable. Listed below are some potential open issues in this project we have come across, 
+as well as how we plan to address these issues:
+
+\begin{itemize}
+  \item \textbf{Exercise Detection Accuracy:} Ensuring the app correctly analyzes and identifies the movements the patient 
+  undergoes is always going to be a constant challenge. Inaccuracies in the detection could result in false feedback which may 
+  prohibit recovery time. To address this, we will be undergoing further refinement of our detection methods and testing with a 
+  diverse sample size of individuals to aid in the accuracy of our movement detection to provide the most accurate feedback.
+  \item \textbf{Data Privacy:} The app will collect and store sensitive client health information which is something that needs to 
+  be securely stored. We will be making sure information is securely stored, transmission is encrypted and there are strict access 
+  controls in place to have that trust exist with our clients.
+  \item \textbf{Maintaining Patient Engagement:} Maintaining patient engagement is something that is going to be a struggle, as some
+   patients may view this as extra work on their end. Our goal is to hopefully have this app be viewed as a convenient aid that 
+   reduces the need for frequent in person physiotherapy visits, making recovery more so accessible and less time-consuming for 
+   the clients. 
+\end{itemize}
 
 \section{Off-the-Shelf Solutions}
 \subsection{Ready-Made Products}
@@ -539,16 +646,70 @@ involved in the Project}
 
 \section{New Problems}
 \subsection{Effects on the Current Environment}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Increased Battery Usage of Smart Device:} The app’s use of motion tracking and video processing could result in an 
+  increase of battery usage for a user’s smart device. This could also limit usability for individuals who have older devices. 
+  \item \textbf{Increased Storage Impact:} Since the app does involve uploading recording videos for analysis, this may result in 
+  an increase in storage used on the smart device. Individuals using the app who may have limited storage may experience a higher 
+  amount of data being used. This ultimately means that we need to ensure that due to the increase in storage usage, the quality is 
+  not lost, as we do not want that to affect the precision of our analysis in any way, shape or form.
+  \item \textbf{Requirement of stable network access:} The app does rely on a stable network connection to upload exercise videos 
+  for analysis. Areas with weaker connections may lead to individuals dealing with more delays and thus, limiting their overall 
+  usability.
+\end{enumerate}
+
 \subsection{Effects on the Installed Systems}
-\lips
+
+\begin{enumerate}
+  \item It may be hard for existing clinic or hospital systems to easily support integration with our app. There may be 
+  incompatibilities between the varying software platforms used, so this may slow down the process of integration or require 
+  more effort and money to aid in integrating it more smoothly.
+  \item Different systems may store data differently so this is something we also have to be aware of as it could create 
+  inconsistencies when syncing the medical records. 
+  \item When integrating the app to healthcare networks, policies and authentication layers should be carefully managed 
+  because if proper security is not in place, unauthorized users may be able to access patient data, which is extremely unsafe.
+\end{enumerate}
+
 \subsection{Potential User Problems}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Learning Curve:} Some users may not be the most familiar with using technology and may find it a bit more 
+  difficult to use this app which ultimately may lead to a decrease in user satisfaction and engagement.
+  \item \textbf{Privacy Issues and Comfortability with Video Recordings:} Some users may not be comfortable with the process 
+  of recording themselves and uploading their videos to the platform, which could lead to a decrease in engagement.
+  \item \textbf{Preference of in-person physiotherapy guidance:} Some users may prefer in person appointments with their 
+  physiotherapists to receive direct feedback, which may lead to a decrease in user engagement overall. 
+  \item \textbf{Limitations of Recording Videos:} Some users may find it difficult as a result of their limited mobility 
+  to be able to record and upload the videos with precision by themselves without any additional support. This may lead to 
+  inaccurate computations and results.
+  \item \textbf{Misinterpretation of Feedback:} Users may not understand how to correctly translate or interpret the feedback 
+  given by the app, which could ultimately lead to a decrease in the effectiveness and overall productivity of the app.
+\end{enumerate}
+
 \subsection{Limitations in the Anticipated Implementation Environment That May
 Inhibit the New Product}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Limited access to technology:} Some users may be limited in terms of not owning smart devices with a 
+  functional camera or not having enough storage space to record and upload videos. This will ultimately limit the app's overall 
+  accessibility.
+  \item \textbf{Connectivity Issues:} Areas with weaker connections lead to individuals being more prone to experiencing 
+  delays and deal with uploads failing, which ultimately decreases the app’s overall reliability and effectiveness.
+\end{enumerate}
+
 \subsection{Follow-Up Problems}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Regular Updates:} The app will consist of regular updates to make sure it is compatible with the latest 
+  operating systems, all the changes in the newest programming languages as well as ensure it abides by all of the standard 
+  in place.
+  \item \textbf{Data Management and Cleanup:} Large amounts of data will be stored, resulting in a lot of storage being used up, 
+  as mentioned previously. Potentially introducing some sort of periodic cleanup may need to be implemented to address this. 
+  \item \textbf{On-going support may be required:} Users may require technical or instructional support when they are faced with 
+  issues while using the app specifically when recording, uploading or even trying to interpret the results. Potentially providing 
+  client support or a FAQ section may be necessary to address this.
+\end{enumerate}
 
 \section{Tasks}
 \subsection{Project Planning}
@@ -574,7 +735,18 @@ Inhibit the New Product}
 \lips
 
 \section{Ideas for Solution}
-\lips
+In this section , we will highlight the potential technical approaches we may be using to implement our physiotherapy app. 
+The ideas for solution can be seen listed below:
+
+\begin{itemize}
+  \item \textbf{Pose Detection:}  We plan on using the OpenCV library to select 
+  and analyze specific frames of the video uploaded to pick and identify specific key knee joint points using pose estimation 
+  techniques. In terms of the calculations, we can use Python’s built-in math module, which we can use to calculate the specific 
+  calculations necessary.
+  \item \textbf{Feedback Charts:} To showcase graphs and progress summary charts, we can use Python’s built-in matplotlib 
+  library to generate them for us. These can be later integrated to allow patients and physiotherapists the 
+  option to interpret the graphs and overall progress from the visuals provided.
+\end{itemize}
 
 \newpage{}
 \section*{Appendix --- Reflection}
