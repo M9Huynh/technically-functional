@@ -55,10 +55,12 @@ Date 2 & 1.1 & Notes\\
 
 ~\newpage
 \noindent \textbf{ \large Introduction}\\
-The software requirements specification (SRS) document describes the functional and non-functional requirements, scope and functionality of the application. It formally outlines key measures relevant to all the different stages of the software development lifecycle. This document is constructed using the Volere Software Requirements Specification template  \citep{VolereTemplate2012}
+The software requirements specification (SRS) document describes the functional and non-functional requirements, scope and functionality of the application. It formally outlines key measures relevant to all the different stages of the software development lifecycle. This document is constructed using the Volere Software Requirements Specification template  \citep{VolereTemplate2012}.
+
 \section{Purpose of the Project}
 \subsection{User Business}
-\lips
+According to the Global Burden of Diseases, Injuries and Risk Factors study performed in 2019,individuals that would benefit from physical rehabilitation at least once in their lifetime is upwards of 2.41 billion globally \citep{CiezaEtAl2021}. Those with access to a physiotherapist experienced a disconnect with performing a required movement with proper range of motion (ROM) and correct form \citep{FaberEtAl2015}. While a physiotherapist can advise these individuals during their assessments and proceeding follow-up appointments, the efficacy of rehabilitation depends heavily on the individual's correct performance of the exercise. In turn, this creates a need for a tool that can ensure users correctly perform the exercise without supervision. This project aims to develop a tool that can provide feedback and corrections for the prescribed physical rehabilitation exercise.
+
 \subsection{Goals of the Project}
 \lips
 \section{Naming Conventions and Terminology}
@@ -188,9 +190,22 @@ involved in the Project}
 
 \section{Relevant Facts And Assumptions}
 \subsection{Relevant Facts}
-\lips
+Relevant facts for this project are that about a third of patients needing physiotherapy can have improved efficacy due to their exertion and form factors. This leads to slower recovery or future injury later down the line. In some instances, this can lead to a permanent decrease in an affected joint's range of motion and strength. Additionally, there is a gap from initially being prescribed the exercise and the accountability from doing exercises on the patients own time. 
+
+
+The primary target of this system is for patients of physiotherapists and physiotherapists.
+
 \subsection{Business Rules}
-\lips
+
+Some business rules relevant to include that there will be a distinct user interface for general users of the application and a different user interface for physiotherapists. A patient must be directed to use the application from the physiotherapist and will have exercises assigned to  them on the system. Similarly, a physiotherapist can view and manage their patients but cannot access other patients outside their care.
+
+
+A prescribed exercise chosen from the physiotherapist can have certain parameters and limitations, for example: sets, reps, frequency, etc. As well, the patient will be prompted after an exercise to give their perceived exertion as a result of the exercise from a sale of 1-10.
+
+
+Furthermore, any data will not be shared without any explicit consent and stored securely.
+
+
 \subsection{Assumptions}
 \lips
 
@@ -479,9 +494,30 @@ Inhibit the New Product}
 
 \section{Tasks}
 \subsection{Project Planning}
-\lips
+The project planning for this project will follow an agile development approach. We will follow the process of: planning, designing, developing, testing, deploying then reviewing. This will allow us to work towards manageable goals while testing and receiving feedback on our application. 
+
+
+Moreover some recurring tasks that we foresee happening will generally follow the flow below:
+\begin{itemize}
+  \item Initial development of a goal for the milestone.
+  \item Creation of issues on GitHub.
+  \item Resource allocation and sprint execution.
+  \item Testing and stakeholder review/feedback.
+  \item Reflection on the previous sprint to see what could have gone better.
+\end{itemize}
+
 \subsection{Planning of the Development Phases}
-\lips
+
+Similar to section 9 of the development plan document, we seek to adhere to the project schedule.
+ \begin{itemize}
+   \item M1 (Weeks 3 to 4): Problem Statement, Proof of Concept (POC) Plan, Development Plan, Team Charter
+   \item M2 (Weeks 5 to 6): Requirements Document (SRS) Revision 0, Hazard Analysis Revision 0, Design Document Revision -1
+   \item M3 (Week 7): Verification \& Validation (V\&V) Plan Revision 0
+   \item M4 (Weeks 8 to 9): Integrated Draft Document (Problem Statement, SRS, Hazard Analysis, V\&V Plan), Peer Reviews (whole document), Update draft with feedback
+   \item M5 (Weeks 10 to 12): Proof of Concept Demonstration (document + results), Design Document Revision 0, V\&V Report Revision 0, Refinement of SRS, Hazard Analysis, and V\&V Plan based on results and feedback
+   \item M6 (End of Term): Final Demonstration - Revision 1, EXPO Demonstration, Final Documentation Revision 1 (including Problem Statement, Development Plan, POC Plan, Requirements Document, Hazard Analysis, Design Document, V\&V Plan, V\&V Report, Extra Documentation 1, Extra Documentation 2 and Source Code)
+ \end{itemize}
+
 
 \section{Migration to the New Product}
 \subsection{Requirements for Migration to the New Product}
