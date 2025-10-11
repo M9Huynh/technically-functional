@@ -9,6 +9,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{natbib}
 \usepackage{longtable}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
@@ -53,28 +54,114 @@ Date 2 & 1.1 & Notes\\
 ~\\
 
 ~\newpage
+\noindent \textbf{ \large Introduction}\\
+The software requirements specification (SRS) document describes the functional and non-functional requirements, scope and functionality of the application. It formally outlines key measures relevant to all the different stages of the software development lifecycle. This document is constructed using the Volere Software Requirements Specification template  \citep{VolereTemplate2012}
 \section{Purpose of the Project}
 \subsection{User Business}
 \lips
 \subsection{Goals of the Project}
 \lips
+\section{Naming Conventions and Terminology}
+\lips
 \section{Stakeholders}
+The stakeholders for this project are parties with a vested interest in the end product. They will be consulted on their requirements and opinions throughout the development process. Their impact will be foundational for correctness of the product. This section outlines the various types and levels of stakeholders, the personas, user participation (towards application development) and any users that will be responsible for the product’s maintenance. 
 \subsection{Client}
-\lips
+There are two categories of clients that are the target audience for this product. The first category of end users is the patients. The application is being designed for patients who are undergoing physiotherapy treatment and have been given a home exercise program to aid in their rehabilitation. For the purpose of this system, the exercise and the joint selected was recommended by one of our stakeholders. The knee and a straight leg raise were chosen.
+
+The second category of the clients are the physiotherapists who are treating the users on the application. It will integrate the physiotherapist’s patient list and their corresponding performance statistics. The application allows physiotherapists to gain insight into how their patients’ are progressing. Furthermore, it will enable the assessment of the suitability of the prescribed exercise, as well as gauging whether any additional modifications are required (number of repetitions, degree of complexity etc.).
+
 \subsection{Customer}
-\lips
+The application is being developed for a Canadian market with its governing standards and regulations in mind. Although this version of the application does not have any customers, it can prospectively be purchased by any healthcare provider and be incorporated into their patient care structure. 
 \subsection{Other Stakeholders}
-\lips
+The primary and secondary stakeholders are described above (clients and customers).
+
+Other stakeholders may include regulatory authorities or other healthcare specialists, such as physiatrists or massage therapists. The regulatory authorities will be allowed access to conduct audits and ensure that any disclosed patient information is being handled in an ethical manner. In addition, they will verify the accuracy and quality of care being delivered. Other healthcare providers may  benefit from any insights or information that is being provided, which may be used to tailor their own care of the patient. Lastly, support workers may use this application to assist their clients with their home exercises. 
+
 \subsection{Hands-On Users of the Project}
-\lips
+\underline{\textbf{Patients}} \\
+\textbf{User role}: Record corresponding exercise for application to analyze, adjust exercise form based on application feedback and correction, gain insight from performance metrics provided by the application.\\
+\textbf{Subject matter experience}: Aware of how to perform exercise using the instructions provided by the physiotherapist (eg. a worksheet detailing the steps required for the exercise).  \\
+\textbf{Technological experience}: Know how to operate the smart device and use its camera to record their performance of the exercise. \\
+\textbf{Attitude towards technology}: Open to learning if needed.\\
+\textbf{Physical abilities/disabilities}: Able to use a smart device and/or perform the prescribed exercise.\\
+\underline{\textbf{Physiotherapists}} \\
+\textbf{User role}: Access patient statistics to assess suitability of exercise, difficulty and whether the prescribed exercise is effective. \\
+\textbf{Subject matter experience}: Formal education on the topic and have knowledge of general and post operative care. \\
+\textbf{Technological experience}: Able to effectively use the various functionalities of the application. \\
+\textbf{Attitude towards technology}: Varied. \\
+\textbf{Education}: Officially licensed. \\
+
 \subsection{Personas}
-\lips
+
+Name: Scotty Fye \\
+Age: 72 \\
+Occupation: Retired (Former teacher) \\
+Location: Toronto, Canada \\
+Status: Married, with children \\
+
+\noindent “I had knee surgery a few weeks ago because my knee pain was unbearable. As suggested by my doctor, I had knee replacement surgery. Now, I am following some prescribed exercises but I’m worried that I am doing them wrong and possibly slowing down recovery. On top of that, I have a vacation with my family and want to be the \noindent 'fun grandpa'”. \\
+
+\begin{itemize}
+  \item Goals: \\
+  \begin{itemize}
+    \item To gain mobility and strength in his knee for an upcoming vacation and keep up with his active grandchildren.
+    \item He wants to understand how to both manage pain and recover well. 
+    \item See how he is performing on a weekly basis.
+    \item Have guidance for performing these exercises alone to ensure he is performing exercises correctly. \\
+  \end{itemize}
+  \item Fear: 
+  \begin{itemize}
+    \item Worried about doing something wrong which might cause pain and hinder his recovery.
+    \item Prescribed exercises are manageable but is unsure if he should push through discomfort.
+    \item “Should I push through stiffness or should I stop?”
+    \item “Am I bending my knee enough? Not enough?”
+  \end{itemize}
+\end{itemize}
+Name: Maya Thompson\\
+Age: 21 \\
+Occupation: Student \\
+Location: Hamilton, Ontario \\
+
+\noindent “I was in a car accident which shattered my knee. I had to get a full knee replacement in order to continue walking. I was recently discharged from a rehabilitation facility where I started learning how to use my knee and walk again. My physiotherapist enrolled me as their patient on this application to keep up to date on my progress towards recovery.” \\
+
+\begin{itemize}
+  \item Goal: 
+  \begin{itemize}
+    \item To gain sufficient use of her knee to walk and perform activities of daily living.
+    \item To monitor her own progress and use it as a motivating factor for pushing herself.
+    \item To gain enough strength in her muscles without having to further exacerbate her pain.
+  \end{itemize}
+ \item Fear:
+ \begin{itemize}
+   \item Her muscles need to relearn how to function and she is afraid if she performs an exercise incorrectly, the incorrect muscles will learn to compensate during the movement.
+   \item ‘Am I using the correct muscles? Is this the muscle that I need to consciously activate?’
+   \item Her pain might be aggravated to an intolerable degree.
+   \item ‘What if my pain does not start out as much but becomes unbearable because I did not perform the exercise correctly?’
+ \end{itemize}
+\end{itemize}
+
 \subsection{Priorities Assigned to Users}
-\lips
+\textbf{\underline{Key users}}: Patients undergoing post operative physiotherapy have highest priority in the system, physiotherapists using the system to check-in and comment on patient exercises have similar priority. 
+
 \subsection{User Participation}
-\lips
+\textbf{Users (Patients)}
+\begin{itemize}
+  \item User creates an account and set up their profile and may sign into this account with valid credentials.
+  \item User requests analytical information based on their past exercise inputs and results.
+  \item User receives live form recommendations from the system by providing a video-feed of themselves performing the selected activity.
+  \item User requests an overview of their exercise after successfully completing a video-feed upload, or looks back at old overviews.
+  \item User creates comments on their own exercise overviews to keep personal notes and information regarding exercise session.
+  \item User receives comments from the physiotherapist account linked to theirs.
+\end{itemize}
+\textbf{Users (Physiotherapists)}
+\begin{itemize}
+  \item User creates an account and sets up their profile, and may sign into this account with valid credentials.
+  \item User requests a list of all patient accounts connected to their account.
+  \item User receives overviews of patient’s exercises to confirm exercise completion and progress on recovery.
+  \item User creates comments on patient’s exercise overviews to assist the patient with exercise performance, and/or to provide modifications.
+\end{itemize}
 \subsection{Maintenance Users and Service Technicians}
-\lips
+Maintenance and service on the system will be performed by the current development team. Maintenance and service should be minimized with a thorough test suite to ensure all functionalities of the system are operational upon any changes or updates.
 
 \section{Mandated Constraints}
 \subsection{Solution Constraints}
@@ -403,7 +490,45 @@ Inhibit the New Product}
 \lips
 
 \section{Costs}
-\lips
+Currently, the cost of this project is 0 dollars. However, the only cost at this moment is the team members' time and expertise in order to bring this project to fruition. All the tools that are currently being used to build the product are free to use and open source.
+\subsection{Metrics for Estimation}
+Financial costs are not a concern at this stage. However, circumstances may change and require re-evaluation of any cost metrics to include this new development. In that case, a cost-benefit analysis would be performed in order to determine the correct value. \\
+The metrics listed below estimate the time and effort put forth by a team member:
+\begin{itemize}
+  \item The \textit{quality} of commits and pushes - this can be assessed by the commit message’s clarity and descriptiveness.
+  \item The \textit{quantity} of contributions made to the project is an additional indicator of effort. However, it should be contextualized in terms of quality. 
+  \item The quality of other deliverables can be similarly analyzed. 
+\end{itemize}
+As a team, the collective time and effort will be measured by:
+\begin{itemize}
+  \item The number of goals that have been achieved.
+  \item The amount of stretch goals that may have been successfully achieved.
+  \item The quality of the final project deliverables, measured using deliverable grades and TA’s feedback.
+  \item Number of test cases that have been devised.
+  \item Cohesiveness of the final product, which can be quantified by how functional the final application is.
+  \item The amount of time spent on a project deliverable.
+\end{itemize}
+
+\subsection{Estimation Approach}
+Current estimations are based on the previous and ongoing deliverable and may be inaccurate. They are subject to modification throughout the project timeline.
+
+\subsection{Cost Breakdown}
+
+\textbf{Tools and Software}:\\
+The cost is 0 dollars since all libraries and additional software will be open source.\\
+\textbf{Testing Environment}:\\
+The projected test suite will be formulated in house and will have no cost. 
+\textbf{Development effort}:\\
+\begin{itemize}
+  \item Documentation (generating output, editing): 120 hours per member
+  \item Deliverable revision: 20 hours per member
+  \item Team meetings: 50 hours per member
+  \item Software development: 400 hours per member
+  \item Software testing: 100 hours per member
+\end{itemize}
+\textbf{Total}: 690 hours per member 
+
+
 \section{User Documentation and Training}
 \subsection{User Documentation Requirements}
 \lips
@@ -433,5 +558,7 @@ The ideas for solution can be seen listed below:
 \input{../Reflection.tex}
 
 \input{../SRS_Reflection.tex}
+\bibliographystyle {plainnat}
+\bibliography{../../refs/References}
 
 \end{document}
