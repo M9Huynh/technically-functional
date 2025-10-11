@@ -9,6 +9,8 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{longtable}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -52,6 +54,8 @@ Date 2 & 1.1 & Notes\\
 ~\\
 
 ~\newpage
+\noindent \textbf{ \large Introduction}\\
+The software requirements specification (SRS) document describes the functional and non-functional requirements, scope and functionality of the application. It formally outlines key measures relevant to all the different stages of the software development lifecycle. This document is constructed using the Volere Software Requirements Specification template  \citep{VolereTemplate2012}
 \section{Purpose of the Project}
 \subsection{User Business}
 % According to the Global Burden of Diseases, Injuries and Risk Factors study performed in 2019,individuals that would benefit from physical rehabilitation at least once in their lifetime is upwards of 2.41 billion globally \citep{CiezaEtAl2021}. Those with access to a physiotherapist experienced a disconnect with performing a required movement with proper range of motion (ROM) and correct form \citep{FaberEtAl2015}. While a physiotherapist can advise these individuals during their assessments and proceeding follow-up appointments, the efficacy of rehabilitation depends heavily on the individual's correct performance of the exercise. In turn, this creates a need for a tool that can ensure users correctly perform the exercise without supervision. This project aims to develop a tool that can
@@ -59,23 +63,107 @@ Date 2 & 1.1 & Notes\\
 
 \subsection{Goals of the Project}
 \lips
+\section{Naming Conventions and Terminology}
+\lips
 \section{Stakeholders}
+The stakeholders for this project are parties with a vested interest in the end product. They will be consulted on their requirements and opinions throughout the development process. Their impact will be foundational for correctness of the product. This section outlines the various types and levels of stakeholders, the personas, user participation (towards application development) and any users that will be responsible for the product’s maintenance. 
 \subsection{Client}
-\lips
+There are two categories of clients that are the target audience for this product. The first category of end users is the patients. The application is being designed for patients who are undergoing physiotherapy treatment and have been given a home exercise program to aid in their rehabilitation. For the purpose of this system, the exercise and the joint selected was recommended by one of our stakeholders. The knee and a straight leg raise were chosen.
+
+The second category of the clients are the physiotherapists who are treating the users on the application. It will integrate the physiotherapist’s patient list and their corresponding performance statistics. The application allows physiotherapists to gain insight into how their patients’ are progressing. Furthermore, it will enable the assessment of the suitability of the prescribed exercise, as well as gauging whether any additional modifications are required (number of repetitions, degree of complexity etc.).
+
 \subsection{Customer}
-\lips
+The application is being developed for a Canadian market with its governing standards and regulations in mind. Although this version of the application does not have any customers, it can prospectively be purchased by any healthcare provider and be incorporated into their patient care structure. 
 \subsection{Other Stakeholders}
-\lips
+The primary and secondary stakeholders are described above (clients and customers).
+
+Other stakeholders may include regulatory authorities or other healthcare specialists, such as physiatrists or massage therapists. The regulatory authorities will be allowed access to conduct audits and ensure that any disclosed patient information is being handled in an ethical manner. In addition, they will verify the accuracy and quality of care being delivered. Other healthcare providers may  benefit from any insights or information that is being provided, which may be used to tailor their own care of the patient. Lastly, support workers may use this application to assist their clients with their home exercises. 
+
 \subsection{Hands-On Users of the Project}
-\lips
+\underline{\textbf{Patients}} \\
+\textbf{User role}: Record corresponding exercise for application to analyze, adjust exercise form based on application feedback and correction, gain insight from performance metrics provided by the application.\\
+\textbf{Subject matter experience}: Aware of how to perform exercise using the instructions provided by the physiotherapist (eg. a worksheet detailing the steps required for the exercise).  \\
+\textbf{Technological experience}: Know how to operate the smart device and use its camera to record their performance of the exercise. \\
+\textbf{Attitude towards technology}: Open to learning if needed.\\
+\textbf{Physical abilities/disabilities}: Able to use a smart device and/or perform the prescribed exercise.\\
+\underline{\textbf{Physiotherapists}} \\
+\textbf{User role}: Access patient statistics to assess suitability of exercise, difficulty and whether the prescribed exercise is effective. \\
+\textbf{Subject matter experience}: Formal education on the topic and have knowledge of general and post operative care. \\
+\textbf{Technological experience}: Able to effectively use the various functionalities of the application. \\
+\textbf{Attitude towards technology}: Varied. \\
+\textbf{Education}: Officially licensed. \\
+
 \subsection{Personas}
-\lips
+
+Name: Scotty Fye \\
+Age: 72 \\
+Occupation: Retired (Former teacher) \\
+Location: Toronto, Canada \\
+Status: Married, with children \\
+
+\noindent “I had knee surgery a few weeks ago because my knee pain was unbearable. As suggested by my doctor, I had knee replacement surgery. Now, I am following some prescribed exercises but I’m worried that I am doing them wrong and possibly slowing down recovery. On top of that, I have a vacation with my family and want to be the \noindent 'fun grandpa'”. \\
+
+\begin{itemize}
+  \item Goals: \\
+  \begin{itemize}
+    \item To gain mobility and strength in his knee for an upcoming vacation and keep up with his active grandchildren.
+    \item He wants to understand how to both manage pain and recover well. 
+    \item See how he is performing on a weekly basis.
+    \item Have guidance for performing these exercises alone to ensure he is performing exercises correctly. \\
+  \end{itemize}
+  \item Fear: 
+  \begin{itemize}
+    \item Worried about doing something wrong which might cause pain and hinder his recovery.
+    \item Prescribed exercises are manageable but is unsure if he should push through discomfort.
+    \item “Should I push through stiffness or should I stop?”
+    \item “Am I bending my knee enough? Not enough?”
+  \end{itemize}
+\end{itemize}
+Name: Maya Thompson\\
+Age: 21 \\
+Occupation: Student \\
+Location: Hamilton, Ontario \\
+
+\noindent “I was in a car accident which shattered my knee. I had to get a full knee replacement in order to continue walking. I was recently discharged from a rehabilitation facility where I started learning how to use my knee and walk again. My physiotherapist enrolled me as their patient on this application to keep up to date on my progress towards recovery.” \\
+
+\begin{itemize}
+  \item Goal: 
+  \begin{itemize}
+    \item To gain sufficient use of her knee to walk and perform activities of daily living.
+    \item To monitor her own progress and use it as a motivating factor for pushing herself.
+    \item To gain enough strength in her muscles without having to further exacerbate her pain.
+  \end{itemize}
+ \item Fear:
+ \begin{itemize}
+   \item Her muscles need to relearn how to function and she is afraid if she performs an exercise incorrectly, the incorrect muscles will learn to compensate during the movement.
+   \item ‘Am I using the correct muscles? Is this the muscle that I need to consciously activate?’
+   \item Her pain might be aggravated to an intolerable degree.
+   \item ‘What if my pain does not start out as much but becomes unbearable because I did not perform the exercise correctly?’
+ \end{itemize}
+\end{itemize}
+
 \subsection{Priorities Assigned to Users}
-\lips
+\textbf{\underline{Key users}}: Patients undergoing post operative physiotherapy have highest priority in the system, physiotherapists using the system to check-in and comment on patient exercises have similar priority. 
+
 \subsection{User Participation}
-\lips
+\textbf{Users (Patients)}
+\begin{itemize}
+  \item User creates an account and set up their profile and may sign into this account with valid credentials.
+  \item User requests analytical information based on their past exercise inputs and results.
+  \item User receives live form recommendations from the system by providing a video-feed of themselves performing the selected activity.
+  \item User requests an overview of their exercise after successfully completing a video-feed upload, or looks back at old overviews.
+  \item User creates comments on their own exercise overviews to keep personal notes and information regarding exercise session.
+  \item User receives comments from the physiotherapist account linked to theirs.
+\end{itemize}
+\textbf{Users (Physiotherapists)}
+\begin{itemize}
+  \item User creates an account and sets up their profile, and may sign into this account with valid credentials.
+  \item User requests a list of all patient accounts connected to their account.
+  \item User receives overviews of patient’s exercises to confirm exercise completion and progress on recovery.
+  \item User creates comments on patient’s exercise overviews to assist the patient with exercise performance, and/or to provide modifications.
+\end{itemize}
 \subsection{Maintenance Users and Service Technicians}
-\lips
+Maintenance and service on the system will be performed by the current development team. Maintenance and service should be minimized with a thorough test suite to ensure all functionalities of the system are operational upon any changes or updates.
 
 \section{Mandated Constraints}
 \subsection{Solution Constraints}
@@ -224,9 +312,110 @@ Furthermore, any data will not be shared without any explicit consent and stored
 \lips
 \subsection{Standards Compliance Requirements}
 \lips
+\section{Traceability from Requirements to Use Cases}
+This section maps each of the requirements to one or more of the use cases listed and defined above in previous sections.
+\begin{longtable}{p{2.5cm}p{11cm}}
+    \caption{Traceability from Requirements to Use Cases}\label{tab:req_uc}\\
+    \toprule
+    \textbf{Requirement} & \textbf{Use Case(s)} \\
+    \midrule
+    \endfirsthead
+    
+    \multicolumn{2}{c}%
+    {{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+    \toprule
+    \textbf{Requirement} & \textbf{Use Case(s)} \\
+    \midrule
+    \endhead
+    
+    \midrule
+    \multicolumn{2}{r}{{Continued on next page}} \\
+    \endfoot
+    
+    \bottomrule
+    \endlastfoot
+
+    FR1 & PUC3, PUC10 \\
+    FR2 & PUC1 \\
+    FR3 & PUC3 \\
+    FR4 & PUC10 \\
+    FR5 & PUC8 \\
+    FR6 & PUC10 \\
+    FR7 & PUC5 \\
+    FR8 & PUC7 \\
+    FR9 & PUC9 \\
+    FR10 & PUC4, PUC8 \\
+    FR11 & PUC11 \\
+    FR12 & PUC11 \\
+    FR13 & PUC11, PUC12 \\
+    FR14 & PUC6 \\
+    FR15 & PUC7 \\
+    FR16 & PUC7 \\
+    FR17 & PUC8, PUC10 \\
+    FR18 & PUC10 \\
+    FR19 & PUC9 \\
+    FR20 & PUC10 \\
+    FR21 & PUC13 \\
+    FR22 & PUC10, PUC13 \\
+    FR23 & PUC1, PUC13 \\
+    FR24 & PUC13 \\
+    FR25 & PUC8, PUC10 \\
+    LFR-AP1 & All PUCs \\
+    LFR-ST1 & PUC4, PUC6, PUC8 \\
+    UHR-EOU1 & All PUCs \\
+    UHR-EOU2 & PUC6 \\
+    UHR-LRN1 & PUC5, PUC8 \\
+    UHR-UPL1 & PUC6 \\
+    UHR-AR1 & PUC5, PUC6, PUC7 \\
+    PR-SL1 & PUC5 \\
+    PR-SL2 & PUC6 \\
+    PR-SCR1 & PUC6, PUC7 \\
+    PR-PAR1 & PUC11 \\
+    PR-PAR2 & PUC11, PUC12 \\
+    PR-RFT1 & PUC5 \\
+    PR-RFT2 & PUC5 \\
+    PR-RFT3 & All PUCs \\
+    PR-CR1 & All PUCs \\
+    PR-SER1 & PUC11, PUC12 \\
+    OER-EP1 & PUC5, PUC11 \\
+    OER-WE1 & All PUCs \\
+    OER-WE2 & All PUCs \\
+    OER-PR1 & PUC1, PUC3, PUC5, PUC6, PUC8, PUC10 \\
+    OER-RL1 & PUC5, PUC11, PUC12 \\ 
+    MS-MNT1 & PUC13 \\
+    MS-AD1 & PUC5, PUC8 \\
+    SR-AR1 & PUC1 \\
+    SR-AR2 & PUC3 \\
+    SR-AR3 & PUC2 \\
+    SR-IR1 & PUC13 \\
+    SR-PR1 & PUC1, PUC13 \\
+    SR-PR2 & PUC13 \\
+
+
+\end{longtable}
+
 
 \section{Open Issues}
-\lips
+
+This section discusses the open issues in this project. In detail, we will highlight the primary uncertainties and 
+open questions that are present throughout the process of developing our physiotherapy app. Ultimately, these issues 
+represent the challenges we may face throughout the development of our app. Addressing these issues will aid us in ensuring 
+the app is efficient, accurate and reliable. Listed below are some potential open issues in this project we have come across, 
+as well as how we plan to address these issues:
+
+\begin{itemize}
+  \item \textbf{Exercise Detection Accuracy:} Ensuring the app correctly analyzes and identifies the movements the patient 
+  undergoes is always going to be a constant challenge. Inaccuracies in the detection could result in false feedback which may 
+  prohibit recovery time. To address this, we will be undergoing further refinement of our detection methods and testing with a 
+  diverse sample size of individuals to aid in the accuracy of our movement detection to provide the most accurate feedback.
+  \item \textbf{Data Privacy:} The app will collect and store sensitive client health information which is something that needs to 
+  be securely stored. We will be making sure information is securely stored, transmission is encrypted and there are strict access 
+  controls in place to have that trust exist with our clients.
+  \item \textbf{Maintaining Patient Engagement:} Maintaining patient engagement is something that is going to be a struggle, as some
+   patients may view this as extra work on their end. Our goal is to hopefully have this app be viewed as a convenient aid that 
+   reduces the need for frequent in person physiotherapy visits, making recovery more so accessible and less time-consuming for 
+   the clients. 
+\end{itemize}
 
 \section{Off-the-Shelf Solutions}
 \subsection{Ready-Made Products}
@@ -238,16 +427,70 @@ Furthermore, any data will not be shared without any explicit consent and stored
 
 \section{New Problems}
 \subsection{Effects on the Current Environment}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Increased Battery Usage of Smart Device:} The app’s use of motion tracking and video processing could result in an 
+  increase of battery usage for a user’s smart device. This could also limit usability for individuals who have older devices. 
+  \item \textbf{Increased Storage Impact:} Since the app does involve uploading recording videos for analysis, this may result in 
+  an increase in storage used on the smart device. Individuals using the app who may have limited storage may experience a higher 
+  amount of data being used. This ultimately means that we need to ensure that due to the increase in storage usage, the quality is 
+  not lost, as we do not want that to affect the precision of our analysis in any way, shape or form.
+  \item \textbf{Requirement of stable network access:} The app does rely on a stable network connection to upload exercise videos 
+  for analysis. Areas with weaker connections may lead to individuals dealing with more delays and thus, limiting their overall 
+  usability.
+\end{enumerate}
+
 \subsection{Effects on the Installed Systems}
-\lips
+
+\begin{enumerate}
+  \item It may be hard for existing clinic or hospital systems to easily support integration with our app. There may be 
+  incompatibilities between the varying software platforms used, so this may slow down the process of integration or require 
+  more effort and money to aid in integrating it more smoothly.
+  \item Different systems may store data differently so this is something we also have to be aware of as it could create 
+  inconsistencies when syncing the medical records. 
+  \item When integrating the app to healthcare networks, policies and authentication layers should be carefully managed 
+  because if proper security is not in place, unauthorized users may be able to access patient data, which is extremely unsafe.
+\end{enumerate}
+
 \subsection{Potential User Problems}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Learning Curve:} Some users may not be the most familiar with using technology and may find it a bit more 
+  difficult to use this app which ultimately may lead to a decrease in user satisfaction and engagement.
+  \item \textbf{Privacy Issues and Comfortability with Video Recordings:} Some users may not be comfortable with the process 
+  of recording themselves and uploading their videos to the platform, which could lead to a decrease in engagement.
+  \item \textbf{Preference of in-person physiotherapy guidance:} Some users may prefer in person appointments with their 
+  physiotherapists to receive direct feedback, which may lead to a decrease in user engagement overall. 
+  \item \textbf{Limitations of Recording Videos:} Some users may find it difficult as a result of their limited mobility 
+  to be able to record and upload the videos with precision by themselves without any additional support. This may lead to 
+  inaccurate computations and results.
+  \item \textbf{Misinterpretation of Feedback:} Users may not understand how to correctly translate or interpret the feedback 
+  given by the app, which could ultimately lead to a decrease in the effectiveness and overall productivity of the app.
+\end{enumerate}
+
 \subsection{Limitations in the Anticipated Implementation Environment That May
 Inhibit the New Product}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Limited access to technology:} Some users may be limited in terms of not owning smart devices with a 
+  functional camera or not having enough storage space to record and upload videos. This will ultimately limit the app's overall 
+  accessibility.
+  \item \textbf{Connectivity Issues:} Areas with weaker connections lead to individuals being more prone to experiencing 
+  delays and deal with uploads failing, which ultimately decreases the app’s overall reliability and effectiveness.
+\end{enumerate}
+
 \subsection{Follow-Up Problems}
-\lips
+
+\begin{enumerate}
+  \item \textbf{Regular Updates:} The app will consist of regular updates to make sure it is compatible with the latest 
+  operating systems, all the changes in the newest programming languages as well as ensure it abides by all of the standard 
+  in place.
+  \item \textbf{Data Management and Cleanup:} Large amounts of data will be stored, resulting in a lot of storage being used up, 
+  as mentioned previously. Potentially introducing some sort of periodic cleanup may need to be implemented to address this. 
+  \item \textbf{On-going support may be required:} Users may require technical or instructional support when they are faced with 
+  issues while using the app specifically when recording, uploading or even trying to interpret the results. Potentially providing 
+  client support or a FAQ section may be necessary to address this.
+\end{enumerate}
 
 \section{Tasks}
 \subsection{Project Planning}
@@ -283,7 +526,45 @@ Similar to section 9 of the development plan document, we seek to adhere to the 
 \lips
 
 \section{Costs}
-\lips
+Currently, the cost of this project is 0 dollars. However, the only cost at this moment is the team members' time and expertise in order to bring this project to fruition. All the tools that are currently being used to build the product are free to use and open source.
+\subsection{Metrics for Estimation}
+Financial costs are not a concern at this stage. However, circumstances may change and require re-evaluation of any cost metrics to include this new development. In that case, a cost-benefit analysis would be performed in order to determine the correct value. \\
+The metrics listed below estimate the time and effort put forth by a team member:
+\begin{itemize}
+  \item The \textit{quality} of commits and pushes - this can be assessed by the commit message’s clarity and descriptiveness.
+  \item The \textit{quantity} of contributions made to the project is an additional indicator of effort. However, it should be contextualized in terms of quality. 
+  \item The quality of other deliverables can be similarly analyzed. 
+\end{itemize}
+As a team, the collective time and effort will be measured by:
+\begin{itemize}
+  \item The number of goals that have been achieved.
+  \item The amount of stretch goals that may have been successfully achieved.
+  \item The quality of the final project deliverables, measured using deliverable grades and TA’s feedback.
+  \item Number of test cases that have been devised.
+  \item Cohesiveness of the final product, which can be quantified by how functional the final application is.
+  \item The amount of time spent on a project deliverable.
+\end{itemize}
+
+\subsection{Estimation Approach}
+Current estimations are based on the previous and ongoing deliverable and may be inaccurate. They are subject to modification throughout the project timeline.
+
+\subsection{Cost Breakdown}
+
+\textbf{Tools and Software}:\\
+The cost is 0 dollars since all libraries and additional software will be open source.\\
+\textbf{Testing Environment}:\\
+The projected test suite will be formulated in house and will have no cost. 
+\textbf{Development effort}:\\
+\begin{itemize}
+  \item Documentation (generating output, editing): 120 hours per member
+  \item Deliverable revision: 20 hours per member
+  \item Team meetings: 50 hours per member
+  \item Software development: 400 hours per member
+  \item Software testing: 100 hours per member
+\end{itemize}
+\textbf{Total}: 690 hours per member 
+
+
 \section{User Documentation and Training}
 \subsection{User Documentation Requirements}
 \lips
@@ -294,7 +575,18 @@ Similar to section 9 of the development plan document, we seek to adhere to the 
 \lips
 
 \section{Ideas for Solution}
-\lips
+In this section , we will highlight the potential technical approaches we may be using to implement our physiotherapy app. 
+The ideas for solution can be seen listed below:
+
+\begin{itemize}
+  \item \textbf{Pose Detection:}  We plan on using the OpenCV library to select 
+  and analyze specific frames of the video uploaded to pick and identify specific key knee joint points using pose estimation 
+  techniques. In terms of the calculations, we can use Python’s built-in math module, which we can use to calculate the specific 
+  calculations necessary.
+  \item \textbf{Feedback Charts:} To showcase graphs and progress summary charts, we can use Python’s built-in matplotlib 
+  library to generate them for us. These can be later integrated to allow patients and physiotherapists the 
+  option to interpret the graphs and overall progress from the visuals provided.
+\end{itemize}
 
 \newpage{}
 \section*{Appendix --- Reflection}
@@ -302,5 +594,7 @@ Similar to section 9 of the development plan document, we seek to adhere to the 
 \input{../Reflection.tex}
 
 \input{../SRS_Reflection.tex}
+\bibliographystyle {plainnat}
+\bibliography{../../refs/References}
 
 \end{document}
