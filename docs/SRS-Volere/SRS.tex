@@ -26,6 +26,9 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{array}
+\usepackage{float}
+\usepackage{graphicx}
 \usepackage{natbib}
 \usepackage{longtable}
 \hypersetup{
@@ -79,9 +82,8 @@ The software requirements specification (SRS) document describes the functional 
 According to the Global Burden of Diseases, Injuries and Risk Factors study performed in 2019,individuals that would benefit from physical rehabilitation at least once in their lifetime is upwards of 2.41 billion globally \citep{CiezaEtAl2021}. Those with access to a physiotherapist experienced a disconnect with performing a required movement with proper range of motion (ROM) and correct form \citep{FaberEtAl2015}. While a physiotherapist can advise these individuals during their assessments and proceeding follow-up appointments, the efficacy of rehabilitation depends heavily on the individual's correct performance of the exercise. In turn, this creates a need for a tool that can ensure users correctly perform the exercise without supervision. This project aims to develop a tool that can provide feedback and corrections for the prescribed physical rehabilitation exercise.
 
 \subsection{Goals of the Project}
-\lips
-\section{Naming Conventions and Terminology}
-\lips
+Refer to the Goals section in the \href{https://github.com/M9Huynh/technically-functional/blob/3f585acd522ef1d7568f902d0db7c4a2126dcfe7/docs/ProblemStatementAndGoals/ProblemStatement.pdf}{Problem Statement and Goals} document.
+
 \section{Stakeholders}
 The stakeholders for this project are parties with a vested interest in the end product. They will be consulted on their requirements and opinions throughout the development process. Their impact will be foundational for correctness of the product. This section outlines the various types and levels of stakeholders, the personas, user participation (towards application development) and any users that will be responsible for the product’s maintenance. 
 \subsection{Client}
@@ -184,26 +186,123 @@ Maintenance and service on the system will be performed by the current developme
 
 \section{Mandated Constraints}
 \subsection{Solution Constraints}
-\lips
+The system shall provide users access to their account and previous exercise information, provided a valid username and password.
+
+\textbf{Justification}: User data stored in the user database is important to the account, but should be safely guarded without validation.\\
+
+The system shall provide users with an overview of their exercises and data specific to individual exercises.
+
+\textbf{Justification}: Users should be able to look back on their progress and see data on their exercises over time.\\
+
+The system shall provide users the ability to upload video-feeds of them performing exercises, and return recommendations on their form.
+
+\textbf{Justification}: The primary function of the system, users must be able to get form recommendations to assist in proper recovery and boost confidence in correct form. The system must be able to accept the video as input and be capable of returning relevant recommendations to the user.
+
 \subsection{Implementation Environment of the Current System}
-\lips
+\begin{itemize}
+  \item \textbf{Back End} (Processing): Source code written in Python.
+  \item \textbf{Front End} (GUI): Source code written in platform specific application studio (EG. Android Studio).
+  \item \textbf{OpenCV}: Library used to analyze user video-streams for required data.
+  \item \textbf{Database}: Remotely accessible storage for user data.
+\end{itemize}
+
 \subsection{Partner or Collaborative Applications}
-\lips
+Physiotherapist scheduling, management, and patient-oriented softwares could be used in tandem, however the system is not designed with collaborative applications in mind.
+
 \subsection{Off-the-Shelf Software}
-\lips
+\begin{itemize}
+  \item \textbf{Database} software is previously implemented and simply interfaced by the system.
+  \item \textbf{OpenCV} software is unmodified and only interfaced by the system.
+\end{itemize}
+
 \subsection{Anticipated Workplace Environment}
-\lips
+\begin{itemize}
+  \item Physiotherapist patients in their residences or private spaces.
+  \item Physiotherapists in their offices or assigned exercise spaces.
+\end{itemize}
+
 \subsection{Schedule Constraints}
-\lips
+As per the \href{https://github.com/M9Huynh/technically-functional/blob/7ff500c1d16686d4d7926d96109d83b87b307b87/docs/DevelopmentPlan/DevelopmentPlan.pdf}{Development Plan}:
+\begin{itemize}
+  \item Proof of Concept must be developed by November 17th, 2025.
+  \begin{itemize}
+    \item Demonstrations: November 17th - 28th.
+  \end{itemize}
+  \item Revision 0 must be developed by February 2nd, 2026.
+  \begin{itemize}
+    \item Demonstrations: February 2nd - 13th.
+  \end{itemize}
+  \item Revision 1 must be developed by March 23rd, 2026.
+  \begin{itemize}
+    \item Demonstrations: March 23rd - 29th.
+  \end{itemize}
+\end{itemize}
+
 \subsection{Budget Constraints}
-\lips
+The development of the system must remain less than \$125 or the team begins paying out of pocket for development tools. Ideally the implementation remains free and open to use.
+
 \subsection{Enterprise Constraints}
-\lips
+The system will attempt to mimic standards set by professional physiotherapists across Canada. Due to the nature of health care and physiotherapy market within Canada, the system will not provide medical care or medical assistance, simply wellbeing advice similar to that of a gym companion application.
 
 \section{Naming Conventions and Terminology}
+
 \subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
 involved in the Project}
-\lips
+Terminology:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l m{10cm}|}
+  \hline
+  \textbf{Term} & \textbf{Description} \\
+  \hline \hline
+  \textit{Flexion} & The act of contracting the muscles to bend the targeted joint, creating a smaller angle across the joint. \\ \hline
+  \textit{Extension} & The act of contracting the muscles to unbend the targeted joint, creating a larger angle across the joint. \\ \hline
+  \textit{Adduction} & The act of moving a part of the body towards the body’s midline. \\ \hline
+  \textit{Abduction} & The act of moving a part of the body away from the body’s midline. \\ \hline
+  \textit{Joint} & The connection between two bones which allows bending and movements of the limbs. In this document, this term mainly refers to the knee. \\ \hline
+  \textit{Time Under Tension} & The time during an exercise where the targeted muscles are under strain. \\ \hline
+  \textit{Range of Motion} or \textit{ROM} & The range of angles within which the user can move their joint from maximum stretching of the joint to maximum contraction of the joint. \\ \hline
+  \textit{Form} & An all inclusive term referring to the position of body parts, their range of motion, and how they are coupled to execute the correct movement. \\ \hline
+  \textit{Repetition} or \textit{Rep} & A single complete movement of an exercise from start to finish. \\ \hline
+  \textit{Effectiveness} & Relevant to user-based goals to measure their own progress towards their recovery. (ie effectiveness in mobility increase, effectiveness in pain relief, etc.) \\ \hline
+  \textit{Computer Vision} & The ability for the system to ‘see’ the user and extract relevant information. \\ \hline
+  \textit{CI/CD} & Continuous integration/continuous deployment which automates building and limited testing of methods in our project. \\ \hline
+\end{tabular}
+\caption{Table of Project Terminology}
+\end{table}
+
+Acronyms and Shorthands:
+\begin{table}[H]
+\centering
+\begin{tabular}{|c l|}
+  \hline
+  \textbf{Acronym} & \textbf{Meaning} \\
+  \hline
+  A & Assumption \\
+  PS & Physical System Description \\
+  DD & Data Definition \\
+  GD & General Definition \\
+  GS & Goal Statement \\
+  TM & Theoretical Model \\
+  LC & Likely Change \\
+  UC & Unlikely Change \\
+  TUT & Time Under Tension \\
+  DOF & Degrees of Freedom \\
+  ROM & Range of Motion \\
+  RMS & Root-Mean-Square (metric for error) \\
+  Reps & Repetitions \\
+  PTs & Physiotherapists \\
+  FPS & Frame per Second \\
+  CV & Computer Vision \\
+  ML & Machine Learning \\
+  FRs & Functional Requirements\\
+  NFRs & Non-Functional Requirements \\
+  PR & Pull Request \\
+  SRS & Software Requirement Specification \\ \hline
+\end{tabular}
+\caption{Project Acronyms and Shorthands}
+\end{table}
 
 \section{Relevant Facts And Assumptions}
 \subsection{Relevant Facts}
@@ -224,33 +323,164 @@ Furthermore, any data will not be shared without any explicit consent and stored
 
 
 \subsection{Assumptions}
-\lips
+\begin{table}[H]
+\begin{tabular}{l m{10cm}}
+  \textbf{\#} & \textbf{Assumption} \\
+  A1 & The user of the system is a post-operative patient requiring physiotherapy. \\
+  A2 & Users have prescribed physiotherapy exercises from a professional physiotherapist. \\
+  A3 & Users prescribed exercise names will remain consistent across physiotherapists. \\
+  A4 & Messages from the system are recommended actions and not healthcare advice. \\
+  A5 & User’s smart devices will have an internet connection during video-feed uploading. \\
+  A6 & User’s smart devices will be fully functional. \\
+  A7 & User’s smart device camera will be fully functional. \\
+  A8 & User’s smart device camera will be undamaged. \\
+  A9 & User’s smart devices will meet or exceed the minimum system requirements. \\
+  A10 & Users will have adequate space to record their exercises. \\
+  A11 & Users will be able to read or listen to advice from the system during exercise video-feeds. \\
+  A12 & Assume that the user knows how to use the smart device and generally how to navigate it when human-centered interfaces are used. \\
+  A13 & Only one user is within the frame of the smart device. \\
+  A14 & Users will be receptive to feedback.
+\end{tabular}
+\end{table}
 
 \section{The Scope of the Work}
 \subsection{The Current Situation}
-\lips
+Current at-home solutions for patients requiring physiotherapy, namely post-operative patients, are paid solutions that connect you to a physiotherapist to speak with or suggest to you a series of exercises based on some generically entered data. Patients are lacking a self-help tool to not only ensure they’re completing their exercises, but completing them correctly and safely as well.
+
+Computer vision is being used in select places in the market to analyze form and give feedback, this exists for things like golf and tennis form analysis. However a stand-alone form-analyzing application which provides feedback independent of domain experts could scale far better and reach people who need it.
+
 \subsection{The Context of the Work}
-\lips
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{Context_Diagram.png}
+  \caption{Work Context Diagram}
+\end{figure}
+
 \subsection{Work Partitioning}
-\lips
+\begin{table}[H]
+\centering
+\begin{tabular}{|m{3cm}|m{3cm}|m{8cm}|}
+  \hline
+  \textbf{Event} & \textbf{System Action} & \textbf{Description} \\ \hline
+  User Requests Login & Login Request (in) & Compare user’s entered data with user database. \\ \hline
+  Login Result Return & Login Result (out) & Return result, login or fail, to user based on data comparison. \\ \hline
+  User Requests Display & Display Request (in) & Generate display with data from the user database. \\ \hline
+  Display Return & Display Return (out) & Send the generated display to the user's GUI. \\ \hline
+  User Submits Video & Form Feedback Request (in) & The user submits a video-feed for form analysis. \\ \hline
+  Form Feedback Return & Form Feedback Return (out) & The system analyzes the form in the user’s video feed. The system generates form feedback and an overview from the analyzed information. The system generates a display with the newly added overview. The system sends the form feedback and the new display to the user. \\ \hline  
+\end{tabular}
+\caption{Work Partitioning}
+\end{table}
+
 \subsection{Specifying a Business Use Case (BUC)}
-\lips
+A user (patient) is prescribed exercises by a physiotherapist and uses the app to ensure they are doing the exercises correctly. This use case assumes the user is already logged in, and thus skips the login steps.
+
+\begin{figure}[H]
+\includegraphics[width=\linewidth]{BUC.png}
+\caption{Business Use Case Diagram}
+\end{figure}
 
 \section{Business Data Model and Data Dictionary}
 \subsection{Business Data Model}
-\lips
+N/A 
+This is not yet concrete, and will be fleshed out more at the implementation stage. Currently, the data flow should look very similar to that seen in the Work Context Diagram.
+
 \subsection{Data Dictionary}
-\lips
+N/A
+For the same reasons above, the data structures and specific metadata required for this section doesn’t yet exist within the project, and so cannot be entered here.
 
 \section{The Scope of the Product}
 \subsection{Product Boundary}
-\lips
+Refer to the Work Context Diagram for the boundaries of the system’s operations.
 \subsection{Product Use Case Table}
-\lips
+\begin{figure}[H]
+  \includegraphics[width=13cm]{PUC.png}
+  \caption{Product Use Case Table}
+\end{figure}
 \subsection{Individual Product Use Cases (PUC's)}
-\lips
+Where not specified, user is assumed to be user (patient).\\ \\
+PUC1: Login\\
+Event: User enters username and password and requests login.\\
+Preconditions: User is not logged in.\\
+Actors: User, System, Database\\
+Normal Flow: User enters a valid username and password confirmed within the database and successfully accesses their pre-existing account.\\
+Alternative Flow: User enters an invalid username and password which don’t verify in the database and the user is returned an error for invalid login information.\\ \\
+PUC2: Logout\\
+Event: User requests to logout of their account.\\
+Preconditions: User is logged in.\\
+Actors: User, System\\
+Normal Flow: User requests to log out of their account. The system moves the user to the login page.\\
+Alternative Flow: N/A\\ \\
+PUC3: Create Account\\
+Event: User requests to create an account.\\
+Precondition: User is not logged in.\\
+Actors: User, System, Database\\
+Normal Flow: User enters an email, username, and password combination not already contained within the database. Email and username must be unique. The system creates an account for the user, stores the account information in the user database, and logs them into their account.\\
+Alternative Flow: User enters an email or username that already exists within the user database, or a password which does not meet minimum requirements. The system returns an error and prompts the user to re-enter incorrect fields.\\ \\
+PUC4: Request Analytics Display\\
+Event: User refreshes analytics display (home page), user logs into their account, user returns to home page after an exercise.
+Precondition: User is logged in and on the home page.\\
+Actors: User, System\\
+Normal Flow: After any of the events, the system uses all the stored user exercise overviews to refresh the analytics display.\\
+Alternative Flow: If there are no stored exercise overviews for the user, the system prompts them to complete an exercise.\\ \\
+PUC5: Submit Video for Analysis\\
+Event: User submits a video-feed for form analysis.\\
+Precondition: User is logged in and on the video submission screen.\\
+Actors: User, System\\
+Normal Flow: User submits a video-feed to the system for form analysis. The system accepts the video and recognizes the patient (user) within the video.\\
+Alternative Flow: The system doesn’t recognize a patient within the video and prompts the user to fix any issues with their video-feed.\\ \\
+PUC6: Receive Form Recommendations\\
+Event: User is logged in and has submitted a video-feed for form analysis.\\
+Precondition: User is logged in and the system has recognized them within the video-feed.\\
+Actors: User, System\\
+Normal Flow: System returns form recommendations based on data pulled from the video-feed and formulates the data into readable language recommendations which are displayed to the user.\\
+Alternative Flow: System fails to draw analytical information from the video-feed and fails to create form recommendations for the patient (user).\\ \\
+PUC7: Review Video Submission\\
+Event: User has ended the video-feed upload.\\
+Precondition: User is logged in, has submitted a video-feed for analysis, and has successfully received form recommendations.\\
+Actors: User, System\\
+Normal Flow: User can rewatch their video-feed submission with form recommendations in real-time before finally exiting the video submission screen.\\
+Alternative Flow: User can cancel or request to redo their video-feed submission, taking them back to PUC5.\\ \\
+PUC8: Receive Overview\\
+Event: User has submitted and exited a video-feed submission.\\
+Precondition: User has successfully submitted a video-feed submission, received recommendations, and exited the submission screen.\\
+Actors: User (Patient), User (Physiotherapist), System\\
+Normal Flow: System generates an overview of the exercise just submitted by the user and provides in natural language an overview to the user.\\
+Alternative Flow: If the user didn’t submit their video-feed but exited and cancelled instead, no overview is created.\\ \\
+PUC9: Comment on Exercise\\
+Event: User creates a comment on an exercise.\\
+Precondition: User (Patient) must be logged in and have completed one exercise, or, user (Physiotherapist) must be logged in and have at least one patient that has completed one exercise.\\
+Actors: User (Patient), User (Physiotherapist), System\\
+Normal Flow: User requests to create a comment on an exercise overview. User enters their own information into a text field and submits the comment. This comment is now visible to all users with access to that exercise overview.\\
+Alternative Flow: User cancels their comment creation, and no comment is saved alongside the exercise overview.\\ \\
+PUC10: Request Patient List\\
+Event: User (Physiotherapist) requests or refreshes the patient list on their homepage.\\
+Precondition: User (Physiotherapist) is logged in.\\
+Actors: User (Physiotherapist), System\\
+Normal Flow: System returns the list of all patients tied to the respective user (Physiotherapist) account, with access to their exercise overviews.\\
+Alternative Flow: If the user (Physiotherapist) has no patients connected to their account, the system prompts them to add at least one patient.\\ \\
+PUC11: Extract Data from Video\\
+Event: System receives a video-feed from a user.\\
+Precondition: User is recognizable in the video-feed.\\
+Actors: System\\
+Normal Flow: The system uses a CV library to extract necessary data relevant to the user’s form, storing the information locally for generating form recommendations, analytics displays, and overviews.\\ \\
+PUC12: Create Form Recommendation\\
+Event: System has extracted necessary form data from a video-feed.\\
+Precondition: The video-feed was successfully analyzed by the CV library and received the necessary information.\\
+Actors: System\\
+Normal Flow: The system takes the form data and generates a naturally worded recommendation for the user’s form.\\ \\
+PUC13: Store Exercise Overview\\
+Event: Exercise overview has been created, comment has been submitted.\\
+Precondition: Exercise overview or comment was successfully created, not cancelled.\\
+Actors: System, Database\\
+Normal Flow: The exercise overview is stored in the user database tied to the user’s account.\\
 
-\section{9 Functional Requirements}
+\subsection{System State Diagram}
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{FSM.png}
+  \caption{System State Diagram (State Machine)}
+\end{figure}
+
+\section{Functional Requirements}
 
 \begin{reqlist}
 	
@@ -375,25 +605,25 @@ Furthermore, any data will not be shared without any explicit consent and stored
 	
 \end{reqlist}
 
-\section{10 Look and Feel Requirements}
+\section{Look and Feel Requirements}
 
-\subsection{10.1 Appearance Requirements}
+\subsection{Appearance Requirements}
 \begin{reqlist}
 	\item[LFR-AP 1.] The system shall maintain consistent navigation and design across all interfaces.
 	\rationale{Consistency reduces cognitive load, minimizes learning time, and prevents user confusion when navigating between different features of the application.}
 	\fitcrit{All interfaces use the same navigation structure, color scheme, typography, and button styles. User testing confirms that 90\% of users can navigate between features without assistance after a 5-minute introduction.}
 \end{reqlist}
 
-\subsection{10.2 Style Requirements}
+\subsection{Style Requirements}
 \begin{reqlist}
 	\item[LFR-ST 1.] The system shall provide a user-friendly interface with clear instructions and visual cues.
 	\rationale{Many patients and some PTs may have limited technical expertise. A clear, intuitive interface ensures that the technology doesn't become a barrier to receiving or providing care.}
 	\fitcrit{User testing with participants of varying technical skill levels shows that 80\% can complete common tasks (start exercise, view progress, leave feedback) without external help. All critical actions have visible instructions and visual indicators.}
 \end{reqlist}
 
-\section{11 Usability and Humanity Requirements}
+\section{Usability and Humanity Requirements}
 
-\subsection{11.1 Ease of Use Requirements}
+\subsection{Ease of Use Requirements}
 \begin{reqlist}
 	\item[UHR-EOU 1.] The system shall be accessible to users with limited technical skills.
 	\rationale{The patient population includes individuals of all ages and technical abilities. The system must accommodate users who may not be comfortable with complex technology to ensure broad accessibility.}
@@ -420,33 +650,33 @@ Furthermore, any data will not be shared without any explicit consent and stored
 	\fitcrit{Patients can activate a live video feed view showing themselves during exercise execution. The view is available as an optional toggle on the exercise interface and updates in real-time throughout the session.}
 \end{reqlist}
 
-\subsection{11.2 Personalization and Internationalization Requirements}
+\subsection{Personalization and Internationalization Requirements}
 N/A
 
-\subsection{11.3 Learning Requirements}
+\subsection{Learning Requirements}
 \begin{reqlist}
 	\item[UHR-LRN 1.] The system shall provide clear instructions for exercise execution and system navigation.
 	\rationale{Clear instructions reduce the learning curve, improve user confidence, ensure exercises are performed correctly, and minimize the need for external support.}
 	\fitcrit{Each exercise includes written instructions (maximum 8th-grade reading level) and visual demonstrations. Navigation instructions are available on first use.}
 \end{reqlist}
 
-\subsection{11.4 Understandability and Politeness Requirements}
+\subsection{Understandability and Politeness Requirements}
 \begin{reqlist}
 	\item[UHR-UPL 1.] The system shall provide corrective feedback in a clear and constructive manner.
 	\rationale{Constructive, respectful feedback maintains patient motivation and engagement. Harsh or confusing feedback could discourage patients from continuing their treatment program.}
 	\fitcrit{All feedback messages use positive, instructive language (e.g., ``Try bending your knee a bit more'' rather than ``Wrong'').}
 \end{reqlist}
 
-\subsection{11.5 Accessibility Requirements}
+\subsection{Accessibility Requirements}
 \begin{reqlist}
 	\item[UHR-AR 1.] The system shall provide both visual and audible cues.
 	\rationale{The system providing different methods to indicate whether a patient is correctly performing exercises or not ensures accessibility to users who benefit in understanding the functionalities and instructions given by the application.}
 	\fitcrit{All critical feedback and instructions are available in both visual (on-screen text/graphics) and audible (spoken) formats.}
 \end{reqlist}
 
-\section{12 Performance Requirements}
+\section{Performance Requirements}
 
-\subsection{12.1 Speed and Latency Requirements}
+\subsection{Speed and Latency Requirements}
 \begin{reqlist}
 	\item[PR-SL 1.] The system shall load the exercise interface within 2 seconds under normal network conditions.
 	\rationale{Fast loading times prevent user frustration and abandonment. Patients are more likely to complete exercises when the system responds quickly, maintaining treatment adherence.}
@@ -457,14 +687,14 @@ N/A
 	\fitcrit{From the moment a form deviation is detected in the video stream, corrective feedback (visual and audible) is delivered within 1 second in 95\% of cases. Latency is measured from deviation occurrence to feedback display.}
 \end{reqlist}
 
-\subsection{12.2 Safety-Critical Requirements}
+\subsection{Safety-Critical Requirements}
 \begin{reqlist}
 	\item[PR-SCR 1.] The system shall not allow patients to proceed with exercises if critical form violations are detected that could result in injury.
 	\rationale{Preventing exercise execution when dangerous form is detected protects patients from potential injury, particularly when performing unsupervised exercises at home. This overrides the general principle of allowing retries to prioritize immediate safety.}
 	\fitcrit{When critical form violations (defined as deviations $>30^\circ$ from safe range or joint stress indicators) are detected, the system immediately halts the exercise with a warning message. The system prevents continuation until the violation is corrected.}
 \end{reqlist}
 
-\subsection{12.3 Precision or Accuracy Requirements}
+\subsection{Precision or Accuracy Requirements}
 \begin{reqlist}
 	\item[PR-PAR 1.] The system shall accurately compute biomechanical features (e.g., joint angle, range of motion) with sufficient precision to detect form deviations.
 	\rationale{Accurate measurements are essential for providing valid feedback and tracking progress. Inaccurate measurements could lead to inappropriate corrections or missed therapeutic opportunities.}
@@ -475,7 +705,7 @@ N/A
 	\fitcrit{Form verification achieves minimum 85\% accuracy (correctly identifies both correct and incorrect form) when compared to expert PT assessment. False positive rate is below 10\%, and false negative rate is below 15\%.}
 \end{reqlist}
 
-\subsection{12.4 Robustness or Fault-Tolerance Requirements}
+\subsection{Robustness or Fault-Tolerance Requirements}
 \begin{reqlist}
 	\item[PR-RFT 1.] The system shall recover from unexpected failures within 5 minutes.
 	\rationale{Quick recovery minimizes disruption to patient exercise sessions and prevents data loss. Extended downtime could cause patients to miss treatment windows or lose confidence in the system.}
@@ -492,34 +722,34 @@ N/A
 	\rationale{Exercise sessions interrupted by device power loss result in lost data, incomplete PT records, and user frustration. Proactive battery monitoring allows users to charge their device or complete a shorter session before power runs out. This is particularly important for video recording and analysis, which can drain the battery quickly. Preventing mid-session failures improves data completeness, user experience, and treatment adherence by ensuring sessions can be completed successfully.}
 \end{reqlist}
 
-\subsection{12.5 Capacity Requirements}
+\subsection{Capacity Requirements}
 \begin{reqlist}
 	\item[PR-CR 1.] The system shall support at least 100 concurrent users without degradation in performance.
 	\rationale{High availability ensures that patients can access their treatment programs when scheduled. Frequent downtime could disrupt treatment adherence and patient outcomes.}
 	\fitcrit{Load testing confirms the system supports 100 simultaneous active sessions with response times remaining within specified limits (2-second interface load, 1-second feedback delivery). No crashes or errors occur under maximum load conditions.}
 \end{reqlist}
 
-\subsection{12.6 Scalability or Extensibility Requirements}
+\subsection{Scalability or Extensibility Requirements}
 \begin{reqlist}
 	\item[PR-SER 1.] The system architecture shall support future expansion to additional joint types beyond the knee.
 	\rationale{Starting with knee exercises but planning for expansion ensures the system can grow to serve broader treatment needs without requiring complete architectural redesign.}
 	\fitcrit{System architecture uses modular, joint-agnostic design patterns. Adding a new joint type (e.g., shoulder, ankle) requires only new exercise definitions and reference models, not core system changes.}
 \end{reqlist}
 
-\subsection{12.7 Longevity Requirements}
+\subsection{Longevity Requirements}
 \noindent N/A \\
 \textit{Reason:} Longevity requirements have been addressed in the previous iteration and are now covered under requirements 12.7.1 and 12.7.2, which specify a minimum 5-year operational lifespan and the use of widely-supported, non-proprietary technologies. No additional longevity requirements are necessary at this stage of the project.
 
-\section{13 Operational and Environmental Requirements}
+\section{Operational and Environmental Requirements}
 
-\subsection{13.1 Expected Physical Environment}
+\subsection{Expected Physical Environment}
 \begin{reqlist}
 	\item[OER-EP 1.] The system shall function in typical home and clinical environments where patients perform physiotherapy exercises.
 	\rationale{Patients will use the system in diverse settings with varying lighting, space constraints, and background conditions. The system must be robust enough to function reliably in non-laboratory environments.}
 	\fitcrit{Computer vision analysis functions accurately in lighting conditions from 200--1000 lux, with backgrounds containing typical home elements (furniture, walls, patterns). Testing in 5 diverse home environments shows successful exercise capture and analysis in 90\% of cases.}
 \end{reqlist}
 
-\subsection{13.2 Wider Environment Requirements}
+\subsection{Wider Environment Requirements}
 \begin{reqlist}
 	\item[OER-WE 1.] The system shall be compatible with major operating systems (Windows, iOS, Android).
 	\rationale{Patients and PTs use diverse devices and operating systems. Cross-platform compatibility ensures maximum accessibility and prevents the system from excluding users based on their device choices.}
@@ -530,18 +760,18 @@ N/A
 	\fitcrit{The interface adapts to screen sizes from 5-inch mobile devices to 27-inch desktop monitors. All interface elements remain accessible and readable. No horizontal scrolling is required. Testing on 10 different screen sizes shows full functionality on all devices.}
 \end{reqlist}
 
-\subsection{13.3 Requirements for Interfacing with Adjacent Systems}
+\subsection{Requirements for Interfacing with Adjacent Systems}
 \noindent N/A \\
 \textit{Reason:} Interface requirements have been addressed in the previous iteration and are now covered under requirements 13.3.1 and 13.3.2, which specify API integration capabilities for EMR systems and standardized data export formats. The first iteration of the system focuses on core functionality as a standalone application.
 
-\subsection{13.4 Productization Requirements}
+\subsection{Productization Requirements}
 \begin{reqlist}
 	\item[OER-PR 1.] The system shall include comprehensive user documentation for both patients and physiotherapists, including setup guides, troubleshooting instructions, and feature explanations.
 	\rationale{Thorough documentation reduces support burden, enables self-service problem resolution, facilitates user onboarding, and increases user confidence in the system. This is essential for product adoption in clinical settings.}
 	\fitcrit{Documentation includes setup guides, troubleshooting FAQ (minimum 15 common issues), and feature explanations for all major functions. Documentation is available in-app and as downloadable PDFs. User testing shows 80\% can resolve common issues using documentation alone.}
 \end{reqlist}
 
-\subsection{13.5 Release Requirements}
+\subsection{Release Requirements}
 \begin{reqlist}
 	\item[OER-RL 1.] The system shall follow a phased release approach, beginning with knee joint exercises before expanding to additional joint types.
 	\rationale{Phased releases allow the development team to validate the core platform with a focused feature set, gather real-world user feedback, identify and resolve issues in a controlled scope, and demonstrate value before expanding functionality. This reduces risk and enables iterative improvement.}
@@ -550,27 +780,27 @@ N/A
 	\rationale{Pre-release connectivity testing ensures that all external dependencies (libraries, databases) are properly configured and functional before the system reaches end users. This prevents deployment failures, reduces post-release bugs, and ensures that critical functionality is available from day one. Testing connectivity in the release process catches integration issues early when they are less costly and disruptive to fix.}
 \end{reqlist}
 
-\section{14 Maintainability and Support Requirements}
+\section{Maintainability and Support Requirements}
 
-\subsection{14.1 Maintenance Requirements}
+\subsection{Maintenance Requirements}
 \begin{reqlist}
 	\item[MS-MNT 1.] The system shall automatically back up patient data once every 24 hours.
 	\rationale{Regular backups protect against data loss from hardware failures, software bugs, or security incidents. Daily backups balance data protection with system resource usage.}
 \end{reqlist}
 
-\subsection{14.2 Supportability Requirements}
+\subsection{Supportability Requirements}
 N/A
 
-\subsection{14.3 Adaptability Requirements}
+\subsection{Adaptability Requirements}
 \begin{reqlist}
 	\item[MS-AD 1.] The system shall support both online and limited offline modes, caching exercise instructions for use without internet.
 	\rationale{Internet connectivity may be temporarily unavailable in some home environments. Offline capability with cached instructions ensures patients can continue exercises and sync data when connectivity is restored.}
 	\fitcrit{Exercise instructions, demonstration videos, and patient's current exercise plan are cached locally and accessible without internet connection. Cached content updates automatically when online. Users can view current exercises and instructions when offline.}
 \end{reqlist}
 
-\section{15 Security Requirements}
+\section{Security Requirements}
 
-\subsection{15.1 Access Requirements}
+\subsection{Access Requirements}
 \begin{reqlist}
 	\item[SR-AR 1.] The system shall enforce secure login using unique credentials for each user.
 	\rationale{Unique credentials ensure accountability, enable proper access control, and comply with healthcare privacy regulations requiring authenticated access to patient information.}
@@ -589,13 +819,13 @@ N/A
 	\rationale{Limiting login attempts to five protects accounts from brute force attacks where attackers systematically try multiple password combinations. Offering a password reset option after failed attempts balances security with user convenience, allowing legitimate users who have forgotten their password to regain access without being permanently locked out. This threshold is high enough to accommodate normal user errors but low enough to deter automated attacks.}
 \end{reqlist}
 
-\subsection{15.2 Integrity Requirements}
+\subsection{Integrity Requirements}
 \begin{reqlist}
 	\item[SR-IR 1.] The system shall encrypt all sensitive patient data at rest and in transit.
 	\rationale{Encryption protects patient privacy and complies with healthcare data protection regulations. It prevents unauthorized access even if data is intercepted or storage media is compromised.}
 \end{reqlist}
 
-\subsection{15.3 Privacy Requirements}
+\subsection{Privacy Requirements}
 \begin{reqlist}
 	\item[SR-PR 1.] The system shall restrict patients to accessing only their own data.
 	\rationale{Privacy restrictions prevent patients from viewing others' medical information, complying with healthcare privacy laws and maintaining trust in the system's data protection capabilities.}
@@ -604,33 +834,37 @@ N/A
 	\rationale{Healthcare regulations mandate specific retention periods and privacy protections for medical records. Compliance prevents legal liability and protects patient rights.}
 \end{reqlist}
 
-\subsection{15.4 Audit Requirements}
+\subsection{Audit Requirements}
 \noindent N/A \\
 \textit{Reason:} While audit trails are best practice for healthcare systems, explicit audit requirements are not mandated for the first iteration of this application. The system's access controls (Section 15.1), data integrity measures (Section 15.2), and privacy restrictions (Section 15.3) provide adequate security for the initial release. Comprehensive audit logging capabilities (tracking who accessed what data and when) will be considered for future iterations based on regulatory guidance, clinic feedback, and compliance requirements that emerge during pilot deployment.
 
-\subsection{15.5 Immunity Requirements}
+\subsection{Immunity Requirements}
 \noindent N/A \\
 \textit{Reason:} Immunity requirements (protection against specific types of attacks such as SQL injection, cross-site scripting, or denial-of-service attacks) are implicitly addressed through requirement 17.2.4, which mandates compliance with OWASP Top 10 security best practices. Rather than listing specific attack vectors as separate requirements, the system's security posture is comprehensively covered through adherence to industry-standard security frameworks and the security requirements outlined in Section 15.1 (Access), 15.2 (Integrity), and 15.3 (Privacy).
 
-\section{16 Cultural Requirements}
+\section{Cultural Requirements}
 
-\subsection{16.1 Cultural Requirements}
+\subsection{Cultural Requirements}
 \noindent N/A \\
 \textit{Reason:} The first iteration of the system is being developed for deployment within Canada, specifically targeting English-speaking physiotherapy clinics and patients. The system uses standard physiotherapy terminology and neutral instructional language that does not contain culturally-specific references, idioms, or imagery that would require cultural adaptation. Cultural and internationalization requirements will be assessed when expanding to multicultural user bases, non-English speaking populations, or international markets in future releases.
 
-\section{17 Compliance Requirements}
+\section{Compliance Requirements}
 
-\subsection{17.1 Legal Requirements}
+\subsection{Legal Requirements}
 \noindent N/A \\
 \textit{Reason:} Legal compliance requirements have been addressed in the previous iteration and are now covered under requirements 17.1.1 through 17.1.4, which specify compliance with PIPEDA, provincial health information acts, AODA/WCAG accessibility standards, patient consent legislation, and telemedicine regulations. These requirements comprehensively address the legal obligations for a healthcare application operating in the Canadian context.
 
-\subsection{17.2 Standards Compliance Requirements}
+\subsection{Standards Compliance Requirements}
 \noindent N/A \\
 \textit{Reason:} The system will follow industry best practices and security standards as they apply to the implementation, but specific standards compliance certifications (such as ISO 27001, HL7 FHIR, or SOC 2) are not required for the initial release targeting small to medium physiotherapy clinics. Compliance with accessibility standards (WCAG) is addressed under legal requirements (AODA compliance in 17.1.2). Additional standards compliance requirements will be evaluated based on market demands and enterprise client needs in future iterations.
 
 \section{Compliance Requirements}
 \subsection{Legal Requirements}
+N/A
+
 \subsection{Standards Compliance Requirements}
+N/A
+
 \section{Traceability from Requirements to Use Cases}
 This section maps each of the requirements to one or more of the use cases listed and defined above in previous sections.
 \begin{longtable}{p{2.5cm}p{11cm}}
@@ -738,11 +972,17 @@ as well as how we plan to address these issues:
 
 \section{Off-the-Shelf Solutions}
 \subsection{Ready-Made Products}
-\lips
+Existing physiotherapy companion apps and other sport-specific or sports-medicine applications exist on the market, however they fail to do what this system intends. Existing physiotherapy companion apps either use human input on the other side of a submission, reducing scalability and increasing possibilities of human error. Some apps even require linking with hardware worn on the patient’s body to draw relevant form information for creating recommendations.
+
+Existing form apps with computer-vision are used for very specific purposes, but not for physiotherapy recovery uses.
+
 \subsection{Reusable Components}
-\lips
+The computer-vision aspects of form recommendation apps for sports, such as golf swings, tennis swings, or baseball batting practice, can be observed and mimicked for the computer-vision aspects of the application.
+
+Some physiotherapy app systems that confirm users with physiotherapists, or confirm validity of physiotherapists, can also be mimicked to model the user database.
+
 \subsection{Products That Can Be Copied}
-\lips
+There are no products that can be directly copied, but as mentioned in 20.2 there are parts of different existing applications that can be spliced to assist the implementation of the system.
 
 \section{New Problems}
 \subsection{Effects on the Current Environment}
@@ -840,9 +1080,12 @@ Similar to section 9 of the development plan document, we seek to adhere to the 
 
 \section{Migration to the New Product}
 \subsection{Requirements for Migration to the New Product}
-\lips
+As the system isn’t a migration from an older system, there are no changes needed to be made at a level any deeper than user onboarding. This means the requirements here are limited to onboarding patients in need of physiotherapy advice and physiotherapists who wish to ensure their patients are completing their exercises outside of appointments.
 \subsection{Data That Has to be Modified or Translated for the New System}
-\lips
+N/A
+
+As mentioned in 23.1, there is no change required on a level deeper than onboarding, this puts the data level out-of-scope for migration.
+
 
 \section{Costs}
 Currently, the cost of this project is 0 dollars. However, the only cost at this moment is the team members' time and expertise in order to bring this project to fruition. All the tools that are currently being used to build the product are free to use and open source.
@@ -886,12 +1129,25 @@ The projected test suite will be formulated in house and will have no cost.
 
 \section{User Documentation and Training}
 \subsection{User Documentation Requirements}
-\lips
+Users, both patients and physiotherapists, will receive system prompts for next steps upon first usage of each of the system’s features. In addition to the prompts, first-time utilization will also come with help dialogue that lets the user know at a high level what the system is doing with inputs.
+
+After first-time utilization, help buttons will remain to allow users to re-open this help dialogue if users are ever confused on system utilization.
+
 \subsection{Training Requirements}
-\lips
+N/A
+
+Users, both patients and physiotherapists, will learn all they need to through system prompts and help dialogue and will require no additional training to utilize the system.
+
 
 \section{Waiting Room}
-\lips
+There are currently no updates planned to occur after the completion of the system outlined within this document. However, there are functionalities that would be pursued if the system was carried beyond the scope of this document.\\ \\
+These additional features include, but are not limited to, the following:
+\begin{itemize}
+  \item Additional joints and exercises for physiotherapy advice and form recommendations.
+  \item Additional security features such as two-factor authentication.
+  \item Physiotherapist access to full-length patient video-streams (rather than just overview access).
+  \item Advanced metrics and exercise information such as muscle activation.
+\end{itemize}
 
 \section{Ideas for Solution}
 In this section , we will highlight the potential technical approaches we may be using to implement our physiotherapy app. 
@@ -916,4 +1172,87 @@ The ideas for solution can be seen listed below:
 \bibliographystyle {plainnat}
 \bibliography{../../refs/References}
 
+\section*{Team Reflection Sections}
+\begin{enumerate}
+  \item N/A
+  \item N/A
+  \item N/A
+  \item N/A
+  \item A list of knowledge areas required for the team:
+  \begin{itemize}
+    \item Understanding of Pose Estimation and CV Concepts: Learn and understand how OpenCV and pose estimation frameworks correctly identify body joins and track various movements.
+    \item Data Visualization for User Feedback and Progress: Learn how to generate and incorporate feedback graphs using matplotlib and display them.
+    \item Communication of ideas for documentation, presentation, internal channels within team members and navigating difficult situations.
+    \item UX Research and Accessibility for Rehab Users: Designing for users with pain, limited mobility, or fatigue; meeting clear feedback expectations and simple flows that encourage exercise adherence.
+  \end{itemize}
+  \item A list of approaches:
+  \begin{itemize}
+    \item Pose Estimation and Computer Vision:
+    \begin{itemize}
+      \item Watching online tutorials that showcase these concepts and how to use them.
+      \item Read any available documentation to understand how detection works and what results will be, and how you can use that output.
+    \end{itemize}
+    \item Data Visualization for User Feedback and Progress:
+    \begin{itemize}
+      \item Watch matplotlib tutorials to understand and practice creating graphs and other visualizations to display data.
+      \item Read up on any documentation online teaching the concepts and methods used.
+    \end{itemize}
+    \item UX Research and Accessibility for Rehab Users:
+    \begin{itemize}
+      \item Make a quick prototype. Figma frames or even paper sketches. Keep it click-through simple.
+      \item User testing with 3 people: Gather classmates/friends (ideally 1–2 who’ve done physio).
+    \end{itemize}
+  \end{itemize}
+\end{enumerate}
+
+\section*{Individual Reflections} 
+\subsection*{Vaisnavi - Reflection}
+\begin{enumerate}
+  \item Something that went well while writing this deliverable was our group's consistent communication with one another through our team meetings as well as our messages via Microsoft Teams.  We worked well in terms of splitting up the tasks and keeping each other updated in terms of what our progress was with each of our sections.
+  \item The traceability matrix was something very different for me, it was hard at first to grasp what was required of the matrix but after the TA meeting and talking to the professor as well as my teammates, it definitely cleared a few things up and aided in the process of making the matrix for that section. 
+  \item A lot of our requirements were based upon research as well as our supervisor meetings with our supervisor Kevin. After having a couple meetings with him, it definitely aided in refining the requirements for our app and defining a more clear scope overall as well. 
+  \item Having taken 3RA3 has been super helpful as many of the concepts we are working through in this document were initially introduced in that course. It ultimately has allowed me to learn and strengthen my understanding of the concepts and apply those concepts in a more meaningful manner.
+  \item Written in team section.
+  \item I would like to pursue the following approaches: Pose Estimation and Computer Vision as well as Data Visualization for User Feedback and Progress. This is because I am keen on learning and understanding how OpenCV works as I have never worked with it prior and am interested to see how we can successfully utilize computer vision and available libraries to correctly use pose estimation techniques to analyze the specific video frames and display helpful feedback for the users. Moreover, while I have used matplotlib previously, I plan on doing further research to see how we could incorporate this to provide user-friendly visuals of user progress. My main goal here is to ensure users are able to clearly interpret their progress from the visuals easily and effectively. \\
+\end{enumerate}
+
+\subsection*{Eman - Reflection}
+\begin{enumerate}
+  \item Something that went well while writing this deliverable was the consistency in communication on each member and their status of deliverables. As our approach was to split up the sections and address them, each member was very efficient in communicating their ability to commit time to their part beforehand and also communicating if and when assistance was needed.
+  \item Defining the user flow was a difficult task for me as there were many things to consider. While outlining the flow, many new requirements arose which weren’t necessarily confirmed were in scope of our project. I resolved them by ensuring that the group was in loop of these new items and introducing discussions around it. I initiated a brainstorming session with a user flow diagram so that each member is able to visualize whether or not a new requirement would be beneficial to include in scope.
+  \item During requirements definition, I had 2-3 requirements come up through discussion with my peers. Specifically, one group member had shared their findings for their section, which involved the onboarding process for users. This made me think about different roles and how the onboarding process would differentiate for each user role and access. Ultimately, this led to the definition of requirements in two different point of views, as the flow for one user role differs from the flow of another user role. 
+  \item SFWRENG 3RA3 would definitely be an asset to this project. This course outlines requirements elicitation in depth with guidelines on how to conduct user testing. As requirements elicitation was the hardest part for me throughout this document, having the knowledge from 3RA3 was definitely helpful to refer to.
+  \item Written in team section.
+  \item Written in team section. \\
+\end{enumerate}
+
+\subsection*{Matthew - Reflection}
+\begin{enumerate}
+  \item Something that went well with this deliverable was the ability to adhere to internal deadlines along with communication during the deliverable. Throughout the deliverable if there was a problem that occurred or a task that required more attention then we as a group were able to recognize it and allocate resources to addressing that blocker.
+  \item I think one pain point that we experienced was the difference in SRS documents. Initially I had used the template in the SRS folder and the team was close to finishing that initial draft. However during the TA meeting it was advised that we use the Volere template instead which was something that we each had to read through and transfer our current ideas to fit the template. It had helped that we were able to communicate effectively and ensure that different sections were looked at with the new template.
+  \item a good amount of our requirements were from our advisor Kevin. This is because he had given us a perspective from the clinician's side using the application and that helped us not only define our requirements but also keep a manageable scope throughout the project.
+  \item I think the software requirements course but also human-centered interfaces. It has allowed us to consider the perspective of different users and create an in depth SRS document. 
+  \item I think that one skill the team needs to successfully complete this capstone project is communication. While things like adaptability and technical skills are needed, being able to ask the right questions and translate ideas to verbal/written communication is just as important.
+  \item Two approaches for improving communication involve repetition. I think that this not only ingrains itself as practice but also as a way to see what works for the audience and being able to read non-verbal cues. In addition another approach for communication is asking for feedback. I think the capstone offers an opportunity to reflect after each deliverable or sprint for not only how the quality of work was but how effectively we communicated. I would like to learn more about effective communication and how that can affect a project. I made this choice since I believe how you communicate works hand in hand with the quality of your responses. on the other end of the spectrum, if you aren't able to communicate an idea then it creates gaps in your proposal. \\
+\end{enumerate}
+
+\subsection*{Maham - Reflection}
+\begin{enumerate}
+  \item As mentioned before, the constant communication between our members proved to be an invaluable quality. Everyone was friendly, cordial and professional. Over the completion of this deliverable, all of us really got a concrete idea of what our project actually was. I think that aspect of the deliverable went well and was enjoyable. 
+  \item Deciding which template to use was a pain point. I wish the professor had been clearer about his folder labels, because all members initially flocked to the folder labelled SRS. Only during our TA meeting did we come to know that was the incorrect one, and we had already put substantial time into it. However, once our template was correctly chosen, all members tackled their pre-assigned tasks and delivered the highest quality of work. There were individual time management strategies at play, but eventually, all members synced up together.
+  \item Our advisor, Kevin, helped solidify most of our vague requirements. He gave relevant feedback on some of our decisions. Other than that, members from our team have undergone some form of physiotherapy, so there was personal experience to draw from. 
+  \item The human computer interfaces course, large systems design, and the communications course were all very helpful in enhancing the quality of our deliverables. I think the objectives achieved in those courses will be very helpful to us and pave the way to success.
+  \item Written in team section.
+  \item I think most of the skills and knowledge mentioned above are acquired in a learn-by-doing fashion. Another method could be learning those software engineering code skills by practicing on a website such as Kaggle, which employs the learn-by-doing way of teaching. Due to other engagements and time constraints, I did not delve as deeply as I would have liked to. However, that has a positive aspect as well, because we are not supposed to make any design decisions right now. I also tried exploring accessible design by looking at other applications which employ such design features. My purpose for choosing these two areas to learn was to establish a basic foundational idea and perhaps start thinking about implementation details. \\
+\end{enumerate}
+
+\subsection*{Cieran - Reflection}
+\begin{enumerate}
+  \item Writing this deliverable really made us converge on what it actually is we are designing. Without properly diving into the requirements of the system and discussing how users will flow through the system, how the individual features interact with both the user and with data, and how the system is intended to be used, we all had different visions of the system that was going to be built. Now that we’ve gone to great detail, we are all much closer to having the same mental image of the system in our heads.
+  \item As pointed out above, we didn’t have the same system in mind at the start of this deliverable. Starting out, if we hadn’t spoken amongst ourselves as much as we did, we’d have different sections of each document with completely different expectations of what the system is meant to do. Additionally, the extension placed on the project messed with some internal deadlines and created some stagnation in progress.
+  \item Quite a few of the requirements were taken directly from question answers in meetings with our advisor, however all the requirements were modelled with these conversations in mind. In wanting to make sure the system created is what an actual physiotherapist would use, we had to make sure to model to the wants and knowledge of an actual physiotherapist.
+  \item 4HC3, which is human-computer interfacing, will be an asset in both designing and implementing the GUI required for the physiotherapy companion application. The techniques in the class learned to guide users, map inputs reasonably so even beginners have an easy time working through the functionalities of the system.
+  \item In addition to the points mentioned by the team overall and each other team member, integration of several programming languages is required for this project. Using Python as a back-end language to interface with a library for computer vision, and placing all that inside a windows form application or within an android studio designed application, is a completely new field of programming for me personally.
+  \item Two ways to approach this specific problem are familiarization with both languages, separately, and then familiarization with the plugins and libraries that allow the two to interface. To gain familiarization with both languages, the approach is to just crash things together so to say. During the proof of concept, build something that works cruelly, understand why it works and all the things you did wrong in making it, then during Rev 0 make it better, and do the same in Rev 1. Learning the plugins will take more documentation reading and actual learning. Utilizing resources from teams that have already done this, video sources, the developer’s documentation, and anything else that can advance knowledge of the plugins and libraries are all vital resources here.
+\end{enumerate}
 \end{document}
