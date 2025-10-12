@@ -314,25 +314,24 @@ The system will follow the steps below (high-level):
   \end{itemize}
 \end{itemize}
 
-\noindent Addressing the major risks will help the team define metrics for success and goals to achieve for the proof of concept demonstration.
+\noindent However should the team not achieve progress on the two risks above then it may lead to technological and functional consequences. 
+
+The limitation in measuring 3D motion with a 2D camera may result in:
+\begin{itemize}
+  \item Decreased accuracy in form assessment due to misinterpreting angles and locations of joints.
+  \item Incorrect prompts from the system due to poor assessment and false positives when considering other views.
+\end{itemize}
 
 
-\noindent Some additional risks that may be included if there is time prior to the proof of concept demo are: 
+\noindent Additionally, the inability to measure range of motion (ROM) and progress:
 
 \begin{itemize}
-  \item Variations in how different users will record each video 
-  \begin{itemize}
-    \item A possible solution: Having a guide overlay to indicate where they should film the exercise from.
-  \end{itemize}
-  \item Hardware limitations with running the system on different devices (i.e. computer, phone, etc.)
-  \begin{itemize}
-    \item A possible metric is measuring the classification accuracy and the granularity for which movements are measured. This ties into the first major risk of the number of views.
-  \end{itemize} 
-  \item Accuracy of metric gathering may have environmental factors and lead to an inaccurate assessment of the exercise.
-  \begin{itemize}
-    \item Comparing differences in the feedback by testing it in different environments (i.e. high noise areas, plain backgrounds, etc.)
-  \end{itemize}
+  \item If incremental changes cannot be detected then the progress tracking will not be as meaningful when generating a report.
+  \item May result in reduced usefulness for the patient and physiotherapist due to lack of motivation and inability to see clear visual or numeric feedback over time.
 \end{itemize}
+
+\noindent Addressing the major risks will help the team define metrics for success and goals to achieve for the proof of concept demonstration.
+
 
 \section{Expected Technology}
 
@@ -356,6 +355,8 @@ Unit Testing             & Pytest           & Specific unit testing software wit
 \end{table}
 
 Continuous integration within the project will be used for simple checks like latex build success, compilation success, and simple test cases throughout the project to ensure to changes to the main branch break the project and cause unnecessary pain points for the team. Additionally, using continuous integration to enforce our coding standards makes sure our formatting and naming conventions stay consistent throughout the entire duration of the project.
+
+\pagebreak
 
 \section{Coding Standard}
 
@@ -467,36 +468,31 @@ Lastly, we have all agreed that deliverables are to be prepared and finalized tw
 
 \subsubsection*{Attitude}
 
-For this project, the expected attitude from group members is to stay positive, respectful, and collaborative. Everyone should
-contribute their fair share, communicate openly, and be willing to listen to each other’s ideas. Mistakes and challenges will
-come up, but approaching them with patience and a problem-solving mindset will keep the group moving forward smoothly.
+For this project, the expected attitude from group members is to stay positive, respectful, and collaborative. Everyone should contribute their fair share, communicate openly, and be willing to listen to each other's ideas. Mistakes and challenges will come up, but approaching them with patience and a problem-solving mindset will keep the group moving forward smoothly.
 
 \subsubsection*{Stay on Track}
 
-To stay on track, GitHub will be used to assign and organize tasks for each group member. This will clearly show the division of labour, 
-monitor progress in real time, and ensure deadlines are being met. By breaking down the work into smaller tasks and tracking them, we can stay organized, avoid confusion, and keep the project
-moving. Each task may be broken down into subtasks, which can allow progress to be tracked at various stages towards completion.  
+To stay on track, GitHub will be used to assign and organize tasks for each group member. This will clearly show the division of labour, monitor progress in real time, and ensure deadlines are being met. By breaking down the work into smaller tasks and tracking them, we can stay organized, avoid confusion, and keep the project moving. Each task may be broken down into subtasks, which can allow progress to be tracked at various stages towards completion.  
 
 \subsubsection*{Team Building}
 
-The team will engage in social activities together if schedules allow. Team building activities will strongly be encouraged.
-There may be sessions of working together in person. This will also depend on work habits and preferences.
+The team will engage in social activities together if schedules allow. Team building activities will strongly be encouraged.There may be sessions of working together in person. This will also depend on work habits and preferences.
 
 \subsubsection*{Decision Making} 
 
-When making a decision on the team, we will lean towards a unanimous vote. We 
-want each member of the team to feel their feedback is heard to improve the project 
-communication. In cases where this is not the case, we will hold a vote. Since there 
-are 5 members, no one can abstain that way a solution can be achieved. 
+When making a decision on the team, we will lean towards a unanimous vote. We want each member of the team to feel their feedback is heard to improve the project communication. In cases where this is not the case, we will hold a vote. Since there are 5 members, no one can abstain that way a solution can be achieved. 
 
 
-Each member is allowed to voice their opinion to the team without interruption so 
-everyone is heard and we can reach an objective solution (without personal feelings 
-swaying the decision). 
+Each member is allowed to voice their opinion to the team without interruption so everyone is heard and we can reach an objective solution (without personal feelings swaying the decision). 
 
 
-In the event that voting cannot be held properly, we will select a neutral mediator to 
-guide us further.
+In the event that voting cannot be held properly, we will select a neutral mediator to guide us further.
+
+\subsubsection*{Conflicts}
+In the event of a conflict, they should be addressed openly, respectfully and acknowledge as early as possible to prevent escalation. Each team member must actively listen and focus on the problem. The team will seek to arrive at a solution that meets everyone's concerns but if necessary will vote or involve a neutral part to mediate and facilitate conversation. 
+
+
+This conflict and resolution should be documented so there can be reflection as a team to avoid recurrence. 
 
 
 \end{document}
