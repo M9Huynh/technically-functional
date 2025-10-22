@@ -10,16 +10,16 @@ import csv
 from collections import deque
 import time
  
-#Config ---------------
+#Config setup
 CAM_INDEX = 0
 FRAME_WIDTH = 640
 FRAME_HEIGHT = 360
 MODEL_COMPLEXITY = 0
 MIN_DET_CONF = 0.5
 MIN_TRK_CONF = 0.5
-SMOOTH_WINDOW = 5            # moving avg frames for angle smoothing
-CALIB_SECONDS = 1.0          # seconds to average when calibrating
-HYSTERESIS = 5.0             # extra degrees between flex/extend thresholds
+SMOOTH_WINDOW = 5  #moving avg frames for angle smoothing
+CALIB_SECONDS = 1.0  #seconds to average when calibrating
+HYSTERESIS = 5.0  # extra degrees between flex/extend thresholds
  
 OUTPUT_DIR = "poc_outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -31,7 +31,7 @@ mp_draw = mp.solutions.drawing_utils
 def angle_deg(a, b, c):
     """Angle ∠ABC in degrees given points a,b,c as (x,y)."""
     a, b, c = np.array(a), np.array(b), np.array(c)
-    ba, bc = a - b, c - b
+    ba, bc = a - b, c - b 
     nba, nbc = np.linalg.norm(ba), np.linalg.norm(bc)
     if nba == 0 or nbc == 0:
         return 0.0
