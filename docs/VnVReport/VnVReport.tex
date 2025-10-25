@@ -199,6 +199,168 @@ The test will be conducted with the use of a script which will input valid, inva
 
 \end{longtable}
 
+\subsection{System specific testing}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for Exercise System and Additional Functions} \\
+\hline
+\textbf{Test Case ID} & \textbf{System\_exercise\_instruct} \\
+\hline
+\endfirsthead
+
+
+\hline
+Control & Manual \\
+\hline
+Rationale & In order to record the patient performing the exercise, the system has to be able to instruct the patient on how to perform it. \\
+\hline
+State & Patient is logged into the application and has it open on their device. Patient has selected the exercise they want to perform on their exercise list. Once selected, system displays an overview of the steps required. \\
+\hline
+Input & Patient clicks on 'start' \\
+\hline
+Output & System displays (text or audio) instructions on how to perform the selected exercise \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient navigates to 'Exercise list'
+    \item Patient clicks on the exercise they would like to perform
+    \item The system displays the instructions (audio/text) OR system guides the exercise performance by the patient
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{System\_record\_exercise} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & Patient performance of the exercise has to be successfully recorded to aid system analysis on its correctness. \\
+\hline
+State & Patient is currently logged in and has the application open on their device. Patient has selected the exercise they would like to perform from the exercise list. \\
+\hline
+Input & Patient clicks on the 'record' button \\
+\hline
+Output & Exercise successfully recorded, saved and ready for viewing \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient clicks on the 'exercise list' and selects the exercise they would like to perform
+    \item System directs patient to a screen with a live video stream of themselves
+    \item Patient clicks on the 'record' button
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{System\_analysis\_feedback} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & System has to effectively perform analysis on patient exercise form to provide feedback. \\
+\hline
+State & Patient is recording exercise \\
+\hline
+Input & System receives visual of patient performing exercise \\
+\hline
+Output & System detects intended deviations and correctly alerts (audio and visual) the user \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient performs exercise with intentional form deviations
+    \item System monitors exercise performance in real-time
+    \item Verify system generates appropriate audio and visual alerts for detected deviations
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{Video\_store\_retrieval} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & The system has to be able to retrieve the most recent recorded video in storage (either locally or database). \\
+\hline
+State & Patient has performed and recorded exercise being performed \\
+\hline
+Input & Patient indicates where video should be stored (locally or database). \\
+\hline
+Output & Video has been successfully stored and a pop-up ('Saved successfully') is displayed \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient completes exercise recording
+    \item Patient selects storage location (local or database)
+    \item System saves the video and displays confirmation message
+    \item Verify video can be retrieved from the selected storage location
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{post\_ex\_patient\_feedback} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system has to be able to store patient feedback of the performed exercise (e.g. the level of (perceived) difficulty of the exercise). See FR 9. \\
+\hline
+State & Patient has performed and recorded exercise being performed and system has successfully performed analysis of the performance \\
+\hline
+Input & Patient feedback (See Appendix). \\
+\hline
+Output & Answers are stored successfully \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item System displays feedback form after exercise completion
+    \item Patient provides feedback on exercise difficulty and other metrics
+    \item System stores the feedback data
+    \item Verify feedback is accessible for review by PT
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{Incorrect\_form\_adjustment} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & The system has to be able to differentiate between correct and incorrect forms to provide accurate feedback. \\
+\hline
+State & Patient is performing the selected exercise. \\
+\hline
+Input & Incorrect form during exercise performance \\
+\hline
+Output & Adjustment directives displayed to patient \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient performs exercise with incorrect form
+    \item System detects the incorrect posture/movement
+    \item System provides real-time adjustment instructions
+    \item Verify patient can understand and implement the corrections
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{System\_rejects\_duplicate} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system will traverse all login credentials stored on the database and will disallow account creation if a duplicate identifying credential exists (e.g. duplicate email, or user login ID). Note: This is a design detail that will be decided later in the project timeline. \\
+\hline
+State & User has input information in all of the required fields on the 'Create Account' page. \\
+\hline
+Input & User clicks the 'Submit' button \\
+\hline
+Output & A pop-up with the message 'Account already exists' (Note: The team has not decided what page to direct to after this message appears) \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item User attempts to create account with existing email/login ID
+    \item System checks database for duplicates
+    \item System displays error message and prevents account creation
+    \item Verify existing accounts remain unaffected
+\end{itemize} \\
+\hline
+
+\end{longtable}
+
+
 
 \section{Nonfunctional Requirements Evaluation}
 
