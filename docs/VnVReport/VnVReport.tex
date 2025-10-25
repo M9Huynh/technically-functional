@@ -1,6 +1,8 @@
 \documentclass[12pt, titlepage]{article}
 
 \usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
 \usepackage{tabularx}
 \usepackage{hyperref}
 \hypersetup{
@@ -64,7 +66,82 @@ Date 2 & 1.1 & Notes\\
 
 This document ...
 
-\section{Functional Requirements Evaluation}
+\section{System evaluation}
+\subsection{Functional Requirements Evaluation}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for User Account Creation} \\
+\hline
+\textbf{Test Case ID} & \textbf{user\_acc\_create} \\
+\hline
+\endfirsthead
+
+
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system must be able to create and store a new account \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Govt id (name, date of birth), license number (PT) OR invite code (patient), email, password (new) \\
+\hline
+Output & 'Account created successfully' displayed on page and user is successfully added to the user database \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+\hline
+
+\textbf{Test Case ID} & \textbf{Invalid\_formatCreate} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The data input by the user has to be in the correct format for our system to accept it as valid. \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Incorrect format of license number/invite code OR incorrect format of date of birth, email, password(new) \\
+\hline
+Output & System displays 'incorrect format of one or more inputs' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+\hline
+
+\textbf{Test Case ID} & \textbf{Invalid\_sign\_up\_creds} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & Successful verification for both types of users is needed to use the application \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Incorrect license number/mismatch of license number and govt id OR incorrect format of invite code, email, password(new) \\
+\hline
+Output & System displays 'License number cannot verified' OR 'invalid invite code' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+\hline
+
+\textbf{Test Case ID} & \textbf{Acc\_exists} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & New users should not already have an account on the system \\
+\hline
+State & Account already exists on system \\
+\hline
+Input & Govt id (name, date of birth), license number/invite code, email, password \\
+\hline
+Output & 'Account already exists. Wrong password. Try again.' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+\hline
+
+\end{longtable}
+
+
 
 \section{Nonfunctional Requirements Evaluation}
 
