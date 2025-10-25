@@ -363,6 +363,123 @@ How the test will be performed &
 
 
 \section{Nonfunctional Requirements Evaluation}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Non-Functional Requirements Testing} \\
+\hline
+\textbf{Test Case ID} & \textbf{ui\_testing} \\
+\hline
+\endfirsthead
+
+
+
+\hline
+Type & Static \\
+\hline
+Rationale & Ensure user interface meets usability standards and stakeholder expectations \\
+\hline
+State & N/A \\
+\hline
+Input & User interface elements and survey responses \\
+\hline
+Output & Modified user interface based on feedback \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item A survey will be given to users (see Stakeholders) to test different user interface elements
+    \item See Appendix for survey questions
+    \item Based on the feedback received, the user interface will be modified in order to satisfy additional requirements
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{ex\_int\_speed} \\
+\hline
+Type & Dynamic \\
+\hline
+Rationale & Ensure exercise interface loads within acceptable time limits for good user experience \\
+\hline
+State & User is logged in and has application open on their device \\
+\hline
+Input & User clicks on exercise interface \\
+\hline
+Output & Interface loads within 2 seconds \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Multiple users will access the exercise interface under normal network conditions
+    \item Load times will be measured and recorded
+    \item Statistical analysis will determine if 95\% of loads occur within 2 seconds
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{fail\_recovery} \\
+\hline
+Type & Dynamic \\
+\hline
+Rationale & The system must be able to restore its pre-failure state 95\% of the time within 5 minutes \\
+\hline
+State & User is currently using the application on their device \\
+\hline
+Input & System failure (simulated) \\
+\hline
+Output & System restarts and recovers within 5 minutes \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Test will be repeated numerous times with various failure scenarios
+    \item Recovery time and success rate will be measured
+    \item System will be forced to fail during different operations
+    \item Verify data integrity after recovery
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{Interrupted\_vid} \\
+\hline
+Type & Dynamic \\
+\hline
+Rationale & The system must be able to attempt resubmission of video after restoring internet connection \\
+\hline
+State & A video of the user performing the exercise is being uploaded \\
+\hline
+Input & Internet connection interruption during upload \\
+\hline
+Output & Video is successfully re-queued for upload to the system. Re-upload is resumed at the point of failure \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Simulate network disconnection during video upload
+    \item Restore network connection after interruption
+    \item Verify system detects interruption and queues video for re-upload
+    \item Confirm upload resumes from point of failure (not restarting)
+    \item Validate video integrity after successful upload
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{PR-RFT 3, PR-RFT 4, PR-CR1, PR-SER 1} \\
+\hline
+Type & N/A \\
+\hline
+Rationale & These requirements address advanced system capabilities beyond current testing scope \\
+\hline
+State & N/A \\
+\hline
+Input & N/A \\
+\hline
+Output & N/A \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item These requirements are unable to be tested in a timely manner due to project constraints (time, money)
+    \item Testing deferred to future development phases
+    \item Requirements marked for re-evaluation in next project iteration
+\end{itemize} \\
+\hline
+
+\end{longtable}
 
 \subsection{Usability}
 		
