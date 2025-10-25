@@ -336,28 +336,6 @@ How the test will be performed &
 \end{itemize} \\
 \hline
 
-\textbf{Test Case ID} & \textbf{System\_rejects\_duplicate} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & The system will traverse all login credentials stored on the database and will disallow account creation if a duplicate identifying credential exists (e.g. duplicate email, or user login ID). Note: This is a design detail that will be decided later in the project timeline. \\
-\hline
-State & User has input information in all of the required fields on the 'Create Account' page. \\
-\hline
-Input & User clicks the 'Submit' button \\
-\hline
-Output & A pop-up with the message 'Account already exists' (Note: The team has not decided what page to direct to after this message appears) \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item User attempts to create account with existing email/login ID
-    \item System checks database for duplicates
-    \item System displays error message and prevents account creation
-    \item Verify existing accounts remain unaffected
-\end{itemize} \\
-\hline
-
 \end{longtable}
 
 
