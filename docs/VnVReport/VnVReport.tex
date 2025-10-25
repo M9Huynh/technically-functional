@@ -67,7 +67,7 @@ Date 2 & 1.1 & Notes\\
 This document ...
 
 \section{System evaluation}
-\subsection{Functional Requirements Evaluation}
+\subsection{New user account creation}
 \begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
 \caption{Software Test Cases for User Account Creation} \\
 \hline
@@ -141,6 +141,63 @@ The test will be conducted with the use of a script which will input valid, inva
 
 \end{longtable}
 
+\subsection{PT focused testing}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for Physical Therapist (PT) Functions} \\
+\hline
+\textbf{Test Case ID} & \textbf{PT\_deletes\_patient\_acc} \\
+\hline
+\endfirsthead
+
+\hline
+Control & Automatic \\
+\hline
+Rationale & This ensures PTs control over patients' accounts. PT can remove patient(s) profiles from the application. \\
+\hline
+State & PT and patient have account on application, PT has the patient on their patient list \\
+\hline
+Input & PT requests a specific patient's account deletion \\
+\hline
+Output & Account deleted from user database and PT patient list. Patient is unable to log in ('Account not found'). \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+\hline
+
+\textbf{Test Case ID} & \textbf{PT\_adjusts\_patient\_exercise} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system allows the PT to obtain an overview of patient performance and adjust different parameters accordingly (eg. number of repetitions). \\
+\hline
+State & PT and patient have an account on application, PT has patient on their patient list \\
+\hline
+Input & PT accesses the patient's profile page and adds/modifies exercise \\
+\hline
+Output & Patient exercise criteria is modified. \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+\hline
+
+\textbf{Test Case ID} & \textbf{PT\_sends\_invite} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & A patient can only sign up if they have an invite code from the PT. \\
+\hline
+State & Patient does not have an account on the application while PT does. \\
+\hline
+Input & PT adds patient's information and contact method (where the code will be sent). Contact methods may include: email, text messages, and other forms of communication. \\
+\hline
+Output & An 'Invite sent' message is displayed on the screen \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+\hline
+
+\end{longtable}
 
 
 \section{Nonfunctional Requirements Evaluation}
