@@ -96,7 +96,7 @@ Input & Govt id (name, date of birth), license number (PT) OR invite code (patie
 Output & "Account created successfully" displayed on page and user is successfully added to the user database \\
 \hline
 How the test will be performed & 
-The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+The test will be conducted with the use of a script (see template in Appendix)  \\
 \hline
 
 \textbf{Test Case ID} & \textbf{invalid\_format\_create} \\
@@ -112,7 +112,7 @@ Input & Incorrect format of license number/invite code OR incorrect format of da
 Output & System displays 'incorrect format of one or more inputs' \\
 \hline
 How the test will be performed & 
-The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+The test will be conducted with the use of a script (see template in Appendix)  \\
 \hline
 
 \textbf{Test Case ID} & \textbf{cannot\_verify\_creds} \\
@@ -128,7 +128,7 @@ Input & Incorrect license number/mismatch of license number and govt id OR incor
 Output & System displays 'License number cannot verified' OR 'invalid invite code' \\
 \hline
 How the test will be performed & 
-The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+The test will be conducted with the use of a script (see template in Appendix)  \\
 \hline
 
 \textbf{Test Case ID} & \textbf{acc\_exists} \\
@@ -144,7 +144,7 @@ Input & Govt id (name, date of birth), license number/invite code, email, passwo
 Output & 'Account already exists. Wrong password. Try again.' \\
 \hline
 How the test will be performed & 
-The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+The test will be conducted with the use of a script (see template in Appendix)  \\
 \hline
 
 \end{longtable}
@@ -169,7 +169,7 @@ Input & PT adds patient's information and contact method (where the code will be
 Output & An 'Invite sent' message is displayed on the screen \\
 \hline
 How the test will be performed & 
-The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+The test will be conducted with the use of a script (see template in Appendix) \\
 \hline
 
 \textbf{Test Case ID} & \textbf{PT\_adjusts\_exercise} \\
@@ -185,7 +185,7 @@ Input & PT accesses the patient's profile page and adds/modifies exercise \\
 Output & Patient exercise criteria is modified. \\
 \hline
 How the test will be performed & 
-The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+The test will be conducted with the use of a script (see template in Appendix)  \\
 \hline
 
 
@@ -203,14 +203,15 @@ Input & PT requests a specific patient's account deletion \\
 Output & Account deleted from user database and PT patient list. Patient is unable to log in ('Account not found'). \\
 \hline
 How the test will be performed & 
-The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+The test will be conducted with the use of a script (see template in Appendix)  \\
 \hline
 
 
 \end{longtable}
 
 \subsection{Patient focused testing}
-This section contains: system\_exercise\_overview, system\_record\_exercise, system\_performs\_correctly, video\_store, video\_retrieval, post\_ex\_patient\_feedback \\
+This section contains: system\_exercise\_overview, system\_record\_exercise, system\_performs\_correctly, video\_store, video\_retrieval, post\_ex\_patient\_feedback,
+incorrect\_form\_adjustment \\
 
 \begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
 \caption{Software Test Cases for Exercise System and Additional Functions} \\
@@ -228,7 +229,7 @@ Input & Patient clicks on exercise from exercise list. \\
 \hline
 Output & System displays an overview of the steps required for the exercise.\\
 \hline
-How the test will be performed & The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix)  \\
 
 \hline
 \textbf{Test Case ID} & \textbf{system\_record\_exercise} \\
@@ -286,7 +287,7 @@ Input & Patient clicks on 'Save exercise' button. \emph{Note: The team has not d
 \hline
 Output & Video has been successfully saved and is ready for viewing. \\
 \hline
-How the test will be performed & The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix)  \\
 \hline
 
 \textbf{Test Case ID} & \textbf{video\_retrieval} \\
@@ -301,7 +302,7 @@ Input & Patient OR PT clicks on video stored (local or database) for viewing. \e
 \hline
 Output & Video has been successfully retrieved and is ready for viewing. \\
 \hline
-How the test will be performed & The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix) \\
 \hline
 
 
@@ -309,7 +310,7 @@ How the test will be performed & The test will be conducted with the use of a sc
 \hline
 Control & Automatic \\
 \hline
-Rationale & The system has to be able to store patient feedback of the performed exercise (e.g. the level of (perceived) difficulty of the exercise). \\
+Rationale & The system has to be able to store patient feedback of the performed exercise (e.g. the level of (perceived) difficulty of the exercise) \\
 \hline
 State & Patient has performed and recorded exercise being performed and system has successfully performed analysis of the performance \\
 \hline
@@ -317,17 +318,16 @@ Input & Patient input into feedback form (See Appendix \emph{Patient post-exerci
 \hline
 Output & Answers are stored successfully \\
 \hline
-How the test will be performed & The test will be conducted with the use of a script which will input valid, invalid and edge case values
- \\
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix) \\
 \hline
 
-\textbf{Test Case ID} & \textbf{Incorrect\_form\_adjustment} \\
+\textbf{Test Case ID} & \textbf{incorrect\_form\_adjustment} \\
 \hline
 Control & Manual \\
 \hline
 Rationale & The system has to be able to differentiate between correct and incorrect forms to provide accurate feedback. \\
 \hline
-State & Patient is performing the selected exercise. \\
+State & Patient is performing the selected exercise \\
 \hline
 Input & Incorrect form during exercise performance \\
 \hline
@@ -339,7 +339,6 @@ How the test will be performed &
     \item Patient performs exercise with incorrect form
     \item System detects the incorrect posture/movement
     \item System provides real-time adjustment instructions
-    \item Verify patient can understand and implement the corrections
 \end{itemize} \\
 \hline
 
@@ -352,9 +351,6 @@ How the test will be performed &
 \caption{Non-Functional Requirements Testing} \\
 \hline
 \textbf{Test Case ID} & \textbf{ui\_testing} \\
-\hline
-\endfirsthead
-
 
 
 \hline
@@ -371,7 +367,7 @@ Output & Modified user interface based on feedback \\
 How the test will be performed & 
 \begin{itemize}
     \setlength\itemsep{0em}
-    \item A survey will be given to users (see Stakeholders) to test different user interface elements
+    \item A survey will be given to users (see 'Stakeholders' in SRS for the type of users) to test different interface elements
     \item See Appendix for survey questions
     \item Based on the feedback received, the user interface will be modified in order to satisfy additional requirements
 \end{itemize} \\
@@ -379,7 +375,7 @@ How the test will be performed &
 
 \textbf{Test Case ID} & \textbf{ex\_int\_speed} \\
 \hline
-Type & Dynamic \\
+Type & Automatic \\
 \hline
 Rationale & Ensure exercise interface loads within acceptable time limits for good user experience \\
 \hline
@@ -389,13 +385,9 @@ Input & User clicks on exercise interface \\
 \hline
 Output & Interface loads within 2 seconds \\
 \hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item Multiple users will access the exercise interface under normal network conditions
-    \item Load times will be measured and recorded
-    \item Statistical analysis will determine if 95\% of loads occur within 2 seconds
-\end{itemize} \\
+How the test will be performed & The test will use external tools (Postman) to measure API latency. In order to replicate real world conditions, 
+an increasing amount of simulated user loads can be used. Statistical analysis will be performed on the collected results to provide a more accurate value. 
+\\
 \hline
 
 \textbf{Test Case ID} & \textbf{fail\_recovery} \\
