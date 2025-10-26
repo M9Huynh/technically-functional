@@ -164,7 +164,7 @@ Rationale & A patient can only sign up if they have an invite code from the PT. 
 \hline
 State & Patient does not have an account on the application while PT does. \\
 \hline
-Input & PT adds patient's information and contact method (where the code will be sent). Contact methods may include: email, text messages, and other forms of communication. \\
+Input & PT adds patient's information and contact method (where the code will be sent). \\
 \hline
 Output & An 'Invite sent' message is displayed on the screen \\
 \hline
@@ -210,39 +210,32 @@ The test will be conducted with the use of a script which will input valid, inva
 \end{longtable}
 
 \subsection{Patient focused testing}
+This section contains: system\_exercise\_overview, system\_record\_exercise, system\_performs\_correctly, video\_store, video\_retrieval, post\_ex\_patient\_feedback \\
+
 \begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
 \caption{Software Test Cases for Exercise System and Additional Functions} \\
 \hline
-\textbf{Test Case ID} & \textbf{System\_exercise\_instruct} \\
+
+\textbf{Test Case ID} & \textbf{system\_exercise\_overview} \\
 \hline
-\endfirsthead
+Control & Automatic \\
+\hline
+Rationale & In order to record the patient performing the exercise, the system has to be able to provide instructions to the patient on how to perform it. \\
+\hline
+State & Patient is logged into the application and has it open on their device. Patient has selected the exercise they want to perform on their exercise list. \\
+\hline
+Input & Patient clicks on exercise from exercise list. \\
+\hline
+Output & System displays an overview of the steps required for the exercise.\\
+\hline
+How the test will be performed & The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
 
-
+\hline
+\textbf{Test Case ID} & \textbf{system\_record\_exercise} \\
 \hline
 Control & Manual \\
 \hline
-Rationale & In order to record the patient performing the exercise, the system has to be able to instruct the patient on how to perform it. \\
-\hline
-State & Patient is logged into the application and has it open on their device. Patient has selected the exercise they want to perform on their exercise list. Once selected, system displays an overview of the steps required. \\
-\hline
-Input & Patient clicks on 'start' \\
-\hline
-Output & System displays (text or audio) instructions on how to perform the selected exercise \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item Patient navigates to 'Exercise list'
-    \item Patient clicks on the exercise they would like to perform
-    \item The system displays the instructions (audio/text) OR system guides the exercise performance by the patient
-\end{itemize} \\
-\hline
-
-\textbf{Test Case ID} & \textbf{System\_record\_exercise} \\
-\hline
-Control & Manual \\
-\hline
-Rationale & Patient performance of the exercise has to be successfully recorded to aid system analysis on its correctness. \\
+Rationale & Patient performance of the exercise has to be successfully recorded to aid system analysis of its correctness. \\
 \hline
 State & Patient is currently logged in and has the application open on their device. Patient has selected the exercise they would like to perform from the exercise list. \\
 \hline
@@ -256,10 +249,11 @@ How the test will be performed &
     \item Patient clicks on the 'exercise list' and selects the exercise they would like to perform
     \item System directs patient to a screen with a live video stream of themselves
     \item Patient clicks on the 'record' button
+    \item System records exercise
 \end{itemize} \\
 \hline
 
-\textbf{Test Case ID} & \textbf{System\_analysis\_feedback} \\
+\textbf{Test Case ID} & \textbf{system\_performs\_correctly} \\
 \hline
 Control & Manual \\
 \hline
@@ -269,59 +263,62 @@ State & Patient is recording exercise \\
 \hline
 Input & System receives visual of patient performing exercise \\
 \hline
-Output & System detects intended deviations and correctly alerts (audio and visual) the user \\
+Output & System provides feedback to patient (e.g. instructions for the next steps in the exercise) \\
 \hline
 How the test will be performed & 
 \begin{itemize}
     \setlength\itemsep{0em}
-    \item Patient performs exercise with intentional form deviations
-    \item System monitors exercise performance in real-time
-    \item Verify system generates appropriate audio and visual alerts for detected deviations
+    \item Patient performs exercise correctly
+    \item System monitors and analyzes exercise performance in real-time
+    \item System provides correct feedback
 \end{itemize} \\
 \hline
 
-\textbf{Test Case ID} & \textbf{Video\_store\_retrieval} \\
+\textbf{Test Case ID} & \textbf{video\_store} \\
 \hline
-Control & Manual \\
+Control & Automatic \\
+\hline
+Rationale & The system has to be able to store a recorded video of the patient performing the exercises. \\
+\hline
+State & Patient has performed and recorded exercise being performed. \\
+\hline
+Input & Patient clicks on 'Save exercise' button. \emph{Note: The team has not decided whether to store the video locally or on the user database. }\\
+\hline
+Output & Video has been successfully saved and is ready for viewing. \\
+\hline
+How the test will be performed & The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
+\hline
+
+\textbf{Test Case ID} & \textbf{video\_retrieval} \\
+\hline
+Control & Automatic \\
 \hline
 Rationale & The system has to be able to retrieve the most recent recorded video in storage (either locally or database). \\
 \hline
 State & Patient has performed and recorded exercise being performed \\
 \hline
-Input & Patient indicates where video should be stored (locally or database). \\
+Input & Patient OR PT clicks on video stored (local or database) for viewing. \emph{Note: The team has not decided whether to store the video locally or on the user database. }\\
 \hline
-Output & Video has been successfully stored and a pop-up ('Saved successfully') is displayed \\
+Output & Video has been successfully retrieved and is ready for viewing. \\
 \hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item Patient completes exercise recording
-    \item Patient selects storage location (local or database)
-    \item System saves the video and displays confirmation message
-    \item Verify video can be retrieved from the selected storage location
-\end{itemize} \\
+How the test will be performed & The test will be conducted with the use of a script which will input valid, invalid and edge case values \\
 \hline
+
 
 \textbf{Test Case ID} & \textbf{post\_ex\_patient\_feedback} \\
 \hline
 Control & Automatic \\
 \hline
-Rationale & The system has to be able to store patient feedback of the performed exercise (e.g. the level of (perceived) difficulty of the exercise). See FR 9. \\
+Rationale & The system has to be able to store patient feedback of the performed exercise (e.g. the level of (perceived) difficulty of the exercise). \\
 \hline
 State & Patient has performed and recorded exercise being performed and system has successfully performed analysis of the performance \\
 \hline
-Input & Patient feedback (See Appendix). \\
+Input & Patient input into feedback form (See Appendix \emph{Patient post-exercise feedback form}). \\
 \hline
 Output & Answers are stored successfully \\
 \hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item System displays feedback form after exercise completion
-    \item Patient provides feedback on exercise difficulty and other metrics
-    \item System stores the feedback data
-    \item Verify feedback is accessible for review by PT
-\end{itemize} \\
+How the test will be performed & The test will be conducted with the use of a script which will input valid, invalid and edge case values
+ \\
 \hline
 
 \textbf{Test Case ID} & \textbf{Incorrect\_form\_adjustment} \\
