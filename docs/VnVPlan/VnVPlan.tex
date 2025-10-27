@@ -167,23 +167,7 @@ During development, pylint will ensure the coding standard is adhered to constan
 
 \subsection{Software Validation}
 
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
-
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
-
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
-The feedback from your supervisor will be very useful for improving your project.}
-
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
-as a Rev 0 demo for the supervisor.}
-
-\wss{This section might reference back to the SRS verification section.}
+For software validation, to ensure the proper system was designed to solve the problems addressed at the beginning of this project and outlined within the problem statement document, there will be system walkthroughs and interviews with stakeholders and the project advisor. Within these interviews we will assess time to use the systems functions, understanding of the system and how it processes data, and general acceptance of the system. The interview will end with a few questions outlined in the appendix of this document.
 
 \section{System Tests}
 
@@ -443,17 +427,137 @@ How test will be performed:
 
 \section{Appendix}
 
-This is where you can place additional information.
+Additional project information to expand on the previous sections. Mostly example or sample information at this time.
 
 \subsection{Symbolic Parameters}
 
-The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.
+\noindent Example script layout for system testing: \\
+/* \\
+\# Create user account testing \\
+New account creation (user\_acc\_create) \\
+Invalid format of field inputs (invalid\_formatCreate) \\
+Invalid sign up credentials (cannot\_verify\_creds) \\
+Presence of an existing account (acc\_exists) \\ \\
+\# PT focused testing \\
+PT successfully sends invite to patient (PT\_sends\_invite) \\
+PT adds/modified patient exercise (PT\_adjusts\_exercise) \\
+PT deletes patient account (PT\_deletes\_patient\_acc) \\ \\
+\# Patient focused testing \\
+System\_exercise\_overview \\
+Video\_store \\
+Video\_retrieval \\
+System\_analysis\_feedback \\
+Post\_ex\_patient\_feedback \\
+Incorrect\_form\_adjustment \\ \\
+\# NFR testing \\
+Ex\_int\_speed \\
+Fail\_recovery \\
+Interrupted\_vid \\
+\*/
+
 
 \subsection{Usability Survey Questions?}
 
-\wss{This is a section that would be appropriate for some projects.}
+\noindent \textbf{Advisor SRS Questions}:
+\begin{enumerate}
+  \item Are there any sections of the requirements which are found to be confusing or hard to measure?
+  \item Are there any sections of the system you feel the requirements do not expand on?
+  \item Are there any sections of the system you feel the requirements expand on that is out of scope?
+  \item Do you feel the requirements are extensive enough?
+  \item Do you feel the requirements are tracked well?
+\end{enumerate}
 
+\noindent \textbf{Design Questionnaire Questions}:
+
+“Strongly Disagree” to “Strongly Agree” style questioning.
+\begin{enumerate}
+  \item The system navigation is intuitive.
+  \item The system’s functions are all easily accessible.
+  \item The system helped set up your exercises for success.
+  \item The system enables you to complete your exercises with better guidance.
+  \item The system enables you to complete your exercises with better confidence.
+  \item The feedback returned during your exercise was helpful.
+  \item The overview data from your exercise was helpful.
+  \item You would you use this software for your exercises again.
+\end{enumerate}
+Could have a final open-ended question based on user pain points with the system. Ie. what didn’t work well for individuals. \\ \\
+\noindent \textbf{Software Validation Questionnaire Questions}:
+
+“Strongly Disagree” to “Strongly Agree” style questioning.
+\begin{enumerate}
+  \item This software assisted you in completing your exercises.
+  \item This software was easy to use.
+  \item This software was easy to navigate.
+  \item The feedback from the system assisted you in fixing your form.
+  \item The feedback from the system generated greater confidence in your form.
+  \item The feedback from the system was meaningful and helpful.
+  \item The data generated from your exercises was helpful.
+  \item The system responded how you expected it to during usage.
+  \item The system clearly described what was going on.
+  \item You felt adequately trained to use the system from the system dialogues.
+  \item You felt safe while using the system.
+\end{enumerate}
+
+\noindent \textbf{Ui\_testing Survey}:
+\begin{enumerate}
+  \item How would you rate your overall experience with the application (1 - poor, 5 - excellent)?
+  \item How would you rate the visual appeal of the application (1 - poor, 5 - excellent)? 
+  \item How easy was it to navigate through the application? (1 - difficult, 5 - easy)
+  \begin{enumerate}
+    \item Were the tutorials helpful? (1 - not helpful, 5 - very helpful)
+    \item How logical was the arrangement of the different components within the system (1 - very illogical, 5 - very logical)?
+  \end{enumerate}
+  \item Which areas could use some improvement?
+  \begin{enumerate}
+    \item Navigation 
+    \item Menu structure
+    \item Colour/contrast scheme
+    \item Error messages 
+    \item Other (With open text entry)
+  \end{enumerate}
+\end{enumerate}
+
+\noindent \textbf{Patient Post-Exercise Feedback Form}:
+\begin{enumerate}
+  \item How did you feel before the exercise? (1 - good, 5-bad)
+  \begin{enumerate}
+    \item Did you have tightness? Yes/no
+    \item Did you have any pain? Yes/no.
+    \begin{enumerate}
+      \item How bad was your pain? (1 - no pain, 10 - unbearable pain)
+      \item What was the perceived level of pain/difficulty? (1 - very easy, 10 - very difficult)
+      \item Where was your pain located? (Open text entry)
+    \end{enumerate}
+    \item Have you noticed any recent changes? (Open text entry)
+  \end{enumerate}
+  \item If you had any pain DURING the exercise, how bad was it? (1 - no pain, 10 - unbearable pain)
+  \item How did you feel after the exercise? (1 - good, 5-bad)
+  \begin{enumerate}
+    \item Did you have tightness? Yes/no
+    \item Did you have any pain? Yes/no.
+    \begin{enumerate}
+      \item How bad was your pain? (1 - no pain, 10 - unbearable pain)
+      \item What was the perceived level of pain/difficulty? (1 - very easy, 10 - very difficult)
+      \item Where was your pain located? (Open text entry)
+    \end{enumerate}
+    \item Have you noticed any recent changes? (Open text entry)
+  \end{enumerate}
+  \item How challenging was the exercise today? (1 - easy, 5 - very hard)
+  \begin{enumerate}
+    \item Do you have any feedback for your physiotherapist? (Open text entry)
+  \end{enumerate}
+  \item In your opinion, is this treatment plan helping your health? Yes/no. Choose the option that describes how the plan is helping (Can choose multiple).
+  \begin{enumerate}
+    \item My movement
+    \item My flexibility
+    \item My pain
+    \item My mood
+  \end{enumerate}
+  \item In your opinion, how difficult is the current prescribed exercise plan? (1 - easy, 5 - very difficult)
+  \begin{enumerate}
+    \item Should your physiotherapist change the difficulty of your plan? (1 - no change, 5 - Large increase in difficulty)
+  \end{enumerate}
+\end{enumerate}
 \newpage{}
 \section*{Appendix --- Reflection}
 
