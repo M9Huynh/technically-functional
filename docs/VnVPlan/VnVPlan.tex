@@ -73,59 +73,47 @@ in.}
   \bottomrule
 \end{tabular}\\
 
-\wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
-
-\wss{Remove this section if it isn't needed}
+Refer to Section 4 in the \href{https://github.com/M9Huynh/technically-functional/blob/32182cfc56c602466e270b7fcbad01d892911ea1/docs/SRS/SRS.pdf}{SRS document} for a table of many more symbols, abbereviations, acronyms, and definitions.
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
+This document aims to outline the verification and validation that the Physiotherapy Companion app will go through during development. Starting with what the software is, what it is meant to achieve, and some relevant information before explaining in detail the standards and metrics that will be used to evaluate the software.
 
 \section{General Information}
 
 \subsection{Summary}
 
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
+The software focused on in this document is the Physiotherapy Companion application, built for smart devices with camera access to assess a user, expected to be a patient undergoing physiotherapy, on their form during assigned physiotherapy exercises.
+
+The application will provide support and guidance for the exercise and make real-time suggestions to improve the user’s form during a video-feed. It will also provide overviews of previous exercises to allow users to see progress and consistency, assisting in forming healthy habits towards recovery and reinforce confidence.
+
+The application will also support a more administrative side for physiotherapists, allowing them to view exercise overviews for patients assigned to them, as well as leave comments on overviews to ensure consistent and timely usage of the application for healthy exercising.
+
 
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+The objectives of the testing expanded upon within this document focus on general system usability, the security of user profiles and video-feed data, and the verification of stakeholder requirements.
 
-\wss{You should also list the objectives that are out of scope.  You don't have 
-the resources to do everything, so what will you be leaving out.  For instance, 
-if you are not going to verify the quality of usability, state this.  It is also 
-worthwhile to justify why the objectives are left out.}
+Usage of the system should be easily explainable for first-time users with simple dialogue popups and limited visible guiding from one function to the next. Additionally, for the video-feed portion of the application’s usage, the user should be reasonably guided through the exercise and process to set them up for successful exercise execution and form recommendation acceptance.
 
-\wss{The objectives are important because they highlight that you are aware of 
-limitations in your resources for verification and validation.  You can't do everything, 
-so what are you going to prioritize?  As an example, if your system depends on an 
-external library, you can explicitly state that you will assume that external library 
-has already been verified by its implementation team.}
+User profile and video-feed data should be securely stored, whether locally or within a remote database accessed by the system. User-data has become an increasingly sensitive topic within the software industry of late and everyone wants to know how data is used and  dispersed. In this way, users should be aware of the usage of their data and the system should ensure unauthorized access outside of the communicated plan is never possible.
 
-\subsection{Challenge Level and Extras}
+Meeting stakeholder requirements, whether they be data restrictive or process flow in nature, is what will validate the core features of the system. If the users the system is designed for don’t find the usage expected from the system, then ultimately the system has failed to perform its primary goal. Ensuring stakeholder requirements and feedback are incorporated into the system as it is developed, both initially and onward, will ensure the system is both wanted and usable to the intended audience.
 
-\wss{State the challenge level (advanced, general, basic) for your project.
-Your challenge level should exactly match what is included in your problem
-statement.  This should be the challenge level agreed on between you and the
-course instructor.  You can use a pull request to update your challenge level
-(in TeamComposition.csv or Repos.csv) if your plan changes as a result of the
-VnV planning exercise.}
+Some out-of-scope objectives include performance and user-interface quality. In this sense, quality means the overall refinement and how finalized and polished the interface looks; the implementation should not inhibit usability, but every button need not be graphically developed individually.
 
-\wss{Summarize the extras (if any) that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.
-You can use a pull request to update your extras (in TeamComposition.csv or
-Repos.csv) if your plan changes as a result of the VnV planning exercise.}
+For performance, the system should respond in a timely manner that doesn’t frustrate a user’s ability to perform the main activities of the system, but using the most optimal algorithm and fully optimizing the system are not direct objectives of the system at this time. These things could both be expanded into and developed, but for now are considered out of scope.
+
+\subsection{Extras}
+
+The extras set out for the system consist of a Design Thinking Document and a User Instructional Video.
+
+The Design Thinking Document aims to explain the process behind, and work done towards, the final design of the system. This document explains the overall flow of processing through the system but also the interfacing elements, external libraries utilized, and more. The document flow is iterative, as is the design process, and aims to communicate the entire design process flow of the system.
+
+The User Instructional Video aims to communicate the ideal usage of the system to the primary stakeholders. The video will demonstrate the usage of the analytics display, the video-feed submission function along with form recommendations, as well as an explanation of the overviews provided from each completed exercise. All of these will be instructed from the perspective of a patient user within the system. For the physiotherapist view, the patient list and comment features will be focussed on along with the analytical display function previously focussed on.
+
 
 \subsection{Relevant Documentation}
 
@@ -142,8 +130,7 @@ how they relate to your VnV efforts.}
 
 \section{Plan}
 
-\wss{Introduce this section.  You can provide a roadmap of the sections to
-  come.}
+This section will focus on the methods to verify and validate artifacts of the project. The methods for each artifact or facet of the system will be listed below, and additional information including possible questionnaire questions can be found in the appendix at the end of this document. The section will start primarily with verification and move to validation at the end.
 
 \subsection{Verification and Validation Team}
 
@@ -153,64 +140,30 @@ how they relate to your VnV efforts.}
 
 \subsection{SRS Verification}
 
-\wss{List any approaches you intend to use for SRS verification.  This may
-  include ad hoc feedback from reviewers, like your classmates (like your
-  primary reviewer), or you may plan for something more rigorous/systematic.}
+To verify the SRS, several approaches will be used across different sections of the document. In general, the document will receive verification through feedback from 4G06 teaching assistants, peer-review feedback from another design team, and a check in with a project advisor to ensure the document represents the wants for the project. This check-in will be a self review by the advisor followed by a scheduled meeting to present any requirements felt could possibly change. Based on feedback from the advisor, issues will be created and handled.
 
-\wss{If you have a supervisor for the project, you shouldn't just say they will
-read over the SRS.  You should explain your structured approach to the review.
-Will you have a meeting?  What will you present?  What questions will you ask?
-Will you give them instructions for a task-based inspection?  Will you use your
-issue tracker?}
-
-\wss{Maybe create an SRS checklist?}
+To verify the functional requirements within the SRS, the above will all be used in addition to software checks for functionality and a requirements checklist to be updated upon checking functional requirements within the implementation.
+For verification of non-functional requirements within the SRS, again including all the general checks, there will be a questionnaire of the software’s usage and another checklist with a less binary scaling system for the NFRs.
 
 \subsection{Design Verification}
 
-\wss{Plans for design verification}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+To verify the design we’ll rely on feedback from 4G06 teaching assistants, from peer-review feedback provided by colleagues on another design team, as well as advisor and stakeholder questioning. The feedback from teaching assistants and peer-review feedback will be created as issues within our repository and handled accordingly. For advisor and stakeholder questioning, there will be software handouts along with a questionnaire which is expanded on more at the end of this section.
 
 \subsection{Verification and Validation Plan Verification}
 
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
+This document will also be reviewed by the teaching assistants and provided peer-review by another design team, again creating issues within the GitHub repository to be dealt with accordingly.
 
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+In addition, the test suite derived from this document will be verified via code coverage and mutation testing on the software itself. For validation, the final outcome for each test will be discussed in the previously mentioned meeting with the project advisor to ensure the system is doing what it should upon each test case.
 
 \subsection{Implementation Verification}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
-
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
-
-\wss{The final class presentation in CAS 741 could be used as a code
-walkthrough.  There is also a possibility of using the final presentation (in
-CAS741) for a partial usability survey.}
+For testing the implemented system, there will be a software testing suite developed based on the tests listed in sections 4 and 5 of this document. Additional testing by the team includes code walk-throughs of critical sections both during development and upon reaching milestones within the development cycle. Throughout development, there will also be static analysis on each pull request to GitHub, ensuring naming conventions and best practice are followed throughout the project.
 
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
+Automated testing includes the testing suite previously mentioned in this section; derived from the tests found in this document which are based upon the requirements found within the SRS document of this project. These tests will be verified themselves with mutation testing and code coverage assessments. A testing suite such as pytest or Python Extension will be utilized to implement the tests mentioned in further sections of this document. These suits contain their own internal tools for checking code coverage, and the GitHub will be using continuous integration to ensure base cases continue to pass through all pull requests as well as general compilation checks.
 
-\wss{If you have already done this in the development plan, you can point to
-that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+During development, pylint will ensure the coding standard is adhered to constantly and also be working with the continuous development within the GitHub to ensure no slip-ups on merging.
 
 \subsection{Software Validation}
 
