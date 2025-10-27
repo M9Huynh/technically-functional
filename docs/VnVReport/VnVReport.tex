@@ -344,7 +344,7 @@ How the test will be performed &
 
 \end{longtable}
 
-
+\newpage
 
 \section{Nonfunctional Requirements Evaluation}
 \begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
@@ -405,10 +405,9 @@ Output & System restarts and recovers within 5 minutes \\
 How the test will be performed & 
 \begin{itemize}
     \setlength\itemsep{0em}
-    \item Test will be repeated numerous times with various failure scenarios
+    \item A failure scenario will be simulated
     \item Recovery time and success rate will be measured
-    \item System will be forced to fail during different operations
-    \item Verify data integrity after recovery
+    \item System's state will be compared to pre-failure state to confirm if properly restored.
 \end{itemize} \\
 \hline
 
@@ -427,25 +426,17 @@ Output & Video is successfully re-queued for upload to the system. Re-upload is 
 How the test will be performed & 
 \begin{itemize}
     \setlength\itemsep{0em}
-    \item Simulate network disconnection during video upload
-    \item Restore network connection after interruption
-    \item Verify system detects interruption and queues video for re-upload
+    \item Network is disconnected during video upload
+    \item Connection is restored after interruption
+    \item The system detects interruption and queues video for re-upload
     \item Confirm upload resumes from point of failure (not restarting)
-    \item Validate video integrity after successful upload
+    \item Video integrity is confirmed after successful upload
 \end{itemize} \\
 \hline
 
-\textbf{Test Case ID} & \textbf{PR-RFT 3, PR-RFT 4, PR-CR1, PR-SER 1} \\
-\hline
-Type & N/A \\
-\hline
+ & \textbf{PR-RFT 3, PR-RFT 4, PR-CR1, PR-SER 1} \\
+
 Rationale & These requirements address advanced system capabilities beyond current testing scope \\
-\hline
-State & N/A \\
-\hline
-Input & N/A \\
-\hline
-Output & N/A \\
 \hline
 How the test will be performed & 
 \begin{itemize}
@@ -457,12 +448,6 @@ How the test will be performed &
 \hline
 
 \end{longtable}
-
-\subsection{Usability}
-		
-\subsection{Performance}
-
-\subsection{etc.}
 	
 \section{Comparison to Existing Implementation}	
 
