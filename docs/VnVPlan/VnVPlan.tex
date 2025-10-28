@@ -299,136 +299,281 @@ Please refer to the following Microsoft Excel file: \href{https://mcmasteru365-m
 
 \section{Unit Test Description}
 
-\wss{This section should not be filled in until after the MIS (detailed design
-  document) has been completed.}
+\section{Unit Tests}
 
-\wss{Reference your MIS (detailed design document) and explain your overall
-philosophy for test case selection.}  
-
-\wss{To save space and time, it may be an option to provide less detail in this section.  
-For the unit tests you can potentially layout your testing strategy here.  That is, you 
-can explain how tests will be selected for each module.  For instance, your test building 
-approach could be test cases for each access program, including one test for normal behaviour 
-and as many tests as needed for edge cases.  Rather than create the details of the input 
-and output here, you could point to the unit testing code.  For this to work, you code 
-needs to be well-documented, with meaningful names for all of the tests.}
+This section outlines the unit testing approach, scope, and representative test cases for each module. Detailed input/output data and executable tests are maintained in the project’s testing repository.
 
 \subsection{Unit Testing Scope}
 
-\wss{What modules are outside of the scope.  If there are modules that are
-  developed by someone else, then you would say here if you aren't planning on
-  verifying them.  There may also be modules that are part of your software, but
-  have a lower priority for verification than others.  If this is the case,
-  explain your rationale for the ranking of module importance.}
+All major modules developed for the system are within the scope of unit testing, including authentication, organization linking, exercise management, video capture, computer vision, reporting, data storage, and user interface components.
+
+Third-party libraries and SDKs (e.g., video encoding, encryption frameworks) are out of scope for direct unit testing. These are verified indirectly through integration and acceptance testing. Modules responsible for UI styling and documentation display are of lower priority since their risk level is minimal; they will be verified primarily through automated UI snapshot tests.
+
+Testing focuses on functional correctness, data integrity, and compliance with fitness criteria. Each module includes both \textbf{black box} (external behavior) and \textbf{white box} (internal logic) tests.
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Most of the verification will be through automated unit testing.  If
-  appropriate specific modules can be verified by a non-testing based
-  technique.  That can also be documented in this section.}
+Most verification for the functional requirements will occur through automated unit tests. Each module below outlines representative tests that validate the implementation of key requirements.
 
-\subsubsection{Module 1}
+\subsubsection{Module 1: Authentication and Account Management}
 
-\wss{Include a blurb here to explain why the subsections below cover the module.
-  References to the MIS would be good.  You will want tests from a black box
-  perspective and from a white box perspective.  Explain to the reader how the
-  tests were selected.}
+This module verifies that only authorized users can access protected features and that account creation, login, and security rules comply with FR 1--4 and SR AR 1--4.
 
-\begin{enumerate}
+\textbf{Test ID: AUTH-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: System with no active user session. \\
+Input: Attempt to access the dashboard without logging in. \\
+Output: Access is denied with an authentication error message (HTTP 401 or equivalent). \\
+Test Case Derivation: From FR 1 --- users must log in before accessing exercises or dashboards. \\
+How Test Will Be Performed: Run automated request simulation; verify the controller response and log entry. \\[6pt]
 
-\item{test-id1\\}
+\textbf{Test ID: AUTH-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Empty user database. \\
+Input: Attempt to register with missing required fields or duplicate credentials. \\
+Output: Registration is rejected; descriptive validation errors are returned. \\
+Test Case Derivation: From FR 1.1 --- all required fields must be completed, and credentials must be unique. \\
+How Test Will Be Performed: Automated validation tests using mocked data submissions. \\[6pt]
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+\textbf{Test ID: AUTH-UT-003} \\
+Type: Functional, Automatic \\
+Initial State: Active logged-in session. \\
+Input: 60 minutes of inactivity simulated with timers. \\
+Output: Session is automatically terminated; subsequent requests are rejected. \\
+Test Case Derivation: From SR-AR 3 --- system must log out inactive users. \\
+How Test Will Be Performed: Use time mocking; verify session invalidation behavior. \\[10pt]
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+\subsubsection{Module 2: Organization Linking and Access Codes}
 
-How test will be performed: 
-					
-\item{test-id2\\}
+This module ensures physiotherapists and patients connect securely under FR 1.2--1.3 and FR 2--3.
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+\textbf{Test ID: ORG-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: Unverified physiotherapist profile. \\
+Input: Submit incomplete license or clinic credentials. \\
+Output: Verification denied; PT access blocked until all credentials provided. \\
+Test Case Derivation: From FR 1.2 --- PT access requires all four credential fields. \\
+How Test Will Be Performed: Automated validation of registration form with missing inputs. \\[6pt]
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+\textbf{Test ID: ORG-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Patient account without an organization link. \\
+Input: Attempt to join with invalid and valid access codes. \\
+Output: Invalid codes rejected; valid code links patient to exactly one PT and clinic. \\
+Test Case Derivation: From FR 1.3 and FR 3 --- patients can only join with a valid PT-issued code. \\
+How Test Will Be Performed: Automated join requests tested against mock organization data. \\[10pt]
 
-How test will be performed: 
+\subsubsection{Module 3: Exercise Program Management}
 
-\item{...\\}
-    
-\end{enumerate}
+Covers FR 5--6, FR 10--11, FR 22, and FR 27. Ensures exercises can be created, customized, and tracked properly.
 
-\subsubsection{Module 2}
+\textbf{Test ID: PROG-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: Exercise library initialized. \\
+Input: Request for exercise list by an authorized patient. \\
+Output: At least 10 knee exercises with instructions and media are returned. \\
+Test Case Derivation: From FR 5 --- the system must include a complete knee-exercise library. \\
+How Test Will Be Performed: Automated content verification test querying the exercise repository. \\[6pt]
 
-...
+\textbf{Test ID: PROG-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Existing exercise plan. \\
+Input: PT updates sets, reps, and rest time. \\
+Output: Plan updated immediately; change logged with timestamp. \\
+Test Case Derivation: From FR 6 --- PTs can customize patient exercises. \\
+How Test Will Be Performed: Automated API test comparing new and old plan versions. \\[6pt]
+
+\textbf{Test ID: PROG-UT-003} \\
+Type: Functional, Automatic \\
+Initial State: PT sets weekly limits on exercise metrics. \\
+Input: Patient attempts to exceed limit. \\
+Output: System prevents action and displays a limit-exceeded message. \\
+Test Case Derivation: From FR 27 --- PT-defined daily/weekly limitations must be enforced. \\
+How Test Will Be Performed: Simulate plan execution and validate limit enforcement. \\[10pt]
+
+\subsubsection{Module 4: Video Capture and Review}
+
+Tests FR 7, FR 15, FR 26, and user-environment checks.
+
+\textbf{Test ID: CAP-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: Device camera available. \\
+Input: Begin exercise recording. \\
+Output: Video captured at $\geq$720p @ 30 fps; stored successfully for PT review. \\
+Test Case Derivation: From FR 7 --- video must meet minimum quality standards. \\
+How Test Will Be Performed: Automated hardware simulation verifying metadata fields. \\[6pt]
+
+\textbf{Test ID: CAP-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Patient ready to record in a low-light environment. \\
+Input: System performs pre-capture check. \\
+Output: Warning prompts user to improve lighting before recording. \\
+Test Case Derivation: From UHR-EOU 3 --- app must alert user to poor conditions. \\
+How Test Will Be Performed: Simulated light-level input producing prompt verification. \\[6pt]
+
+\textbf{Test ID: CAP-UT-003} \\
+Type: Functional, Automatic \\
+Initial State: Captured but incomplete exercise data. \\
+Input: Submit out-of-frame video. \\
+Output: System rejects submission, provides retry prompt with reason. \\
+Test Case Derivation: From FR 26 --- retries allowed for insufficient data. \\
+How Test Will Be Performed: Mock analysis engine returning ``insufficient data'' flag. \\[10pt]
+
+\subsubsection{Module 5: Computer Vision and Form Analysis}
+
+Validates FR 8, FR 12--14, FR 16, and related accuracy requirements.
+
+\textbf{Test ID: CV-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: Analysis model loaded. \\
+Input: Test video with known joint angles. \\
+Output: Angles computed within $\pm$5°; range of motion within $\pm$10\%. \\
+Test Case Derivation: From FR 12 and PR-PAR 1 --- measurement accuracy thresholds. \\
+How Test Will Be Performed: Automated comparison with expert-measured reference data. \\[6pt]
+
+\textbf{Test ID: CV-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Exercise attempt with poor form. \\
+Input: Analyze deviation from model. \\
+Output: ``Incorrect form'' message specifying deviation (e.g., insufficient bend) within 1 second. \\
+Test Case Derivation: From FR 13--14 --- system must identify and describe form issues. \\
+How Test Will Be Performed: Simulated exercise data fed to analysis engine; timing measured. \\[6pt]
+
+\textbf{Test ID: CV-UT-003} \\
+Type: Functional, Automatic \\
+Initial State: Detected dangerous deviation. \\
+Input: Critical form violation ($>$30° misalignment). \\
+Output: Exercise halted; warning displayed. \\
+Test Case Derivation: From PR-SCR 1 --- prevent injury by halting unsafe movement. \\
+How Test Will Be Performed: Inject synthetic ``critical'' deviation data; verify halt condition. \\[10pt]
+
+\subsubsection{Module 6: Reporting and Dashboards}
+
+Confirms FR 17--20, FR 25, and FR 18 (PT visibility).
+
+\textbf{Test ID: RPT-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: Completed exercise session. \\
+Input: Generate session report. \\
+Output: Report includes completion rate, form score, pain level, and feedback. \\
+Test Case Derivation: From FR 17 --- PTs receive session reports automatically. \\
+How Test Will Be Performed: Automated generation and field-validation of report content. \\[6pt]
+
+\textbf{Test ID: RPT-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Patient repeatedly fails exercise. \\
+Input: Record 3 failed attempts. \\
+Output: Alert appears in PT dashboard. \\
+Test Case Derivation: From FR 20 --- alerts for repeated incorrect attempts. \\
+How Test Will Be Performed: Simulate consecutive failed submissions and verify dashboard flag. \\[10pt]
+
+\subsubsection{Module 7: Data Security and Privacy}
+
+Ensures data protection as required by FR 21--23 and SR IR 1--SR PR 2.
+
+\textbf{Test ID: DATA-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: Database ready for new patient data. \\
+Input: Save patient profile with personal and medical details. \\
+Output: Data stored in encrypted form; readable only via authorized session. \\
+Test Case Derivation: From FR 21 and SR-IR 1 --- encryption at rest and in transit. \\
+How Test Will Be Performed: Automated write-and-read test confirming ciphertext storage. \\[6pt]
+
+\textbf{Test ID: DATA-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Two patient accounts exist. \\
+Input: Patient A attempts to access Patient B’s records. \\
+Output: Access denied; system logs unauthorized attempt. \\
+Test Case Derivation: From FR 23 and SR-PR 1 --- patients may access only their own data. \\
+How Test Will Be Performed: Automated access attempt verifying access-control policies. \\[10pt]
 
 \subsection{Tests for Nonfunctional Requirements}
 
-\wss{If there is a module that needs to be independently assessed for
-  performance, those test cases can go here.  In some projects, planning for
-  nonfunctional tests of units will not be that relevant.}
+These tests focus on performance, robustness, scalability, and maintainability characteristics that affect the overall reliability of the system.
 
-\wss{These tests may involve collecting performance data from previously
-  mentioned functional tests.}
+\subsubsection{Module 8: Performance and Latency}
 
-\subsubsection{Module ?}
-		
-\begin{enumerate}
+\textbf{Test ID: PERF-UT-001} \\
+Type: Dynamic, Automatic \\
+Initial State: Application idle. \\
+Input/Condition: Load exercise interface. \\
+Output/Result: Interface loads within 2 seconds. \\
+How Test Will Be Performed: Automated timing test using performance hooks. \\[6pt]
 
-\item{test-id1\\}
+\textbf{Test ID: PERF-UT-002} \\
+Type: Dynamic, Automatic \\
+Initial State: Running video analysis. \\
+Input/Condition: Introduce form deviation. \\
+Output/Result: Corrective feedback appears within 1 second. \\
+How Test Will Be Performed: Mock time-stamped analysis results; measure delay to user prompt. \\[10pt]
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+\subsubsection{Module 9: Reliability and Offline Operation}
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
+\textbf{Test ID: REL-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: Network unavailable. \\
+Input/Condition: Attempt to upload exercise video. \\
+Output/Result: Upload queued locally; auto-retries every 30 seconds until success. \\
+How Test Will Be Performed: Network simulation tests queue persistence and retry logic. \\[6pt]
 
-\end{enumerate}
+\textbf{Test ID: REL-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Device offline. \\
+Input/Condition: User opens exercise list. \\
+Output/Result: Cached exercises and instructions load successfully; sync resumes when online. \\
+How Test Will Be Performed: Offline simulation verifying cache and synchronization behavior. \\[10pt]
 
-\subsubsection{Module ?}
+\subsubsection{Module 10: Security and Backup}
 
-...
+\textbf{Test ID: SEC-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: System with active data records. \\
+Input/Condition: Trigger daily backup job. \\
+Output/Result: Backup created and timestamped successfully. \\
+How Test Will Be Performed: Automated scheduler simulation confirming backup creation. \\[6pt]
+
+\textbf{Test ID: SEC-UT-002} \\
+Type: Functional, Automatic \\
+Initial State: Idle session. \\
+Input/Condition: User inactive for 60 minutes. \\
+Output/Result: Session automatically logs out and prompts for re-authentication. \\
+How Test Will Be Performed: Time-simulation test confirming session timeout. \\[10pt]
+
+\subsubsection{Module 11: Scalability and Extensibility}
+
+\textbf{Test ID: EXT-UT-001} \\
+Type: Functional, Automatic \\
+Initial State: Base application loaded with knee module. \\
+Input/Condition: Add new ``shoulder'' exercise definitions. \\
+Output/Result: System loads new joint without modifying core logic. \\
+How Test Will Be Performed: Add-on simulation validating modular design extensibility. \\[10pt]
 
 \subsection{Traceability Between Test Cases and Modules}
 
-\wss{Provide evidence that all of the modules have been considered.}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{p{4cm} p{7cm} p{4cm}}
+		\toprule
+		\textbf{Module} & \textbf{Primary Requirements Covered} & \textbf{Representative Test IDs} \\
+		\midrule
+		1. Authentication \& Account Management & FR 1--4; SR AR 1--4; SR3 & AUTH-UT-001--003 \\
+		2. Organization Linking \& Access Codes & FR 1.2--1.3; FR 2--3 & ORG-UT-001--002 \\
+		3. Exercise Program Management & FR 5--6; FR 10--11; FR 22; FR 27 & PROG-UT-001--003 \\
+		4. Video Capture \& Review & FR 7; FR 15; FR 26 & CAP-UT-001--003 \\
+		5. Computer Vision \& Form Analysis & FR 8; FR 12--14; FR 16; PR-PAR 1--2; PR-SCR 1 & CV-UT-001--003 \\
+		6. Reporting \& Dashboards & FR 17--20; FR 25 & RPT-UT-001--002 \\
+		7. Data Security \& Privacy & FR 21--23; SR-IR 1; SR-PR 1--2 & DATA-UT-001--002 \\
+		8. Performance \& Latency & PR-SL 1--2 & PERF-UT-001--002 \\
+		9. Reliability \& Offline Operation & PR-RFT 2; MS-AD 1 & REL-UT-001--002 \\
+		10. Security \& Backup & SR AR 3; MS-MNT 1 & SEC-UT-001--002 \\
+		11. Scalability \& Extensibility & PR-CR 1; PR-SER 1 & EXT-UT-001 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Traceability Between Test Cases and Modules}
+\end{table}
 
-\newpage
-				
-\bibliographystyle{plainnat}
+This matrix demonstrates coverage of all functional and nonfunctional requirements through at least one representative unit test per module.
 
-\bibliography{../../refs/References}
-
-\newpage
 
 \section{Appendix}
 
