@@ -55,10 +55,6 @@ in.}
 \tableofcontents
 
 \listoftables
-\wss{Remove this section if it isn't needed}
-
-\listoffigures
-\wss{Remove this section if it isn't needed}
 
 \newpage
 
@@ -73,164 +69,109 @@ in.}
   \bottomrule
 \end{tabular}\\
 
-\wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
-
-\wss{Remove this section if it isn't needed}
+Refer to Section 4 in the \href{https://github.com/M9Huynh/technically-functional/blob/32182cfc56c602466e270b7fcbad01d892911ea1/docs/SRS/SRS.pdf}{SRS document} for a table of many more symbols, abbreviations, acronyms, and definitions.
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
+This document aims to outline the verification and validation that the Physiotherapy Companion app will go through during development. The document begins with a breif description as to what the software is, what it is meant to achieve, and some relevant information before explaining in detail the standards and metrics that will be used to evaluate the system.
 
 \section{General Information}
 
 \subsection{Summary}
 
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
+The software focused on in this document is the Physiotherapy Companion application, built for smart devices with camera access to assess a patient undergoing physiotherapy on their form during assigned physiotherapy exercises.
+
+The application will provide support and guidance for the exercise and make real-time suggestions to improve the user’s form using a video-feed. It will also provide overviews of previous exercises to allow users to see progress and consistency, assisting in forming healthy habits towards recovery and reinforce confidence.
+
+The application will also support a more administrative function for physiotherapists, allowing them to view exercise summaries for patients assigned to them. Additionally, physiotherapists may leave comments on summaries to ensure consistent and timely usage of the application for healthy exercising.
+
 
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+The objectives of the testing expanded upon within this document focus on general system usability, the security of user profiles and video-feed data, and the verification of stakeholder requirements.
 
-\wss{You should also list the objectives that are out of scope.  You don't have 
-the resources to do everything, so what will you be leaving out.  For instance, 
-if you are not going to verify the quality of usability, state this.  It is also 
-worthwhile to justify why the objectives are left out.}
+Usage of the system should be easily explainable for first-time users with simple dialogue popups and limited visible guiding from one function to the next. Additionally, for the video-feed portion of the application’s usage, the user should be reasonably guided through the exercise and process to set them up for successful exercise execution and form recommendation acceptance.
 
-\wss{The objectives are important because they highlight that you are aware of 
-limitations in your resources for verification and validation.  You can't do everything, 
-so what are you going to prioritize?  As an example, if your system depends on an 
-external library, you can explicitly state that you will assume that external library 
-has already been verified by its implementation team.}
+User profile and video-feed data should be securely stored, whether locally or within a remote database accessed by the system. User data security has become an increasingly sensitive topic within the software industry of late and users may question how their data is being stored and utilized. Users should be aware of the usage of their data and the system should ensure unauthorized access outside of the communicated plan is never possible.
 
-\subsection{Challenge Level and Extras}
+Meeting stakeholder requirements, whether they be data restrictive or process flow in nature, is what will validate the core features of the system. If users do not find value in the expected usage expected from the system, then, ultimately, the system has failed to perform its primary goal. Ensuring stakeholder requirements and feedback are incorporated into the system as it is developed, both initially and onward, will ensure the system is both wanted and usable to the intended audience.
 
-\wss{State the challenge level (advanced, general, basic) for your project.
-Your challenge level should exactly match what is included in your problem
-statement.  This should be the challenge level agreed on between you and the
-course instructor.  You can use a pull request to update your challenge level
-(in TeamComposition.csv or Repos.csv) if your plan changes as a result of the
-VnV planning exercise.}
+Some out-of-scope objectives include performance and user-interface quality. In this sense, quality means the overall refinement and how polished the interface looks. The implementation should not inhibit usability, but the design need not be too meticulous and visually pleasing.
 
-\wss{Summarize the extras (if any) that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.
-You can use a pull request to update your extras (in TeamComposition.csv or
-Repos.csv) if your plan changes as a result of the VnV planning exercise.}
+For performance, the system should respond in a timely manner that does not frustrate a user’s ability to perform the main activities of the system. Designing an optimized system which may use minimal amounts of resources is not one of the current objectives of the system. These things could both be expanded into and developed, but for now are considered out of scope.
+
+\subsection{Extras}
+
+The extras set out for the system consist of a Design Thinking Document and a User Instructional Video.
+
+The Design Thinking Document aims to explain the process behind, and work done towards, the final design of the system. This document explains the overall flow of processing through the system and the interfacing elements, external libraries utilized, and more. The document flow is iterative, as is the design process, and aims to communicate the entire design process of the system.
+
+The User Instructional Video aims to communicate the method of usage of the system to the primary stakeholders. The video will demonstrate the usage of the dashboard and analytics display, the video-feed  form recommendation function, as well as an explanation of the overall feedback provided for each completed exercise. AThe instructions will be patient-centred. For the physiotherapist view the patient list, comment features, and analytical display function will be explained.
+
 
 \subsection{Relevant Documentation}
+\begin{itemize}
+  \item Problem Statement and Goals: \citet{PS}
+  \item Development Plan: \citet{DevPlan}
+  \item System Requirements Specification: \citet{SRS}
+  \item Hazard Analysis: \citet{HA}
+  \item User Instructional Video: \citet{UserVideo}
+  \item Design Thinking Document: \citet{DesignThinking}
+\end{itemize}
+All of the above document are important artifacts for the implementation of the system. These documents outline how the implementation will be approached and what the implementation will  follow.
 
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.  You can create BibTeX entries for your
-  documents and within those entries include a hyperlink to the documents.}
-
-\citet{SRS}
-
-\wss{Don't just list the other documents.  You should explain why they are relevant and 
-how they relate to your VnV efforts.}
+More documents to come here for external libraries such as OpenCV, pytest, Python Extension, and more when it is determined which libraries and external softwares will be used.
 
 \section{Plan}
 
-\wss{Introduce this section.  You can provide a roadmap of the sections to
-  come.}
+This section will focus on the methods to verify and validate artifacts of the project. The methods for each facet of the system will be listed below, and additional information including possible questionnaire questions can be found in the appendix at the end of this document. The section will start primarily with verification and move to validation at the end.
 
 \subsection{Verification and Validation Team}
-
-\wss{Your teammates.  Maybe your supervisor.
-  You should do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
-
+See \textit{Table 1: Verification and Validation Team}.
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|m{6cm}|}
+    \hline \textbf{Role} & \textbf{Member(s)} & \textbf{Description} \\ \hline
+    Test Development & Maham, Eman & Development of tests for the system and system units based on functional and non-functional requirements listed within the SRS document. \\ \hline
+    Test Implementation & Cieran & Implementation of a test suite for feasibly software testable requirements, developed based on the tests made by the test development team. Also assurance of software coverage by the suite. \\ \hline
+    Test Execution & Matthew & Running and verification of the test suite. \\ \hline
+    Requirements Verification & Vaisnavi & Verification and tracking of requirements to ensure each has been met and tested effectively. \\ \hline
+    Stakeholder Validation & All & Validation with stakeholders and external users to ensure the system developed performs as users expect; focus on usability. \\ \hline
+  \end{tabular}
+  \caption{Verification and Validation Team}
+\end{table}
 \subsection{SRS Verification}
 
-\wss{List any approaches you intend to use for SRS verification.  This may
-  include ad hoc feedback from reviewers, like your classmates (like your
-  primary reviewer), or you may plan for something more rigorous/systematic.}
+To verify the SRS, several approaches will be used across different sections of the document. In general, the document will receive verification through feedback from 4G06 teaching assistants, peer-review feedback from another design team, and a check in with a project advisor to ensure the document represents the correct motivation for the project. This check-in will be a self review by the advisor followed by a scheduled meeting to present any probable modifications to the requirements. Based on feedback from the advisor, issues will be created and handled.
 
-\wss{If you have a supervisor for the project, you shouldn't just say they will
-read over the SRS.  You should explain your structured approach to the review.
-Will you have a meeting?  What will you present?  What questions will you ask?
-Will you give them instructions for a task-based inspection?  Will you use your
-issue tracker?}
-
-\wss{Maybe create an SRS checklist?}
+To verify the functional requirements within the SRS, the above will be used in addition to software checks for functionality and a requirements checklist which will be updated upon checking functional requirements within the implementation.
+For verification of non-functional requirements within the SRS, in addition to the general checks, there will be a questionnaire of the software’s usage and another checklist with a more flexible scaling system for the NFRs.
 
 \subsection{Design Verification}
 
-\wss{Plans for design verification}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+Verification of the design will rely on feedback from 4G06 teaching assistants, peer-review feedback provided by colleagues on another design team, as well as advisor and stakeholder inquiries. The feedback from teaching assistants and peer-review feedback will be created as issues within our repository and handled accordingly. For advisor and stakeholder inquiry, there will be software handouts along with a questionnaire which is expanded on more at the end of this section.
 
 \subsection{Verification and Validation Plan Verification}
 
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
+This document will also be reviewed by the teaching assistants and provided peer-review by another design team, creating issues within the GitHub repository to be dealt with accordingly.
 
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+In addition, the test suite derived from this document will be verified via code coverage and mutation testing on the software. For validation, the final outcome of each test will be discussed in the meeting with the project advisor to ensure the system is doing what it should in each test case.
 
 \subsection{Implementation Verification}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
-
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
-
-\wss{The final class presentation in CAS 741 could be used as a code
-walkthrough.  There is also a possibility of using the final presentation (in
-CAS741) for a partial usability survey.}
+For testing the implemented system, there will be a software testing suite developed based on the tests listed in sections 4 and 5 of this document. Additional testing by the team includes code walk-throughs of critical sections both during development and upon reaching milestones within the development cycle. There will also be static analysis on each pull request to GitHub, ensuring naming conventions and best practice are followed throughout the project.
 
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
+Automated testing includes the testing suite previously mentioned in this section; derived from the tests found in this document which are based upon the requirements found within the \href{https://github.com/M9Huynh/technically-functional/blob/32182cfc56c602466e270b7fcbad01d892911ea1/docs/SRS/SRS.pdf}{SRS document} of this project. These tests will be verified themselves with mutation testing and code coverage assessments. A testing suite such as pytest or Python Extension will be utilized to implement the tests mentioned in further sections of this document. These suits contain their own internal tools for checking code coverage, and the GitHub will be using continuous integration to ensure base cases continue to pass through all pull requests as well as general compilation checks.
 
-\wss{If you have already done this in the development plan, you can point to
-that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+During development, pylint will ensure the coding standard is adhered to and continuous development within GitHub will ensure no slip-ups on merging.
 
 \subsection{Software Validation}
 
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
-
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
-
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
-The feedback from your supervisor will be very useful for improving your project.}
-
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
-as a Rev 0 demo for the supervisor.}
-
-\wss{This section might reference back to the SRS verification section.}
+For software validation, to ensure the correct system was designed to solve the problems outlined within the problem statement document, there will be system walkthroughs and interviews with stakeholders and the project advisor. These interviews will assess time to use the systems functions, understanding of the system and how it processes data, as well as a general acceptance of the system. The interview will end with questions outlined in the appendix of this document. (Section 6.2)
 
 \section{System Tests}
 
@@ -354,8 +295,7 @@ How test will be performed:
 
 \subsection{Traceability Between Test Cases and Requirements}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+Please refer to the following Microsoft Excel file: \href{https://mcmasteru365-my.sharepoint.com/:x:/g/personal/dieboltc_mcmaster_ca/EYBm9tg_K8JDkVQ9Z3X4dZIBOX3TODsKXdwZCJ0CxEYkqQ?e=aGQzxo}{Traceability Matrix}
 
 \section{Unit Test Description}
 
@@ -637,17 +577,137 @@ This matrix demonstrates coverage of all functional and nonfunctional requiremen
 
 \section{Appendix}
 
-This is where you can place additional information.
+Additional project information to expand on the previous sections. Mostly example or sample information at this time.
 
 \subsection{Symbolic Parameters}
 
-The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.
+\noindent Example script layout for system testing: \\
+/* \\
+\# Create user account testing \\
+New account creation (user\_acc\_create) \\
+Invalid format of field inputs (invalid\_formatCreate) \\
+Invalid sign up credentials (cannot\_verify\_creds) \\
+Presence of an existing account (acc\_exists) \\ \\
+\# PT focused testing \\
+PT successfully sends invite to patient (PT\_sends\_invite) \\
+PT adds/modified patient exercise (PT\_adjusts\_exercise) \\
+PT deletes patient account (PT\_deletes\_patient\_acc) \\ \\
+\# Patient focused testing \\
+System\_exercise\_overview \\
+Video\_store \\
+Video\_retrieval \\
+System\_analysis\_feedback \\
+Post\_ex\_patient\_feedback \\
+Incorrect\_form\_adjustment \\ \\
+\# NFR testing \\
+Ex\_int\_speed \\
+Fail\_recovery \\
+Interrupted\_vid \\
+\*/
+
 
 \subsection{Usability Survey Questions?}
 
-\wss{This is a section that would be appropriate for some projects.}
+\noindent \textbf{Advisor SRS Questions}:
+\begin{enumerate}
+  \item Are there any sections of the requirements which are found to be confusing or hard to measure?
+  \item Are there any sections of the system you feel the requirements do not expand on?
+  \item Are there any sections of the system you feel the requirements expand on that is out of scope?
+  \item Do you feel the requirements are extensive enough?
+  \item Do you feel the requirements are tracked well?
+\end{enumerate}
 
+\noindent \textbf{Design Questionnaire Questions}:
+
+“Strongly Disagree” to “Strongly Agree” style questioning.
+\begin{enumerate}
+  \item The system navigation is intuitive.
+  \item The system’s functions are all easily accessible.
+  \item The system helped set up your exercises for success.
+  \item The system enables you to complete your exercises with better guidance.
+  \item The system enables you to complete your exercises with better confidence.
+  \item The feedback returned during your exercise was helpful.
+  \item The overview data from your exercise was helpful.
+  \item You would you use this software for your exercises again.
+\end{enumerate}
+Could have a final open-ended question based on user pain points with the system I.e. what did not work well for individuals. \\ \\
+\noindent \textbf{Software Validation Questionnaire Questions}:
+
+“Strongly Disagree” to “Strongly Agree” style questioning.
+\begin{enumerate}
+  \item This software assisted you in completing your exercises.
+  \item This software was easy to use.
+  \item This software was easy to navigate.
+  \item The feedback from the system assisted you in fixing your form.
+  \item The feedback from the system generated greater confidence in your form.
+  \item The feedback from the system was meaningful and helpful.
+  \item The data generated from your exercises was helpful.
+  \item The system responded how you expected it to during usage.
+  \item The system clearly described what was going on.
+  \item You felt adequately trained to use the system from the system dialogues.
+  \item You felt safe while using the system.
+\end{enumerate}
+
+\noindent \textbf{Ui\_testing Survey}:
+\begin{enumerate}
+  \item How would you rate your overall experience with the application (1 - poor, 5 - excellent)?
+  \item How would you rate the visual appeal of the application (1 - poor, 5 - excellent)? 
+  \item How easy was it to navigate through the application? (1 - difficult, 5 - easy)
+  \begin{enumerate}
+    \item Were the tutorials helpful? (1 - not helpful, 5 - very helpful)
+    \item How logical was the arrangement of the different components within the system (1 - very illogical, 5 - very logical)?
+  \end{enumerate}
+  \item Which areas could use some improvement?
+  \begin{enumerate}
+    \item Navigation 
+    \item Menu structure
+    \item Colour/contrast scheme
+    \item Error messages 
+    \item Other (With open text entry)
+  \end{enumerate}
+\end{enumerate}
+
+\noindent \textbf{Patient Post-Exercise Feedback Form}:
+\begin{enumerate}
+  \item How did you feel before the exercise? (1 - good, 5-bad)
+  \begin{enumerate}
+    \item Did you have tightness? Yes/no
+    \item Did you have any pain? Yes/no.
+    \begin{enumerate}
+      \item How bad was your pain? (1 - no pain, 10 - unbearable pain)
+      \item What was the perceived level of pain/difficulty? (1 - very easy, 10 - very difficult)
+      \item Where was your pain located? (Open text entry)
+    \end{enumerate}
+    \item Have you noticed any recent changes? (Open text entry)
+  \end{enumerate}
+  \item If you had any pain DURING the exercise, how bad was it? (1 - no pain, 10 - unbearable pain)
+  \item How did you feel after the exercise? (1 - good, 5-bad)
+  \begin{enumerate}
+    \item Did you have tightness? Yes/no
+    \item Did you have any pain? Yes/no.
+    \begin{enumerate}
+      \item How bad was your pain? (1 - no pain, 10 - unbearable pain)
+      \item What was the perceived level of pain/difficulty? (1 - very easy, 10 - very difficult)
+      \item Where was your pain located? (Open text entry)
+    \end{enumerate}
+    \item Have you noticed any recent changes? (Open text entry)
+  \end{enumerate}
+  \item How challenging was the exercise today? (1 - easy, 5 - very hard)
+  \begin{enumerate}
+    \item Do you have any feedback for your physiotherapist? (Open text entry)
+  \end{enumerate}
+  \item In your opinion, is this treatment plan helping your health? Yes/no. Choose the option that describes how the plan is helping (Can choose multiple).
+  \begin{enumerate}
+    \item My movement
+    \item My flexibility
+    \item My pain
+    \item My mood
+  \end{enumerate}
+  \item In your opinion, how difficult is the current prescribed exercise plan? (1 - easy, 5 - very difficult)
+  \begin{enumerate}
+    \item Should your physiotherapist change the difficulty of your plan? (1 - no change, 5 - Large increase in difficulty)
+  \end{enumerate}
+\end{enumerate}
 \newpage{}
 \section*{Appendix --- Reflection}
 
@@ -671,6 +731,67 @@ graduate attribute of Lifelong Learning.
   question, what are at least two approaches to acquiring the knowledge or
   mastering the skill?  Of the identified approaches, which will each team
   member pursue, and why did they make this choice?
+\end{enumerate}
+
+\subsection*{Vaisnavi - Reflection}
+\begin{enumerate}
+  \item I think one main thing that went well while writing this deliverable was our communication as a group and how that played into the division of work. We had two sub-teams where Matthew and I were focusing on the POC, while Cieran, Maham and Eman were focused on this VnV deliverable. Our communication throughout aided in making this process of working on the deliverable seamless as everyone seemed to be very looped in on what each sub-team was working on. We had our weekly meetings to touch base and ask for any help if it was needed, and it worked very well.
+  \item I think one of the main pain points we came across was as a result of us working on the POC, it was a little bit hard at the start to fully keep up with updates for the VnV Plan. However, as mentioned above, with sharing our progress and updates during our team meetings, this helped in providing more clarity and consistency between all group members, and it allowed everyone to be on the same page.
+  \item \textbf{GROUP Q}
+  \item To improve the knowledge of OpenCV and MediaPipe pose detection for accurate testing of body landmark tracing, we could do the two approaches:
+  \begin{enumerate}
+    \item Follow documentation and existing examples to understand how to properly utilize OpenCV and Mediapipe to accurately detect the varying body landmarks through pose detection.
+    \item Try to work with small test cases and work on small files to test it out on different body landmarks and see how it works.
+  \end{enumerate}
+\end{enumerate}
+
+\subsection*{Maham - Reflection}
+\begin{enumerate}
+  \item The team was split into two groups: one was responsible for the POC demonstration, and the other was completing the VnV report. All members were in constant communication even though they had other (very) important deadlines to meet. The sub-teams functioned very well, because each team had members who were (somewhat) more comfortable in the area they were responsible for, and others that wanted to expand their skillset. There was a good balance present. In the end, all members delivered work of the highest calibre and I am happy to be a part of such a great team.
+  \item I do not think it was a pain point but I had underestimated the amount of thought and importance that my portion would entail. I think it was challenging balancing the high priority of this deliverable (my part) and my other important (health) engagements as well. However, I used all the time management skills that I have learned and effectively managed to chunk my work into more realizable chunks while ensuring I am taking care of my well-being and delivered some good quality work.
+  \item \textbf{GROUP Q}
+  \item I had previously acquired some knowledge on software testing and have always been fascinated by it. But to really master the application, I had to be very detail oriented. I did a deep dive into the various components of our system. However, I realized that I had to be careful and not make my focus too narrow - because I was developing system tests. I had to look at the overall picture. I did this in 2 ways. Firstly, I researched ‘system testing’ to further increase my knowledge and get a more concrete idea. However, since I had prior knowledge, I found most of the resources online just broke down system testing into different unit tests. I did not want to pursue that because Eman was working on the unit testing component. I spoke to my teammates on the possible overlap between unit and system testing, and was more confident in my (potential) analysis and approach. In the end, I refined my testing knowledge and by designing different test cases for any possible scenario, and making sure the system was approached from various aspects without being too focused on individual modules. 
+\end{enumerate}
+
+\subsection*{Matthew - Reflection}
+\begin{enumerate}
+  \item I think one thing that went well when writing this deliverable was how we divided these two weeks up. We had taken the advice from the professor to begin development on the POC while working on the VnV plan. The team was divided into myself and Vais on the POC while Cieran, Maham and Eman were working on the VnV plan. This allowed us to do brief check-ins with each other while beginning development and thus more time to develop before the POC demo.
+  \item I think some pain points during this deliverable was tied to external workloads. Since half of the deliverable encompassed reading week, this meant that the team had midterms and assignments for other classes due before this deliverable and managing that was more difficult. We resolved this by being transparent with each of our workloads, by letting each other know in our Teams chat if we were going to be busy and when the next time we would be available is. This allowed us to plan the deliverable better and achieve internal deadlines.
+  \item \textbf{GROUP Q}
+  \item I would like to improve my knowledge of stakeholder understanding. I think that with stakeholder understanding it is important as they are the target audience for the application and their needs are to be met even if it differs from our own since they are the target. My approach for that will consist of understanding interviews as well as conversations with the stakeholder during testing. Another approach will be different user groups to see if our initial persona and ideas for the stakeholder would make sense. \\
+  I think the is important since it is easy to develop requirements by making assumptions but to bridge the gap to the target audience is crucial to make a product or service that they would actually use.
+
+\end{enumerate}
+
+\subsection*{Cieran - Reflection}
+\begin{enumerate}
+  \item Team communication as always but I won’t expand further on that. There was a decision to split the team into two subteams; a proof of concept team to begin the implementation and a verification and validation team to tackle this document. I feel the subteams have both been incredibly efficient in their work and the communication between the two has not faltered. The proof of concept team worked well together in overall and in subteam meetings to grasp an understanding of the software packages we will be utilizing while the verification and validation team ensured the entire system was covered within the tests outlined in this document.
+  \item I expanded on it during the last deliverable, that each person had this ‘own version’ of the system in their mind and we were all building towards a different thing when the assignment started. That wasn’t entirely gone here and we hit a few bumps worrying about what each of the others was including within the system while thinking we don’t need that to be included. Through team meetings and a general walkthrough of the flow of the program, we all got on the same page and managed to generate tests and feel as if we’ve properly outlined a system to ensure the system is designed properly.
+  \item \textbf{GROUP Q}
+  \item I feel my personal interaction with test suite development lacks for the requirements of this project. To advance this I will attempt to do the following:
+  \begin{enumerate}
+    \item Follow online guides, walkthroughs, and documentation on the software packages (Python Extension, pytest, pylint, etc) to ensure the software testing suite developed contains both meaningful tests derived from this document while also covering all the software.
+    \item Generate and execute tests in advancing complexity to ensure an understanding of the routines gone through with a testing suite. ‘Getting my hands dirty’.
+  \end{enumerate}
+\end{enumerate}
+
+\subsection*{Group - Reflection}
+\begin{enumerate}
+  \item \textbf{SOLO Q}
+  \item \textbf{SOLO Q}
+  \item See below:
+  \begin{itemize}
+    \item System testing, unit testing: understanding the distinction and the overlap between them
+    \item Database security: What the security vulnerabilities are for databases. Some network testing is also contained in this category. Tools such as Wireshark (network traffic analyzer) and Nmap (which machines are active on the network). Note: Wireshark usage has legal implications. The team will ensure that all testing is properly done. 
+    \item API testing (OpenCV): tool has not been selected yet.
+    \item Negative and edge case testing: using Python scripts.
+    \item How to integrate previously designed requirements into tests (trying to design tests that satisfy multiple requirements).
+    \item Improve knowledge of OpenCV and MediaPipe pose detection for accurate testing of body landmark tracking.
+    \item Understand how to verify angle accuracy and other issues during testing with OpenCV and MediaPipe.
+    \item General knowledge of subject matter (physiotherapy)/stakeholder understanding (This involves an understanding of what should be tested and areas for success).
+    \item Understanding what the movement is, which ones can be assessed and requirements for each exercise warrants.
+  \end{itemize}
+  \item \textbf{SOLO Q} (Based on GROUP Q above.)
 \end{enumerate}
 
 \end{document}

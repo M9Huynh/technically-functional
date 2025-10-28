@@ -1,6 +1,8 @@
 \documentclass[12pt, titlepage]{article}
 
 \usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
 \usepackage{tabularx}
 \usepackage{hyperref}
 \hypersetup{
@@ -62,17 +64,390 @@ Date 2 & 1.1 & Notes\\
 
 \pagenumbering{arabic}
 
-This document ...
+\section{System testing}
+The tests outlined below have been divided into 3 key areas: \\
+\begin{enumerate}
+\item \textbf{User registration suite:} the tests listed here have been designed for the purpose of testing the system's handling of the registration process. 
+\item \textbf{PT specific testing:} These tests have been tailored to test the functionalities available to the physiotherapists. 
+\item \textbf{Patient focused testing:} The results from this will give insight into how well the system accomplishes its intended purpose. 
+\end{enumerate}
+\textbf{Note: Automatic tests will be run using a script. See Appendix for an example template of script.
+The use of ‘display’ indicates both audio and visual formats are provided.}
 
-\section{Functional Requirements Evaluation}
+\subsection{User registration suite} 
+This section contains: user\_acc\_create, invalid\_format\_create, cannot\_verify\_creds, acc\_exists.
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for User Account Creation} \\
+\hline
+\textbf{Test Case ID} & \textbf{user\_acc\_create} \\
+\hline
+\endfirsthead
+
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system must be able to create and store a new account. \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Govt id (name, date of birth), license number (PT) OR invite code (patient), email, password (will be set at the end of the registration process) \\
+\hline
+Output & "Account created successfully" displayed on page and user is successfully added to the user database \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
+
+\textbf{Test Case ID} & \textbf{invalid\_format\_create} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The data input by the user has to be in the correct format for our system to accept it as valid. \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Incorrect format of license number/invite code OR incorrect format of date of birth, email,  password (will be set at the end of the registration process) \\
+\hline
+Output & System displays 'incorrect format of one or more inputs' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
+
+\textbf{Test Case ID} & \textbf{cannot\_verify\_creds} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & Successful verification for both types of users is needed to use the application \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Incorrect license number/mismatch of license number and govt id OR incorrect format of invite code, email, password (will be set at the end of the registration process)  \\
+\hline
+Output & System displays 'License number cannot verified' OR 'invalid invite code' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
+
+\textbf{Test Case ID} & \textbf{acc\_exists} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & New users should not already have an account on the system \\
+\hline
+State & Account already exists on system \\
+\hline
+Input & Govt id (name, date of birth), license number/invite code, email, password \\
+\hline
+Output & 'Account already exists. Wrong password. Try again.' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
+
+\end{longtable}
+
+\subsection{PT focused testing}
+This section contains: PT\_sends\_invite, PT\_adjusts\_exercise, PT\_deletes\_patient\_acc.
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for Physical Therapist (PT) Functions} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{PT\_sends\_invite} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & A patient can only sign up if they have an invite code from the PT. \\
+\hline
+State & Patient does not have an account on the application while PT does. \\
+\hline
+Input & PT adds patient's information and contact method (where the code will be sent). \\
+\hline
+Output & An 'Invite sent' message is displayed on the screen \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix) \\
+\hline
+
+\textbf{Test Case ID} & \textbf{PT\_adjusts\_exercise} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system allows the PT to obtain an overview of patient performance and adjust different parameters accordingly (eg. number of repetitions). \\
+\hline
+State & PT and patient have an account on application, PT has patient on their patient list \\
+\hline
+Input & PT accesses the patient's profile page and adds/modifies exercise \\
+\hline
+Output & Patient exercise criteria is modified. \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
+
+
+\textbf{Test Case ID} & \textbf{PT\_deletes\_patient\_acc} \\
+
+\hline
+Control & Automatic \\
+\hline
+Rationale & This ensures PTs control over patients' accounts. PT can remove patient(s) profiles from the application. \\
+\hline
+State & PT and patient have account on application, PT has the patient on their patient list \\
+\hline
+Input & PT requests a specific patient's account deletion \\
+\hline
+Output & Account deleted from user database and PT patient list. Patient is unable to log in ('Account not found'). \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
+
+
+\end{longtable}
+
+\subsection{Patient focused testing}
+This section contains: system\_exercise\_overview, system\_record\_exercise, system\_performs\_correctly, video\_store, video\_retrieval, post\_ex\_patient\_feedback,
+incorrect\_form\_adjustment \\
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for Exercise System and Additional Functions} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{system\_exercise\_overview} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & In order to record the patient performing the exercise, the system has to be able to provide instructions to the patient on how to perform it. \\
+\hline
+State & Patient is logged into the application and has it open on their device. Patient has selected the exercise they want to perform on their exercise list. \\
+\hline
+Input & Patient clicks on exercise from exercise list. \\
+\hline
+Output & System displays an overview of the steps required for the exercise.\\
+\hline
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix)  \\
+
+\hline
+\textbf{Test Case ID} & \textbf{system\_record\_exercise} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & Patient performance of the exercise has to be successfully recorded to aid system analysis of its correctness. \\
+\hline
+State & Patient is currently logged in and has the application open on their device. Patient has selected the exercise they would like to perform from the exercise list. \\
+\hline
+Input & Patient clicks on the 'record' button \\
+\hline
+Output & Exercise successfully recorded, saved and ready for viewing \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient clicks on the 'exercise list' and selects the exercise they would like to perform
+    \item System directs patient to a screen with a live video stream of themselves
+    \item Patient clicks on the 'record' button
+    \item System records exercise
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{system\_performs\_correctly} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & System has to effectively perform analysis on patient exercise form to provide feedback. \\
+\hline
+State & Patient is recording exercise \\
+\hline
+Input & System receives visual of patient performing exercise \\
+\hline
+Output & System provides feedback to patient (e.g. instructions for the next steps in the exercise) \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient performs exercise correctly
+    \item System monitors and analyzes exercise performance in real-time
+    \item System provides correct feedback
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{video\_store} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system has to be able to store a recorded video of the patient performing the exercises. \\
+\hline
+State & Patient has performed and recorded exercise being performed. \\
+\hline
+Input & Patient clicks on 'Save exercise' button. \emph{Note: The team has not decided whether to store the video locally or on the user database. }\\
+\hline
+Output & Video has been successfully saved and is ready for viewing. \\
+\hline
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
+
+\textbf{Test Case ID} & \textbf{video\_retrieval} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system has to be able to retrieve the most recent recorded video in storage (either locally or database). \\
+\hline
+State & Patient has performed and recorded exercise being performed \\
+\hline
+Input & Patient OR PT clicks on video stored (local or database) for viewing. \emph{Note: The team has not decided whether to store the video locally or on the user database. }\\
+\hline
+Output & Video has been successfully retrieved and is ready for viewing. \\
+\hline
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix) \\
+\hline
+
+
+\textbf{Test Case ID} & \textbf{post\_ex\_patient\_feedback} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system has to be able to store patient feedback of the performed exercise (e.g. the level of (perceived) difficulty of the exercise) \\
+\hline
+State & Patient has performed and recorded exercise being performed and system has successfully performed analysis of the performance \\
+\hline
+Input & Patient input into feedback form (See Appendix \emph{Patient post-exercise feedback form}). \\
+\hline
+Output & Answers are stored successfully \\
+\hline
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix) \\
+\hline
+
+\textbf{Test Case ID} & \textbf{incorrect\_form\_adjustment} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & The system has to be able to differentiate between correct and incorrect forms to provide accurate feedback. \\
+\hline
+State & Patient is performing the selected exercise \\
+\hline
+Input & Incorrect form during exercise performance \\
+\hline
+Output & Adjustment directives displayed to patient \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient performs exercise with incorrect form
+    \item System detects the incorrect posture/movement
+    \item System provides real-time adjustment instructions
+\end{itemize} \\
+\hline
+
+\end{longtable}
+
+\newpage
 
 \section{Nonfunctional Requirements Evaluation}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Non-Functional Requirements Testing} \\
+\hline
+\textbf{Test Case ID} & \textbf{ui\_testing} \\
 
-\subsection{Usability}
-		
-\subsection{Performance}
 
-\subsection{etc.}
+\hline
+Type & Static \\
+\hline
+Rationale & Ensure user interface meets usability standards and stakeholder expectations \\
+\hline
+State & N/A \\
+\hline
+Input & User interface elements and survey responses \\
+\hline
+Output & Modified user interface based on feedback \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item A survey will be given to users (see 'Stakeholders' in SRS for the type of users) to test different interface elements
+    \item See Appendix for survey questions
+    \item Based on the feedback received, the user interface will be modified in order to satisfy additional requirements
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{ex\_int\_speed} \\
+\hline
+Type & Automatic \\
+\hline
+Rationale & Ensure exercise interface loads within acceptable time limits for good user experience \\
+\hline
+State & User is logged in and has application open on their device \\
+\hline
+Input & User clicks on exercise interface \\
+\hline
+Output & Interface loads within 2 seconds \\
+\hline
+How the test will be performed & The test will use external tools (Postman) to measure API latency. In order to replicate real world conditions, 
+an increasing amount of simulated user loads can be used. Statistical analysis will be performed on the collected results to provide a more accurate value. 
+\\
+\hline
+
+\textbf{Test Case ID} & \textbf{fail\_recovery} \\
+\hline
+Type & Dynamic \\
+\hline
+Rationale & The system must be able to restore its pre-failure state 95\% of the time within 5 minutes \\
+\hline
+State & User is currently using the application on their device \\
+\hline
+Input & System failure (simulated) \\
+\hline
+Output & System restarts and recovers within 5 minutes \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item A failure scenario will be simulated
+    \item Recovery time and success rate will be measured
+    \item System's state will be compared to pre-failure state to confirm if properly restored.
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{Interrupted\_vid} \\
+\hline
+Type & Dynamic \\
+\hline
+Rationale & The system must be able to attempt resubmission of video after restoring internet connection \\
+\hline
+State & A video of the user performing the exercise is being uploaded \\
+\hline
+Input & Internet connection interruption during upload \\
+\hline
+Output & Video is successfully re-queued for upload to the system. Re-upload is resumed at the point of failure \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Network is disconnected during video upload
+    \item Connection is restored after interruption
+    \item The system detects interruption and queues video for re-upload
+    \item Confirm upload resumes from point of failure (not restarting)
+    \item Video integrity is confirmed after successful upload
+\end{itemize} \\
+\hline
+
+ & \textbf{PR-RFT 3, PR-RFT 4, PR-CR1, PR-SER 1} \\
+
+Rationale & These requirements address advanced system capabilities beyond current testing scope \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item These requirements are unable to be tested in a timely manner due to project constraints (time, money)
+    \item Testing deferred to future development phases
+    \item Requirements marked for re-evaluation in next project iteration
+\end{itemize} \\
+\hline
+
+\end{longtable}
 	
 \section{Comparison to Existing Implementation}	
 
