@@ -2,6 +2,8 @@
 
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -10,7 +12,8 @@
     linkcolor=red,
     urlcolor=blue
 }
-\usepackage[round]{natbib}
+\usepackage{natbib}
+\usepackage{float}
 
 \input{../Comments}
 \input{../Common}
@@ -28,27 +31,14 @@
 \section*{Revision History}
 
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
-\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\toprule {\bf Name(s)} & {\bf Date} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
+Maham, Cieran and Eman & Oct 27, 2025 & Added initial first draft of the VnV Plan\\
 Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
 
-~\\
-\wss{The intention of the VnV plan is to increase confidence in the software.
-However, this does not mean listing every verification and validation technique
-that has ever been devised.  The VnV plan should also be a \textbf{feasible}
-plan. Execution of the plan should be possible with the time and team available.
-If the full plan cannot be completed during the time available, it can either be
-modified to ``fake it'', or a better solution is to add a section describing
-what work has been completed and what work is still planned for the future.}
 
-\wss{The VnV plan is typically started after the requirements stage, but before
-the design stage.  This means that the sections related to unit testing cannot
-initially be completed.  The sections will be filled in after the design stage
-is complete.  the final version of the VnV plan should have all sections filled
-in.}
 
 \newpage
 
@@ -75,7 +65,7 @@ Refer to Section 4 in the \href{https://github.com/M9Huynh/technically-functiona
 
 \pagenumbering{arabic}
 
-This document aims to outline the verification and validation that the Physiotherapy Companion app will go through during development. The document begins with a breif description as to what the software is, what it is meant to achieve, and some relevant information before explaining in detail the standards and metrics that will be used to evaluate the system.
+This document aims to outline the verification and validation that the Physiotherapy Companion app will go through during development. The document begins with a brief description as to what the software is, what it is meant to achieve, and some relevant information before explaining in detail the standards and metrics that will be used to evaluate the system.
 
 \section{General Information}
 
@@ -122,7 +112,7 @@ The User Instructional Video aims to communicate the method of usage of the syst
 \end{itemize}
 All of the above document are important artifacts for the implementation of the system. These documents outline how the implementation will be approached and what the implementation will  follow.
 
-More documents to come here for external libraries such as OpenCV, pytest, Python Extension, and more when it is determined which libraries and external softwares will be used.
+More documents to come here for external libraries such as OpenCV, pytest, Python Extension, and more when it is determined which libraries and external software will be used.
 
 \section{Plan}
 
@@ -173,125 +163,391 @@ During development, pylint will ensure the coding standard is adhered to and con
 
 For software validation, to ensure the correct system was designed to solve the problems outlined within the problem statement document, there will be system walkthroughs and interviews with stakeholders and the project advisor. These interviews will assess time to use the systems functions, understanding of the system and how it processes data, as well as a general acceptance of the system. The interview will end with questions outlined in the appendix of this document. (Section 6.2)
 
-\section{System Tests}
-
-\wss{There should be text between all headings, even if it is just a roadmap of
-the contents of the subsections.}
-
-\subsection{Tests for Functional Requirements}
-
-\wss{Subsets of the tests may be in related, so this section is divided into
-  different areas.  If there are no identifiable subsets for the tests, this
-  level of document structure can be removed.}
-
-\wss{Include a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.}
-
-\subsubsection{Area of Testing1}
-
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
-		
-\paragraph{Title for Test}
-
+\section{System testing}
+The tests outlined below have been divided into 3 key areas: \\
 \begin{enumerate}
-
-\item{test-id1\\}
-
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs.  Output is not how you
-are going to return the results of the test.  The output is the expected
-result.}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-					
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-
+\item \textbf{User registration suite:} the tests listed here have been designed for the purpose of testing the system's handling of the registration process. 
+\item \textbf{PT specific testing:} These tests have been tailored to test the functionalities available to the physiotherapists. 
+\item \textbf{Patient focused testing:} The results from this will give insight into how well the system accomplishes its intended purpose. 
 \end{enumerate}
+\textbf{Note: Automatic tests will be run using a script. See Appendix for an example template of script.
+The use of ‘display’ indicates both audio and visual formats are provided.}
 
-\subsubsection{Area of Testing2}
+\subsection{User registration suite} 
+This section contains: user\_acc\_create, invalid\_format\_create, cannot\_verify\_creds, acc\_exists.
 
-...
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for User Account Creation} \\
+\hline
+\textbf{Test Case ID} & \textbf{user\_acc\_create} \\
+\hline
+\endfirsthead
 
-\subsection{Tests for Nonfunctional Requirements}
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system must be able to create and store a new account. \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Govt id (name, date of birth), license number (PT) OR invite code (patient), email, password (will be set at the end of the registration process) \\
+\hline
+Output & "Account created successfully" displayed on page and user is successfully added to the user database \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
 
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy.}
+\textbf{Test Case ID} & \textbf{invalid\_format\_create} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The data input by the user has to be in the correct format for our system to accept it as valid. \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Incorrect format of license number/invite code OR incorrect format of date of birth, email,  password (will be set at the end of the registration process) \\
+\hline
+Output & System displays 'incorrect format of one or more inputs' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
 
-\wss{For some nonfunctional tests, you won't be setting a target threshold for
-passing the test, but rather describing the experiment you will do to measure
-the quality for different inputs.  For instance, you could measure speed versus
-the problem size.  The output of the test isn't pass/fail, but rather a summary
-table or graph.}
+\textbf{Test Case ID} & \textbf{cannot\_verify\_creds} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & Successful verification for both types of users is needed to use the application \\
+\hline
+State & User does not have an account on the application. \\
+\hline
+Input & Incorrect license number/mismatch of license number and govt id OR incorrect format of invite code, email, password (will be set at the end of the registration process)  \\
+\hline
+Output & System displays 'License number cannot verified' OR 'invalid invite code' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
 
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
+\textbf{Test Case ID} & \textbf{acc\_exists} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & New users should not already have an account on the system \\
+\hline
+State & Account already exists on system \\
+\hline
+Input & Govt id (name, date of birth), license number/invite code, email, password \\
+\hline
+Output & 'Account already exists. Wrong password. Try again.' \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
 
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
+\end{longtable}
 
-\wss{If you introduce static tests in your plan, you need to provide details.
-How will they be done?  In cases like code (or document) walkthroughs, who will
-be involved? Be specific.}
+\subsection{PT focused testing}
+This section contains: PT\_sends\_invite, PT\_adjusts\_exercise, PT\_deletes\_patient\_acc.
 
-\subsubsection{Area of Testing1}
-		
-\paragraph{Title for Test}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for Physical Therapist (PT) Functions} \\
+\hline
 
-\begin{enumerate}
+\textbf{Test Case ID} & \textbf{PT\_sends\_invite} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & A patient can only sign up if they have an invite code from the PT. \\
+\hline
+State & Patient does not have an account on the application while PT does. \\
+\hline
+Input & PT adds patient's information and contact method (where the code will be sent). \\
+\hline
+Output & An 'Invite sent' message is displayed on the screen \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix) \\
+\hline
 
-\item{test-id1\\}
+\textbf{Test Case ID} & \textbf{PT\_adjusts\_exercise} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system allows the PT to obtain an overview of patient performance and adjust different parameters accordingly (eg. number of repetitions). \\
+\hline
+State & PT and patient have an account on application, PT has patient on their patient list \\
+\hline
+Input & PT accesses the patient's profile page and adds/modifies exercise \\
+\hline
+Output & Patient exercise criteria is modified. \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
+\textbf{Test Case ID} & \textbf{PT\_deletes\_patient\_acc} \\
 
-\end{enumerate}
+\hline
+Control & Automatic \\
+\hline
+Rationale & This ensures PTs control over patients' accounts. PT can remove patient(s) profiles from the application. \\
+\hline
+State & PT and patient have account on application, PT has the patient on their patient list \\
+\hline
+Input & PT requests a specific patient's account deletion \\
+\hline
+Output & Account deleted from user database and PT patient list. Patient is unable to log in ('Account not found'). \\
+\hline
+How the test will be performed & 
+The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
 
-\subsubsection{Area of Testing2}
 
-...
+\end{longtable}
+
+\subsection{Patient focused testing}
+This section contains: system\_exercise\_overview, system\_record\_exercise, system\_performs\_correctly, video\_store, video\_retrieval, post\_ex\_patient\_feedback,
+incorrect\_form\_adjustment \\
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Software Test Cases for Exercise System and Additional Functions} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{system\_exercise\_overview} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & In order to record the patient performing the exercise, the system has to be able to provide instructions to the patient on how to perform it. \\
+\hline
+State & Patient is logged into the application and has it open on their device. Patient has selected the exercise they want to perform on their exercise list. \\
+\hline
+Input & Patient clicks on exercise from exercise list. \\
+\hline
+Output & System displays an overview of the steps required for the exercise.\\
+\hline
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix)  \\
+
+\hline
+\textbf{Test Case ID} & \textbf{system\_record\_exercise} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & Patient performance of the exercise has to be successfully recorded to aid system analysis of its correctness. \\
+\hline
+State & Patient is currently logged in and has the application open on their device. Patient has selected the exercise they would like to perform from the exercise list. \\
+\hline
+Input & Patient clicks on the 'record' button \\
+\hline
+Output & Exercise successfully recorded, saved and ready for viewing \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient clicks on the 'exercise list' and selects the exercise they would like to perform
+    \item System directs patient to a screen with a live video stream of themselves
+    \item Patient clicks on the 'record' button
+    \item System records exercise
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{system\_performs\_correctly} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & System has to effectively perform analysis on patient exercise form to provide feedback. \\
+\hline
+State & Patient is recording exercise \\
+\hline
+Input & System receives visual of patient performing exercise \\
+\hline
+Output & System provides feedback to patient (e.g. instructions for the next steps in the exercise) \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient performs exercise correctly
+    \item System monitors and analyzes exercise performance in real-time
+    \item System provides correct feedback
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{video\_store} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system has to be able to store a recorded video of the patient performing the exercises. \\
+\hline
+State & Patient has performed and recorded exercise being performed. \\
+\hline
+Input & Patient clicks on 'Save exercise' button. \emph{Note: The team has not decided whether to store the video locally or on the user database. }\\
+\hline
+Output & Video has been successfully saved and is ready for viewing. \\
+\hline
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix)  \\
+\hline
+
+\textbf{Test Case ID} & \textbf{video\_retrieval} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system has to be able to retrieve the most recent recorded video in storage (either locally or database). \\
+\hline
+State & Patient has performed and recorded exercise being performed \\
+\hline
+Input & Patient OR PT clicks on video stored (local or database) for viewing. \emph{Note: The team has not decided whether to store the video locally or on the user database. }\\
+\hline
+Output & Video has been successfully retrieved and is ready for viewing. \\
+\hline
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix) \\
+\hline
+
+
+\textbf{Test Case ID} & \textbf{post\_ex\_patient\_feedback} \\
+\hline
+Control & Automatic \\
+\hline
+Rationale & The system has to be able to store patient feedback of the performed exercise (e.g. the level of (perceived) difficulty of the exercise) \\
+\hline
+State & Patient has performed and recorded exercise being performed and system has successfully performed analysis of the performance \\
+\hline
+Input & Patient input into feedback form (See Appendix \emph{Patient post-exercise feedback form}). \\
+\hline
+Output & Answers are stored successfully \\
+\hline
+How the test will be performed & The test will be conducted with the use of a script (see template in Appendix) \\
+\hline
+
+\textbf{Test Case ID} & \textbf{incorrect\_form\_adjustment} \\
+\hline
+Control & Manual \\
+\hline
+Rationale & The system has to be able to differentiate between correct and incorrect forms to provide accurate feedback. \\
+\hline
+State & Patient is performing the selected exercise \\
+\hline
+Input & Incorrect form during exercise performance \\
+\hline
+Output & Adjustment directives displayed to patient \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Patient performs exercise with incorrect form
+    \item System detects the incorrect posture/movement
+    \item System provides real-time adjustment instructions
+\end{itemize} \\
+\hline
+
+\end{longtable}
+
+\newpage
+
+\section{Nonfunctional Requirements Evaluation}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
+\caption{Non-Functional Requirements Testing} \\
+\hline
+\textbf{Test Case ID} & \textbf{ui\_testing} \\
+
+
+\hline
+Type & Static \\
+\hline
+Rationale & Ensure user interface meets usability standards and stakeholder expectations \\
+\hline
+State & N/A \\
+\hline
+Input & User interface elements and survey responses \\
+\hline
+Output & Modified user interface based on feedback \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item A survey will be given to users (see 'Stakeholders' in SRS for the type of users) to test different interface elements
+    \item See Appendix for survey questions
+    \item Based on the feedback received, the user interface will be modified in order to satisfy additional requirements
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{ex\_int\_speed} \\
+\hline
+Type & Automatic \\
+\hline
+Rationale & Ensure exercise interface loads within acceptable time limits for good user experience \\
+\hline
+State & User is logged in and has application open on their device \\
+\hline
+Input & User clicks on exercise interface \\
+\hline
+Output & Interface loads within 2 seconds \\
+\hline
+How the test will be performed & The test will use external tools (Postman) to measure API latency. In order to replicate real world conditions, 
+an increasing amount of simulated user loads can be used. Statistical analysis will be performed on the collected results to provide a more accurate value. 
+\\
+\hline
+
+\textbf{Test Case ID} & \textbf{fail\_recovery} \\
+\hline
+Type & Dynamic \\
+\hline
+Rationale & The system must be able to restore its pre-failure state 95\% of the time within 5 minutes \\
+\hline
+State & User is currently using the application on their device \\
+\hline
+Input & System failure (simulated) \\
+\hline
+Output & System restarts and recovers within 5 minutes \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item A failure scenario will be simulated
+    \item Recovery time and success rate will be measured
+    \item System's state will be compared to pre-failure state to confirm if properly restored.
+\end{itemize} \\
+\hline
+
+\textbf{Test Case ID} & \textbf{Interrupted\_vid} \\
+\hline
+Type & Dynamic \\
+\hline
+Rationale & The system must be able to attempt resubmission of video after restoring internet connection \\
+\hline
+State & A video of the user performing the exercise is being uploaded \\
+\hline
+Input & Internet connection interruption during upload \\
+\hline
+Output & Video is successfully re-queued for upload to the system. Re-upload is resumed at the point of failure \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item Network is disconnected during video upload
+    \item Connection is restored after interruption
+    \item The system detects interruption and queues video for re-upload
+    \item Confirm upload resumes from point of failure (not restarting)
+    \item Video integrity is confirmed after successful upload
+\end{itemize} \\
+\hline
+
+ & \textbf{PR-RFT 3, PR-RFT 4, PR-CR1, PR-SER 1} \\
+
+Rationale & These requirements address advanced system capabilities beyond current testing scope \\
+\hline
+How the test will be performed & 
+\begin{itemize}
+    \setlength\itemsep{0em}
+    \item These requirements are unable to be tested in a timely manner due to project constraints (time, money)
+    \item Testing deferred to future development phases
+    \item Requirements marked for re-evaluation in next project iteration
+\end{itemize} \\
+\hline
+
+\end{longtable}
+	
 
 \subsection{Traceability Between Test Cases and Requirements}
 
@@ -299,7 +555,7 @@ Please refer to the following Microsoft Excel file: \href{https://mcmasteru365-m
 
 \section{Unit Test Description}
 
-\section{Unit Tests}
+\subsection{Unit Tests}
 
 This section outlines the unit testing approach, scope, and representative test cases for each module. Detailed input/output data and executable tests are maintained in the project’s testing repository.
 
@@ -579,7 +835,7 @@ This matrix demonstrates coverage of all functional and nonfunctional requiremen
 
 Additional project information to expand on the previous sections. Mostly example or sample information at this time.
 
-\subsection{Symbolic Parameters}
+\subsection{Example script}
 
 \noindent Example script layout for system testing: \\
 /* \\
@@ -606,7 +862,7 @@ Interrupted\_vid \\
 \*/
 
 
-\subsection{Usability Survey Questions?}
+\subsection{Usability Survey Questions}
 
 \noindent \textbf{Advisor SRS Questions}:
 \begin{enumerate}
@@ -708,10 +964,12 @@ Could have a final open-ended question based on user pain points with the system
     \item Should your physiotherapist change the difficulty of your plan? (1 - no change, 5 - Large increase in difficulty)
   \end{enumerate}
 \end{enumerate}
+ 
+\newpage{}
+\bibliographystyle {plainnat}
+\bibliography{../../refs/References}   
 \newpage{}
 \section*{Appendix --- Reflection}
-
-\wss{This section is not required for CAS 741}
 
 The information in this section will be used to evaluate the team members on the
 graduate attribute of Lifelong Learning.
@@ -770,28 +1028,18 @@ graduate attribute of Lifelong Learning.
   \item \textbf{GROUP Q}
   \item I feel my personal interaction with test suite development lacks for the requirements of this project. To advance this I will attempt to do the following:
   \begin{enumerate}
-    \item Follow online guides, walkthroughs, and documentation on the software packages (Python Extension, pytest, pylint, etc) to ensure the software testing suite developed contains both meaningful tests derived from this document while also covering all the software.
+    \item Follow online guides, walkthroughs, and documentation on the software packages (Python Extension, pytest, pylint, etc.) to ensure the software testing suite developed contains both meaningful tests derived from this document while also covering all the software.
     \item Generate and execute tests in advancing complexity to ensure an understanding of the routines gone through with a testing suite. ‘Getting my hands dirty’.
   \end{enumerate}
 \end{enumerate}
 
-\subsection*{Group - Reflection}
-\begin{enumerate}
-  \item \textbf{SOLO Q}
-  \item \textbf{SOLO Q}
-  \item See below:
-  \begin{itemize}
-    \item System testing, unit testing: understanding the distinction and the overlap between them
-    \item Database security: What the security vulnerabilities are for databases. Some network testing is also contained in this category. Tools such as Wireshark (network traffic analyzer) and Nmap (which machines are active on the network). Note: Wireshark usage has legal implications. The team will ensure that all testing is properly done. 
-    \item API testing (OpenCV): tool has not been selected yet.
-    \item Negative and edge case testing: using Python scripts.
-    \item How to integrate previously designed requirements into tests (trying to design tests that satisfy multiple requirements).
-    \item Improve knowledge of OpenCV and MediaPipe pose detection for accurate testing of body landmark tracking.
-    \item Understand how to verify angle accuracy and other issues during testing with OpenCV and MediaPipe.
-    \item General knowledge of subject matter (physiotherapy)/stakeholder understanding (This involves an understanding of what should be tested and areas for success).
-    \item Understanding what the movement is, which ones can be assessed and requirements for each exercise warrants.
-  \end{itemize}
-  \item \textbf{SOLO Q} (Based on GROUP Q above.)
-\end{enumerate}
+\subsection*{Eman - Reflection}
+    \begin{enumerate}
+      \item The team worked together effectively by dividing into two focused groups, one for the POC demonstration and another for the VnV plan. Communication was strong throughout, and everyone contributed their strengths while helping others learn. The collaboration created a good balance where team members could build on their existing skills while developing new ones.
+      \item My main challenge was ensuring complete test coverage across all system modules. I initially underestimated how much detail was needed to properly test each component in isolation. Identifying all the edge cases and understanding how to structure effective unit tests took more effort than expected. I resolved this by creating a systematic checklist that mapped each module to its requirements, then worked through them methodically. Collaborating with teammates to review my test cases also helped catch gaps I had missed.
+      \item \textbf{GROUP Q}
+      \item I focused on mastering unit testing and test coverage. My first approach was working through practical examples to understand fixtures, mocking, and test isolation. My second approach was carefully reviewing our system requirements and architecture to understand what each module should do. I chose this combination because I needed both the technical testing skills and domain knowledge about our system. Understanding the requirements helped me design tests that actually validated meaningful functionality rather than just checking basic operations. This dual approach allowed me to create comprehensive unit tests covering all eleven modules in our system.
+    \end{enumerate}
+
 
 \end{document}
