@@ -12,7 +12,8 @@
     linkcolor=red,
     urlcolor=blue
 }
-\usepackage[round]{natbib}
+\usepackage{natbib}
+\usepackage{float}
 
 \input{../Comments}
 \input{../Common}
@@ -30,27 +31,14 @@
 \section*{Revision History}
 
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
-\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\toprule {\bf Name(s)} & {\bf Date} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
+Maham, Cieran and Eman & Oct 27, 2025 & Added initial first draft of the VnV Plan\\
 Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
 
-~\\
-\wss{The intention of the VnV plan is to increase confidence in the software.
-However, this does not mean listing every verification and validation technique
-that has ever been devised.  The VnV plan should also be a \textbf{feasible}
-plan. Execution of the plan should be possible with the time and team available.
-If the full plan cannot be completed during the time available, it can either be
-modified to ``fake it'', or a better solution is to add a section describing
-what work has been completed and what work is still planned for the future.}
 
-\wss{The VnV plan is typically started after the requirements stage, but before
-the design stage.  This means that the sections related to unit testing cannot
-initially be completed.  The sections will be filled in after the design stage
-is complete.  the final version of the VnV plan should have all sections filled
-in.}
 
 \newpage
 
@@ -77,7 +65,7 @@ Refer to Section 4 in the \href{https://github.com/M9Huynh/technically-functiona
 
 \pagenumbering{arabic}
 
-This document aims to outline the verification and validation that the Physiotherapy Companion app will go through during development. The document begins with a breif description as to what the software is, what it is meant to achieve, and some relevant information before explaining in detail the standards and metrics that will be used to evaluate the system.
+This document aims to outline the verification and validation that the Physiotherapy Companion app will go through during development. The document begins with a brief description as to what the software is, what it is meant to achieve, and some relevant information before explaining in detail the standards and metrics that will be used to evaluate the system.
 
 \section{General Information}
 
@@ -124,7 +112,7 @@ The User Instructional Video aims to communicate the method of usage of the syst
 \end{itemize}
 All of the above document are important artifacts for the implementation of the system. These documents outline how the implementation will be approached and what the implementation will  follow.
 
-More documents to come here for external libraries such as OpenCV, pytest, Python Extension, and more when it is determined which libraries and external softwares will be used.
+More documents to come here for external libraries such as OpenCV, pytest, Python Extension, and more when it is determined which libraries and external software will be used.
 
 \section{Plan}
 
@@ -567,7 +555,7 @@ Please refer to the following Microsoft Excel file: \href{https://mcmasteru365-m
 
 \section{Unit Test Description}
 
-\section{Unit Tests}
+\subsection{Unit Tests}
 
 This section outlines the unit testing approach, scope, and representative test cases for each module. Detailed input/output data and executable tests are maintained in the project’s testing repository.
 
@@ -847,7 +835,7 @@ This matrix demonstrates coverage of all functional and nonfunctional requiremen
 
 Additional project information to expand on the previous sections. Mostly example or sample information at this time.
 
-\subsection{Symbolic Parameters}
+\subsection{Example script}
 
 \noindent Example script layout for system testing: \\
 /* \\
@@ -874,7 +862,7 @@ Interrupted\_vid \\
 \*/
 
 
-\subsection{Usability Survey Questions?}
+\subsection{Usability Survey Questions}
 
 \noindent \textbf{Advisor SRS Questions}:
 \begin{enumerate}
@@ -976,10 +964,12 @@ Could have a final open-ended question based on user pain points with the system
     \item Should your physiotherapist change the difficulty of your plan? (1 - no change, 5 - Large increase in difficulty)
   \end{enumerate}
 \end{enumerate}
+ 
+\newpage{}
+\bibliographystyle {plainnat}
+\bibliography{../../refs/References}   
 \newpage{}
 \section*{Appendix --- Reflection}
-
-\wss{This section is not required for CAS 741}
 
 The information in this section will be used to evaluate the team members on the
 graduate attribute of Lifelong Learning.
@@ -1038,28 +1028,18 @@ graduate attribute of Lifelong Learning.
   \item \textbf{GROUP Q}
   \item I feel my personal interaction with test suite development lacks for the requirements of this project. To advance this I will attempt to do the following:
   \begin{enumerate}
-    \item Follow online guides, walkthroughs, and documentation on the software packages (Python Extension, pytest, pylint, etc) to ensure the software testing suite developed contains both meaningful tests derived from this document while also covering all the software.
+    \item Follow online guides, walkthroughs, and documentation on the software packages (Python Extension, pytest, pylint, etc.) to ensure the software testing suite developed contains both meaningful tests derived from this document while also covering all the software.
     \item Generate and execute tests in advancing complexity to ensure an understanding of the routines gone through with a testing suite. ‘Getting my hands dirty’.
   \end{enumerate}
 \end{enumerate}
 
-\subsection*{Group - Reflection}
-\begin{enumerate}
-  \item \textbf{SOLO Q}
-  \item \textbf{SOLO Q}
-  \item See below:
-  \begin{itemize}
-    \item System testing, unit testing: understanding the distinction and the overlap between them
-    \item Database security: What the security vulnerabilities are for databases. Some network testing is also contained in this category. Tools such as Wireshark (network traffic analyzer) and Nmap (which machines are active on the network). Note: Wireshark usage has legal implications. The team will ensure that all testing is properly done. 
-    \item API testing (OpenCV): tool has not been selected yet.
-    \item Negative and edge case testing: using Python scripts.
-    \item How to integrate previously designed requirements into tests (trying to design tests that satisfy multiple requirements).
-    \item Improve knowledge of OpenCV and MediaPipe pose detection for accurate testing of body landmark tracking.
-    \item Understand how to verify angle accuracy and other issues during testing with OpenCV and MediaPipe.
-    \item General knowledge of subject matter (physiotherapy)/stakeholder understanding (This involves an understanding of what should be tested and areas for success).
-    \item Understanding what the movement is, which ones can be assessed and requirements for each exercise warrants.
-  \end{itemize}
-  \item \textbf{SOLO Q} (Based on GROUP Q above.)
-\end{enumerate}
+\subsection*{Eman - Reflection}
+    \begin{enumerate}
+      \item The team worked together effectively by dividing into two focused groups, one for the POC demonstration and another for the VnV plan. Communication was strong throughout, and everyone contributed their strengths while helping others learn. The collaboration created a good balance where team members could build on their existing skills while developing new ones.
+      \item My main challenge was ensuring complete test coverage across all system modules. I initially underestimated how much detail was needed to properly test each component in isolation. Identifying all the edge cases and understanding how to structure effective unit tests took more effort than expected. I resolved this by creating a systematic checklist that mapped each module to its requirements, then worked through them methodically. Collaborating with teammates to review my test cases also helped catch gaps I had missed.
+      \item \textbf{GROUP Q}
+      \item I focused on mastering unit testing and test coverage. My first approach was working through practical examples to understand fixtures, mocking, and test isolation. My second approach was carefully reviewing our system requirements and architecture to understand what each module should do. I chose this combination because I needed both the technical testing skills and domain knowledge about our system. Understanding the requirements helped me design tests that actually validated meaningful functionality rather than just checking basic operations. This dual approach allowed me to create comprehensive unit tests covering all eleven modules in our system.
+    \end{enumerate}
+
 
 \end{document}
