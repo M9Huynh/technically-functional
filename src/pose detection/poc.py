@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 import csv
 from collections import deque
-import time
+import time 
  
 #Config setup
 CAM_INDEX = 0
@@ -29,7 +29,7 @@ mp_pose = mp.solutions.pose
 mp_draw = mp.solutions.drawing_utils
  
 def angle_deg(a, b, c):
-    """Angle ∠ABC in degrees given points a,b,c as (x,y)."""
+   #Angle ∠ABC in degrees given points a,b,c as (x,y)
     a, b, c = np.array(a), np.array(b), np.array(c)
     ba, bc = a - b, c - b 
     nba, nbc = np.linalg.norm(ba), np.linalg.norm(bc)
@@ -40,7 +40,7 @@ def angle_deg(a, b, c):
     return float(np.degrees(np.arccos(cosang)))
  
 def collect_average_angle(pose, cap, duration_sec=1.0):
-    """Collect knee angle over duration and return average (blocking)."""
+    #Collect knee angle over duration and return average 
     samples = []
     end_t = time.time() + duration_sec
     while time.time() < end_t:
@@ -63,7 +63,6 @@ def collect_average_angle(pose, cap, duration_sec=1.0):
     return float(np.mean(samples)) if samples else 0.0
  
 def main():
-    # macOS-friendly backend
     cap = cv2.VideoCapture(CAM_INDEX, cv2.CAP_AVFOUNDATION) #change this to not error on windows
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
@@ -118,7 +117,7 @@ def main():
                 smooth_ang = float(np.mean(angle_buf))
                 angle_display = f"{smooth_ang:.0f}°"
  
-                # Update state with hysteresis thresholds
+                # Update state with thresholds
                 if state == "flexed" and smooth_ang >= thresh_extend:
                     state = "extended"
                 elif state == "extended" and smooth_ang <= thresh_flex:
