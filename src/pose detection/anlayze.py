@@ -15,10 +15,10 @@ class Analyzer:
             self.min_angle = angle
             self.max_angle = angle
             self.started = True
-
+        #update min angle when knee bends more
         if angle < self.min_angle:
             self.min_angle = angle        
-            
+        #update max angle when knee extends more
         if angle > self.max_angle:
             self.max_angle = angle
 
