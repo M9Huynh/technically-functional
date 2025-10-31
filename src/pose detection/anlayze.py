@@ -23,7 +23,7 @@ class Analyzer:
             self.max_angle = angle
 
         #calculate the range of motion
-        def calc_rom(self -> float):
+        def calc_rom(self) -> float:
             return self.max_angle - self.min_angle
         
         def summary(self) -> dict:
