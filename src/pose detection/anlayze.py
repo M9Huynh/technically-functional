@@ -17,7 +17,10 @@ class Analyzer:
             self.started = True
 
         if angle < self.min_angle:
-            self.min_angle = angle
+            self.min_angle = angle        
+            
+        if angle > self.max_angle:
+            self.max_angle = angle
 
 
 
