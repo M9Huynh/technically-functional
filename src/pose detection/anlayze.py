@@ -10,11 +10,12 @@ class Analyzer:
         self.max_angle = 0.0
 
     def update(self, angle:float):
+        #Track the first detected angle to initialize the angle variable
         if not self.started:
             self.min_angle = angle
             self.max_angle = angle
             self.started = True
-            
+
 
 
 
