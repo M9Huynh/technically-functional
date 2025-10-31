@@ -9,6 +9,13 @@ class Analyzer:
         self.min_angle = 0.0
         self.max_angle = 0.0
 
+    def update(self, angle:float):
+        if not self.started:
+            self.min_angle = angle
+            self.max_angle = angle
+            self.started = True
+            
+
 
 
 
