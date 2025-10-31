@@ -25,6 +25,13 @@ class Analyzer:
         #calculate the range of motion
         def calc_rom(self -> float):
             return self.max_angle - self.min_angle
+        
+        def summary(self) -> dict:
+            return {
+                "min_degree": round(self.min_angle, 1),
+                "max_degree": round(self.max_angle, 1),
+                "rom_degree": round(self.calc_rom, 1),
+            }
 
 
 
