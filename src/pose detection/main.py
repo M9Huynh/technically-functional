@@ -47,7 +47,7 @@ class PoseApp:
                 if ret:
                     res = cam.process_pose(frame)
                     frame_landmarks = cam.draw_landmarks(res, frame)
-                    knee_angle = knee_angle_from_result(res, side = self.side)
+                    knee_angle = knee_angle_from_result(res, side= self.side)
                     if knee_angle is not None:
                         self.analyzer.update(knee_angle)
                         
@@ -60,7 +60,8 @@ class PoseApp:
                             (20,75), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
                     
                     cv.imshow(view, frame_landmarks)
-            
+            if cv.waitKey(1) == ord('q'):
+                break
 
     def quit(self):
         for view, cam in self.cams.items():
