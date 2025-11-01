@@ -5,7 +5,7 @@ import os
 from draw import PoseCamera
 from analyze import Analyzer
 
-os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "1"
+os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 
 def _angle_deg(a, b, c):
     if a is None or b is None or c is None:
