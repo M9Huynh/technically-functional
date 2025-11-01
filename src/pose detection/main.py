@@ -26,6 +26,13 @@ class PoseApp:
                     if knee_angle is not None:
                         self.analyzer.update(knee_angle)
                         stats = self.analyzer.summary()
+
+                        cv.putText(frame_landmarks,
+                            f"Angle: {knee_angle:.1f} deg",
+                            (20,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+                        cv.putText(frame_landmarks,
+                            f"ROM: {stats['rom_degree']:.1f}  Min: {stats['min_degree']:.1f}  Max: {stats['max_degree']:.1f}",
+                            (20,75), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
                     
                     cv.imshow(view, frame_landmarks)
             if cv.waitKey(1) == ord('q'):
