@@ -2,9 +2,9 @@ import cv2 as cv
 import mediapipe as mp
 import os
 from draw import PoseCamera
-from analyze import Analyzer
+from anlayze import Analyzer
 
-os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
+os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "1"
 
 class PoseApp:
     def __init__(self):
