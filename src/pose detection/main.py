@@ -2,7 +2,7 @@ import cv2 as cv
 import mediapipe as mp
 import os
 from draw import PoseCamera
-from anlayze import Analyzer
+from anlalyze import Analyzer
 
 os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "1"
 
