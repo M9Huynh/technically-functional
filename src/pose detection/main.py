@@ -41,7 +41,7 @@ class PoseApp:
 
     def run(self):
         while True: 
-            for in self.cams.items():
+            for view, cam in self.cams.items():
                 ret, frame = cam.get_frame()
                 if ret:
                     res = cam.process_pose(frame)
