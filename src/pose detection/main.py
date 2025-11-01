@@ -2,6 +2,8 @@ import cv2 as cv
 import mediapipe as mp
 import os
 from draw import PoseCamera
+from analyze import Analyzer
+
 os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 
 class PoseApp:
@@ -11,6 +13,7 @@ class PoseApp:
             'Sagittal Plane':PoseCamera(0,pose_detect=self.pose_detect)
             # ,'Frontal Plane': PoseCamera(1, pose_detect=self.pose_detect)
         }
+        self.analyzer = Analyzer()
 
     def run(self):
         while True: 
