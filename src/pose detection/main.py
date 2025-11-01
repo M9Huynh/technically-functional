@@ -22,6 +22,11 @@ class PoseApp:
                 if ret:
                     res = cam.process_pose(frame)
                     frame_landmarks = cam.draw_landmarks(res, frame)
+                    knee_angle = cam.knee_angle if hasattr(cam, "knee_angle") else None
+                    if knee_angle is not None:
+                        self.analyzer.update(knee_angle)
+                        stats = self.analyzer.summary()
+                    
                     cv.imshow(view, frame_landmarks)
             if cv.waitKey(1) == ord('q'):
                 break
