@@ -5,7 +5,7 @@ import os
 from draw import PoseCamera
 from analyze import Analyzer
 
-os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
+os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0" #needs to be 1 to work on mac
 
 def _angle_deg(a, b, c):
     if a is None or b is None or c is None:
@@ -30,6 +30,7 @@ def knee_angle_from_result(res, side="RIGHT"):
     knee  = (lm[knee_i].x,  lm[knee_i].y)
     ankle = (lm[ankle_i].x, lm[ankle_i].y)
     return _angle_deg(hip, knee, ankle)
+
 class PoseApp:
     def __init__(self):
         self.side = "RIGHT"
