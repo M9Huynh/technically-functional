@@ -32,6 +32,7 @@ class Analyzer:
             "max_degree": round(self.max_angle, 1),
             "rom_degree": round(self.calc_rom(), 1),
         }
+    
 
 
 
