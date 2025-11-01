@@ -49,8 +49,8 @@ class PoseApp:
                     knee_angle = knee_angle_from_result(res, side="RIGHT")
                     if knee_angle is not None:
                         self.analyzer.update(knee_angle)
+                        
                         stats = self.analyzer.summary()
-
                         cv.putText(frame_landmarks,
                             f"Angle: {knee_angle:.1f} deg",
                             (20,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
