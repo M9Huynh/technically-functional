@@ -30,8 +30,9 @@ class Analyzer:
         return {
             "min_degree": round(self.min_angle, 1),
             "max_degree": round(self.max_angle, 1),
-            "rom_degree": round(self.calc_rom, 1),
+            "rom_degree": round(self.calc_rom(), 1),
         }
+    
 
 
 
