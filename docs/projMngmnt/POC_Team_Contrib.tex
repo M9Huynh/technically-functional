@@ -18,8 +18,7 @@
 
 \maketitle
 
-This document summarizes the contributions of each team member up to the POC
-Demo.  The time period of interest is the time between the beginning of the term
+\noindent This document summarizes the contributions of each team member up to the POC Demo. The time period of interest is the time between the beginning of the term
 and the POC demo.
 
 \section{Demo Plans}
@@ -28,13 +27,13 @@ For the POC demo we plan to showcase the two major risks of our project which we
 
 \noindent A few major risks in our proof of concept demonstration are:
 \begin{itemize}
-  \item Risks associated with measuring a 3D motion with a 2D view/plane. Currently the scope of the project includes patients with exercises to the knee joint due to complexities with joints that are omni-directional (i.e. shoulder, ankle, etc.).
+  \item Risks associated with measuring a 3D motion using a 2D view/plane. Currently the scope of the project includes patients performing an exercise of the knee as other joints add complexity with their degrees of freedom (i.e. shoulder, ankle, etc.).
   \begin{itemize}
-    \item To address this, the team will test how a single camera view is sufficient for recording the movement. This will be tested primarily on the sagittal view and compared with adding frontal and transverse views. The accuracy of video analysis will be measured by obtaining the results from each view and comparing the difference in guided prompts and verifying if they can adhere to the requirements of the exercise (i.e. does a single view yield false positives? Does having two views change the accuracy achieved?).
+    \item To address this, the team will test whether a  single camera view is sufficient for recording the movement. This will be tested primarily on the sagittal view and compared with adding frontal and transverse views. The accuracy of video analysis will be measured by comparing the difference in guided prompts and verifying if they can adhere to the requirements of the exercise (i.e. does a single view yield false positives? Does having two views change the accuracy achieved?).
   \end{itemize}  
-  \item The second is being able to measure metrics related to stretching and past history. This was identified as a key risk since range of motion is a key metric in physiotherapy and measuring it over time is a good indicator of exercise efficacy. Furthermore, while talking with the advisor for the project it was apparent that patients are not “pushing themselves” mobilizing their knee as much due to the post-operative condition.
+  \item The second is being able to measure metrics related to stretching and past history. This was identified as a key risk since range of motion is a key metric in physiotherapy and measuring it over time is a good indicator of exercise efficacy. Furthermore, while talking with our supervisor, it was apparent that patients may not “push themselves” due to the perceived fragility of their post-operative condition.
   \begin{itemize}
-    \item This can be measured by testing the system to see if it can recognize any marginal increase within the exercise (i.e. incremental changes in the angle of knee flexion). This can help indicate the limitations of ranges of motion and measure exercise duration.
+    \item The system tracks a patient's rehabilitation progress by measuring their range of motion (i.e. the maximum/minimum angle of knee flexion) and monitoring exercise duration. Thus, the success criteria is if the team can identify range of motion and exercise duration.
   \end{itemize}
 \end{itemize}
 
@@ -146,7 +145,7 @@ Eman & 4 & 2.3\% \\
 \end{tabular}
 \end{table}
 
-** add justification here, I know for Vaisnavi, a few commits werent tracked at the beginning of the project due to her account settings?
+** add justification here Vaisnavi (account settings) and Eman (not accepting repo invite till later)
 
 \wss{If needed, an explanation for the counts can be provided here.  For
 instance, if a team member has more commits to unmerged branches, these numbers
@@ -171,7 +170,7 @@ Eman & 0 & 4 \\
 \end{tabular}
 \end{table}
 
-A majority of the assigned column is not done properly and mainly encapsulates the SRS and HA sections as that was the only deliverable that created issues for each section and were assigned accordingly but that was based on a different SRS template and doesn't capture the template that we used (Volere).
+A majority of the assigned column is not done properly and mainly encapsulates the SRS and HA sections as that was the only deliverable that created issues for each section and were assigned accordingly but that was based on a different SRS template and does not capture the \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}{template that we used} (Volere).
 
 \section{CICD}
 
