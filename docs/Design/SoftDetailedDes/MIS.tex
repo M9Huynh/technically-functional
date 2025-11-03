@@ -156,7 +156,7 @@ The following table is taken directly from the Module Guide document for this pr
 \newpage
 ~\newpage
 
-\section{MIS of \wss{Module Name}} \label{Module} \wss{Use labels for
+\section{MIS - \textbf{Account System}} \label{Module} \wss{Use labels for
   cross-referencing}
 
 \wss{You can reference SRS labels, such as R\ref{R_Inputs}.}
@@ -164,12 +164,19 @@ The following table is taken directly from the Module Guide document for this pr
 \wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
 
 \subsection{Module}
-
-\wss{Short name for the module}
+This module's primary function is to handle any account-related tasks (e.g. Account creation (Patient), Account deletion (PT)). \\
 
 \subsection{Uses}
+\begin{itemize}
 
-
+\item name(var)
+\item role(var)
+\item username (var)
+\item password (var)
+\item birthday(var)
+\item license\_no(var)
+\item invite\_code(var)
+\end{itemize}
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
