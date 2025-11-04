@@ -19,6 +19,11 @@
 \usepackage[section]{placeins}
 \usepackage{caption}
 \usepackage{fullpage}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{colortbl}
+
+
 
 \hypersetup{
 bookmarks=true,     % show bookmarks bar?
@@ -28,6 +33,12 @@ citecolor=blue,      % color of links to bibliography
 filecolor=magenta,  % color of file links
 urlcolor=cyan          % color of external links
 }
+
+\definecolor{tableblue}{RGB}{230, 240, 255}
+\definecolor{headerblue}{RGB}{100, 150, 220}
+\newcolumntype{L}{>{\raggedright\arraybackslash}p{0.2\textwidth}}
+\newcolumntype{M}{>{\raggedright\arraybackslash}p{0.15\textwidth}}
+\newcolumntype{R}{>{\raggedright\arraybackslash}p{0.55\textwidth}}
 
 \usepackage{array}
 
@@ -163,8 +174,44 @@ The following table is taken directly from the Module Guide document for this pr
 
 \wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
 
-\subsection{Module}
-This module's primary function is to handle any account-related tasks (e.g. Account creation (Patient), Account deletion (PT)). \\
+\section{Variables}
+\begin{table}[h]
+\centering
+\rowcolors{2}{tableblue}{white}
+\begin{tabular}{|L|M|R|}
+\hline
+\rowcolor{blue!70}
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+Name & String & This is the name of the user. \\
+\hline
+role & String & Values can be PT or patient \\
+\hline
+email & String & This will be used as their login ID \\
+\hline
+password & String & This is set by the user for login purposes \\
+\hline
+birthday & String & This is the user's birthday that will be used for verification purposes \\
+\hline
+license\_no & Int & This is used for verification of PT \\
+\hline
+invite\_code & String & This is given by the PT to the patient to allow registration on the application \\
+\hline
+\end{tabular}
+\caption{User Account Data Fields}
+\label{tab:user_data}
+\end{table}
+
+
+
+\subsection{Account Management}
+
+\section{MIS}
+\subsection{Module - Account Management}
+
+\textit{ADT}
+
+This module's purpose is to initialize an instance of UserAccount and to handle any account-related tasks (e.g. Account creation (Patient), Account deletion (PT)). \\
 
 \subsection{Uses}
 \begin{itemize}
