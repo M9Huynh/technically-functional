@@ -219,8 +219,8 @@ This module's purpose is to initialize an instance of UserAccount and to handle 
 
 \textbf{Exported Constants}
 \begin{itemize}
-\item \textit{Patient}: ADT
-\item \textit{PT}: ADT 
+\item \textit{UserAccount\_Patient}: ADT
+\item \textit{UserAccount\_PT}: ADT 
 \end{itemize}
 
 \noindent \textbf{Exported Access Programs}
@@ -233,7 +233,7 @@ This module's purpose is to initialize an instance of UserAccount and to handle 
 \rowcolor{headerblue}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
-account\_create & \parbox[t]{0.32\textwidth}{\textit{Name\\role\\birthday\\license\_no\\invite\_code\\email\\password}} & Patient (ADT) or PT (ADT) & \parbox[t]{0.25\textwidth}{Input\_format\_invalid\\required\_field\_empty} \\
+account\_create & \parbox[t]{0.32\textwidth}{\textit{Name\\role\\birthday\\license\_no\\invite\_code\\email\\password}} & UserAccount\_Patient (ADT) or UserAccount\_PT (ADT) & \parbox[t]{0.25\textwidth}{Input\_format\_invalid\\required\_field\_empty} \\
 \hline
 account\_delete & \parbox[t]{0.32\textwidth}{\textit{Name\\email}} & NA & \parbox[t]{0.25\textwidth}{input\_format\_invalid\\required\_field\_empty\\patient\_not\_found} \\
 \hline
@@ -242,14 +242,18 @@ account\_delete & \parbox[t]{0.32\textwidth}{\textit{Name\\email}} & NA & \parbo
 \label{tab:account_routines}
 \end{table}
 
-
-
 \subsubsection{Semantics}
 
-\subsubsection{State Variables}
+\noindent \textbf{State Variables} \\
+\textit{A}: an instance of UserAccount \\
+\textit{B}: an instance of UserAccount \\
 
+%Check requirements doc
+\noindent \textbf{State Invariant} \\
+$\forall A, B \in UserDatabase: A[i] \neq B[j]$ \\
+$0 < A < length(A) \cap A[i] \notin \emptyset$ \\
 
-\subsubsection{Environment Variables}
+% not sure if I need this\subsubsection{Environment Variables}
 
 \subsubsection{Assumptions}
 
