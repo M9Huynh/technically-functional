@@ -1,6 +1,7 @@
 \documentclass[12pt, titlepage]{article}
 
 \usepackage{fullpage}
+\usepackage[margin=1in]{geometry}
 \usepackage[round]{natbib}
 \usepackage{multirow}
 \usepackage{booktabs}
@@ -74,7 +75,7 @@ This section records information for easy reference.
   SRS & Software Requirements Specification\\
   \progname & Explanation of program name\\
   UC & Unlikely Change \\
-  \wss{etc.} & \wss{...}\\
+  % \wss{etc.} & \wss{...}\\
   \bottomrule
 \end{tabular}\\
 
@@ -179,8 +180,17 @@ decisions will be changed.
 
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
+  (Input: Recording/Video Upload, Output: On-Screen Feedback/Corrections).
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The knee will remain modeled as a single–degree-of-freedom (1-DOF) 
+hinge joint in the sagittal plane (flexion and extension only). No expansion to multi-DOF modelling or other joints is planned.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Users will only perform physiotherapist-approved rehabilitation exercises. 
+The system will not automatically generate or recommend new, unverified exercises.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Feedback will be limited to movement-based corrections and joint angle guidance. 
+The system will not provide medical diagnosis or replace professional physiotherapy assessment.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The system will continue to operate using a standard camera and common consumer hardware. 
+There is no plan to introduce external sensors, wearable devices, or specialized motion-capture equipment.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The scope will remain focused on knee rehabilitation. The system will not expand to whole-body tracking or unrelated physiotherapy movements.
+
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
