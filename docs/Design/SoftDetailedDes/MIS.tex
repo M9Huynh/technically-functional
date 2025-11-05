@@ -13,7 +13,7 @@
 \usepackage{xfrac}
 \usepackage{tabularx}
 \usepackage{float}
-\usepackage{siunitx}
+
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage[section]{placeins}
@@ -39,6 +39,7 @@ urlcolor=cyan          % color of external links
 \newcolumntype{L}{>{\raggedright\arraybackslash}p{0.2\textwidth}}
 \newcolumntype{M}{>{\raggedright\arraybackslash}p{0.15\textwidth}}
 \newcolumntype{R}{>{\raggedright\arraybackslash}p{0.55\textwidth}}
+\newcolumntype{S}{>{\raggedright\arraybackslash}p{0.26\textwidth}}
 
 \usepackage{array}
 
@@ -167,13 +168,6 @@ The following table is taken directly from the Module Guide document for this pr
 \newpage
 ~\newpage
 
-\section{MIS - \textbf{Account System}} \label{Module} \wss{Use labels for
-  cross-referencing}
-
-\wss{You can reference SRS labels, such as R\ref{R_Inputs}.}
-
-\wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
-
 \section{Variables}
 \begin{table}[h]
 \centering
@@ -203,9 +197,6 @@ invite\_code & String & This is given by the PT to the patient to allow registra
 \end{table}
 
 
-
-\subsection{Account Management}
-
 \section{MIS}
 \subsection{Module - Account Management}
 
@@ -213,50 +204,58 @@ invite\_code & String & This is given by the PT to the patient to allow registra
 
 This module's purpose is to initialize an instance of UserAccount and to handle any account-related tasks (e.g. Account creation (Patient), Account deletion (PT)). \\
 
-\subsection{Uses}
+\subsubsection{Uses}
 \begin{itemize}
-
-\item name(var)
-\item role(var)
-\item username (var)
-\item password (var)
-\item birthday(var)
-\item license\_no(var)
-\item invite\_code(var)
+\item name
+\item role
+\item email
+\item password 
+\item birthday
+\item license\_no
+\item invite\_code
 \end{itemize}
-\subsection{Syntax}
 
-\subsubsection{Exported Constants}
+\subsubsection{Syntax}
 
-\subsubsection{Exported Access Programs}
+\textbf{Exported Constants}
+\begin{itemize}
+\item \textit{UserAccount\_Patient}: ADT
+\item \textit{UserAccount\_PT}: ADT 
+\end{itemize}
 
-\begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\noindent \textbf{Exported Access Programs}
+
+\begin{table}[h]
+\centering
+\rowcolors{2}{tableblue}{white}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{0.18\textwidth}|>{\raggedright\arraybackslash}p{0.32\textwidth}|>{\raggedright\arraybackslash}p{0.2\textwidth}|>{\raggedright\arraybackslash}p{0.25\textwidth}|}
 \hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\rowcolor{headerblue}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
-\wss{accessProg} & - & - & - \\
+account\_create & \parbox[t]{0.32\textwidth}{\textit{Name\\role\\birthday\\license\_no\\invite\_code\\email\\password}} & UserAccount\_Patient (ADT) or UserAccount\_PT (ADT) & \parbox[t]{0.25\textwidth}{Input\_format\_invalid\\required\_field\_empty} \\
 \hline
-\end{tabular}
-\end{center}
+account\_delete & \parbox[t]{0.32\textwidth}{\textit{Name\\email}} & NA & \parbox[t]{0.25\textwidth}{input\_format\_invalid\\required\_field\_empty\\patient\_not\_found} \\
+\hline
+\end{tabularx}
+\caption{Account Management Access Routines}
+\label{tab:account_routines}
+\end{table}
 
-\subsection{Semantics}
+\subsubsection{Semantics}
 
-\subsubsection{State Variables}
+\noindent \textbf{State Variables} \\
+\textit{A}: an instance of UserAccount \\
+\textit{B}: an instance of UserAccount \\
 
-\wss{Not all modules will have state variables.  State variables give the module
-  a memory.}
+%Check requirements doc
+\noindent \textbf{State Invariant} \\
+$\forall A, B \in UserDatabase: A[i] \neq B[j]$ \\
+$0 < A < length(A) \cap A[i] \notin \emptyset$ \\
 
-\subsubsection{Environment Variables}
-
-\wss{This section is not necessary for all modules.  Its purpose is to capture
-  when the module has external interaction with the environment, such as for a
-  device driver, screen interface, keyboard, file, etc.}
+% not sure if I need this\subsubsection{Environment Variables}
 
 \subsubsection{Assumptions}
-
-\wss{Try to minimize assumptions and anticipate programmer errors via
-  exceptions, but for practical purposes assumptions are sometimes appropriate.}
 
 \subsubsection{Access Routine Semantics}
 
