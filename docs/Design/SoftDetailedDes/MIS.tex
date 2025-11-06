@@ -22,6 +22,7 @@
 \usepackage[table]{xcolor}
 \usepackage{array}
 \usepackage{colortbl}
+\usepackage{makecell}
 
 
 
@@ -41,7 +42,6 @@ urlcolor=cyan          % color of external links
 \newcolumntype{R}{>{\raggedright\arraybackslash}p{0.55\textwidth}}
 \newcolumntype{S}{>{\raggedright\arraybackslash}p{0.26\textwidth}}
 
-\usepackage{array}
 
 \externaldocument{../../SRS/SRS}
 
@@ -219,7 +219,7 @@ This module's purpose is to initialize an instance of UserAccount and to handle 
 
 \textbf{Exported Constants}
 \begin{itemize}
-\item \textit{UserAccount\_Patient}: ADT
+\item \textit{UserAccount\_P}: ADT
 \item \textit{UserAccount\_PT}: ADT 
 \end{itemize}
 
@@ -228,21 +228,35 @@ This module's purpose is to initialize an instance of UserAccount and to handle 
 \begin{table}[h]
 \centering
 \rowcolors{2}{tableblue}{white}
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{0.18\textwidth}|>{\raggedright\arraybackslash}p{0.32\textwidth}|>{\raggedright\arraybackslash}p{0.2\textwidth}|>{\raggedright\arraybackslash}p{0.25\textwidth}|}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+% Use X columns to span full width
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
 \rowcolor{headerblue}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
-account\_create & \parbox[t]{0.32\textwidth}{\textit{Name\\role\\birthday\\license\_no\\invite\_code\\email\\password}} & UserAccount\_Patient (ADT) or UserAccount\_PT (ADT) & \parbox[t]{0.25\textwidth}{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_exists\\Incorrect\_creds\\Invite\_code\_expired\\} \\
+account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
 \hline
-account\_delete & \parbox[t]{0.32\textwidth}{\textit{Name\\email}} & NA & \parbox[t]{0.25\textwidth}{required\_field\_empty\\patient\_not\_found} \\
+account\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
 \hline
-username\_pw\_match & \parbox[t]{0.32\textwidth}{\textit{Name\\email}} & NA & \parbox[t]{0.25\textwidth}{wrong\_email\_password} \\
+username\_pw\_match & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_\\password} \\
+\hline
+get\_profile & \makecell[lt]{\textit{Name}\\\textit{Birthday}} & UserAccount & \makecell[lt]{wrong\_email\_\\password} \\
+\hline
+add\_analysis\_to\_\newline storagedb & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Recent\_analysis}} & NA & \makecell[lt]{User\_not\_found\\Upload\_error} \\
+\hline
+add\_video\_to\_\newline storagedb & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Recent\_video}} & NA & \makecell[lt]{User\_not\_found\\Upload\_error\\Video\_too\_short} \\
+\hline
+get\_storagedb\_ \newline analysis & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_video & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+get\_userdb\_info & \makecell[lt]{\textit{Email}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 \end{tabularx}
 \caption{Account Management Access Routines}
 \label{tab:account_routines}
 \end{table}
+
 
 \subsubsection{Semantics}
 
@@ -283,6 +297,75 @@ $0 < A < length(A) \cap A[i] \notin \emptyset$ \\
   have local scope.}
 
 \newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Module - Dashboard}
+
+\textit{ADT}
+
+This module's purpose is to initialize an instance of UserAccount and to handle any account-related tasks (e.g. Account creation (Patient), Account deletion (PT)). It is an adapter that links to the user\_info\_database and storage\_database. \\
+
+\subsubsection{Uses}
+\begin{itemize}
+\item name
+\item role
+\item email
+\item password 
+\item birthday
+\item license\_no
+\item invite\_code
+\end{itemize}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}
+\begin{itemize}
+\item \textit{UserAccount\_Patient}: ADT
+\item \textit{UserAccount\_PT}: ADT 
+\end{itemize}
+
+\noindent \textbf{Exported Access Programs}
+
+
+\subsubsection{Semantics}
+
+\noindent \textbf{State Variables} \\
+\textit{A}: an instance of UserAccount \\
+\textit{B}: an instance of UserAccount \\
+
+%Check requirements doc
+\noindent \textbf{State Invariant} \\
+$\forall A, B \in UserDatabase: A[i] \neq B[j]$ \\
+$0 < A < length(A) \cap A[i] \notin \emptyset$ \\
+
+% not sure if I need this\subsubsection{Environment Variables}
+
+\subsubsection{Assumptions}
+
+\subsubsection{Access Routine Semantics}
+
+\noindent \wss{accessProg}():
+\begin{itemize}
+\item transition: \wss{if appropriate} 
+\item output: \wss{if appropriate} 
+\item exception: \wss{if appropriate} 
+\end{itemize}
+
+\wss{A module without environment variables or state variables is unlikely to
+  have a state transition.  In this case a state transition can only occur if
+  the module is changing the state of another module.}
+
+\wss{Modules rarely have both a transition and an output.  In most cases you
+  will have one or the other.}
+
+\subsubsection{Local Functions}
+
+\wss{As appropriate} \wss{These functions are for the purpose of specification.
+  They are not necessarily something that is going to be implemented
+  explicitly.  Even if they are implemented, they are not exported; they only
+  have local scope.}
+
 
 \bibliographystyle {plainnat}
 \bibliography {../../../refs/References}
