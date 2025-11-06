@@ -33,7 +33,7 @@
 
 \begin{document}
 
-\title{Module Guide for \progname{}} 
+\title{Module Guide for \progname{}}
 \author{\authname}
 \date{\today}
 
@@ -60,10 +60,10 @@ This section records information for easy reference.
 \subsection{Abbreviations and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
+\begin{tabular}{l l}
+  \toprule
   \textbf{symbol} & \textbf{description}\\
-  \midrule 
+  \midrule
   AC & Anticipated Change\\
   DAG & Directed Acyclic Graph \\
   M & Module \\
@@ -99,7 +99,7 @@ based on the principle of information hiding~\citep{Parnas1972a}.  This
 principle supports design for change, because the ``secrets'' that each module
 hides represent likely future changes.  Design for change is valuable in SC,
 where modifications are frequent, especially during initial development as the
-solution space is explored.  
+solution space is explored.
 
 Our design follows the rules laid out by \citet{ParnasEtAl1984}, as follows:
 \begin{itemize}
@@ -157,15 +157,15 @@ adapted here is called design for
 change.
 
 \begin{description}
-\item[\refstepcounter{acnum} \actheacnum \label{AC1}:] 
+\item[\refstepcounter{acnum} \actheacnum \label{AC1}:]
 The user interface of the application may be changed to include additional features for accessibility. Changes include:
 \begin{enumerate}
   \item How feedback is presented to the user as the exercise is performed (i.e. written, auditory, alerts, etc.).
   \item How the insights are generated to the user on their account dashboard (i.e. displayed as a line graph, columns of data, does the user have the option to select from multiple views, etc.).
 \end{enumerate}
-\item[\refstepcounter{acnum} \actheacnum \label{AC2}:] 
+\item[\refstepcounter{acnum} \actheacnum \label{AC2}:]
 The angles that are calculated to support different exercises. Currently, the application supports the 'single leg raise' exercises which is routinely used in rehabilitation for post-operative knee surgery. Future iterations of the application may include additional body parts and exercises.
-\item[\refstepcounter{acnum} \actheacnum \label{AC3}:] 
+\item[\refstepcounter{acnum} \actheacnum \label{AC3}:]
 Changes to the feedback/guidance given. As more requirements are met, there should be changes to encapsulate the prompts required for the motion (i.e. 'keep the torso straight as this movement is performed'). Additionally, there may be alternate prompts with varying degrees of complexity, which relates to accessibility and the patients understanding of the exercise (i.e. 'during this motion you want to engage your quadriceps as you drive your toe towards the sky ~8 inches off the ground).
 \end{description}
 
@@ -296,7 +296,7 @@ to be implemented.
   facts, or programming considerations. The secrets of this module are
   \emph{not} described in the SRS.
 \item[Services:] Includes data structure and algorithms used in the system that
-  do not provide direct interaction with the user. 
+  do not provide direct interaction with the user.
   % Changes in these modules are more likely to be motivated by a desire to
   % improve performance than by externally imposed changes.
 \item[Implemented By:] --
@@ -360,29 +360,29 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 
 \section{Use Hierarchy Between Modules} \label{SecUse}
 
-In this section, the uses hierarchy between modules is
-provided. \citet{Parnas1978} said of two programs A and B that A {\em uses} B if
-correct execution of B may be necessary for A to complete the task described in
-its specification. That is, A {\em uses} B if there exist situations in which
-the correct functioning of A depends upon the availability of a correct
-implementation of B.  Figure \ref{FigUH} illustrates the use relation between
-the modules. It can be seen that the graph is a directed acyclic graph
-(DAG). Each level of the hierarchy offers a testable and usable subset of the
-system, and modules in the higher level of the hierarchy are essentially simpler
-because they use modules from the lower levels.
+% In this section, the uses hierarchy between modules is
+% provided. \citet{Parnas1978} said of two programs A and B that A {\em uses} B if
+% correct execution of B may be necessary for A to complete the task described in
+% its specification. That is, A {\em uses} B if there exist situations in which
+% the correct functioning of A depends upon the availability of a correct
+% implementation of B.  Figure \ref{FigUH} illustrates the use relation between
+% the modules. It can be seen that the graph is a directed acyclic graph
+% (DAG). Each level of the hierarchy offers a testable and usable subset of the
+% system, and modules in the higher level of the hierarchy are essentially simpler
+% because they use modules from the lower levels.
 
-\wss{The uses relation is not a data flow diagram.  In the code there will often
-be an import statement in module A when it directly uses module B.  Module B
-provides the services that module A needs.  The code for module A needs to be
-able to see these services (hence the import statement).  Since the uses
-relation is transitive, there is a use relation without an import, but the
-arrows in the diagram typically correspond to the presence of import statement.}
+% \wss{The uses relation is not a data flow diagram.  In the code there will often
+% be an import statement in module A when it directly uses module B.  Module B
+% provides the services that module A needs.  The code for module A needs to be
+% able to see these services (hence the import statement).  Since the uses
+% relation is transitive, there is a use relation without an import, but the
+% arrows in the diagram typically correspond to the presence of import statement.}
 
-\wss{If module A uses module B, the arrow is directed from A to B.}
+% \wss{If module A uses module B, the arrow is directed from A to B.}
 
 \begin{figure}[H]
 \centering
-%\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
