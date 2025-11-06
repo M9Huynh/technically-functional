@@ -202,7 +202,7 @@ invite\_code & String & This is given by the PT to the patient to allow registra
 
 \textit{ADT}
 
-This module's purpose is to initialize an instance of UserAccount and to handle any account-related tasks (e.g. Account creation (Patient), Account deletion (PT)). \\
+This module's purpose is to initialize an instance of UserAccount and to handle any account-related tasks (e.g. Account creation (Patient), Account deletion (PT)). It is an adapter that links to the user\_info\_database and storage\_database. \\
 
 \subsubsection{Uses}
 \begin{itemize}
@@ -224,7 +224,7 @@ This module's purpose is to initialize an instance of UserAccount and to handle 
 \end{itemize}
 
 \noindent \textbf{Exported Access Programs}
-
+%Check invite code expired?
 \begin{table}[h]
 \centering
 \rowcolors{2}{tableblue}{white}
@@ -233,9 +233,11 @@ This module's purpose is to initialize an instance of UserAccount and to handle 
 \rowcolor{headerblue}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
-account\_create & \parbox[t]{0.32\textwidth}{\textit{Name\\role\\birthday\\license\_no\\invite\_code\\email\\password}} & UserAccount\_Patient (ADT) or UserAccount\_PT (ADT) & \parbox[t]{0.25\textwidth}{Input\_format\_invalid\\required\_field\_empty} \\
+account\_create & \parbox[t]{0.32\textwidth}{\textit{Name\\role\\birthday\\license\_no\\invite\_code\\email\\password}} & UserAccount\_Patient (ADT) or UserAccount\_PT (ADT) & \parbox[t]{0.25\textwidth}{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_exists\\Incorrect\_creds\\Invite\_code\_expired\\} \\
 \hline
-account\_delete & \parbox[t]{0.32\textwidth}{\textit{Name\\email}} & NA & \parbox[t]{0.25\textwidth}{input\_format\_invalid\\required\_field\_empty\\patient\_not\_found} \\
+account\_delete & \parbox[t]{0.32\textwidth}{\textit{Name\\email}} & NA & \parbox[t]{0.25\textwidth}{required\_field\_empty\\patient\_not\_found} \\
+\hline
+username\_pw\_match & \parbox[t]{0.32\textwidth}{\textit{Name\\email}} & NA & \parbox[t]{0.25\textwidth}{wrong\_email\_password} \\
 \hline
 \end{tabularx}
 \caption{Account Management Access Routines}
