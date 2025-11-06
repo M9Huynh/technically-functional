@@ -101,7 +101,7 @@ hides represent likely future changes.  Design for change is valuable in SC,
 where modifications are frequent, especially during initial development as the
 solution space is explored.  
 
-Our design follows the rules layed out by \citet{ParnasEtAl1984}, as follows:
+Our design follows the rules laid out by \citet{ParnasEtAl1984}, as follows:
 \begin{itemize}
 \item System details that are likely to change independently should be the
   secrets of separate modules.
@@ -157,16 +157,19 @@ adapted here is called design for
 change.
 
 \begin{description}
-\item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
-  hardware on which the software is running.
-\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
-  initial input data.
-\item ...
+\item[\refstepcounter{acnum} \actheacnum \label{AC1}:] 
+The user interface of the application may be changed to include additional features for accessibility. Changes include:
+\begin{enumerate}
+  \item How feedback is presented to the user as the exercise is performed (i.e. written, auditory, alerts, etc.).
+  \item How the insights are generated to the user in their account dashboard (i.e. displayed as a line graph, columns of data, does the user have the option to select from multiple views, etc.).
+\end{enumerate}
+\item[\refstepcounter{acnum} \actheacnum \label{AC2}:] 
+Which angles are calculated to support different exercises. Currently the application supports the 'single leg raise' typically used for post-operative knee exercises but further the system may change to support other exercises (i.e. knee extension).
+\item[\refstepcounter{acnum} \actheacnum \label{AC3}:] 
+Changes to the feedback/guidance given. As more requirements are met, there should be changes to encapsulate the prompts required for the motion (i.e. 'keep the torso straight as this movement is performed'). Additionally, if there are alternate prompts but with varying degrees of complexity which relates to accessibility (i.e. 'during this motion you want to engage your quadriceps as you drive your toe towards the sky ~8 inches off the ground).
 \end{description}
 
-\wss{Anticipated changes relate to changes that would be made in requirements,
-design or implementation choices.  They are not related to changes that are made
-at run-time, like the values of parameters.}
+
 
 \subsection{Unlikely Changes} \label{SecUchange}
 
