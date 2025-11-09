@@ -590,11 +590,35 @@ NA
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
 
+%get metrics - gets metrics from metrics module
+%send analysis to db - sends overall analysis to db
+%analysis rt - real time analysis
+%analysis overall - overall analysis (given at end of recording)
+%adjust metrics - module will tell what to correct (eg. if angle is too small)
+%update metrics - ? different than adjust? check with team
+%send analysis to db - send overall analysis for storage into
+
+get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+send\_analysis\_to\newline\_feedback & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
 analysis\_rt & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
 analysis\_overall & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
+
+adjust\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+update\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
 
 \end{longtable}
 
@@ -926,6 +950,8 @@ submit\_video & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\U
 draw\_markers & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+get\_rt\_feed & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
 \end{longtable}
