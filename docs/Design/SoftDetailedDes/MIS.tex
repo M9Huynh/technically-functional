@@ -644,59 +644,33 @@ send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\
 \item exception: \wss{if appropriate} 
 \end{itemize}
 
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\newpage
 
 \subsubsection{Local Functions}
-\begin{table}[h]
-\centering
+\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
+\hline
+\rowcolor{headerblue}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+\endhead
+
+\hline
+\endfoot
+
 \rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
 
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
+adjust\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
+\end{longtable}
 
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
-\end{table}
-
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-
-\newpage
-
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\subsubsection{Local Functions}
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Feedback}
@@ -911,7 +885,6 @@ placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\te
  \subsection{Module - Main}
 NA
 
-
 \subsubsection{Uses}
 
 \subsubsection{Syntax}
@@ -941,18 +914,29 @@ NA
 
 record\_video & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
+
 retry\_record & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
-form\_vs\_template & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-submit\_video & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
+
 draw\_markers & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
+
+form\_vs\_template & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+submit\_video & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
 get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
+
 get\_rt\_feed & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
+
+PT\_feedback\_on\_P & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+
 
 \end{longtable}
 
