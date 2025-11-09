@@ -74,7 +74,7 @@ This section records information for easy reference.
   SRS & Software Requirements Specification\\
   \progname & Explanation of program name\\
   UC & Unlikely Change \\
-  \wss{etc.} & \wss{...}\\
+  % \wss{etc.} & \wss{...}\\
   \bottomrule
 \end{tabular}\\
 
@@ -182,8 +182,16 @@ decisions will be changed.
 
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
+  (Input: Recording/Video Upload, Output: On-Screen Feedback/Corrections).
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The knee will remain modeled as a single–degree-of-freedom (1-DOF) 
+hinge joint in the sagittal plane (flexion and extension only). No expansion to multi-DOF modelling or other joints is planned.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Users will only perform physiotherapist-approved rehabilitation exercises. 
+The system will not automatically generate or recommend new, unverified exercises.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Feedback will be limited to movement-based corrections and joint angle guidance. 
+The system will not provide medical diagnosis or replace professional physiotherapy assessment.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The system is not being built to integrate feedback from external sensors, wearable devices, 
+and specialized specialized motion-capture equipment.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The scope will remain focused on knee rehabilitation. The system will not expand to whole-body tracking or unrelated physiotherapy movements.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -406,9 +414,71 @@ needed. Drawings, Sketches, Figma}
 
 \section{Timeline}
 
-\wss{Schedule of tasks and who is responsible}
+For the remainder of the term, the project timeline will follow the official course deliverables and our internal task assignments. 
+A detailed task breakdownis maintained on our \href{https://github.com/users/M9Huynh/projects/2}{GitHub Project Board}. The high-level 
+schedule is listed below:\ 
 
-\wss{You can point to GitHub if this information is included there}
+
+\textbf{Present to Mid-November}
+\begin{itemize}
+    \item \textbf{POC Finalization \& Testing} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Complete camera and pose detection reliability.
+         \item Work out demo to showcase to professor and TA
+    \end{itemize}
+
+    \item \textbf{Design Document Revision 0} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Write system architecture, data flow, MediaPipe integration, hazards and mitigations.
+        \item Add code comments, diagrams, and updated requirement traceability.
+    \end{itemize}
+\end{itemize}
+
+\textbf{December to January}
+\begin{itemize}
+    \item \textbf{Work on project as a whole in preposition for Revision 0 Demo} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Work on entire project, start building and revising the remaining modules, to begin putting together all the pieces
+    \end{itemize}
+\end{itemize}
+\textbf{February}
+\begin{itemize}
+    \item \textbf{Rev0 Presentations} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Implement feedback from the professor and TA in the previous deliverables.
+        \item Refactor code to ensure it is functional, stable, and ready for the presentation.
+        \item Finalize demonstration plan and speaking roles.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Late March -- Early April}
+\begin{itemize}
+    \item \textbf{Final Demonstration (Revision 1)} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Implement improvements from TA feedback.
+        \item Enhance UI transparency (tracking visualization, angles, notifications).
+        \item Prepare live demo and video recording.
+    \end{itemize}
+
+    \item \textbf{EXPO Demonstration} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Build poster and prepare speaking roles.
+        \item Conduct demo rehearsals and ensure hardware stability.
+    \end{itemize}
+\end{itemize}
+
+\textbf{April -- Final Week}
+\begin{itemize}
+    \item \textbf{Final Documentation (Revision 1)} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Submit Problem Statement, Development Plan, POC Plan, Requirements, Hazard Analysis, Design Document, V\&V Plan, V\&V Report, Extra Documentation, and Source Code.
+        \item Include GitHub repository link, README, demo video, and traceability matrices.
+    \end{itemize}
+\end{itemize}
+
+% \wss{Schedule of tasks and who is responsible}
+
+% \wss{You can point to GitHub if this information is included there}
 
 \bibliographystyle {plainnat}
 \bibliography{../../../refs/References}
