@@ -169,10 +169,12 @@ The following table is taken directly from the Module Guide document for this pr
 
 \section{Variables}
 \begin{table}[h]
+\caption{User Account Data Fields}
+\label{tab:user_data}
 \centering
 \rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
+\setlength{\extrarowheight}{2pt}
+\setlength{\arrayrulewidth}{1pt}
 \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
 \rowcolor{blue!40}
@@ -180,7 +182,7 @@ The following table is taken directly from the Module Guide document for this pr
 \hline
 Name & String & Name of the user & 7.1 \\
 \hline
-role & String & Values can be PT or patient & 7.1 \\
+Role & String & Values can be PT or patient & 7.1 \\
 \hline
 email & String & Used as login ID & 7.1 \\
 \hline
@@ -192,13 +194,19 @@ license\_no & Int & Verification of PT & 7.1 \\
 \hline
 invite\_code & String & Given by PT to patient for registration & 7.1 \\
 \hline
-Recent\_report & ADT & Generated report & TBD \\
-\hline
 Date & String & Date selected by user & 7.1 \\
+\hline
+Time & String & Time selected by user & 7.2 \\
 \hline
 Recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
 \hline
-Report & Record & Report(s) sent to Generator module for analysis & TBD \\
+Recent\_report & ADT & Generated report & TBD \\
+\hline
+Recent\_video & String (JSON) & Last video recorded by patient & TBD \\
+\hline
+Video & String (JSON) & A video in the user database & TBD \\
+\hline
+Report & Record & Report(s) sent to Generator module for analysis\newline OR \newline requested by patient & TBD \\
 \hline
 Ex\_instruct & String & Performance instructions of requested exercise & TBD \\
 \hline
@@ -209,8 +217,6 @@ Repetitions & String & Repetitions of exercise per set & 7.1 \\
 Rest\_time & String & Rest time between sets & 7.1 \\
 \hline
 \end{tabularx}
-\caption{User Account Data Fields}
-\label{tab:user_data}
 \end{table}
 
 
@@ -378,6 +384,8 @@ This module's purpose is to display the most recent report, an overall analysis 
 \noindent \textbf{Exported Access Programs}
 
 \begin{table}[h]
+%generate insights - generates overall analysis after assessing all past reports
+%get_report - get specific report from db
 \centering
 \rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
@@ -389,19 +397,22 @@ This module's purpose is to display the most recent report, an overall analysis 
 \hline
 generate\_insights & \makecell[lt]{\textit{NA}} & \makecell[lt]{NA} & \makecell[lt]{\textit{No\_activity\_history}\\\textit{Cannot\_connect\_API}} \\
 \hline
-get\_summary & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{NA} \\
+%get\_summary & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{NA} \\
+%\hline
+generate\_report & \makecell[lt]{\textit{Date}\\\textit{Time}} & \textit{Recent\_report} & \makecell[lt]{NA} \\
 \hline
-get\_report & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{NA} \\
+get\_report & \makecell[lt]{\textit{Date}\\\textit{Time}} & \textit{Report} & \makecell[lt]{NA} \\
 \hline
 \end{tabularx} 
-\caption{Reporting Access Routines}
-\label{tab:reporting_routines}
+\caption{Generator Access Routines}
+\label{tab:generator_routines}
 \end{table}
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
 \textit{A}: an instance of UserAccount\_P \\
+\textit{E}: an instance of Recent\_analysis
 
 \noindent \textbf{State Invariant} \\
 
