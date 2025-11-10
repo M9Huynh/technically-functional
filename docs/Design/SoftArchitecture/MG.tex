@@ -228,84 +228,172 @@ actually be implemented.
 
 \section{Connection Between Requirements and Design} \label{SecConnection}
 
-The design of the system is intended to satisfy the requirements developed in
-the SRS. In this stage, the system is decomposed into modules. The connection
-between requirements and modules is listed in Table~\ref{TblRT}.
+The design of the system is intended to satisfy the requirements developed in the SRS. In this stage, the system is decomposed into modules. The connection between requirements and modules is listed in Table~\ref{TblRT}.
 
-\wss{The intention of this section is to document decisions that are made
-  ``between'' the requirements and the design.  To satisfy some requirements,
-  design decisions need to be made.  Rather than make these decisions implicit,
-  they are explicitly recorded here.  For instance, if a program has security
-  requirements, a specific design decision may be made to satisfy those
-  requirements with a password.}
+\subsection*{Design Decisions}
+
+\begin{description}
+	\item[\textbf{Security}] To satisfy security and privacy requirements (FR21--FR23, SR-IR1, SR-PR1--2), the system implements end-to-end encryption for data at rest and in transit using industry-standard encryption protocols. User authentication employs session-based tokens with automatic timeout after 60 minutes of inactivity.
+	\item[\textbf{Real-time Performance}] To meet the requirement for real-time feedback (FR13--14, PR-SL1--2), the computer vision processing pipeline is optimized to provide analysis results within 1~second of detecting form deviations. This is achieved through efficient pose estimation algorithms and selective processing of critical joint angles.
+	\item[\textbf{Offline Capability}] To address reliability requirements (PR-RFT2, MS-AD1), the system implements local caching of exercise instructions and video queuing for uploads. This ensures users can access exercise information and record sessions even without internet connectivity, with automatic synchronization when connection is restored.
+	\item[\textbf{Modular Exercise Library}] To support extensibility (PR-CR1, PR-SER1), the exercise library is designed as a modular system where new exercises and joint types can be added without modifying core analysis logic. Each exercise type has its own parameter set defining acceptable ranges and form criteria.
+	\item[\textbf{Two-Camera View Analysis}] To address the risk of 3D motion measurement with 2D cameras, the system supports analysis from the sagittal view as primary, with optional frontal view for enhanced accuracy. The analysis algorithms are designed to work with single or multiple camera angles.
+\end{description}
 
 \section{Module Decomposition} \label{SecMD}
 
-Modules are decomposed according to the principle of ``information hiding''
-proposed by \citet{ParnasEtAl1984}. The \emph{Secrets} field in a module
-decomposition is a brief statement of the design decision hidden by the
-module. The \emph{Services} field specifies \emph{what} the module will do
-without documenting \emph{how} to do it. For each module, a suggestion for the
-implementing software is given under the \emph{Implemented By} title. If the
-entry is \emph{OS}, this means that the module is provided by the operating
-system or by standard programming language libraries.  \emph{\progname{}} means the
-module will be implemented by the \progname{} software.
+Modules are decomposed according to the principle of ``information hiding.'' The \emph{Secrets} field in a module decomposition is a brief statement of the design decision hidden by the module. The \emph{Services} field specifies \emph{what} the module will do without documenting \emph{how} to do it. If the entry is \emph{OS}, this means that the module is provided by the operating system or by standard programming language libraries. \emph{\progname{}} means the module will be implemented by the \progname{} software. Only the leaf modules in the hierarchy have to be implemented.
 
-Only the leaf modules in the hierarchy have to be implemented. If a dash
-(\emph{--}) is shown, this means that the module is not a leaf and will not have
-to be implemented.
-
-\subsection{Hardware Hiding Modules (\mref{mHH})}
+\subsection{Hardware Hiding Modules (M1)}
 
 \begin{description}
-\item[Secrets:]The data structure and algorithm used to implement the virtual
-  hardware.
-\item[Services:]Serves as a virtual hardware used by the rest of the
-  system. This module provides the interface between the hardware and the
-  software. So, the system can use it to display outputs or to accept inputs.
-\item[Implemented By:] OS
+	\item[Secrets:] The data structure and algorithm used to implement the virtual hardware.
+	\item[Services:] Serves as a virtual hardware used by the rest of the system. This module provides the interface between the hardware and the software, including camera access, screen display, audio output, and device sensors. The system can use it to capture video, display outputs, or accept touch inputs.
+	\item[Implemented By:] Android~OS
 \end{description}
 
 \subsection{Behaviour-Hiding Module}
 
 \begin{description}
-\item[Secrets:]The contents of the required behaviours.
-\item[Services:]Includes programs that provide externally visible behaviour of
-  the system as specified in the software requirements specification (SRS)
-  documents. This module serves as a communication layer between the
-  hardware-hiding module and the software decision module. The programs in this
-  module will need to change if there are changes in the SRS.
-\item[Implemented By:] --
+	\item[Secrets:] The contents of the required behaviours.
+	\item[Services:] Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
+	\item[Implemented By:] --
 \end{description}
 
-\subsubsection{Input Format Module (\mref{mInput})}
-
+\subsubsection{Authentication Module (M2)}
 \begin{description}
-\item[Secrets:]The format and structure of the input data.
-\item[Services:]Converts the input data into the data structure used by the
-  input parameters module.
-\item[Implemented By:] [Your Program Name Here]
-\item[Type of Module:] [Record, Library, Abstract Object, or Abstract Data Type]
-  [Information to include for leaf modules in the decomposition by secrets tree.]
+	\item[Secrets:] The implementation details of user authentication, session management, and credential verification.
+	\item[Services:] Handles user login, logout, session creation, and session timeout. Verifies user credentials against stored records and manages authentication tokens. Enforces 60-minute inactivity timeout as per SR-AR3.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR1, FR1.1, SR-AR1, SR-AR3
 \end{description}
 
-\subsubsection{Etc.}
+\subsubsection{User Account Management Module (M3)}
+\begin{description}
+	\item[Secrets:] The structure and validation logic for user account data, including patient and physiotherapist profiles.
+	\item[Services:] Creates and manages user accounts for both patients and physiotherapists. Validates registration data including government ID, license numbers (for PTs), and invite codes (for patients). Stores and retrieves user profile information securely.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Data Type
+	\item[Related Requirements:] FR1.1, FR1.2, FR1.3, FR2
+\end{description}
 
+\subsubsection{Organization Linking Module (M4)}
+\begin{description}
+	\item[Secrets:] The algorithm for generating, validating, and managing access codes that link patients to physiotherapists.
+	\item[Services:] Generates unique access codes for physiotherapists to share with patients. Validates patient-submitted access codes and establishes the patient--PT relationship. Manages the patient list for each physiotherapist. Handles patient account deletion requests from PTs.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR1.3, FR2, FR3, FR18
+\end{description}
+
+\subsubsection{Exercise Library Module (M5)}
+\begin{description}
+	\item[Secrets:] The storage structure and retrieval methods for exercise information, including instructions, media, and form parameters.
+	\item[Services:] Maintains a library of at least ten knee exercises with detailed instructions, demonstration media, and form parameters. Provides exercise information to users on demand. Supports caching for offline access.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Data Type
+	\item[Related Requirements:] FR5, MS-AD1
+\end{description}
+
+\subsubsection{Exercise Program Management Module (M6)}
+\begin{description}
+	\item[Secrets:] The data structures and business logic for managing patient-specific exercise programs, including customization and progress tracking.
+	\item[Services:] Allows physiotherapists to create and customize exercise programs for individual patients, including sets, reps, rest times, and weekly limits. Tracks patient exercise completion and progress over time. Enforces PT-defined limitations on exercise frequency and intensity.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR6, FR10, FR11, FR22, FR27
+\end{description}
+
+\subsubsection{Video Capture Module (M7)}
+\begin{description}
+	\item[Secrets:] The implementation of video recording, including camera configuration, frame rate management, and recording controls.
+	\item[Services:] Captures video of users performing exercises at minimum 720p resolution and 30~fps. Performs pre-capture environment checks (lighting, framing). Provides recording controls (start, stop, retry). Ensures video meets minimum quality standards before proceeding to analysis.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR7, FR15, FR26, UHR-EOU3
+\end{description}
+
+\subsubsection{Video Storage Module (M8)}
+\begin{description}
+	\item[Secrets:] The mechanism for storing, retrieving, and managing video files, including local caching and cloud synchronization.
+	\item[Services:] Stores recorded exercise videos securely (encrypted at rest per SR-IR1). Manages local storage and cloud upload queuing. Handles upload retry logic when network is unavailable. Retrieves stored videos for patient and PT review. Implements automatic backup functionality.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR21, SR-IR1, PR-RFT2, MS-MNT1
+\end{description}
+
+\subsubsection{Feedback Generation Module (M11)}
+\begin{description}
+	\item[Secrets:] The rules and logic for converting analysis results into user-friendly feedback messages and instructions.
+	\item[Services:] Generates real-time corrective feedback messages based on form analysis results. Provides step-by-step exercise guidance. Creates descriptive messages for form deviations specifying required adjustments. Triggers safety warnings for dangerous movements.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Library
+	\item[Related Requirements:] FR13, FR14, FR16, PR-SCR1
+\end{description}
+
+\subsubsection{Reporting Module (M12)}
+\begin{description}
+	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
+	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Library
+	\item[Related Requirements:] FR17, FR19, FR20, FR25
+\end{description}
+
+\subsubsection{Dashboard Module (M13)}
+\begin{description}
+	\item[Secrets:] The user interface layout and interaction logic for patient and physiotherapist dashboards.
+	\item[Services:] Displays patient exercise history, progress charts, and upcoming exercises. Shows PT patient list with status indicators and alerts. Provides access to video review and report viewing. Enables PT comments on patient sessions. Presents analytics and visualizations of exercise data.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR18, FR19, FR24, FR25
+\end{description}
 
 \subsection{Software Decision Module}
 
 \begin{description}
-\item[Secrets:] The design decision based on mathematical theorems, physical
-  facts, or programming considerations. The secrets of this module are
-  \emph{not} described in the SRS.
-\item[Services:] Includes data structure and algorithms used in the system that
-  do not provide direct interaction with the user. 
-  % Changes in these modules are more likely to be motivated by a desire to
-  % improve performance than by externally imposed changes.
-\item[Implemented By:] --
+	\item[Secrets:] The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are not described in the SRS.
+	\item[Services:] Includes data structure and algorithms used in the system that do not provide direct interaction with the user.
+	\item[Implemented By:] --
 \end{description}
 
-\subsubsection{Etc.}
+\subsubsection{Computer Vision Processing Module (M9)}
+\begin{description}
+	\item[Secrets:] The specific computer vision algorithms and implementation details for pose detection, joint tracking, and body landmark identification.
+	\item[Services:] Processes video frames to detect and track body landmarks using pose estimation. Identifies key joints relevant to knee exercises (hip, knee, ankle, foot). Extracts coordinate data for joint positions across video frames. Handles varying lighting conditions and camera angles. Implements the core CV library integration (e.g., OpenCV, MediaPipe).
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Data Type
+	\item[Related Requirements:] FR8, FR12
+\end{description}
+
+\subsubsection{Form Analysis Module (M10)}
+\begin{description}
+	\item[Secrets:] The mathematical models and algorithms for calculating joint angles, range of motion, and determining form correctness based on exercise parameters.
+	\item[Services:] Calculates joint angles from landmark coordinates with $\pm5^{\circ}$ accuracy. Measures range of motion with $\pm10\%$ accuracy. Compares measured values against exercise-specific acceptable ranges. Detects form deviations and classifies severity. Identifies dangerous movements requiring immediate halt. Measures time-under-tension and exercise duration.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Library
+	\item[Related Requirements:] FR12, FR13, FR14, PR-PAR1, PR-PAR2, PR-SCR1
+\end{description}
+
+\subsubsection{Data Encryption Module (M14)}
+\begin{description}
+	\item[Secrets:] The encryption algorithms, key management, and cryptographic protocols used to secure patient data.
+	\item[Services:] Encrypts patient data at rest and in transit using industry-standard protocols. Manages encryption keys securely. Provides methods for encrypting and decrypting data as needed by other modules. Ensures compliance with healthcare data security requirements.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Library
+	\item[Related Requirements:] FR21, SR-IR1
+\end{description}
+
+\subsubsection{Access Control Module (M15)}
+\begin{description}
+	\item[Secrets:] The authorization logic and permission management system that enforces data access policies.
+	\item[Services:] Enforces role-based access control for patients and physiotherapists. Ensures patients can only access their own data. Ensures PTs can only access data for patients in their patient list. Logs unauthorized access attempts. Validates user permissions before allowing data operations.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR23, SR-PR1, SR-PR2
+\end{description}
+
 
 \section{Traceability Matrix} \label{SecTM}
 
