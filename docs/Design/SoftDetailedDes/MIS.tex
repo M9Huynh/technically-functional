@@ -200,7 +200,7 @@ Time & String & Time selected by user & 7.2 \\
 \hline
 Recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
 \hline
-Recent\_report & ADT & Generated report & TBD \\
+Recent\_report & Record & Generated report of recent\_video & TBD \\
 \hline
 Recent\_video & String (JSON) & Last video recorded by patient & TBD \\
 \hline
@@ -412,10 +412,14 @@ get\_report & \makecell[lt]{\textit{Date}\\\textit{Time}} & \textit{Report} & \m
 
 \noindent \textbf{State Variables} \\
 \textit{A}: an instance of UserAccount\_P \\
-\textit{E}: an instance of Recent\_analysis
+\textit{E}: an instance of Recent\_analysis\\
+\textit{V}: video \\
+\textit{R}: report \\
+\textit{RR}: recent\_report \\
 
 \noindent \textbf{State Invariant} \\
-
+$ \forall RR,$ $\exists (A \cap V) $ \\
+$ \forall R,$ $\exists (A \cap V_i|i \geq 1..n, n \in 1..\mathbb{N})$
 
 \subsubsection{Assumptions}
 
