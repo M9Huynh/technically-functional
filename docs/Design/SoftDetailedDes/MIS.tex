@@ -607,7 +607,9 @@ get\_rt\_feed & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\U
 \noindent \textbf{State Invariant} \\
 
 
-%Environment variables?
+\subsubsection{Environment variables}
+%TODO fix this pls @Maham
+camera \\
 
 \subsubsection{Assumptions}
 
@@ -620,14 +622,6 @@ get\_rt\_feed & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\U
 \item exception: \wss{if appropriate} 
 \end{itemize}
 
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\newpage
 
 \subsubsection{Local Functions}
 \begin{table}[h]
@@ -642,7 +636,8 @@ get\_rt\_feed & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\U
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 
 \hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
+%set markers? idk
+set\_markers& \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
 
