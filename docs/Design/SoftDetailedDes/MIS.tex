@@ -588,48 +588,48 @@ This module handles the video recording, placing markers on it and checking if t
 \rowcolor{lavender}
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets metrics from metrics module} \\
 \hline
-\rowcolor{lightlavender}
-get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{\textit{angle}\\\textit{height}} & \makecell[lt]{RetrievalError} \\
+\rowcolor{white}
+get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{\textit{angle}\\\textit{height}\\\textit{duration}} & \makecell[lt]{DataRetrievalError} \\
 \hline
 
 % Function 2
 \rowcolor{lavender}
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends overall analysis to feedback module} \\
 \hline
-\rowcolor{lightlavender}
-send\_analysis\_to\newline\_feedback & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\rowcolor{white}
+send\_analysis\_to\newline\_feedback & \makecell[lt]{\textit{NA}} & \makecell[lt]{\textit{recent\_analysis}} & \makecell[lt]{DataRetrievalError\\RecentAnalysisNotFoundError} \\
 \hline
 
 % Function 3
 \rowcolor{lavender}
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Performs real-time analysis during recording} \\
 \hline
-\rowcolor{lightlavender}
-analysis\_rt & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\rowcolor{white}
+analysis\_rt & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{\textit{instructions\_ui}} & \makecell[lt]{CannotAnalyzeError\\NoInputError} \\
 \hline
 
 % Function 4
 \rowcolor{lavender}
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Performs overall analysis (given at end of recording)} \\
 \hline
-\rowcolor{lightlavender}
-analysis\_overall & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\rowcolor{white}
+analysis\_overall & \makecell[lt]{\textit{recent\_video}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{InsufficientDataError\\ProcessError} \\
 \hline
 
 % Function 5
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Module will tell what to correct (e.g., if angle is too small)} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Module will provide corrections (received from Metrics) to UI (e.g. angle is too small)} \\
 \hline
-\rowcolor{lightlavender}
-adjust\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\rowcolor{white}
+corrections\_metrics & \makecell[lt]{\textit{rt\_metrics}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
 % Function 6
 \rowcolor{lavender}
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends overall analysis for storage into database} \\
 \hline
-\rowcolor{lightlavender}
-send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\rowcolor{white}
+send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{UserNotFoundError} \\
 \hline
 
 \end{tabular}
@@ -651,8 +651,8 @@ send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\
 \rowcolor{lavender}
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Calls draw to give markers of the leg} \\
 \hline
-\rowcolor{lightlavender}
-set\_markers & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+\rowcolor{white}
+set\_markers & \makecell[lt]{unprocessed\_frame} & \makecell[lt]{processed\_frame} & \makecell[lt]{InvalidFrameError} \\
 \hline
 
 \end{tabular}
@@ -660,6 +660,7 @@ set\_markers & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\t
 \label{table:access_routines_set_markers}
 \end{table}
 
+\newpage
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
