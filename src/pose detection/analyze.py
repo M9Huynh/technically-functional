@@ -15,7 +15,7 @@ class Analyzer:
         self.cal_duration_s = 3.0
         self.cal_min = None
         self.cal_max = None
-        
+
     def start_calibration(self, duration_s: float = 3.0):
         self.is_calibrating = True
         self.cal_duration_s = float(duration_s)
@@ -31,7 +31,7 @@ class Analyzer:
         if self.cal_max is None or angle > self.cal_max:
             self.cal_max = angle
 
-        # when finished
+
         if (time.time() - self.cal_start_ts) >= self.cal_duration_s:
             if self.cal_min is not None and self.cal_max is not None:
                 self.min_angle = self.cal_min
