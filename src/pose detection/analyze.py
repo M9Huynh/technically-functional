@@ -9,6 +9,13 @@ class Analyzer:
         self.min_angle = 0.0
         self.max_angle = 0.0
 
+        #Calibration State
+        self.is_calibrating = False
+        self.cal_start_ts = None
+        self.cal_duration_s = 3.0
+        self.cal_min = None
+        self.cal_max = None
+
     def update(self, angle:float):
         #Track the first detected angle to initialize the angle variable
         if not self.started:
