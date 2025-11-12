@@ -77,8 +77,6 @@ Date 2 & 1.1 & Notes\\
 
 See SRS Documentation at \wss{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}
 
-\wss{Also add any additional symbols, abbreviations or acronyms}
-
 \newpage
 
 \tableofcontents
@@ -99,9 +97,6 @@ and \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Desig
 found at \url{https://github.com/M9Huynh/technically-functional}.  
 
 \section{Notation}
-
-\wss{You should describe your notation.  You can use what is below as
-  a starting point.}
 
 The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
 with the addition that template modules have been adapted from
@@ -169,6 +164,8 @@ The following table is taken directly from the Module Guide document for this pr
 \end{table}
 
 \section{Variables}
+For clarity and readability, the variables used throughout the document are provided below.
+
 \begin{longtable}{|>{\raggedright\arraybackslash}p{0.22\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}p{0.38\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|}
 \caption{Variable used throughout MIS}\\
 \hline
@@ -191,9 +188,9 @@ The following table is taken directly from the Module Guide document for this pr
 \setlength{\extrarowheight}{2pt}
 \setlength{\arrayrulewidth}{1pt}
 
-Name & String & Name of the user & 7.1 \\
+name & String & Name of the user & 7.1 \\
 \hline
-Role & String & Values can be PT or patient & 7.1 \\
+role & String & Values can be PT or patient & 7.1 \\
 \hline
 email & String & Used as login ID & 7.1 \\
 \hline
@@ -205,33 +202,33 @@ license\_no & Int & Verification of PT & 7.1 \\
 \hline
 invite\_code & String & Given by PT to patient for registration & 7.1 \\
 \hline
-Date & String & Date selected by user & 7.1 \\
+date & String & Date selected by user & 7.1 \\
 \hline
-Time & String & Time selected by user & 7.2 \\
+time & String & Time selected by user & 7.2 \\
 \hline
-Recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
+recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
 \hline
-Recent\_report & Record & Generated report of recent\_video & TBD \\
+recent\_report & Record & Generated report of recent\_video & TBD \\
 \hline
-Recent\_video & String (JSON) & Last video recorded by patient & TBD \\
+recent\_video & String (JSON) & Last video recorded by patient & TBD \\
 \hline
-Video & String (JSON) & A video in the user database & TBD \\
+video & String (JSON) & A video in the user database & TBD \\
 \hline
-Report & Record & Report(s) sent to Generator module for analysis OR requested by patient & TBD \\
+report & Record & Report(s) sent to Generator module for analysis OR requested by patient & TBD \\
 \hline
-Ex\_instruct & String & Performance instructions of requested exercise & TBD \\
+ex\_instruct & String & Performance instructions of requested exercise & TBD \\
 \hline
-Sets & String & Number of sets given by PT & 7.1 \\
+sets & String & Number of sets given by PT & 7.1 \\
 \hline
-Repetitions & String & Repetitions of exercise per set & 7.1 \\
+repetitions & String & Repetitions of exercise per set & 7.1 \\
 \hline
-Rest\_time & String & Rest time between sets & 7.1 \\
+rest\_time & String & Rest time between sets & 7.1 \\
 \hline
-Leg\_landmarks & Array & MediaPipe output of leg & 7.4 \\
+leg\_landmarks & Array & MediaPipe output of leg & 7.4 \\
 \hline
-Processed\_frame & Image & Video frame with overlaid markers & 7.4 \\
+processed\_frame & Image & Video frame with overlaid markers & 7.4 \\
 \hline
-PTcomment & String & PT's comment on patient activity & 7.3 \\
+PT\_comment & String & PT's comment on patient activity & 7.3 \\
 \hline
 
 \end{longtable}
@@ -261,8 +258,8 @@ This module creates an instance of UserAccount\_P/PT and is an adapter that conn
 \item time
 \item date
 \item duration
-\item Recent\_video
-\item Recent\_ analysis
+\item recent\_video
+\item recent\_ analysis
 \item Sets
 \item repetitions
 \item rest\_time
@@ -713,7 +710,7 @@ get\_initial\_form & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthda
 %analysis rt - real time analysis
 %analysis overall - overall analysis (given at end of recording)
 %adjust metrics - module will tell what to correct (eg. if angle is too small)
-%update metrics - ? different than adjust? check with team
+%update metrics - returns updated metrics to metrics module
 %send analysis to db - send overall analysis for storage into
 
 get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
@@ -731,9 +728,6 @@ analysis\_overall & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\O
 adjust\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
-update\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
 send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
@@ -748,8 +742,7 @@ send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
 
-
-%Environment variables?
+\subsubsection{Environment variables} 
 
 \subsubsection{Assumptions}
 
@@ -789,7 +782,6 @@ adjust\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\
 get\_initial\_landmarks & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
-%Leg\_landmarks & Array & MediaPipe output of leg
 \end{longtable}
 
 
@@ -824,8 +816,8 @@ NA
 \rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+%ex_feedback\_to\_main - feedback to user given after analysis
+ex\_feedback\_to\_main & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
 
