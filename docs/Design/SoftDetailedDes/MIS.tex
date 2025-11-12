@@ -689,27 +689,25 @@ camera \\
 \subsubsection{Local Functions}
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabular}{|l|l|l|l|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-%set markers
-set\_markers& \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
-\hline
-%gets starting form of patient
-
-get\_initial\_form & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
+% Function with description
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets starting form of user} \\
+\hline
+\rowcolor{white}
+get\_initial\_form & \makecell[lt]{\textit{input\_frame}} & \makecell[lt]{unprocessed\_frame} & \makecell[lt]{InvalidFrameError} \\
+\hline
+
+\end{tabular}
+\caption{Local Access Routines (Main)}
+\label{tab:access_routines}
 \end{table}
 
 
