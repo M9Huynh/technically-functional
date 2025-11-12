@@ -15,6 +15,29 @@ class Analyzer:
         self.cal_duration_s = 3.0
         self.cal_min = None
         self.cal_max = None
+        
+    def start_calibration(self, duration_s: float = 3.0):
+        self.is_calibrating = True
+        self.cal_duration_s = float(duration_s)
+        self.cal_start_ts = time.time()
+        self.cal_min = None
+        self.cal_max = None
+
+    def _calibrate_with_angle(self, angle: float):
+        if angle is None:
+            return
+        if self.cal_min is None or angle < self.cal_min:
+            self.cal_min = angle
+        if self.cal_max is None or angle > self.cal_max:
+            self.cal_max = angle
+
+        # when finished
+        if (time.time() - self.cal_start_ts) >= self.cal_duration_s:
+            if self.cal_min is not None and self.cal_max is not None:
+                self.min_angle = self.cal_min
+                self.max_angle = self.cal_max
+                self.started = True
+            self.is_calibrating = False
 
     def update(self, angle:float):
         #Track the first detected angle to initialize the angle variable
