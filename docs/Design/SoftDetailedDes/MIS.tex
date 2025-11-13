@@ -549,12 +549,6 @@ get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\O
 \label{tab:account_routines}
 \end{table}
 
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Main}
@@ -602,10 +596,10 @@ overall\_analysis\_home & \makecell[lt]{\textit{name}\\\textit{birthday}} & \mak
 
 % Function 3
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Performs real-time analysis during recording} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends real time processed frames to metrics (to be forwarded to Analysis)} \\
 \hline
 \rowcolor{white}
-analysis\_rt & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{\textit{instructions\_ui}} & \makecell[lt]{CannotAnalyzeError\\NoInputError} \\
+analysis\_rt\_frame & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{\textit{instructions\_ui}} & \makecell[lt]{CannotAnalyzeError\\NoInputError} \\
 \hline
 
 % Function 4
@@ -729,54 +723,68 @@ get\_initial\_form & \makecell[lt]{\textit{input\_frame}} & \makecell[lt]{unproc
 \textbf{Exported Constants}
 
 \noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
+\begin{table}[h]
+\centering
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-%latest_metrics - gets metrics from metrics module
-%send analysis to db - sends overall analysis to db
-%analysis rt - real time analysis
-%analysis overall - overall analysis (given at end of recording)
-%adjust metrics - module will tell what to correct (eg. if angle is too small)
-%update metrics - returns updated metrics to metrics module
-%send analysis to db - send overall analysis for storage into
-
-latest\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\begin{tabular}{|l|l|l|l|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
 
-send\_analysis\_to\newline\_feedback & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+% latest_metrics - gets metrics from metrics module
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} gets metrics from metrics module} \\
+\hline
+\rowcolor{white}
+latest\_metrics & \makecell[lt]{\textit{rt\_metrics}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{InsufficientDataError} \\
 \hline
 
-analysis\_rt & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+% send_analysis_to_feedback - sends overall analysis to feedback
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} sends overall analysis to Feedback module} \\
+\hline
+\rowcolor{white}
+send\_analysis\_to\newline\_feedback & \makecell[lt]{\textit{recent\_analysis}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{AnalysisNotFoundError} \\
 \hline
 
-analysis\_overall & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+% analysis_rt - real time analysis
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} performs real time analysis} \\
+\hline
+\rowcolor{white}
+analysis\_rt & \makecell[lt]{\textit{processed\_frames}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
-adjust\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+% analysis_overall - overall analysis (given at end of recording)
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} overall analysis (given at end of recording)} \\
+\hline
+\rowcolor{white}
+analysis\_overall & \makecell[lt]{\textit{video}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{ConnectionError\\InsufficientDataError} \\
 \hline
 
+% adjust_metrics - module will tell how to fix form (eg. if angle is too small)
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} module will correct form (eg. if angle is too small)} \\
+\hline
+\rowcolor{white}
+adjust\_metrics & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{rt\_metrics} & \makecell[lt]{UndetectedFormError} \\
+\hline
+
+% send_analysis_to_db - send overall analysis for storage into
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} send overall analysis to Database module} \\
+\hline
+\rowcolor{lightlavender}
 send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
-
-\end{longtable}
+\end{tabular}
+\caption{Access Routines for Analysis Module}
+\label{table:access_routines}
+\end{table}
 
 \subsubsection{Semantics}
 
