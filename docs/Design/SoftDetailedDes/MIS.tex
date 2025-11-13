@@ -297,41 +297,101 @@ This module creates an instance of UserAccount\_P/PT and is an adapter that conn
 \end{itemize}
 
 \noindent \textbf{Exported Access Programs}\\
+\noindent\textsuperscript{1} \textit{For this function, the output depends on context. For example, if this function was going to be used in another one which corresponds to the PT functionality of viewing 
+a patient, their view would be restricted to patients under their care.}
+
+
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
+\rowcolors{2}{lavender}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
 
 \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
-get\_userdb\_info$^1$ & \makecell[lt]{\textit{Name}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves user account information from the user table} \\
 \hline
-PTaccount\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
+\rowcolor{white}
+get\_userdb\_info$^1$ & \makecell[lt]{\textit{Name}} & \makecell[lt]{\textit{user\_acc\_p}\\\textit{user\_acc\_pt}} & \makecell[lt]{UserNotFoundError\\DownloadError} \\
 \hline
-username\_pw\_match & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_\\password} \\
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Allows PT to delete a patient account from the system} \\
 \hline
-add\_analysis\_to\_\newline user\_act & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Recent\_analysis}} & NA & \makecell[lt]{UserNotFoundError\\SaveError} \\
+\rowcolor{white}
+PTaccount\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
 \hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Verifies if username and password match for authentication} \\
+\hline
+\rowcolor{white}
+username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \makecell[lt]{LoginMatchError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Adds analysis results to user activity history} \\
+\hline
+\rowcolor{white}
+add\_analysis\_to\newline\_user\_act & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_analysis}} & NA & \makecell[lt]{UserNotFoundError\\SaveError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Saves video recording for user account} \\
+\hline
+\rowcolor{white}
 save\_video & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Recent\_video}} & NA & \makecell[lt]{User\_not\_found\\Upload\_error\\Video\_too\_short} \\
 \hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves analysis data for a specific date} \\
+\hline
+\rowcolor{white}
 get\_analysis & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Date}} & Recent\_analysis & \makecell[lt]{User\_not\_found\\Download\_error\\Analysis\_not\_found} \\
 \hline
+
+\end{tabularx}
+\caption{Exported Access Routines (Part 1)}
+\label{tab:user_routines_1}
+\end{table}
+\clearpage
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Provides exercise instructions to user} \\
+\hline
+\rowcolor{white}
 exerc\_instruct & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Exercise}} & \textit{Ex\_instruct} & \makecell[lt]{User\_not\_found\\Download\_error\\exercise\_not\_in\_list} \\
 \hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Allows physical therapist to modify exercise parameters} \\
+\hline
+\rowcolor{white}
 PT\_modifies\_exercise & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Sets}\\\textit{Repetitions}\\\textit{Rest\_time}} & \textit{Ex\_instruct} & \makecell[lt]{User\_not\_found\\Download\_error\\exercise\_not\_in\_list} \\
 \hline
-\end{tabularx}
-\caption{Exported Access Routines}
-\label{tab:user_routines}
-\end{table} 
-\noindent\textsuperscript{1} \textit{For this function, the output depends on context. For example, if this function was going to be used in another one which corresponds to the PT functionality of viewing 
-a patient, their view would be restricted to patients under their care.}
 
-\newpage
+\end{tabularx}
+\caption{Exported Access Routines (Part 2)}
+\label{tab:user_routines_2}
+\end{table}
+
+
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
