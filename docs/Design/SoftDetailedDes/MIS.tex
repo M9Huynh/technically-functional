@@ -837,8 +837,7 @@ get\_initial\_landmarks & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Feedback}
-NA
-
+This module is responsible for delivering the feedback (e.g. to adjust form) to the Main module.
 
 \subsubsection{Uses}
 
@@ -847,145 +846,37 @@ NA
 \textbf{Exported Constants}
 
 \noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-%ex_feedback\_to\_main - feedback to user given after analysis
-ex\_feedback\_to\_main & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-
-\end{longtable}
-
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-
-
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-
-
-%Environment variables?
-
-\subsubsection{Assumptions}
-
-\subsubsection{Access Routine Semantics}
-
-\noindent \wss{accessProg}():
-\begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
-\end{itemize}
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\newpage
-
-\subsubsection{Local Functions}
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabular}{|l|l|l|l|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
+% ex_feedback_to_main - feedback to user given after analysis
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} feedback to user given after analysis} \\
+\hline
+\rowcolor{white}
+ex\_feedback\_to\_main & \makecell[lt]{\textit{feedback}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{FeedbackEmptyError} \\
+\hline
 
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
+% given_feedback - instructions given by analysis to construct feedback that will be forwarded to Main
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} instructions given by analysis to construct feedback that will be forwarded to the Main module} \\
+\hline
+\rowcolor{white}
+given\_instruct & \makecell[lt]{\textit{feedback\_instructions}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{InsEmptyError} \\
+\hline
+
+\end{tabular}
+\caption{Access Routines for Analysis Module}
+\label{table:access_routines}
 \end{table}
 
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-
-\newpage
-
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\subsubsection{Local Functions}
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Metrics}
-NA
-
-
-\subsubsection{Uses}
-
-\subsubsection{Syntax}
-
-\textbf{Exported Constants}
-
-\noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-
-\end{longtable}
-
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
@@ -1020,23 +911,137 @@ placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\Use
 \subsubsection{Local Functions}
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabular}{|l|l|l|l|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
+% construct_feedback
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Constructs feedback based on instructions from Analyze module} \\
+\hline
+\rowcolor{white}
+construct\_feedback & \makecell[lt]{\textit{feedback\_instructions}} & \makecell[lt]{\textit{feedback}} & \makecell[lt]{InsEmptyError} \\
+\hline
 
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
+\end{tabular}
+\caption{Feedback Access Routines}
+\label{tab:feedback_routines}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Metrics}
+This module measures matrics (\textit{angle, duration, height}) that are necessary to construct any corrections to the user's form. \\
+
+
+\subsubsection{Uses}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}
+
+\noindent \textbf{Exported Access Programs}
+\begin{table}[h]
+\centering
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+% placeholder
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} obtains a frame from Main module} \\
+\hline
+\rowcolor{white}
+get\_frame & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{NA} & \makecell[lt]{NoFrameError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} calculates metrics from frame provided by Main module} \\
+\hline
+\rowcolor{white}
+calculate\_frame & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{\textit{angle}\\\textit{height}\\\textit{duration}} & \makecell[lt]{NoFrameError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} obtains metrics that need to be adjusted by the user (calls Analysis)} \\
+\hline
+\rowcolor{white}
+fixed\_frame & \makecell[lt]{\textit{NA}} & \makecell[lt]{\textit{fixed\_metrics}} & \makecell[lt]{NoFrameError} \\
+\hline
+
+
+
+\end{tabular}
+\caption{Access Routines for Analysis Module}
+\label{table:access_routines}
+\end{table}
+
+\subsubsection{Semantics}
+
+\noindent \textbf{State Variables} \\
+
+
+%Check requirements doc
+\noindent \textbf{State Invariant} \\
+
+
+%Environment variables?
+
+\subsubsection{Assumptions}
+
+\subsubsection{Access Routine Semantics}
+
+\noindent \wss{accessProg}():
+\begin{itemize}
+\item transition: \wss{if appropriate} 
+\item output: \wss{if appropriate} 
+\item exception: \wss{if appropriate} 
+\end{itemize}
+
+\subsubsection{Local Functions}
+\begin{table}[h]
+\centering
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+% measures the angle between the starting and final plane
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} measures the angle between the starting and final plane} \\
+\hline
+\rowcolor{white}
+measure\_angle & \makecell[lt]{\textit{initial\_plane}\\\textit{final\_plane}} & \makecell[lt]{\textit{angle}} & \makecell[lt]{FrameEmptyError} \\
+\hline
+
+% measures difference in initial and final height
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} measures difference in initial and final height} \\
+\hline
+\rowcolor{white}
+measure\_height & \makecell[lt]{\textit{initial\_height}\\\textit{final\_height}} & \makecell[lt]{\textit{height}} & \makecell[lt]{FrameEmptyError} \\
+\hline
+
+% measures duration of the performed exercise
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} measures duration of the performed exercise} \\
+\hline
+\rowcolor{white}
+measure\_duration & \makecell[lt]{\textit{initial\_time}\\\textit{final\_time}} & \makecell[lt]{\textit{duration}} & \makecell[lt]{FrameEmptyError} \\
+\hline
+
+\end{tabular}
+\caption{Metrics Access Routines}
+\label{tab:metrics_routines}
 \end{table}
 
 \subsubsection{Local Functions}
