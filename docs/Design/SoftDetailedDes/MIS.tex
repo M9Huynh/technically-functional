@@ -777,8 +777,8 @@ adjust\_metrics & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{rt\_m
 \rowcolor{lavender}
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} send overall analysis to Database module} \\
 \hline
-\rowcolor{lightlavender}
-send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\rowcolor{white}
+send\_analysis\_to\_db & \makecell[lt]{\textit{overall\_analysis}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
 \end{tabular}
@@ -789,12 +789,14 @@ send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-
+TBD
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
+TBD
 
 \subsubsection{Environment variables} 
+\textit{NA}
 
 \subsubsection{Assumptions}
 
@@ -809,32 +811,28 @@ send\_analysis\_to\_db & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\
 
 
 \subsubsection{Local Functions}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
+\begin{table}[h]
+\centering
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-adjust\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\begin{tabular}{|l|l|l|l|}
 \hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+% get_initial_landmarks
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets initial landmarks from the starting position} \\
+\hline
+\rowcolor{white}
 get\_initial\_landmarks & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
 
-\end{longtable}
+\end{tabular}
+\caption{Access Routines for Analysis Module}
+\label{table:access_routines}
+\end{table}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
