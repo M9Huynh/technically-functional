@@ -235,7 +235,25 @@ processed\_frame & Image & Video frame with overlaid markers & 7.4 \\
 \hline
 PT\_comment & String & PT's comment on patient activity & 7.3 \\
 \hline
-
+overall\_analysis & Abstract object & the overall analysis of all patient activity & 7.4 \\ %check
+\hline
+processed\_frames\_list & list & list of processed\_frames & 7.3 \\
+\hline
+feedback\_instructions & Abstract Object & instructions given from analysis to feedback module & 7.3 \\
+\hline
+fixed\_metrics & float & corrected metrics & 7.3 \\
+\hline
+initial/final\_\newline plane/time/height & float & initial and final measurements & 7.3 \\
+\hline
+%TODO
+ins\_ui & String & PT's comment on patient activity & 7.3 \\
+\hline
+unprocessed\_frames & String & PT's comment on patient activity & 7.3 \\
+\hline
+rt\_metrics & String & PT's comment on patient activity & 7.3 \\
+\hline
+input\_frame & String & PT's comment on patient activity & 7.3 \\
+\hline
 \end{longtable}
 
 
@@ -274,8 +292,8 @@ This module creates an instance of UserAccount\_P/PT and is an adapter that conn
 
 \textbf{Exported Constants}
 \begin{itemize}
-\item \textit{UserAccount\_P}: ADT
-\item \textit{UserAccount\_PT}: ADT 
+\item \textit{user\_acc\_p}: ADT
+\item \textit{user\_acc\_pt}: ADT 
 \end{itemize}
 
 \noindent \textbf{Exported Access Programs}\\
