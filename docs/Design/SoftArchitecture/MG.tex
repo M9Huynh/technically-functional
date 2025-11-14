@@ -276,43 +276,16 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Implemented By:] \progname{}
 \end{description}
 
-\subsubsection{Authentication Module (M2)}
+\subsubsection{User Interface Module (M1)}
 \begin{description}
-	\item[Secrets:] The implementation details of user authentication, session management, and credential verification.
-	\item[Services:] Handles user login, logout, session creation, and session timeout. Verifies user credentials against stored records and manages authentication tokens. Enforces 60-minute inactivity timeout as per SR-AR3.
+	\item[Secrets:] The user interface layout and interaction logic for patient and physiotherapist dashboards.
+	\item[Services:] Displays patient exercise history, progress charts, and upcoming exercises. Shows PT patient list with status indicators and alerts. Provides access to video review and report viewing. Enables PT comments on patient sessions. Presents analytics and visualizations of exercise data.
 	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR1, FR1.1, SR-AR1, SR-AR3
+	\item[Related Requirements:] FR18, FR19, FR24, FR25
 \end{description}
 
-\subsubsection{User Account Management Module (M3)}
-\begin{description}
-	\item[Secrets:] The structure and validation logic for user account data, including patient and physiotherapist profiles.
-	\item[Services:] Creates and manages user accounts for both patients and physiotherapists. Validates registration data including government ID, license numbers (for PTs), and invite codes (for patients). Stores and retrieves user profile information securely.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Data Type
-	\item[Related Requirements:] FR1.1, FR1.2, FR1.3, FR2
-\end{description}
-
-\subsubsection{Organization Linking Module (M4)}
-\begin{description}
-	\item[Secrets:] The algorithm for generating, validating, and managing access codes that link patients to physiotherapists.
-	\item[Services:] Generates unique access codes for physiotherapists to share with patients. Validates patient-submitted access codes and establishes the patient--PT relationship. Manages the patient list for each physiotherapist. Handles patient account deletion requests from PTs.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR1.3, FR2, FR3, FR18
-\end{description}
-
-\subsubsection{Exercise Library Module (M5)}
-\begin{description}
-	\item[Secrets:] The storage structure and retrieval methods for exercise information, including instructions, media, and form parameters.
-	\item[Services:] Maintains a library of at least ten knee exercises with detailed instructions, demonstration media, and form parameters. Provides exercise information to users on demand. Supports caching for offline access.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Data Type
-	\item[Related Requirements:] FR5, MS-AD1
-\end{description}
-
-\subsubsection{Exercise Program Management Module (M6)}
+\subsubsection{Home Module (M2)}
 \begin{description}
 	\item[Secrets:] The data structures and business logic for managing patient-specific exercise programs, including customization and progress tracking.
 	\item[Services:] Allows physiotherapists to create and customize exercise programs for individual patients, including sets, reps, rest times, and weekly limits. Tracks patient exercise completion and progress over time. Enforces PT-defined limitations on exercise frequency and intensity.
@@ -321,49 +294,22 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR6, FR10, FR11, FR22, FR27
 \end{description}
 
-\subsubsection{Video Capture Module (M7)}
+\subsubsection{Main Module (M3)}
 \begin{description}
 	\item[Secrets:] The implementation of video recording, including camera configuration, frame rate management, and recording controls.
-	\item[Services:] Captures video of users performing exercises at minimum 720p resolution and 30~fps. Performs pre-capture environment checks (lighting, framing). Provides recording controls (start, stop, retry). Ensures video meets minimum quality standards before proceeding to analysis.
+	\item[Services:] Captures video of users performing exercises at minimum 720p resolution and 30 fps. Performs pre-capture environment checks (lighting, framing). Provides recording controls (start, stop, retry). Ensures video meets minimum quality standards before proceeding to analysis.
 	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Object
 	\item[Related Requirements:] FR7, FR15, FR26, UHR-EOU3
 \end{description}
 
-\subsubsection{Video Storage Module (M8)}
+\subsubsection{Draw Module (M4)}
 \begin{description}
-	\item[Secrets:] The mechanism for storing, retrieving, and managing video files, including local caching and cloud synchronization.
-	\item[Services:] Stores recorded exercise videos securely (encrypted at rest per SR-IR1). Manages local storage and cloud upload queuing. Handles upload retry logic when network is unavailable. Retrieves stored videos for patient and PT review. Implements automatic backup functionality.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR21, SR-IR1, PR-RFT2, MS-MNT1
-\end{description}
-
-\subsubsection{Feedback Generation Module (M11)}
-\begin{description}
-	\item[Secrets:] The rules and logic for converting analysis results into user-friendly feedback messages and instructions.
-	\item[Services:] Generates real-time corrective feedback messages based on form analysis results. Provides step-by-step exercise guidance. Creates descriptive messages for form deviations specifying required adjustments. Triggers safety warnings for dangerous movements.
+	\item[Secrets:] The graphical representation of landmarks and objects of interest within the video provided by the user.
+	\item[Services:] Graphically shows the user the system's understanding of their movements by highlighting landmarks such as their ankle, knee, and hip. Additionally, draws lines between these landmarks to communicate how the system interprets limb movement.
 	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Library
-	\item[Related Requirements:] FR13, FR14, FR16, PR-SCR1
-\end{description}
-
-\subsubsection{Reporting Module (M12)}
-\begin{description}
-	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
-	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Library
-	\item[Related Requirements:] FR17, FR19, FR20, FR25
-\end{description}
-
-\subsubsection{Dashboard Module (M13)}
-\begin{description}
-	\item[Secrets:] The user interface layout and interaction logic for patient and physiotherapist dashboards.
-	\item[Services:] Displays patient exercise history, progress charts, and upcoming exercises. Shows PT patient list with status indicators and alerts. Provides access to video review and report viewing. Enables PT comments on patient sessions. Presents analytics and visualizations of exercise data.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR18, FR19, FR24, FR25
+	\item[Related Requirements:] FR5, FR14, LFR-ST1, UHR-EOU2, UHR-EOU5, UHR-EOU6
 \end{description}
 
 \subsection{Software Decision Module}
