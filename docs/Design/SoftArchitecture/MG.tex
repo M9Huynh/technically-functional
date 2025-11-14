@@ -371,14 +371,14 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 \begin{description}
 	\item[Secrets:] The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are not described in the SRS.
 	\item[Services:] Includes data structure and algorithms used in the system that do not provide direct interaction with the user.
-	\item[Implemented By:] PhysioCompanion
+	\item[Implemented By:] \progname{}
 \end{description}
 
 \subsubsection{Database Management Module (M5)}
 \begin{description}
 	\item[Secrets:] The structure, validation, and authorization logic for all user credentials, account data, invite codes, physiotherapist identification numbers, exercise information, and data encryption.
 	\item[Services:] Handles user login, logout, session creation, and session timeout. Verifies user credentials against stored records and manages authentication tokens. Enforces 60-minute inactivity timeout as per SR-AR3. Creates and manages user accounts for both patients and physiotherapists. Validates registration data including government ID, license numbers (for PTs), and invite codes (for patients). Stores and retrieves user profile information securely. Generates unique access codes for physiotherapists to share with patients. Validates patient-submitted access codes and establishes the patient-PT relationship. Manages the patient list for each physiotherapist. Handles patient account deletion requests from PTs.  Maintains a library of at least 10 knee exercises with detailed instructions, demonstration media, and form parameters. Provides exercise information to users on demand. Supports caching for offline access. Encrypts patient data at rest and in transit using industry-standard protocols. Manages encryption keys securely. Provides methods for encrypting and decrypting data as needed by other modules. Ensures compliance with healthcare data security requirements. Enforces role-based access control for patients and physiotherapists. Ensures patients can only access their own data. Ensures PTs can only access data for patients in their patient list. Logs unauthorized access attempts. Validates user permissions before allowing data operations.
-	\item[Implemented By:] Physiotherapy Companion
+	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Object
 	\item[Related Requirements:] FR1, FR1.1, FR1.2, FR1.3, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
 \end{description}
@@ -387,7 +387,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 \begin{description}
 	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
 	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
-	\item[Implemented By:] Physiotherapy Companion
+	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Library
 	\item[Related Requirements:] FR17, FR19, FR20, FR25
 \end{description}
@@ -396,7 +396,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 \begin{description}
 	\item[Secrets:] The specific computer vision algorithms and implementation details for pose detection, joint tracking, and body landmark identification.
 	\item[Services:] Processes video frames to detect and track body landmarks using pose estimation. Identifies key joints relevant to knee exercises (hip, knee, ankle, foot). Extracts coordinate data for joint positions across video frames. Handles varying lighting conditions and camera angles. Implements the core CV library integration (OpenCV, MediaPipe).
-	\item[Implemented By:] Physiotherapy Companion
+	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Data Type
 	\item[Related Requirements:] FR8, FR12
 \end{description}
@@ -405,9 +405,18 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 \begin{description}
 	\item[Secrets:] The mathematical models and algorithms for calculating joint angles, range of motion, and determining form correctness based on exercise parameters. Also the mechanism for storing video files through local caching.
 	\item[Services:] Calculates joint angles from landmark coordinates with ±5° accuracy. Measures range of motion with ±10\% accuracy. Compares measured values against exercise-specific acceptable ranges. Detects form deviations and classifies severity. Identifies dangerous movements requiring immediate halt. Measures time-under-tension and exercise duration. Also stores recorded exercise videos securely (encrypted at rest per SR-IR1).
-	\item[Implemented By:] Physiotherapy Companion
+	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Data Type
 	\item[Related Requirements:] FR12, FR13, FR14, FR21, SR-IR1, PR-RFT2, PR-PAR1, PR-PAR2, PR-SCR1, MS-MNT1
+\end{description}
+
+\subsubsection{Feedback Module (M9)}
+\begin{description}
+	\item[Secrets:] The rules and logic for converting analysis results into user-friendly feedback messages and instructions.
+	\item[Services:] Generates real-time corrective feedback messages based on form analysis results. Provides step-by-step exercise guidance. Creates descriptive messages for form deviations specifying required adjustments. Triggers safety warnings for dangerous movements.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Library
+	\item[Related Requirements:] FR13, FR14, FR16, PR-SCR1
 \end{description}
 
 
