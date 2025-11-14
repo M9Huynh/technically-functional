@@ -202,8 +202,15 @@ below, which are leaves in the hierarchy tree, are the modules that will
 actually be implemented.
 
 \begin{description}
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
-\item ...
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Interface Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Home Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Main Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Draw Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Database Management Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Generator Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Metrics Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Analyze Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Feedback Module
 \end{description}
 
 
@@ -253,7 +260,7 @@ The design of the system is intended to satisfy the requirements developed in th
 
 Modules are decomposed according to the principle of ``information hiding.'' The \emph{Secrets} field in a module decomposition is a brief statement of the design decision hidden by the module. The \emph{Services} field specifies \emph{what} the module will do without documenting \emph{how} to do it. If the entry is \emph{OS}, this means that the module is provided by the operating system or by standard programming language libraries. \emph{\progname{}} means the module will be implemented by the \progname{} software. Only the leaf modules in the hierarchy have to be implemented.
 
-\subsection{Hardware Hiding Modules (M1)}
+\subsection{Hardware Hiding Modules}
 
 \begin{description}
 	\item[Secrets:] The data structure and algorithm used to implement the virtual hardware.
@@ -261,12 +268,12 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Implemented By:] Android~OS
 \end{description}
 
-\subsection{Behaviour-Hiding Module}
+\subsection{Behaviour-Hiding Modules}
 
 \begin{description}
 	\item[Secrets:] The contents of the required behaviours.
 	\item[Services:] Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
-	\item[Implemented By:] --
+	\item[Implemented By:] \progname{}
 \end{description}
 
 \subsubsection{Authentication Module (M2)}
@@ -364,43 +371,43 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 \begin{description}
 	\item[Secrets:] The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are not described in the SRS.
 	\item[Services:] Includes data structure and algorithms used in the system that do not provide direct interaction with the user.
-	\item[Implemented By:] --
+	\item[Implemented By:] PhysioCompanion
 \end{description}
 
-\subsubsection{Computer Vision Processing Module (M9)}
+\subsubsection{Database Management Module (M5)}
+\begin{description}
+	\item[Secrets:] The structure, validation, and authorization logic for all user credentials, account data, invite codes, physiotherapist identification numbers, exercise information, and data encryption.
+	\item[Services:] Handles user login, logout, session creation, and session timeout. Verifies user credentials against stored records and manages authentication tokens. Enforces 60-minute inactivity timeout as per SR-AR3. Creates and manages user accounts for both patients and physiotherapists. Validates registration data including government ID, license numbers (for PTs), and invite codes (for patients). Stores and retrieves user profile information securely. Generates unique access codes for physiotherapists to share with patients. Validates patient-submitted access codes and establishes the patient-PT relationship. Manages the patient list for each physiotherapist. Handles patient account deletion requests from PTs.  Maintains a library of at least 10 knee exercises with detailed instructions, demonstration media, and form parameters. Provides exercise information to users on demand. Supports caching for offline access. Encrypts patient data at rest and in transit using industry-standard protocols. Manages encryption keys securely. Provides methods for encrypting and decrypting data as needed by other modules. Ensures compliance with healthcare data security requirements. Enforces role-based access control for patients and physiotherapists. Ensures patients can only access their own data. Ensures PTs can only access data for patients in their patient list. Logs unauthorized access attempts. Validates user permissions before allowing data operations.
+	\item[Implemented By:] Physiotherapy Companion
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR1, FR1.1, FR1.2, FR1.3, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
+\end{description}
+
+\subsubsection{Generator Module (M6)}
+\begin{description}
+	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
+	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
+	\item[Implemented By:] Physiotherapy Companion
+	\item[Type of Module:] Library
+	\item[Related Requirements:] FR17, FR19, FR20, FR25
+\end{description}
+
+\subsubsection{Metrics Module (M7)}
 \begin{description}
 	\item[Secrets:] The specific computer vision algorithms and implementation details for pose detection, joint tracking, and body landmark identification.
-	\item[Services:] Processes video frames to detect and track body landmarks using pose estimation. Identifies key joints relevant to knee exercises (hip, knee, ankle, foot). Extracts coordinate data for joint positions across video frames. Handles varying lighting conditions and camera angles. Implements the core CV library integration (e.g., OpenCV, MediaPipe).
-	\item[Implemented By:] \progname{}
+	\item[Services:] Processes video frames to detect and track body landmarks using pose estimation. Identifies key joints relevant to knee exercises (hip, knee, ankle, foot). Extracts coordinate data for joint positions across video frames. Handles varying lighting conditions and camera angles. Implements the core CV library integration (OpenCV, MediaPipe).
+	\item[Implemented By:] Physiotherapy Companion
 	\item[Type of Module:] Abstract Data Type
 	\item[Related Requirements:] FR8, FR12
 \end{description}
 
-\subsubsection{Form Analysis Module (M10)}
+\subsubsection{Analyze Module (M8)}
 \begin{description}
-	\item[Secrets:] The mathematical models and algorithms for calculating joint angles, range of motion, and determining form correctness based on exercise parameters.
-	\item[Services:] Calculates joint angles from landmark coordinates with $\pm5^{\circ}$ accuracy. Measures range of motion with $\pm10\%$ accuracy. Compares measured values against exercise-specific acceptable ranges. Detects form deviations and classifies severity. Identifies dangerous movements requiring immediate halt. Measures time-under-tension and exercise duration.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Library
-	\item[Related Requirements:] FR12, FR13, FR14, PR-PAR1, PR-PAR2, PR-SCR1
-\end{description}
-
-\subsubsection{Data Encryption Module (M14)}
-\begin{description}
-	\item[Secrets:] The encryption algorithms, key management, and cryptographic protocols used to secure patient data.
-	\item[Services:] Encrypts patient data at rest and in transit using industry-standard protocols. Manages encryption keys securely. Provides methods for encrypting and decrypting data as needed by other modules. Ensures compliance with healthcare data security requirements.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Library
-	\item[Related Requirements:] FR21, SR-IR1
-\end{description}
-
-\subsubsection{Access Control Module (M15)}
-\begin{description}
-	\item[Secrets:] The authorization logic and permission management system that enforces data access policies.
-	\item[Services:] Enforces role-based access control for patients and physiotherapists. Ensures patients can only access their own data. Ensures PTs can only access data for patients in their patient list. Logs unauthorized access attempts. Validates user permissions before allowing data operations.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR23, SR-PR1, SR-PR2
+	\item[Secrets:] The mathematical models and algorithms for calculating joint angles, range of motion, and determining form correctness based on exercise parameters. Also the mechanism for storing video files through local caching.
+	\item[Services:] Calculates joint angles from landmark coordinates with ±5° accuracy. Measures range of motion with ±10\% accuracy. Compares measured values against exercise-specific acceptable ranges. Detects form deviations and classifies severity. Identifies dangerous movements requiring immediate halt. Measures time-under-tension and exercise duration. Also stores recorded exercise videos securely (encrypted at rest per SR-IR1).
+	\item[Implemented By:] Physiotherapy Companion
+	\item[Type of Module:] Abstract Data Type
+	\item[Related Requirements:] FR12, FR13, FR14, FR21, SR-IR1, PR-RFT2, PR-PAR1, PR-PAR2, PR-SCR1, MS-MNT1
 \end{description}
 
 
