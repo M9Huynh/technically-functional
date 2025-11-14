@@ -237,7 +237,7 @@ PT\_comment & String & PT's comment on patient activity & 7.3 \\
 \hline
 overall\_analysis & Abstract object & the overall analysis of all patient activity & 7.4 \\ %check
 \hline
-processed\_frames\_list & list & list of processed\_frames & 7.3 \\
+processed\_frames\_list & List(Image object) & list of processed\_frames & 7.3 \\
 \hline
 feedback\_instructions & Abstract Object & instructions given from analysis to feedback module & 7.3 \\
 \hline
@@ -246,13 +246,19 @@ fixed\_metrics & float & corrected metrics & 7.3 \\
 initial/final\_\newline plane/time/height & float & initial and final measurements & 7.3 \\
 \hline
 %TODO
-ins\_ui & String & PT's comment on patient activity & 7.3 \\
+ins\_ui & String & PT's comment on patient activity & TBD \\
 \hline
-unprocessed\_frames & String & PT's comment on patient activity & 7.3 \\
+unprocessed\_frames & List(Image objects) & Unprocessed frames list & TBD \\
 \hline
-rt\_metrics & String & PT's comment on patient activity & 7.3 \\
+rt\_metrics & List(of float) & Real-time metrics & TBD \\
 \hline
-input\_frame & String & PT's comment on patient activity & 7.3 \\
+input\_frame & Image & Input frame & TBD \\
+\hline
+exercise & String & Selected exercise & TBD \\
+\hline
+insights & String & Generated insights & TBD \\
+\hline
+all\_reports & List[report] & All reports are stored in a list & TBD \\
 \hline
 \end{longtable}
 
@@ -1512,6 +1518,16 @@ graduate attribute of Problem Analysis and Design.
   
 
 \end{enumerate}
+\subsection*{Maham - Reflection}
+\begin{enumerate}
+  \item Despite our (extremely) busy schedules, we made time to meet when we could and offer assistance to any member that needed it. In addition, all of us kept in contact and checked in with each other. I liked that none of us completely abandoned this project, but rather balanced it quite well. Also, the more frequent PR requests strategy (implemented for this deliverable) ended up being immensely helpful.
+  \item A pain point for me was that a lot of my time and energy was taken up by external tasks. These were, unfortunately, appointments I could not compromise on because they had been scheduled months in advance. I would have loved to give this project more of my focus, and I tried my best to self-organize, but there were some areas I fell short. I will attempt to refine my balancing act for the future.
+  \item The project is still in the early stages of development, and as a result, we do not have many concrete elements. However, some of developed ideas and design decisions was aided by Kevin, our supervisor. At this stage, we are constructing the foundation of the software, and that knowledge was supplied by him. Eventually, when we do have a functional product, we will want to loop in other stakeholders, e.g. patients, for modifications
+  \item Group Q
+  \item Group Q
+  \item Group Q
+  
 
+\end{enumerate}
 
 \end{document}
