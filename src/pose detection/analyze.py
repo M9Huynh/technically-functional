@@ -18,12 +18,26 @@ class Analyzer:
         self.cal_min = None
         self.cal_max = None
 
+        #Rep/duration
+        self.rep_count = 0
+        self.current_rep = None
+        self.rep_durations = []
+
+        self.flexion_threshold= .7
+        self.extension_threshold = .8
+
+        self.rep_state = "T"
+
     def start_calibration(self, duration_s: float = 3.0):
         self.is_calibrating = True
         self.cal_duration_s = float(duration_s)
         self.cal_start_ts = time.time()
         self.cal_min = None
         self.cal_max = None
+
+        self.rep_count = 0
+        self.rep_durations = []
+        self.rep_state = "T"
 
     def _calibrate_with_angle(self, angle: float):
         if angle is None:
@@ -39,6 +53,26 @@ class Analyzer:
                 self.max_angle = self.cal_max
                 self.started = True
             self.is_calibrating = False
+
+    def _rep_update(self, angle:float):
+        if self.min_angle == self.max_angle:
+            return
+        
+        normalized_angle = (angle - self.min_angle)/(self.max_angle-self.min_angle) #setting the angle to be between 0-1 to compare thresholds
+
+        if self.rep_state == "T":
+            if normalized_angle < 1 - self.flexion_threshold:
+                self.rep_state = "B"
+                self.current_rep = time.time()
+
+        elif self.rep_state == "B":
+            if normalized_angle > self.extension_threshold:
+                self.rep_state = "T"
+                if self.current_rep:
+                    rep_duration = time.time() - self.current_rep
+                    self.rep_durations.append(rep_duration)
+                    self.rep_count += 1
+                self.current_rep = None
 
     def update(self, angle:float):
 
@@ -59,12 +93,27 @@ class Analyzer:
         if angle > self.max_angle:
             self.max_angle = angle
 
+        if self.started and not self.is_calibrating:
+            self._rep_update(angle)
+
         #calculate the range of motion
     def calc_rom(self) -> float:
         return self.max_angle - self.min_angle
-    
+
     def summary(self) -> dict:
+        #calculation for durations
+        current_duration = 0 
+        if self.rep_durations:
+            avg_duration = sum(self.rep_durations)/len(self.rep_durations)
+            if self.current_rep:
+                current_duration = time.time() - self.current_rep 
+            else:
+                0
+        else:
+            avg_duration = 0
+            current_duration = 0 
         return {
+            #angle/calibration stats
             "min_degree": round(self.min_angle, 1),
             "max_degree": round(self.max_angle, 1),
             "rom_degree": round(self.calc_rom(), 1),
@@ -73,13 +122,10 @@ class Analyzer:
                 max(0.0, self.cal_duration_s - (time.time() - self.cal_start_ts))
                 if self.is_calibrating else 0.0
             ),
+            #reps/duration status
+            "rep_count": self.rep_count,
+            "current_rep_duration": current_duration,
+            "avg_rep_duration": avg_duration,
+            "rep_state": self.rep_state
         }
     
-
-
-
-
-
-
-
-

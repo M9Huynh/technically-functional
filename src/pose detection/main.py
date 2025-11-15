@@ -14,7 +14,7 @@ class PoseApp:
         self.side = "RIGHT"
         self.pose_detect = mp.solutions.pose.Pose()
         self.cams = {
-            'Sample Video':PoseCamera('right leg knee extension sagittal plane.MP4',pose_detect=self.pose_detect)
+            'Sample Video':PoseCamera('src/pose detection/knee.MP4',pose_detect=self.pose_detect)
             # 'Sagittal Plane':PoseCamera(0,pose_detect=self.pose_detect)
             # ,'Frontal Plane': PoseCamera(1, pose_detect=self.pose_detect)
         }
@@ -73,9 +73,20 @@ class PoseApp:
                         cv.FONT_HERSHEY_SIMPLEX,
                         0.7,
                         (255, 255, 255),   # green
-                        2,
+                        2,  
                     )
-
+                    #includes reps/avg duration
+                    cv.putText(
+                        frame_landmarks,
+                        f"Reps: {stats['rep_count']} Rep State: {stats['rep_state']} Avg Duration: {stats['avg_rep_duration']:.1f}",
+                        (20, 110),
+                        cv.FONT_HERSHEY_SIMPLEX,
+                        0.7,
+                        (0, 0, 255),
+                        2,
+                        
+                    )
+                    
                 cv.imshow(view, frame_landmarks)
 
             if cv.waitKey(1) == ord("q"):
