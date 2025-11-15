@@ -37,6 +37,11 @@ urlcolor=cyan          % color of external links
 
 \definecolor{tableblue}{RGB}{230, 240, 255}
 \definecolor{headerblue}{RGB}{100, 150, 220}
+\definecolor{accentmint}{RGB}{170,240,209} 
+\definecolor{darkpurple}{RGB}{75,0,130}      % Royal purple
+\definecolor{lavender}{RGB}{230,230,250}     % Lavender
+\definecolor{lightlavender}{RGB}{245,245,255} % Light lavender
+
 \newcolumntype{L}{>{\raggedright\arraybackslash}p{0.2\textwidth}}
 \newcolumntype{M}{>{\raggedright\arraybackslash}p{0.15\textwidth}}
 \newcolumntype{R}{>{\raggedright\arraybackslash}p{0.55\textwidth}}
@@ -76,8 +81,6 @@ Date 2 & 1.1 & Notes\\
 
 See SRS Documentation at \wss{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}
 
-\wss{Also add any additional symbols, abbreviations or acronyms}
-
 \newpage
 
 \tableofcontents
@@ -99,9 +102,6 @@ found at \url{https://github.com/M9Huynh/technically-functional}.
 
 \section{Notation}
 
-\wss{You should describe your notation.  You can use what is below as
-  a starting point.}
-
 The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
 with the addition that template modules have been adapted from
 \cite{GhezziEtAl2003}.  The mathematical notation comes from Chapter 3 of
@@ -122,6 +122,10 @@ character & char & a single symbol or digit\\
 integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
 natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
+float & $F$ & floating point numbers within (approx.) (-1.798$*$10$^{308}$, 1.798$*$10$^{308}$) \\
+object & $X$ & an abstract representation of a collection of the above, similar to tuple \\
+array & $a$ & a collection of a single data type, $n$ entries of the form ($a_0$, $a_1$, $a_2$, ... ,$a_{n-1}$) \\
+list & $L$ & an array of non-fixed length \\
 \bottomrule
 \end{tabular} 
 \end{center}
@@ -145,21 +149,20 @@ The following table is taken directly from the Module Guide document for this pr
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
 
-{Hardware-Hiding} & ~ \\
+{Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
-& Output Format\\
-& Output Verification\\
-& Temperature ODEs\\
-& Energy Equations\\ 
-& Control Module\\
-& Specification Parameters Module\\
+\multirow{4}{0.3\textwidth}{Behaviour-Hiding Module}& User Interface Module\\
+& Home Module\\
+& Main Module\\
+& Draw Module \\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision} & {Sequence Data Structure}\\
-& ODE Solver\\
-& Plotting\\
+\multirow{5}{0.3\textwidth}{Software Decision Module} & Database Management Module\\
+& Generator Module\\
+& Metrics Module\\
+& Analyze Module\\
+& Feedback Module\\
 \bottomrule
 
 \end{tabular}
@@ -167,55 +170,109 @@ The following table is taken directly from the Module Guide document for this pr
 \label{TblMH}
 \end{table}
 
-\newpage
-~\newpage
-
 \section{Variables}
-\begin{table}[h]
-\centering
+For clarity and readability, the variables used throughout the document are provided below.
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{0.22\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}p{0.38\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|}
+\caption{Variable used throughout MIS}\\
+\hline
+\rowcolor{headerblue}
+\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
+\hline
+\endfirsthead
+
+\caption[]{Variable used throughout MIS (continued)} \\
+\hline
+\rowcolor{headerblue}
+\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
+\hline
+\endhead
+
+\hline
+\endfoot
+
 \rowcolors{2}{tableblue}{white}
-\begin{tabular}{|L|M|R|}
+\setlength{\extrarowheight}{2pt}
+\setlength{\arrayrulewidth}{1pt}
+
+name & String & Name of the user & 7.1 \\
 \hline
-\rowcolor{blue!70}
-\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+role & String & Values can be PT or patient & 7.1 \\
 \hline
-Name & String & This is the name of the user. \\
+email & String & Used as login ID & 7.1 \\
 \hline
-role & String & Values can be PT or patient \\
+password & String & Set by user for login purposes & 7.1 \\
 \hline
-email & String & This will be used as their login ID \\
+birthday & String & User's birthday for verification & 7.1 \\
 \hline
-password & String & This is set by the user for login purposes \\
+license\_no & Int & Verification of PT & 7.1 \\
 \hline
-birthday & String & This is the user's birthday that will be used for verification purposes \\
+invite\_code & String & Given by PT to patient for registration & 7.1 \\
 \hline
-license\_no & Int & This is used for verification of PT \\
+date & String & Date selected by user & 7.1 \\
 \hline
-invite\_code & String & This is given by the PT to the patient to allow registration on the application \\
+time & String & Time selected by user & 7.2 \\
 \hline
-Recent\_report & ADT & Generated report \\
+recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
 \hline
-Date & String & The date selected by user \\
+recent\_report & Record & Generated report of recent\_video & TBD \\
 \hline
-Recent\_analysis & ADT & Most recently generated analysis \\
+recent\_video & String (JSON) & Last video recorded by patient & TBD \\
 \hline
-Report & Record & This is the report(s) being sent to the dashboard for analysis.\\
+video & String (JSON) & A video in the user database & TBD \\
 \hline
-\end{tabular}
-\caption{User Account Data Fields}
-\label{tab:user_data}
-\end{table}
+report & Record & Report(s) sent to Generator module for analysis OR requested by patient & TBD \\
+\hline
+ex\_instruct & String & Performance instructions of requested exercise & TBD \\
+\hline
+sets & String & Number of sets given by PT & 7.1 \\
+\hline
+repetitions & String & Repetitions of exercise per set & 7.1 \\
+\hline
+rest\_time & String & Rest time between sets & 7.1 \\
+\hline
+leg\_landmarks & Array & MediaPipe output of leg & 7.4 \\
+\hline
+processed\_frame & Image & Video frame with overlaid markers & 7.4 \\
+\hline
+PT\_comment & String & PT's comment on patient activity & 7.3 \\
+\hline
+overall\_analysis & Abstract object & the overall analysis of all patient activity & 7.4 \\ %check
+\hline
+processed\_frames\_list & List(Image object) & list of processed\_frames & 7.3 \\
+\hline
+feedback\_instructions & Abstract Object & instructions given from analysis to feedback module & 7.3 \\
+\hline
+fixed\_metrics & float & corrected metrics & 7.3 \\
+\hline
+initial/final\_\newline plane/time/height & float & initial and final measurements & 7.3 \\
+\hline
+%TODO
+ins\_ui & String & PT's comment on patient activity & TBD \\
+\hline
+unprocessed\_frames & List(Image objects) & Unprocessed frames list & TBD \\
+\hline
+rt\_metrics & List(of float) & Real-time metrics & TBD \\
+\hline
+input\_frame & Image & Input frame & TBD \\
+\hline
+exercise & String & Selected exercise & TBD \\
+\hline
+insights & String & Generated insights & TBD \\
+\hline
+all\_reports & List[report] & All reports are stored in a list & TBD \\
+\hline
+\end{longtable}
 
 
 \section{MIS}
 \subsection{Module - Database Management}
+\textit{ADT} \\
 
-\textit{ADT}
-
-This module is an adapter that connects to the user database. This database consists of these tables:\\
+This module creates an instance of UserAccount\_P/PT and is an adapter that connects to the user database. This database consists of these tables:\\
 \begin{enumerate}
   \item User data: this consists of information such as name, role, email, password, birthday, and license\_no/invite\_code.
-  \item Exercise data: this table consists of exercise nstructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and UserAccount\_P['Name'].
+  \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and UserAccount\_P['Name'].
   \item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
 \end{enumerate}  
 
@@ -232,98 +289,399 @@ This module is an adapter that connects to the user database. This database cons
 \item time
 \item date
 \item duration
+\item recent\_video
+\item recent\_ analysis
+\item Sets
+\item repetitions
+\item rest\_time
 \end{itemize}
 
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}
 \begin{itemize}
-\item \textit{UserAccount\_P}: ADT
-\item \textit{UserAccount\_PT}: ADT 
+\item \textit{user\_acc\_p}: ADT
+\item \textit{user\_acc\_pt}: ADT 
 \end{itemize}
 
-\noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
+\noindent \textbf{Exported Access Programs}\\
+\noindent\textsuperscript{1} \textit{For this function, the output depends on context. For example, if this function was going to be used in another one which corresponds to the PT functionality of viewing 
+a patient, their view would be restricted to patients under their care.}
 
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
 
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
 
-get\_userdb\_info & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
 
-PTaccount\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves user account information from the user table} \\
+\hline
+\rowcolor{white}
+get\_userdb\_info$^1$ & \makecell[lt]{\textit{Name}} & \makecell[lt]{\textit{user\_acc\_p}\\\textit{user\_acc\_pt}} & \makecell[lt]{UserNotFoundError\\DownloadError} \\
 \hline
 
-username\_pw\_match & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_\\password} \\
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} allows PT to delete a patient account from the system} \\
+\hline
+\rowcolor{white}
+PTaccount\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
 \hline
 
-add\_analysis\_to\_\newline user\_act & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Recent\_analysis}} & NA & \makecell[lt]{User\_not\_found\\Upload\_error} \\
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} verifies if username and password match for authentication} \\
+\hline
+\rowcolor{white}
+username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \makecell[lt]{LoginMatchError} \\
 \hline
 
-save\_video & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Recent\_video}} & NA & \makecell[lt]{User\_not\_found\\Upload\_error\\Video\_too\_short} \\
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} adds analysis results to user activity history} \\
+\hline
+\rowcolor{white}
+add\_analysis\_to\newline\_user\_act & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_analysis}} & NA & \makecell[lt]{UserNotFoundError\\SaveError} \\
 \hline
 
-get\_analysis & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Date}} & Recent\_video & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} saves video recording for user account} \\
+\hline
+\rowcolor{white}
+save\_video & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_video}} & NA & \makecell[lt]{UserNotFoundError\\UploadError\\VideoTooShortError} \\
 \hline
 
-exerc\_instruct & \makecell[lt]{\textit{UserAccount\_P}\\\textit{Exercise}} & \textit{NA} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves analysis data for a specific date} \\
+\hline
+\rowcolor{white}
+get\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & \textit{recent\_analysis} & \makecell[lt]{UserNotFoundError\\NoAnalysisError\\DownloadError} \\
 \hline
 
+\end{tabularx}
+\caption{Exported Access Routines (Part 1)}
+\label{tab:user_routines_1}
+\end{table}
+\clearpage
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
 
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
 
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} provides exercise instructions to user} \\
+\hline
+\rowcolor{white}
+exerc\_instruct & \makecell[lt]{\textit{user\_acc\_p}\\\textit{exercise}} & \textit{ex\_instruct} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\hline
 
-%modify exercise PT (3 params: sets, reps, rest time)
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} allows physiotherapist to modify exercise parameters} \\
+\hline
+\rowcolor{white}
+PT\_modifies\_exercise & \makecell[lt]{\textit{user\_acc\_p}\\\textit{sets}\\\textit{repetitions}\\\textit{rest\_time}} & \textit{ex\_instruct} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\hline
 
+\end{tabularx}
+\caption{Exported Access Routines (Part 2)}
+\label{tab:user_routines_2}
+\end{table}
 
-\end{longtable}
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-\textit{A}: an instance of UserAccount \\
-\textit{B}: an instance of UserAccount \\
+\textit{A}: an instance of user\_acc\_p \\
+\textit{B}: an instance of user\_acc\_p \\
+\textit{C}: an instance of user\_acc\_pt \\
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
-$\forall A, B \in UserDatabase: A[i] \neq B[j]$ \\
+$\forall A, B, C \in UserDatabase: A[i] \neq B[j] \neq C[k]$  \\
 $0 < A < length(A) \cap A[i] \notin \emptyset$ \\
 
-% not sure if I need this\subsubsection{Environment Variables}
+\subsubsection{Environment Variables}
+\textit{screen}: The application's display to the user \\
+\textit{touchscreen}: Users will click on the screen to select their desired functionality
 
 \subsubsection{Assumptions}
+NA. %TODO
 
 \subsubsection{Access Routine Semantics}
+%TODO
 
-\noindent \wss{accessProg}():
-\begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
-\end{itemize}
+\noindent \textbf{get\_userdb\_info()}: \\
+NA \textit{(There is no transition taking place)}\\
+\\
+\noindent \textbf{PTaccount\_delete()}: \\
+  \begin{enumerate}
+    \item From the home screen, PT accesses their patient list
+    \item PT selects the desired patient's name
+    \item PT is directed to profile of patient
+    \item PT selects \textit{'Delete Patient'}
+    \item The selected patient is deleted from the user database
+  \end{enumerate}
 
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
+\noindent \textbf{username\_pw\_match()}: \\
+NA \\
 
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
 
+\noindent \textbf{Note: the functions are under development and may change over the course of the project}
+
+\subsubsection{Local Functions}
+
+\begin{table}[h]
+\centering
+\rowcolors{2}{tableblue}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Creates a new user account} \\
+\hline
+\rowcolor{white}
+account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sets user information in database} \\
+\hline
+\rowcolor{white}
+set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{NA} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+\hline
+
+\end{tabularx}
+\caption{Account Management Access Routines (Part 1)}
+\label{tab:account_routines_1}
+\end{table}
+
+\clearpage
+\begin{table}[h]
+\centering
+\rowcolors{2}{tableblue}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves analysis data from database} \\
+\hline
+\rowcolor{white}
+send\_db\_analysis & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_analysis& \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves video data from database} \\
+\hline
+\rowcolor{white}
+send\_db\_video & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_video & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sets analysis report for user} \\
+\hline
+\rowcolor{white}
+set\_analysis\_report & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_analysis & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+\end{tabularx}
+\caption{Account Management Access Routines (Part 2)}
+\label{tab:account_routines_2}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Module - Generator}
+
+This module's purpose is to display the most recent report, an overall analysis of progress, and rehabilitation insights. \\
+
+%subsubsection{Uses}
+%\begin{itemize}
+%\item recent\_report
+%\item report\_db
+%\item user\_acc\_p
+%\end{itemize}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}
+\\NA
+
+
+\noindent \textbf{Exported Access Programs}
+
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Generates health insights after assessing all past reports} \\
+\hline
+\rowcolor{white}
+generate\_insights & \makecell[lt]{\textit{all\_reports}} & \makecell[lt]{\textit{insights}} & \makecell[lt]{NoActivityError\\NoConnectionError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Generates a specific report} \\
+\hline
+\rowcolor{white}
+generate\_report & \makecell[lt]{\textit{date}\\\textit{time}} & \textit{recent\_report} & \makecell[lt]{CannotGenerateError\\NoActivityError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves specific report from database} \\
+\hline
+\rowcolor{white}
+get\_report & \makecell[lt]{\textit{Date}\\\textit{Time}} & \textit{Report} & \makecell[lt]{NA} \\
+\hline
+
+\end{tabularx}
+\caption{Generator Access Routines}
+\label{tab:generator_routines}
+\end{table}
 \newpage
+\subsubsection{Semantics}
+
+\noindent \textbf{State Variables} \\
+\textit{A}: an instance of user\_acc\_p \\
+\textit{E}: an instance of recent\_analysis\\
+\textit{V}: video \\
+\textit{R}: report \\
+\textit{RR}: recent\_report \\
+
+\noindent \textbf{State Invariant} \\
+$ \forall RR,$ $\exists (A \cap V) $ \\
+$ \forall R,$ $\exists (A \cap V_i|i \geq 1..n, n \in 1..\mathbb{N})$
+
+\subsubsection{Environment Variables}
+\textit{NA}
+
+\subsubsection{Assumptions}
+%TODO
+NA
+
+\subsubsection{Access Routine Semantics}
+%TODO
+TBD
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Home}
+
+This module displays past exercises, allows viewing of user profile, and directs to the Generator module. PTs are able to comment on their patient's submissions.
+
+%\subsubsection{Uses}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}\\
+\textit{NA} \\
+
+\noindent \textbf{Exported Access Programs}
+\begin{table}[h]
+\centering
+\rowcolors{2}{tableblue}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays user profile information} \\
+\hline
+\rowcolor{white}
+view\_profile & \makecell[lt]{\textit{Name}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays analysis report for user} \\
+\hline
+\rowcolor{white}
+display\_report & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays summary information} \\
+\hline
+\rowcolor{white}
+display\_summary & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_password} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Shows patient's past exercises} \\
+\hline
+\rowcolor{white}
+p\_past\_exercises & \makecell[lt]{\textit{Email}} & NA & \makecell[lt]{no\_activity} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Provides physical therapist feedback on patient} \\
+\hline
+\rowcolor{white}
+PT\_feedback\_on\_P & \makecell[lt]{\textit{PTcomment}} & \makecell[lt]{NA} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+\end{tabularx}
+\caption{Home Exported Access Routines}
+\label{tab:home_routines}
+\end{table}
+\subsubsection{Semantics}
+
+\noindent \textbf{State Variables} \\
+NA \\
+%Check requirements doc
+\noindent \textbf{State Invariant} \\
+\textit{NA}
+\subsubsection{Environment Variables}
+\textit{NA} 
+
+\subsubsection{Assumptions}
+%TODO 
+TBD
+\subsubsection{Access Routine Semantics}
+%TODO
+%\noindent \wss{accessProg}():
+%\begin{itemize}
+%\item transition: \wss{if appropriate} 
+%\item output: \wss{if appropriate} 
+%\item exception: \wss{if appropriate} 
+%\end{itemize}
+TBD
+
 
 \subsubsection{Local Functions}
 \begin{table}[h]
@@ -334,26 +692,15 @@ $0 < A < length(A) \cap A[i] \notin \emptyset$ \\
 
 \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
-set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %set info on db
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets profile from generator} \\
 \hline
-
-%get\_profile & \makecell[lt]{\textit{Name}\\\textit{Birthday}} & UserAccount & \makecell[lt]{wrong\_email\_\\password} \\  %don't need? same as get user db info
-%\hline
-
-send\_db\_analysis & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_analysis& \makecell[lt]{User\_not\_found\\Download\_error} \\  %get analysis - maybe remove?
-\hline
-
-send\_db\_video & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_video & \makecell[lt]{User\_not\_found\\Download\_error} \\  %get analysis - maybe remove?
-\hline
-
-set\_analysis\_ \newline report & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_analysis & \makecell[lt]{User\_not\_found\\Download\_error} \\  %get analysis - maybe remove?
+\rowcolor{white}
+get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{Cannot\_access\_db} \\
 \hline
 
 \end{tabularx}
@@ -361,75 +708,124 @@ set\_analysis\_ \newline report & \makecell[lt]{\textit{UserAccount\_P}} & Recen
 \label{tab:account_routines}
 \end{table}
 
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-
 \newpage
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Module - Generator}
-
-\textit{ADT}
-
-This module's purpose is to display the most recent report, an overall analysis of progress, and rehabilitation insights. \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Main}
+This module handles the video recording, placing markers on it and checking if the patient's form is appropriate for performing the exercise. It does this through the use of external libraries (notably OpenCV).
 
 \subsubsection{Uses}
-\begin{itemize}
-\item Recent\_report
-\item Report\_db
-\item UserAccount\_P
-\end{itemize}
 
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}
 
-
 \noindent \textbf{Exported Access Programs}
-
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{1}{white}{white}
+%record video - records
+%retry record - will just clal record; not sure if i need it
+%draw markers - this is call to the draw module 
+%form vs template - this is call for metrics module to forward the 'correct' metrics to analyze. 
+%submit video - user submits video
+%get metrics - not sure if i need
+%get rt feed - get real-time feed
+\begin{table}[h]
+\centering
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-get\_patient\_list & \makecell[lt]{\textit{NA}} & \makecell[lt]{NA} & \makecell[lt]{NA} \\
+\begin{tabular}{|l|l|l|l|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
 
-get\_summary & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{NA} \\
+% Function 1
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets metrics from metrics module} \\
 \hline
-%for overall report
-get\_report & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{NA} \\
+\rowcolor{white}
+get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{\textit{angle}\\\textit{height}\\\textit{duration}} & \makecell[lt]{DataRetrievalError} \\
 \hline
 
-\end{longtable}
+% Function 2
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends overall analysis to home module} \\
+\hline
+\rowcolor{white}
+overall\_analysis\_home & \makecell[lt]{\textit{name}\\\textit{birthday}} & \makecell[lt]{\textit{overall\_analysis}} & \makecell[lt]{DataRetrievalError\\AnalysisNotFoundError} \\
+\hline
 
+% Function 3
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends real time processed frames to metrics (to be forwarded to Analysis)} \\
+\hline
+\rowcolor{white}
+analysis\_rt\_frame & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{\textit{instructions\_ui}} & \makecell[lt]{CannotAnalyzeError\\NoInputError} \\
+\hline
+
+% Function 4
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Performs overall analysis (given at end of recording)} \\
+\hline
+\rowcolor{white}
+analysis\_overall & \makecell[lt]{\textit{recent\_video}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{InsufficientDataError\\ProcessError} \\
+\hline
+
+% Function 5
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Module will provide corrections (received from Metrics) to UI (e.g. angle is too small)} \\
+\hline
+\rowcolor{white}
+corrections\_metrics & \makecell[lt]{\textit{rt\_metrics}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+% Function 6
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends recent analysis to home module} \\
+\hline
+\rowcolor{white}
+send\_analysis\_home & \makecell[lt]{\textit{NA}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{UserNotFoundError} \\
+\hline
+
+\end{tabular}
+\caption{Access Routines for Main Module}
+\label{table:access_routines}
+\end{table}
+
+\begin{table}[h]
+\centering
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+% Function 7
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Calls draw to give markers of the leg} \\
+\hline
+\rowcolor{white}
+set\_markers & \makecell[lt]{unprocessed\_frame} & \makecell[lt]{processed\_frame} & \makecell[lt]{InvalidFrameError} \\
+\hline
+
+\end{tabular}
+\caption{Access Routines for Main Module (Continued)}
+\label{table:access_routines_set_markers}
+\end{table}
+
+\newpage
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-\textit{A}: an instance of UserAccount \\
-\textit{B}: an instance of UserAccount \\
+
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
+
+
+\subsubsection{Environment variables}
+%TODO fix this pls @Maham
+camera \\
 
 \subsubsection{Assumptions}
 
@@ -442,112 +838,29 @@ get\_report & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[
 \item exception: \wss{if appropriate} 
 \end{itemize}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Home}
-
-\textit{ADT}
-
-This module displays past exercises, allows viewing of user profile, and directs to the Generator module.
-
-\subsubsection{Uses}
-
-\subsubsection{Syntax}
-
-\textbf{Exported Constants}
-
-\noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-access\_profile \newline \_from\_generator & \makecell[lt]{\textit{Name}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-display\_report & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
-\hline
-
-display\_summary & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_\\password} \\
-\hline
-
-p\_exercise\_select & \makecell[lt]{\textit{NA}} & NA & \makecell[lt]{wrong\_email\_\\password} \\
-\hline
-
-p\_exercise\_select & \makecell[lt]{\textit{NA}} & NA & \makecell[lt]{wrong\_email\_\\password} \\
-\hline
-
-\end{longtable}
-
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-\textit{A}: an instance of UserAccount \\
-\textit{B}: an instance of UserAccount \\
-
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-$\forall A, B \in UserDatabase: A[i] \neq B[j]$ \\
-$0 < A < length(A) \cap A[i] \notin \emptyset$ \\
-
-% not sure if I need this\subsubsection{Environment Variables}
-
-\subsubsection{Assumptions}
-
-\subsubsection{Access Routine Semantics}
-
-\noindent \wss{accessProg}():
-\begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
-\end{itemize}
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\newpage
 
 \subsubsection{Local Functions}
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabular}{|l|l|l|l|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
-
+% Function with description
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets starting form of user} \\
+\hline
+\rowcolor{white}
+get\_initial\_form & \makecell[lt]{\textit{input\_frame}} & \makecell[lt]{unprocessed\_frame} & \makecell[lt]{InvalidFrameError} \\
 \hline
 
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
+\end{tabular}
+\caption{Local Access Routines (Main)}
+\label{tab:access_routines}
 \end{table}
 
 
@@ -560,7 +873,6 @@ account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Analyze}
-NA
 
 
 \subsubsection{Uses}
@@ -570,44 +882,80 @@ NA
 \textbf{Exported Constants}
 
 \noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
+\begin{table}[h]
+\centering
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-analysis\_rt & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\begin{tabular}{|l|l|l|l|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
 
-analysis\_overall & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+% latest_metrics - gets metrics from metrics module
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} gets metrics from metrics module} \\
+\hline
+\rowcolor{white}
+latest\_metrics & \makecell[lt]{\textit{rt\_metrics}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{InsufficientDataError} \\
 \hline
 
-\end{longtable}
+% send_analysis_to_feedback - sends overall analysis to feedback
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} sends overall analysis to Feedback module} \\
+\hline
+\rowcolor{white}
+send\_analysis\_to\newline\_feedback & \makecell[lt]{\textit{recent\_analysis}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{AnalysisNotFoundError} \\
+\hline
+
+% analysis_rt - real time analysis
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} performs real time analysis} \\
+\hline
+\rowcolor{white}
+analysis\_rt & \makecell[lt]{\textit{processed\_frames}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+% analysis_overall - overall analysis (given at end of recording)
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} overall analysis (given at end of recording)} \\
+\hline
+\rowcolor{white}
+analysis\_overall & \makecell[lt]{\textit{video}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{ConnectionError\\InsufficientDataError} \\
+\hline
+
+% adjust_metrics - module will tell how to fix form (eg. if angle is too small)
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} module will correct form (eg. if angle is too small)} \\
+\hline
+\rowcolor{white}
+adjust\_metrics & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{rt\_metrics} & \makecell[lt]{UndetectedFormError} \\
+\hline
+
+% send_analysis_to_db - send overall analysis for storage into
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} send overall analysis to Database module} \\
+\hline
+\rowcolor{white}
+send\_analysis\_to\_db & \makecell[lt]{\textit{overall\_analysis}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+\end{tabular}
+\caption{Access Routines for Analysis Module}
+\label{table:access_routines}
+\end{table}
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-
+TBD
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
+TBD
 
-
-%Environment variables?
+\subsubsection{Environment variables} 
+\textit{NA}
 
 \subsubsection{Assumptions}
 
@@ -620,64 +968,35 @@ analysis\_overall & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\O
 \item exception: \wss{if appropriate} 
 \end{itemize}
 
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\newpage
 
 \subsubsection{Local Functions}
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabular}{|l|l|l|l|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
+% get_initial_landmarks
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets initial landmarks from the starting position} \\
+\hline
+\rowcolor{white}
+get\_initial\_landmarks & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
 
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
+\end{tabular}
+\caption{Access Routines for Analysis Module}
+\label{table:access_routines}
 \end{table}
 
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-
-\newpage
-
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\subsubsection{Local Functions}
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Feedback}
-NA
-
+This module is responsible for delivering the feedback (e.g. to adjust form) to the Main module.
 
 \subsubsection{Uses}
 
@@ -686,31 +1005,36 @@ NA
 \textbf{Exported Constants}
 
 \noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
+\begin{table}[h]
+\centering
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\begin{tabular}{|l|l|l|l|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
 
+% ex_feedback_to_main - feedback to user given after analysis
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} feedback to user given after analysis} \\
+\hline
+\rowcolor{white}
+ex\_feedback\_to\_main & \makecell[lt]{\textit{feedback}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{FeedbackEmptyError} \\
+\hline
 
-\end{longtable}
+% given_feedback - instructions given by analysis to construct feedback that will be forwarded to Main
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} instructions given by analysis to construct feedback that will be forwarded to the Main module} \\
+\hline
+\rowcolor{white}
+given\_instruct & \makecell[lt]{\textit{feedback\_instructions}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{InsEmptyError} \\
+\hline
+
+\end{tabular}
+\caption{Access Routines for Analysis Module}
+\label{table:access_routines}
+\end{table}
 
 \subsubsection{Semantics}
 
@@ -746,50 +1070,29 @@ placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\Use
 \subsubsection{Local Functions}
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabular}{|l|l|l|l|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
+% construct_feedback
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Constructs feedback based on instructions from Analyze module} \\
+\hline
+\rowcolor{white}
+construct\_feedback & \makecell[lt]{\textit{feedback\_instructions}} & \makecell[lt]{\textit{feedback}} & \makecell[lt]{InsEmptyError} \\
+\hline
 
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
+\end{tabular}
+\caption{Feedback Access Routines}
+\label{tab:feedback_routines}
 \end{table}
-
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-
-\newpage
-
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\subsubsection{Local Functions}
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Metrics}
-NA
+This module measures matrics (\textit{angle, duration, height}) that are necessary to construct any corrections to the user's form. \\
 
 
 \subsubsection{Uses}
@@ -799,31 +1102,44 @@ NA
 \textbf{Exported Constants}
 
 \noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
+\begin{table}[h]
+\centering
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
 
-placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+% placeholder
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} obtains a frame from Main module} \\
+\hline
+\rowcolor{white}
+get\_frame & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{NA} & \makecell[lt]{NoFrameError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} calculates metrics from frame provided by Main module} \\
+\hline
+\rowcolor{white}
+calculate\_frame & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{\textit{angle}\\\textit{height}\\\textit{duration}} & \makecell[lt]{NoFrameError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} obtains metrics that need to be adjusted by the user (calls Analysis)} \\
+\hline
+\rowcolor{white}
+fixed\_frame & \makecell[lt]{\textit{NA}} & \makecell[lt]{\textit{fixed\_metrics}} & \makecell[lt]{NoFrameError} \\
 \hline
 
 
-\end{longtable}
+
+\end{tabular}
+\caption{Access Routines for Analysis Module}
+\label{table:access_routines}
+\end{table}
 
 \subsubsection{Semantics}
 
@@ -847,35 +1163,44 @@ placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\Use
 \item exception: \wss{if appropriate} 
 \end{itemize}
 
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\newpage
-
 \subsubsection{Local Functions}
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabular}{|l|l|l|l|}
 \hline
-\rowcolor{headerblue}
+\rowcolor{darkpurple}
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
 \hline
 
+% measures the angle between the starting and final plane
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} measures the angle between the starting and final plane} \\
+\hline
+\rowcolor{white}
+measure\_angle & \makecell[lt]{\textit{initial\_plane}\\\textit{final\_plane}} & \makecell[lt]{\textit{angle}} & \makecell[lt]{FrameEmptyError} \\
+\hline
 
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
+% measures difference in initial and final height
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} measures difference in initial and final height} \\
+\hline
+\rowcolor{white}
+measure\_height & \makecell[lt]{\textit{initial\_height}\\\textit{final\_height}} & \makecell[lt]{\textit{height}} & \makecell[lt]{FrameEmptyError} \\
+\hline
+
+% measures duration of the performed exercise
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} measures duration of the performed exercise} \\
+\hline
+\rowcolor{white}
+measure\_duration & \makecell[lt]{\textit{initial\_time}\\\textit{final\_time}} & \makecell[lt]{\textit{duration}} & \makecell[lt]{FrameEmptyError} \\
+\hline
+
+\end{tabular}
+\caption{Metrics Access Routines}
+\label{tab:metrics_routines}
 \end{table}
 
 \subsubsection{Local Functions}
@@ -883,130 +1208,7 @@ placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\te
 
   
   
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- \subsection{Module - Main}
-NA
-
-
-\subsubsection{Uses}
-
-\subsubsection{Syntax}
-
-\textbf{Exported Constants}
-
-\noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-record\_video & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-retry\_record & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-form\_vs\_template & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-submit\_video & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-draw\_markers & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-get\_rt\_feed & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\end{longtable}
-
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-
-
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-
-
-%Environment variables?
-
-\subsubsection{Assumptions}
-
-\subsubsection{Access Routine Semantics}
-
-\noindent \wss{accessProg}():
-\begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
-\end{itemize}
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\newpage
-
-\subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
-\hline
-
-
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
-\end{table}
-
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-
-\newpage
-
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\subsubsection{Local Functions}
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
+ 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \subsection{Module - Draw}
 NA
@@ -1039,8 +1241,21 @@ NA
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
 
-placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+
+%record check - will check if environment is appropriate - remove if this is an Assumption
+%draw points - will draw points on video feed being passed by main 
+%form check - checks if starting form is appropriate
+
+record\_check  & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
 \hline
+
+form\_check & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+draw\_points & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+
 
 
 \end{longtable}
@@ -1121,118 +1336,6 @@ mpipe\_draw & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\te
   explicitly.  Even if they are implemented, they are not exported; they only
   have local scope.} 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- \subsection{Module - Home}
-NA
-
-
-\subsubsection{Uses}
-
-\subsubsection{Syntax}
-
-\textbf{Exported Constants}
-
-\noindent \textbf{Exported Access Programs}
-\begin{longtable}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-placeholder & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-
-\end{longtable}
-
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-
-
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-
-
-%Environment variables?
-
-\subsubsection{Assumptions}
-
-\subsubsection{Access Routine Semantics}
-
-\noindent \wss{accessProg}():
-\begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
-\end{itemize}
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\newpage
-
-\subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-
-\hline
-placeholder & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\ %creates a profile
-\hline
-
-
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
-\end{table}
-
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
-
-\newpage
-
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\subsubsection{Local Functions}
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - UI}
 NA
@@ -1417,6 +1520,23 @@ graduate attribute of Problem Analysis and Design.
   
 
 \end{enumerate}
+\subsection*{Maham - Reflection}
+\begin{enumerate}
+  \item Despite our (extremely) busy schedules, we made time to meet when we could and offer assistance to any member that needed it. In addition, all of us kept in contact and checked in with each other. I liked that none of us completely abandoned this project, but rather balanced it quite well. Also, the more frequent PR requests strategy (implemented for this deliverable) ended up being immensely helpful.
+  \item A pain point for me was that a lot of my time and energy was taken up by external tasks. These were, unfortunately, appointments I could not compromise on because they had been scheduled months in advance. I would have loved to give this project more of my focus, and I tried my best to self-organize, but there were some areas I fell short. I will attempt to refine my balancing act for the future.
+  \item The project is still in the early stages of development, and as a result, we do not have many concrete elements. However, some of developed ideas and design decisions was aided by Kevin, our supervisor. At this stage, we are constructing the foundation of the software, and that knowledge was supplied by him. Eventually, when we do have a functional product, we will want to loop in other stakeholders, e.g. patients, for modifications
+  \item Group Q
+  \item Group Q
+  \item Group Q
+\end{enumerate}
 
-
+\subsection*{Cieran - Reflection}
+\begin{enumerate}
+  \item During this deliverable there was a need to agree upon implementation tactics. The team met and nailed down an approach for the development of the proof of concept, and I think everyone did a good job of ensuring their thoughts on what the system $was$ got at least mentioned when developing the system.
+  \item I yet again sharked my teammates with procrastination. I have apologized profusely for my lack of initiative with this deliverable and have taken steps to ensure progress is far more consistent and meaningful in the future. As for this deliverable, I worked to catch up my own lack of effort towards the end of the it.
+  \item I think the design decisions, specifically around the system's allowance for physiotherapists to alter patient's exercise routines, were very influenced by meetings with our advisor. As a team, we wanted to ensure that the system was something wanted by both patients and physiotherapists; designing based off of requirements from past physiotherapy patients and our physiotherapist advisor was a must. Some design decisions, such as checking against public databases for the physiotherapist's identification number, were made in an attempt at security for users of the application.
+  \item GROUP Q
+  \item GROUP Q
+  \item GROUP Q
+\end{enumerate}
 \end{document}
