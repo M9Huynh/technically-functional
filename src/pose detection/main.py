@@ -1,6 +1,5 @@
 import cv2 as cv
 import mediapipe as mp
-import math
 import os
 from draw import PoseCamera
 from analyze import Analyzer
