@@ -14,13 +14,12 @@ class PoseApp:
         self.side = None
         self.pose_detect = mp.solutions.pose.Pose()
         self.cams = {
-            'Sample Video':PoseCamera('src/pose detection/knee.MP4',pose_detect=self.pose_detect)
+            'Sample Video':PoseCamera('right leg knee extension sagittal plane.MP4',pose_detect=self.pose_detect)
+            # 'Sample Video':PoseCamera('src/pose detection/knee.MP4',pose_detect=self.pose_detect)
             # 'Sagittal Plane':PoseCamera(0,pose_detect=self.pose_detect)
             # ,'Frontal Plane': PoseCamera(1, pose_detect=self.pose_detect)
         }
         self.analyzer = Analyzer()
-        # # first 10 seconds of video which is the calibration phase
-        # self.analyzer.start_calibration(duration_s=10.0)
 
     def run(self):
         while True:
@@ -124,30 +123,6 @@ class PoseApp:
             if key == ord("q"):
                 break
 
-
-
-    # def run(self):
-    #     while True: 
-    #         for view, cam in self.cams.items():
-    #             ret, frame = cam.get_frame()
-    #             if ret:
-    #                 res = cam.process_pose(frame)
-    #                 frame_landmarks = cam.draw_landmarks(res, frame)
-    #                 knee_angle = knee_angle_from_result(res, side= self.side)
-    #                 if knee_angle is not None:
-    #                     self.analyzer.update(knee_angle)
-                        
-    #                     stats = self.analyzer.summary()
-    #                     cv.putText(frame_landmarks,
-    #                         f"Angle: {knee_angle:.1f} deg",
-    #                         (20,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
-    #                     cv.putText(frame_landmarks,
-    #                         f"ROM: {stats['rom_degree']:.1f}  Min: {stats['min_degree']:.1f}  Max: {stats['max_degree']:.1f}",
-    #                         (20,75), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
-                    
-    #                 cv.imshow(view, frame_landmarks)
-    #         if cv.waitKey(1) == ord('q'):
-    #             break
 
     def quit(self):
         for view, cam in self.cams.items():
