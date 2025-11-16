@@ -26,7 +26,7 @@ class Analyzer:
         self.flexion_threshold= .7
         self.extension_threshold = .8
 
-        self.rep_state = "T"
+        self.rep_state = ""
 
     def start_calibration(self, duration_s: float = 3.0):
         self.is_calibrating = True
@@ -37,7 +37,7 @@ class Analyzer:
 
         self.rep_count = 0
         self.rep_durations = []
-        self.rep_state = "T"
+        self.rep_state = "Extension"
 
     def _calibrate_with_angle(self, angle: float):
         if angle is None:
