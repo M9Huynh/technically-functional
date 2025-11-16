@@ -14,7 +14,7 @@ class Analyzer:
         #Calibration State
         self.is_calibrating = False
         self.cal_start_ts = None
-        self.cal_duration_s = 3.0
+        self.cal_duration_s = 10.0
         self.cal_min = None
         self.cal_max = None
 
