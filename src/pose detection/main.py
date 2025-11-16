@@ -11,7 +11,7 @@ os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0" #needs to be 1 to w
 
 class PoseApp:
     def __init__(self):
-        self.side = "RIGHT"
+        self.side = None
         self.pose_detect = mp.solutions.pose.Pose()
         self.cams = {
             'Sample Video':PoseCamera('src/pose detection/knee.MP4',pose_detect=self.pose_detect)
@@ -19,8 +19,8 @@ class PoseApp:
             # ,'Frontal Plane': PoseCamera(1, pose_detect=self.pose_detect)
         }
         self.analyzer = Analyzer()
-        # first 10 seconds of video which is the calibration phase
-        self.analyzer.start_calibration(duration_s=10.0)
+        # # first 10 seconds of video which is the calibration phase
+        # self.analyzer.start_calibration(duration_s=10.0)
 
     def run(self):
         while True:
@@ -33,6 +33,37 @@ class PoseApp:
 
                 res = cam.process_pose(frame)
                 frame_landmarks = cam.draw_landmarks(res, frame)
+                # prompt user to choose a side
+                if self.side is None:
+                    cv.putText(
+                        frame_landmarks,
+                        "Select knee: press L (left) or R (right)",
+                        (20, 40),
+                        cv.FONT_HERSHEY_SIMPLEX,
+                        0.7,
+                        (255, 255, 255),
+                        2,
+                    )
+
+                    cv.imshow(view, frame_landmarks)
+
+                    # Handle key input (choose side or quit)
+                    key = cv.waitKey(1) & 0xFF
+                    if key == ord("q"):
+                        return
+                    elif key == ord("l"):
+                        # user chose LEFT knee -> start 10s calibration
+                        self.side = "LEFT"
+                        self.analyzer.start_calibration(duration_s=10.0)
+                    elif key == ord("r"):
+                        # user chose RIGHT knee -> start 10s calibration
+                        self.side = "RIGHT"
+                        self.analyzer.start_calibration(duration_s=10.0)
+
+                    # Go to next iteration until side is chosen
+                    continue
+
+                # once side is chosen, continue to compute the knee angle
                 knee_angle = knee_angle_from_result(res, side=self.side)
 
                 # always update analyzer when we have an angle
@@ -42,7 +73,7 @@ class PoseApp:
                 # get current stats (includes calibrating flag)
                 stats = self.analyzer.summary()
 
-                # 🔸 CALIBRATION PHASE (first ~10 seconds)
+                # CALIBRATION PHASE (first ~10 seconds)
                 if stats["calibrating"]:
                     cv.putText(
                         frame_landmarks,
@@ -54,7 +85,7 @@ class PoseApp:
                         2,
                     )
 
-                # 🔹 EXERCISE PHASE (after calibration finished)
+                # EXERCISE PHASE (after calibration phase has finished)
                 else:
                     if knee_angle is not None:
                         cv.putText(
@@ -63,7 +94,7 @@ class PoseApp:
                             (20, 40),
                             cv.FONT_HERSHEY_SIMPLEX,
                             0.7,
-                            (255, 255, 255),   # green
+                            (255, 255, 255),   # white
                             2,
                         )
                     cv.putText(
@@ -72,8 +103,8 @@ class PoseApp:
                         (20, 75),
                         cv.FONT_HERSHEY_SIMPLEX,
                         0.7,
-                        (255, 255, 255),   # green
-                        2,  
+                        (255, 255, 255),   # white 
+                        2,
                     )
                     #includes reps/avg duration
                     cv.putText(
@@ -88,9 +119,11 @@ class PoseApp:
                     )
                     
                 cv.imshow(view, frame_landmarks)
-
-            if cv.waitKey(1) == ord("q"):
+            # global key to quit at any point
+            key = cv.waitKey(1) & 0xFF
+            if key == ord("q"):
                 break
+
 
 
     # def run(self):
