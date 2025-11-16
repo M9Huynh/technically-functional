@@ -60,14 +60,14 @@ class Analyzer:
         
         normalized_angle = (angle - self.min_angle)/(self.max_angle-self.min_angle) #setting the angle to be between 0-1 to compare thresholds
 
-        if self.rep_state == "T":
+        if self.rep_state == "Extension":
             if normalized_angle < 1 - self.flexion_threshold:
-                self.rep_state = "B"
+                self.rep_state = "Flexion"
                 self.current_rep = time.time()
 
-        elif self.rep_state == "B":
+        elif self.rep_state == "Flexion":
             if normalized_angle > self.extension_threshold:
-                self.rep_state = "T"
+                self.rep_state = "Extension"
                 if self.current_rep:
                     rep_duration = time.time() - self.current_rep
                     self.rep_durations.append(rep_duration)
@@ -101,8 +101,18 @@ class Analyzer:
         return self.max_angle - self.min_angle
 
     def summary(self) -> dict:
+        #calculation for calibration time left
+        if self.is_calibrating and self.cal_start_ts is not None:
+            cal_time_left = max(
+                0.0,
+                self.cal_duration_s - (time.time() - self.cal_start_ts)
+            )
+        else:
+            cal_time_left = 0.0
+
         #calculation for durations
-        current_duration = 0 
+        current_duration = 0
+         
         if self.rep_durations:
             avg_duration = sum(self.rep_durations)/len(self.rep_durations)
             if self.current_rep:
@@ -118,10 +128,7 @@ class Analyzer:
             "max_degree": round(self.max_angle, 1),
             "rom_degree": round(self.calc_rom(), 1),
             "calibrating": self.is_calibrating,
-            "cal_time_left": (
-                max(0.0, self.cal_duration_s - (time.time() - self.cal_start_ts))
-                if self.is_calibrating else 0.0
-            ),
+            "cal_time_left": (round(cal_time_left, 1)),
             #reps/duration status
             "rep_count": self.rep_count,
             "current_rep_duration": current_duration,
