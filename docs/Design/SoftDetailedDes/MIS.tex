@@ -275,7 +275,7 @@ good\_to\_record & String & A message informing user that the system is ready to
 This module creates an instance of UserAccount\_P/PT and is an adapter that connects to the user database. This database consists of these tables:\\
 \begin{enumerate}
   \item User data: this consists of information such as name, role, email, password, birthday, and license\_no/invite\_code.
-  \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and UserAccount\_P['Name'].
+  \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
   \item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
 \end{enumerate}  
 
@@ -409,18 +409,22 @@ PT\_modifies\_exercise & \makecell[lt]{\textit{user\_acc\_p}\\\textit{sets}\\\te
 \textit{A}: an instance of user\_acc\_p \\
 \textit{B}: an instance of user\_acc\_p \\
 \textit{C}: an instance of user\_acc\_pt \\
+\textit{i, j, k}: index count \\
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
+$i,j,k \in \mathbb{Z}^+$ \\
 $\forall A, B, C \in UserDatabase: A[i] \neq B[j] \neq C[k]$  \\
 $0 < A < length(A) \cap A[i] \notin \emptyset$ \\
+$0 < B < length(B) \cap B[i] \notin \emptyset$ \\
+$0 < C < length(C) \cap C[i] \notin \emptyset$ \\
 
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
 \textit{touchscreen}: Users will click on the screen to select their desired functionality
 
 \subsubsection{Assumptions}
-NA. %TODO
+User data table is arranged alphabetically. \\
 
 \subsubsection{Access Routine Semantics}
 %TODO
