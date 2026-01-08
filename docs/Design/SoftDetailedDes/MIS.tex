@@ -308,7 +308,7 @@ This module creates an instance of UserAccount\_P/PT and is an adapter that conn
 \end{itemize}
 
 \noindent \textbf{Exported Access Programs}\\
-\noindent\textsuperscript{1} \textit{For this function, the output depends on context. For example, if this function was going to be used in another one which corresponds to the PT functionality of viewing 
+\noindent\textsuperscript{1} \textit{For these functions, the output depends on context. For example, if this function was going to be used in another one which corresponds to the PT functionality of viewing 
 a patient, their view would be restricted to patients under their care.}
 
 
@@ -625,12 +625,12 @@ This module is responsible for creating a new user account.
 \item birthday \textsuperscript{2}
 \end{itemize}
 
-\noindent\textsuperscript{2} \textit{Birthday is an exported constant for distinguishing two users that may have the same name.} \\
-
+\noindent\textsuperscript{2} \textit{'Birthday' is an exported constant for distinguishing two users that may have the same name.} \\
+\newpage
 \noindent \textbf{Exported Access Programs}
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
+\rowcolors{2}{lavender}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
 
@@ -640,44 +640,45 @@ This module is responsible for creating a new user account.
 \color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
 \hline
 
+
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays user profile information} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if an account already exists in the user database.} \\
 \hline
 \rowcolor{white}
-view\_profile & \makecell[lt]{\textit{Name}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+acc\_exists & \makecell[lt]{\textit{Name}\\\textit{birthday}} & \textit{acc\_double} & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
 \hline
 
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays analysis report for user} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} verifies if username and password match for authentication} \\
 \hline
 \rowcolor{white}
-display\_report & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
+username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \makecell[lt]{LoginMatchError} \\
 \hline
 
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays summary information} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} adds analysis results to user activity history} \\
 \hline
 \rowcolor{white}
-display\_summary & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_password} \\
+add\_analysis\_to\newline\_user\_act & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_analysis}} & NA & \makecell[lt]{UserNotFoundError\\SaveError} \\
 \hline
 
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Shows patient's past exercises} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} saves video recording for user account} \\
 \hline
 \rowcolor{white}
-p\_past\_exercises & \makecell[lt]{\textit{Email}} & NA & \makecell[lt]{no\_activity} \\
+save\_video & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_video}} & NA & \makecell[lt]{UserNotFoundError\\UploadError\\VideoTooShortError} \\
 \hline
 
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Provides physical therapist feedback on patient} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves analysis data for a specific date} \\
 \hline
 \rowcolor{white}
-PT\_feedback\_on\_P & \makecell[lt]{\textit{PTcomment}} & \makecell[lt]{NA} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+get\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & \textit{recent\_analysis} & \makecell[lt]{UserNotFoundError\\NoAnalysisError\\DownloadError} \\
 \hline
 
 \end{tabularx}
-\caption{Home Exported Access Routines}
-\label{tab:home_routines}
+\caption{Exported Access Routines (Part 1)}
+\label{tab:user_routines_1}
 \end{table}
 \subsubsection{Semantics}
 
