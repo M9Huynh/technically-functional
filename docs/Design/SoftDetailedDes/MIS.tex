@@ -623,6 +623,7 @@ This module is responsible for creating a new user account.
 \item password
 \item name
 \item birthday \textsuperscript{2}
+\item acc\_double
 \end{itemize}
 
 \noindent\textsuperscript{2} \textit{'Birthday' is an exported constant for distinguishing two users that may have the same name.} \\
@@ -645,35 +646,7 @@ This module is responsible for creating a new user account.
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if an account already exists in the user database.} \\
 \hline
 \rowcolor{white}
-acc\_exists & \makecell[lt]{\textit{Name}\\\textit{birthday}} & \textit{acc\_double} & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} verifies if username and password match for authentication} \\
-\hline
-\rowcolor{white}
-username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \makecell[lt]{LoginMatchError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} adds analysis results to user activity history} \\
-\hline
-\rowcolor{white}
-add\_analysis\_to\newline\_user\_act & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_analysis}} & NA & \makecell[lt]{UserNotFoundError\\SaveError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} saves video recording for user account} \\
-\hline
-\rowcolor{white}
-save\_video & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_video}} & NA & \makecell[lt]{UserNotFoundError\\UploadError\\VideoTooShortError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves analysis data for a specific date} \\
-\hline
-\rowcolor{white}
-get\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & \textit{recent\_analysis} & \makecell[lt]{UserNotFoundError\\NoAnalysisError\\DownloadError} \\
+acc\_exists & \makecell[lt]{\textit{name}\\\textit{birthday}} & \textit{acc\_double} & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
 \hline
 
 \end{tabularx}
@@ -683,12 +656,22 @@ get\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & \textit{re
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-NA \\
+\textit{id}: acc\_id \\
+\textit{name}: name \\
+\textit{role}: role \\
+\textit{email}: email \\
+\textit{dob}: birthday \\
+\textit{pw}: password \\
+\textit{acc\_copy}: acc\_double \\
+\textit{new\_id}: newly created acc\_id \\
+
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
-\textit{NA}
+$\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
+$ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\_id)$ $=$ $\emptyset$
 \subsubsection{Environment Variables}
-\textit{NA} 
+\textit{screen}: The application's display to the user \\
+\textit{touchscreen}: Users will click on the screen to select their desired action
 
 \subsubsection{Assumptions}
 %TODO 
