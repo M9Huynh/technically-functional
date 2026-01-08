@@ -519,6 +519,220 @@ set\_analysis\_report & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_analysi
 \label{tab:account_routines_2}
 \end{table}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Generator}
+
+This module's purpose is to display the most recent report, an overall analysis of progress, and rehabilitation insights. \\
+
+%subsubsection{Uses}
+%\begin{itemize}
+%\item recent\_report
+%\item report\_db
+%\item user\_acc\_p
+%\end{itemize}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}
+\\NA
+
+
+\noindent \textbf{Exported Access Programs}
+
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Generates health insights after assessing all past reports} \\
+\hline
+\rowcolor{white}
+generate\_insights & \makecell[lt]{\textit{all\_reports}} & \makecell[lt]{\textit{insights}} & \makecell[lt]{NoActivityError\\NoConnectionError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Generates a specific report} \\
+\hline
+\rowcolor{white}
+generate\_report & \makecell[lt]{\textit{date}\\\textit{time}} & \textit{recent\_report} & \makecell[lt]{CannotGenerateError\\NoActivityError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves specific report from database} \\
+\hline
+\rowcolor{white}
+get\_report & \makecell[lt]{\textit{Date}\\\textit{Time}} & \textit{Report} & \makecell[lt]{NA} \\
+\hline
+
+\end{tabularx}
+\caption{Generator Access Routines}
+\label{tab:generator_routines}
+\end{table}
+\newpage
+\subsubsection{Semantics}
+
+\noindent \textbf{State Variables} \\
+\textit{A}: an instance of user\_acc\_p \\
+\textit{E}: an instance of recent\_analysis\\
+\textit{V}: video \\
+\textit{R}: report \\
+\textit{RR}: recent\_report \\
+
+\noindent \textbf{State Invariant} \\
+$ \forall RR,$ $\exists (A \cap V) $ \\
+$ \forall R,$ $\exists (A \cap V_i|i \geq 1..n, n \in 1..\mathbb{N})$
+
+\subsubsection{Environment Variables}
+\textit{NA}
+
+\subsubsection{Assumptions}
+%TODO
+NA
+
+\subsubsection{Access Routine Semantics}
+%TODO
+TBD
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Account Creation}
+
+This module is responsible for creating a new user account.
+
+\subsubsection{Uses}
+\begin{itemize}
+\item name
+\item role
+\item email
+\item password 
+\item birthday
+\end{itemize}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}\\
+\begin{itemize}
+\item email
+\item password
+\item name
+\item birthday \textsuperscript{2}
+\end{itemize}
+
+\noindent\textsuperscript{2} \textit{Birthday is an exported constant for distinguishing two users that may have the same name.} \\
+
+\noindent \textbf{Exported Access Programs}
+\begin{table}[h]
+\centering
+\rowcolors{2}{tableblue}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays user profile information} \\
+\hline
+\rowcolor{white}
+view\_profile & \makecell[lt]{\textit{Name}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays analysis report for user} \\
+\hline
+\rowcolor{white}
+display\_report & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays summary information} \\
+\hline
+\rowcolor{white}
+display\_summary & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_password} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Shows patient's past exercises} \\
+\hline
+\rowcolor{white}
+p\_past\_exercises & \makecell[lt]{\textit{Email}} & NA & \makecell[lt]{no\_activity} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Provides physical therapist feedback on patient} \\
+\hline
+\rowcolor{white}
+PT\_feedback\_on\_P & \makecell[lt]{\textit{PTcomment}} & \makecell[lt]{NA} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\hline
+
+\end{tabularx}
+\caption{Home Exported Access Routines}
+\label{tab:home_routines}
+\end{table}
+\subsubsection{Semantics}
+
+\noindent \textbf{State Variables} \\
+NA \\
+%Check requirements doc
+\noindent \textbf{State Invariant} \\
+\textit{NA}
+\subsubsection{Environment Variables}
+\textit{NA} 
+
+\subsubsection{Assumptions}
+%TODO 
+TBD
+\subsubsection{Access Routine Semantics}
+%TODO
+%\noindent \wss{accessProg}():
+%\begin{itemize}
+%\item transition: \wss{if appropriate} 
+%\item output: \wss{if appropriate} 
+%\item exception: \wss{if appropriate} 
+%\end{itemize}
+TBD
+
+
+\subsubsection{Local Functions}
+\begin{table}[h]
+\centering
+\rowcolors{2}{tableblue}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets profile from generator} \\
+\hline
+\rowcolor{white}
+get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{Cannot\_access\_db} \\
+\hline
+
+\end{tabularx}
+\caption{Account Management Access Routines}
+\label{tab:account_routines}
+\end{table}
+
+\newpage
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Module - Generator}
