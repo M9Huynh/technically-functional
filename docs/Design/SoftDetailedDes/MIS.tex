@@ -674,8 +674,10 @@ $ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\
 \textit{touchscreen}: Users will click on the screen to select their desired action
 
 \subsubsection{Assumptions}
-%TODO 
-TBD
+\begin{itemize}
+  \item Users with the same name have different birthdays.
+\end{itemize}
+
 \subsubsection{Access Routine Semantics}
 %TODO
 %\noindent \wss{accessProg}():
@@ -701,10 +703,17 @@ TBD
 \hline
 
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets profile from generator} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Creates a new user account} \\
 \hline
 \rowcolor{white}
-get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{Cannot\_access\_db} \\
+account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sets user information in database} \\
+\hline
+\rowcolor{white}
+set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{NA} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
 \hline
 
 \end{tabularx}
@@ -715,6 +724,93 @@ get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\O
 \newpage
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Valid user}
+This module's purpose is to check whether a potential user is authorized to create an account.
+
+\subsubsection{Uses}
+\begin{itemize}
+\item name
+\item role
+\item invite\_code
+\item license
+\end{itemize}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}
+\\ \textit{is\_valid}: boolean \\
+
+
+\noindent \textbf{Exported Access Programs}\\
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a physiotherapist's license is valid}. \\
+\hline
+\rowcolor{white}
+license\_check & \makecell[lt]{\textit{name}\\\textit{license}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a new patient's invite code is valid.} \\
+\hline
+\rowcolor{white}
+invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite\_code}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
+\hline
+
+
+\end{tabularx}
+\caption{Exported Access Routines}
+\label{tab:user_routines_1}
+\end{table}
+
+\noindent \textbf{State Variables} \\
+\textit{license}: license\_no \\
+\textit{invite}: invite\_code \\
+
+%Check requirements doc
+\noindent \textbf{State Invariant} \\
+\textit{NA?}
+
+\subsubsection{Environment Variables}
+\textit{screen}: The application's display to the user \\
+\textit{touchscreen}: Users will click on the screen to select their desired action
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item Invite codes are randomly generated.
+  \item No two users will have the same invite codes.
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+TODO
+
+\subsubsection{Local Functions}
+NA?
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - User Account}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Exercise Data}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - User Activity}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
