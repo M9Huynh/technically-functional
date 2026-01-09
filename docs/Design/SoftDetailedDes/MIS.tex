@@ -894,7 +894,7 @@ $D(acc\_id) \neq \emptyset \implies acc\_id \notin db $
 
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item Invite codes are randomly generated.
+  \item If two people have the same name, then it is assumed they have different birthdays. 
   \item No two users will have the same invite codes.
 \end{itemize}
 
@@ -906,8 +906,34 @@ NA?
 
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Exercise Data}
+
+This module consists of and allows manipulation of a patient's exercise data. 
+
+\subsubsection{Uses}
+\begin{itemize}
+\item name
+\item acc\_id
+\item exercise
+\item sets
+\item reps
+\item rest\_time
+\end{itemize}
+
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}
+\\ \textit{exercise}: exercise\\
+\textit{sets}: sets \\
+\textit{reps}: reps \\
+\textit{rest\_time}: rest\_time \\
+
+
+\textbf{Exported Access Programs}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - User Activity}
