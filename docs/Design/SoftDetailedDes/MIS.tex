@@ -925,14 +925,45 @@ This module consists of and allows manipulation of a patient's exercise data.
 
 \subsubsection{Syntax}
 
-\textbf{Exported Constants}
+\noindent \textbf{Exported Constants}
 \\ \textit{exercise}: exercise\\
 \textit{sets}: sets \\
 \textit{reps}: reps \\
 \textit{rest\_time}: rest\_time \\
 
 
-\textbf{Exported Access Programs}
+\noindent \textbf{Exported Access Programs}
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} provides exercise instructions to user} \\
+\hline
+\rowcolor{white}
+exerc\_instruct & \makecell[lt]{\textit{user\_acc\_p}\\\textit{exercise}} & \textit{ex\_instruct} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} allows physiotherapist to modify exercise parameters} \\
+\hline
+\rowcolor{white}
+PT\_modifies\_exercise & \makecell[lt]{\textit{user\_acc\_p}\\\textit{sets}\\\textit{repetitions}\\\textit{rest\_time}} & \textit{ex\_instruct} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\hline
+
+\end{tabularx}
+\caption{Exported Access Routines (Part 1)}
+
+\end{table}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
