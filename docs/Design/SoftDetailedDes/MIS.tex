@@ -269,6 +269,8 @@ good\_to\_record & String & A message informing user that the system is ready to
 
 
 \section{MIS}
+This section describes individual module specifications.\\
+\textit{Note: Some of the mathematics used are preliminary and not all-encompassing. They are defined below for feedback purposes.}
 \subsection{Module - Database Management}
 \textit{ADT} \\
 
@@ -807,7 +809,7 @@ NA?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - User Account}
 
-This module's purpose is to handle the users' accounts.
+This module's purpose is to handle the users' accounts in the user database.
 
 \subsubsection{Uses}
 \begin{itemize}
@@ -859,6 +861,8 @@ PTaccount\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecel
 \rowcolor{white}
 username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \makecell[lt]{LoginMatchError} \\
 \hline
+%TODO
+%will add more functions as I see fit
 
 \end{tabularx}
 \caption{Exported Access Routines}
@@ -866,7 +870,41 @@ username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \m
 \end{table}
 
 \noindent\textsuperscript{2} \textit{For this function, the output depends on context. For example, if this function was going to be used in one which corresponds to the PT functionality of viewing 
-a patient, their view would be restricted to patients under their care.}
+a patient, their view would be restricted to patients under their care.} \\
+
+\noindent \textbf{State Variables} \\
+\textit{email}: email \\
+\textit{pw}: password \\
+\textit{name}: name \\
+\textit{id}: acc\_id
+
+%TODO - check?
+\noindent \textit{D(x)}: 'PT\_account\_delete(x)' \\
+\textit{db}: 'User Account database' \\
+
+\noindent \textbf{State Invariant} \\
+$\exists$ $acc\_id$ $|$ $(email \cap pw \notin \emptyset) $ \\
+$D(acc\_id) \neq \emptyset \implies acc\_id \notin db $
+
+
+
+\subsubsection{Environment Variables}
+\textit{screen}: The application's display to the user \\
+\textit{touchscreen}: Users will click on the screen to select their desired action
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item Invite codes are randomly generated.
+  \item No two users will have the same invite codes.
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+TODO
+
+\subsubsection{Local Functions}
+NA?
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Exercise Data}
