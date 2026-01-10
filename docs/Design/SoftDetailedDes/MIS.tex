@@ -967,11 +967,20 @@ PT\_modifies\_exercise & \makecell[lt]{\textit{user\_acc\_p}\\\textit{sets}\\\te
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
+\textit{ex}: exercise\\
+\textit{sets}: sets\\
+\textit{reps}: reps\\
+\textit{rest\_time}: rest\_time\\
+\textit{ex\_routine}: [ex, sets, reps, rest\_time]\\
+\textit{name}: name\\
+\textit{acc\_id}: acc\_id\\
 
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
-
+$\forall x \in ex\_routine: x \notin \emptyset$ \\
+$\forall x \in \{acc\_id\}: \exists y \in \{ex\_routine\}$ $|$ $count(y) = 1$ \\
+$\forall x \in \{ex\_routine\}$ $|$ $x['sets'] = 1$ $\implies$ $x['rest\_time'] = 0$ \\
 
 \subsubsection{Environment Variables}
 
@@ -989,6 +998,7 @@ NA?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - User Activity}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
