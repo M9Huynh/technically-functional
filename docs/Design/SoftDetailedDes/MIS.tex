@@ -982,23 +982,105 @@ $\forall x \in ex\_routine: x \notin \emptyset$ \\
 $\forall x \in \{acc\_id\}: \exists y \in \{ex\_routine\}$ $|$ $count(y) = 1$ \\
 $\forall x \in \{ex\_routine\}$ $|$ $x['sets'] = 1$ $\implies$ $x['rest\_time'] = 0$ \\
 
-\subsubsection{Environment Variables}
-
+\subsubsection{Environment Variables} %TODO check?
+\textit{screen}: The application's display to the user \\
+\textit{touchscreen}: Users will click on the screen to select their desired action \\
 
 \subsubsection{Assumptions}
-
+\begin{itemize}
+  \item During performance of an exercise, breaks may be needed, but the rest\_time specified maybe 0. In this case, it is assumed that the recording takes the speed of performance into account and records for longer. 
+  \item For the same user, no two exercises with the same name are present.
+\end{itemize}
 
 \subsubsection{Access Routine Semantics}
 %TODO
 
 \subsubsection{Local Functions}
-NA?
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
 
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} provides exercise instructions to user} \\
+\hline
+\rowcolor{white}
+add\_ex & \makecell[lt]{\textit{name}\\\textit{exercise}\\\textit{acc\_id}\\\textit{sets}\\\textit{reps}\\\textit{rest\_time}} & \textit{NA} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\hline
+
+\end{tabularx}
+\caption{Local Routines}
+
+\end{table}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - User Activity}
 
+This module handles video data of a patient's recorded exercise.
+
+\subsubsection{Uses}
+\begin{itemize}
+  \item name
+  \item exercise
+  \item date
+  \item duration
+  \item recent\_video
+  \item recent\_analysis
+  \item overall\_analysis
+
+\end{itemize}
+
+\subsubsection{Syntax}
+
+\noindent \textbf{Exported Constants} \\
+\textit{analysis}: recent\_analysis\\
+\textit{recent\_video}: recent\_video\\
+\textit{analysis\_report}: analysis\_report\\
+
+\noindent \textbf{Exported Access Programs} %TODO fix in and out
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} adds analysis results to user activity history} \\
+\hline
+\rowcolor{white}
+add\_analysis\_to\newline\_user\_act & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_analysis}} & NA & \makecell[lt]{UserNotFoundError\\SaveError} \\
+\hline
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} saves video recording for user account} \\
+\hline
+\rowcolor{white}
+save\_video & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_video}} & NA & \makecell[lt]{UserNotFoundError\\UploadError\\VideoTooShortError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves analysis data for a specific date} \\
+\hline
+\rowcolor{white}
+get\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & \textit{recent\_analysis} & \makecell[lt]{UserNotFoundError\\NoAnalysisError\\DownloadError} \\
+\hline
+\end{tabularx}
+\caption{Local Routines}
+
+\end{table}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
