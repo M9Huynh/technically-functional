@@ -653,10 +653,20 @@ acc\_exists & \makecell[lt]{\textit{name}\\\textit{birthday}} & \textit{acc\_dou
 \hline
 
 \end{tabularx}
-\caption{Exported Access Routines (Part 1)}
+\caption{Exported Access Routines}
 \label{tab:user_routines_1}
 \end{table}
+
+\noindent \textbf{Exported Access Programs (definitions)} \\
+\textit{E(x)}: 'acc\_exists(x)' \\
+\textit{db}: 'User Account database' \\
+$i, j \in \mathbb{Z}^{+}$ \\
+$\neg (acc\_exists(i)) \implies$ $db(i).name \neq db(j).name \cup (db(i).name = db(j).name \cap db(i).birthday \neq db(j).birthday)$
+
+
 \subsubsection{Semantics}
+
+
 
 \noindent \textbf{State Variables} \\
 \textit{id}: acc\_id \\
@@ -668,10 +678,15 @@ acc\_exists & \makecell[lt]{\textit{name}\\\textit{birthday}} & \textit{acc\_dou
 \textit{acc\_copy}: acc\_double \\
 \textit{new\_id}: newly created acc\_id \\
 
-%Check requirements doc
 \noindent \textbf{State Invariant} \\
 $\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
-$ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\_id)$ $=$ $\emptyset$
+%REMOVE%
+If there is no account already present in the user database, that means that there is no acc\_id present \\
+%$ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\_id)$ $=$ $\emptyset$ \\
+$acc\_id \cup new\_id \implies$ $\forall n \in name, r \in role, e \in email, d \in dob$, $n \cap r \cap e \cap d \notin \emptyset$ \\ 
+%REMOVE%
+If there is an account present in the user database, that means none of the fields above are empty
+
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
 \textit{touchscreen}: Users will click on the screen to select their desired action
