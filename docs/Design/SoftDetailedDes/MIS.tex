@@ -606,7 +606,11 @@ TBD
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Account Creation}
 
-This module is responsible for creating a new user account.
+This module is responsible for creating a new user account. It creates one of the two objects below:\\
+\begin{itemize}
+  \item user\_acc\_p: [\\acc\_id: int,\\ name: String,\\ role: P,\\ birthday: int,\\ email: String,\\ password: String\\]
+  \item user\_acc\_pt: [\\acc\_id: int,\\ name: String,\\ role: PT,\\ birthday: int,\\ email: String,\\ password: String\\]
+\end{itemize}
 
 \subsubsection{Uses}
 \begin{itemize}
@@ -630,7 +634,7 @@ This module is responsible for creating a new user account.
 \end{itemize}
 
 \noindent\textsuperscript{2} \textit{'Birthday' is an exported constant for distinguishing two users that may have the same name.} \\
-\newpage
+
 \noindent \textbf{Exported Access Programs}
 \begin{table}[h]
 \centering
@@ -751,10 +755,14 @@ set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\
 \textit{code}: Invite\_code \\
 \textit{email}: Email\\
 \textit{pw}: password \\
+\textit{patient}: user\_acc\_p\\
+\textit{PT}: user\_acc\_pt\\
 
-\noindent $new(x) \leftarrow$ $n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$ $|$
+\noindent $new(x):$ \\$n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$ $|$
 $n \cap b \cap e \cap p \cap (l \cup c)$
 
+$set(y):$ \\
+$\neg acc\_exists$
 
 
 
