@@ -661,7 +661,10 @@ acc\_exists & \makecell[lt]{\textit{name}\\\textit{birthday}} & \textit{acc\_dou
 \textit{E(x)}: 'acc\_exists(x)' \\
 \textit{db}: 'User Account database' \\
 $i, j \in \mathbb{Z}^{+}$ \\
-$\neg (acc\_exists(i)) \implies$ $db(i).name \neq db(j).name \cup (db(i).name = db(j).name \cap db(i).birthday \neq db(j).birthday)$
+$\neg (E(i)) \implies$ $db(i).name \neq db(j).name \cup (db(i).name = db(j).name \cap db(i).birthday \neq db(j).birthday)$ \\
+%REMOVE%
+If an account does not already exist, that implies that the names are different, or if they are the same, the birthdays are different.\\
+
 
 
 \subsubsection{Semantics}
@@ -735,11 +738,24 @@ set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\
 \hline
 
 \end{tabularx}
-\caption{Account Management Access Routines}
+\caption{Local Routines}
 \label{tab:account_routines}
-\end{table}
+\end{table} 
 
-\newpage
+\noindent \textbf{Local Routines (definitions)}\\
+\textit{new(x)}: 'account\_create(x)'\\
+\textit{set(y)}: 'set\_user\_info(y)'\\
+\textit{name}: name\\
+\textit{birthday}: birthday\\
+\textit{license}: License\_no \\
+\textit{code}: Invite\_code \\
+\textit{email}: Email\\
+\textit{pw}: password \\
+
+\noindent $new(x) \leftarrow$ $n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$ $|$
+$n \cap b \cap e \cap p \cap (l \cup c)$
+
+
 
 
 
