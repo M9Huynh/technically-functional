@@ -938,7 +938,7 @@ a patient, their view would be restricted to patients under their care.} \\
 
 \noindent \textbf{State Invariant} \\
 $\exists$ $acc\_id$ $|$ $(email \cap pw \notin \emptyset) $ \\
-$D(acc\_id) \neq \emptyset \implies acc\_id \notin db $
+$D(acc\_id) \implies acc\_id \notin db $
 
 
 
@@ -1146,7 +1146,7 @@ save\_overall\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Module - Generator}
+\subsection{Module - Performance Statistics Generator}
 
 This module's purpose is to display the most recent report, an overall analysis of progress, and rehabilitation insights. \\
 
@@ -1228,9 +1228,9 @@ NA
 TBD
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Home}
+\subsection{Module - Profile Activity}
 
-This module displays past exercises, allows viewing of user profile, and directs to the Generator module. PTs are able to comment on their patient's submissions.
+This module displays past exercises, allows viewing of user profile, and directs to the Performance Statistics Generator module. PTs are able to comment on their patient's submissions.
 
 %\subsubsection{Uses}
 
@@ -1342,7 +1342,7 @@ get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\O
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Main}
+\subsection{Module - Analysis Control Flow}
 This module handles the video recording, placing markers on it and checking if the patient's form is appropriate for performing the exercise. It does this through the use of external libraries (notably OpenCV).
 
 \subsubsection{Uses}
