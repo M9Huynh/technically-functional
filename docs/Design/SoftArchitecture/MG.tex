@@ -204,11 +204,15 @@ actually be implemented.
 
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Interface Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Home Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Main Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Profile Activity Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Analysis Control Flow Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Draw Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Database Management Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Generator Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Account Creation Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Account Validity Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Details Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Activity Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Exercise Data Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Performance Statistics Generator Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Metrics Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Analyze Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Feedback Module
@@ -226,13 +230,17 @@ actually be implemented.
 \midrule
 
 \multirow{4}{0.3\textwidth}{Behaviour-Hiding Module}& User Interface Module\\
-& Home Module\\
-& Main Module\\
+& Profile Activity Module\\
+& Analysis Control Flow Module\\
 & Draw Module \\
 \midrule
 
-\multirow{5}{0.3\textwidth}{Software Decision Module} & Database Management Module\\
-& Generator Module\\
+\multirow{9}{0.3\textwidth}{Software Decision Module} & Account Creation Module\\
+& Account Validity Module\\
+& User Details Module\\
+& User Activity Module\\
+& Exercise Data Module\\
+& Performance Statistics Generator Module\\
 & Metrics Module\\
 & Analyze Module\\
 & Feedback Module\\
@@ -286,7 +294,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR18, FR19, FR24, FR25
 \end{description}
 
-\subsubsection{Home Module (M2)}
+\subsubsection{Profile Activity Module (M2)}
 \begin{description}
 	\item[Secrets:] The data structures and business logic for managing patient-specific exercise programs, including customization and progress tracking.
 	\item[Services:] Allows physiotherapists to create and customize exercise programs for individual patients, including sets, reps, rest times, and weekly limits. Tracks patient exercise completion and progress over time. Enforces PT-defined limitations on exercise frequency and intensity.
@@ -295,7 +303,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR6, FR10, FR11, FR22, FR27
 \end{description}
 
-\subsubsection{Main Module (M3)}
+\subsubsection{Analysis Control Flow Module (M3)}
 \begin{description}
 	\item[Secrets:] The implementation of video recording, including camera configuration, frame rate management, and recording controls.
 	\item[Services:] Captures video of users performing exercises at minimum 720p resolution and 30 fps. Performs pre-capture environment checks (lighting, framing). Provides recording controls (start, stop, retry). Ensures video meets minimum quality standards before proceeding to analysis.
@@ -330,7 +338,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR1, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
 \end{description}
 
-\subsubsection{Generator Module (M6)}
+\subsubsection{Performance Statistics Generator Module (M6)}
 \begin{description}
 	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
 	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
@@ -463,7 +471,7 @@ AC3 & M3, M7, M8, M9\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+\includegraphics[width=0.7\textwidth]{UsesHierarchy_1.png}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
