@@ -757,12 +757,27 @@ set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\
 \textit{pw}: password \\
 \textit{patient}: user\_acc\_p\\
 \textit{PT}: user\_acc\_pt\\
+\textit{db}: 'User database'\\
+\textit{new\_db}: updated 'User database' \\
+\textit{acc\_copy}: acc\_double\\
 
-\noindent $new(x):$ \\$n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$ $|$
-$n \cap b \cap e \cap p \cap (l \cup c)$
+\noindent $new(x):$ \\
+Opt 1: \\
+Given: \textit{x} = form submission from user interface \\
+Pre-condition: $\forall$ $n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$: $\neg acc\_copy(x)$ $\cap$ $(n \cap b \cap e \cap p \cap (l \cup c))$\\
+Function: new(x) \\
+Post-condition: $ new\_db = db \cup x$ \\
 
-$set(y):$ \\
-$\neg acc\_exists$
+\noindent Opt 2: \\
+$\neg acc\_copy$ $\cap$ 
+$n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$ $|$
+$n \cap b \cap e \cap p \cap (l \cup c)$ $\neq \emptyset$ \\
+
+\noindent $set(x):$ \\
+Given: \textit{x}
+Pre-condition: $\neg acc\_exists(x)$ \\
+Function: set(x) \\
+Post-condition: $ new\_db = db \cup {(x.name, x.birthday, (x.license \cup x.code), x.email, x.pw)}$
 
 
 
