@@ -789,9 +789,10 @@ All the license numbers and invite codes are unique, positive and 6 digits. \\
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
-\textit{license\_check}: \\
-Input: license
-Transition:
+\textit{license\_check(license)}: \\
+Input: license \\
+Transition: \\ %if license code is in valid license codes, then user acc is added \\
+Output: \textit{is\_valid} \\
 
 \subsubsection{Local Functions}
 NA
