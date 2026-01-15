@@ -704,14 +704,17 @@ If there is an account present in the user database, that means none of the fiel
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
-%TODO
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
-TBD
+$n \in Name, r \in role, b \in birthday, l \in license\_no, i \in invite\_code, e \in email, p \in password$ \\
+\textit{db}: User database \\
+\textbf{Exported access routines}: NA \\
+\textbf{Local routines}:
+\textit{account\_create(n, r, b, l OR i, e, p)}:
+\begin{itemize}
+  \item Output: new \textit{user\_account\_p} or \textit{user\_account\_pt} instance
+  \item Transition: $user\_account\_p$ $\cup$ $user\_account\_pt = \emptyset \implies (user\_account\_p$ $\cup$ $user\_account\_pt) \neq \emptyset$
+  \item Exception: ?
+\end{itemize}
+
 
 
 \subsubsection{Local Functions}
@@ -1818,18 +1821,32 @@ measure\_duration & \makecell[lt]{\textit{initial\_time}\\\textit{final\_time}} 
 
 
   
-  
+\newpage  
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \subsection{Module - Draw}
-NA
+This module is responsible for drawing landmarks by using \textit{MediaPipe} (external library).
 
 
 \subsubsection{Uses}
+\begin{itemize}
+  \item starting\_frame
+  \item processed\_frames\_list
+  \item unprocessed\_frames\_list
+  \item feedback\_instructions
 
+\end{itemize}
+
+\newpage
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}
+\begin{itemize}
+  \item \textit{can\_record}: good\_to\_record
+  \item \textit{fixing\_instructions}: feedback\_instructions
+  \item \textit{processed}: processed\_frames\_list
+\end{itemize}
+
 
 \noindent \textbf{Exported Access Programs}
 \begin{table}[h]
@@ -1847,7 +1864,7 @@ NA
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Checks if the recording environment is appropriate (e.g., lighting, background)} \\
 \hline
 \rowcolor{white}
-record\_check & \makecell[lt]{\textit{starting\_frane}} & \makecell[lt]{\textit{good\_to\_record}} & \makecell[lt]{UserNotFound\\Error\\DownloadError} \\
+record\_check & \makecell[lt]{\textit{starting\_frame}} & \makecell[lt]{\textit{good\_to\_record}} & \makecell[lt]{UserNotFound\\Error\\DownloadError} \\
 \hline
 
 % Analyzes the user's form against a correct form model (determined by Analysis)
@@ -1867,40 +1884,30 @@ draw\_points & \makecell[lt]{\textit{unprocessed\_frames}} & \makecell[lt]{proce
 \hline
 
 \end{tabular}
-\caption{Video Processing Access Routines}
+\caption{Draw Access Routines}
 \label{tab:video_routines}
 \end{table}
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-TODO
+\textit{frames}: unprocessed\_frames\_list\\
+
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
-TODO
+
 
 %Environment variables?
 
 \subsubsection{Assumptions}
-TODO
+\begin{itemize}
+  \item User's complete form is in frame.
+  \item The application will not draw points if the user does not comply with instructions given by \textit{record\_check}.
+\end{itemize}
 \subsubsection{Access Routine Semantics}
 TODO
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
 
-%\wss{A module without environment variables or state variables is unlikely to
-  %have a state transition.  In this case a state transition can only occur if
-  %the module is changing the state of another module.}
-
-%\wss{Modules rarely have both a transition and an output.  In most cases you
-  %will have one or the other.}
-
-%\newpage
 
 \subsubsection{Local Functions}
 \begin{table}[h]
