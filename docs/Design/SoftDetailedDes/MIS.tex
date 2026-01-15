@@ -761,14 +761,18 @@ invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is
 \textit{B}: user\_account\_pt \\
 \textit{C}: user\_account\_p \\
 \textit{D}: user\_account\_pt \\
-\textit{license\_b}: license\_no \\
-\textit{license\_d}: license\_no \\
-\textit{invite\_a}: invite\_code \\
-\textit{invite\_c}: invite\_code \\
+\textit{V}: the set of valid license\_code\\
+\textit{I}: the set of valid invite\_code\\
+\textit{license\_b}: license\_no for user B \\
+\textit{license\_d}: license\_no for user D\\
+\textit{invite\_a}: invite\_code for user A\\
+\textit{invite\_c}: invite\_code for user C\\
+\textit{db}: 'User Database' \\
 
 
 \noindent \textbf{State Invariant} \\
-$\forall$ $license\_b, license\_d: license\_b, license\_d$ $\in$ $\{license\_no\}$ \\
+$\forall a, b, c, d \in A, B, C, D$ $\implies$
+$\forall$ $license\_b, license\_d: license\_b, license\_d$ $\in$ $\{license\_no\}$, \\
 $\forall$ $invite\_a, invite\_c: invite\_a, invite\_c$ $\in$ $\{invite\_code\}$ \\
 %REMOVE
 All license numbers and invite codes belong to their overall respective sets. \\
@@ -778,6 +782,8 @@ All license numbers and invite codes belong to their overall respective sets. \\
 \mathbb{Z}^{+}:$ 100000 $ \leq invite\_a, invite\_c \leq$ 999999, $\cap$ $invite\_a \neq invite\_c$ \\
 %REMOVE
 All the license numbers and invite codes are unique, positive and 6 digits. \\
+\textit{is\_valid} $\in$ $\{true, false\}$
+
 
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
@@ -789,9 +795,16 @@ All the license numbers and invite codes are unique, positive and 6 digits. \\
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
-\textit{license\_check(license)}: \\
+
+\textbf{\textit{license\_check(license)}}: \\
 Input: license \\
 Transition: \\ %if license code is in valid license codes, then user acc is added \\
+$\forall$ $B \in db$ $\Leftrightarrow$ $\exists$ $license\_b \in V$ \\
+Output: \textit{is\_valid} \\
+\textbf{\textit{invite\_code\_check(invite)}}: \\
+Input: invite \\
+Transition: \\
+$\forall$ $A \in db$ $\Leftrightarrow$ $\exists$ $invite\_a \in I$\\
 Output: \textit{is\_valid} \\
 
 \subsubsection{Local Functions}
