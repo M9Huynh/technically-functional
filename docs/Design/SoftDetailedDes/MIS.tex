@@ -711,10 +711,10 @@ This module's purpose is to check whether a potential user is authorized to crea
 
 \subsubsection{Uses}
 \begin{itemize}
-\item name
-\item role
-\item invite\_code
-\item license
+\item \textit{Name}: Name
+\item \textit{role}: role
+\item \textit{invite}: invite\_code
+\item \textit{license}: license\_no
 \end{itemize}
 
 \subsubsection{Syntax}
@@ -747,7 +747,7 @@ license\_check & \makecell[lt]{\textit{name}\\\textit{license}} & \textit{is\_va
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a new patient's invite code is valid.} \\
 \hline
 \rowcolor{white}
-invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite\_code}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
+invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
 \hline
 
 
@@ -768,9 +768,16 @@ invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite\_code}} & \tex
 
 
 \noindent \textbf{State Invariant} \\
-$\forall$ $license\_b \in \mathbb{Z}^{+},$ $\forall$ $license\_d \in \mathbb{Z}^{+}:$ $license\_b \neq license\_d$ \\
-$\forall$ $invite\_a \in \mathbb{Z}^{+},$ $\forall$ $invite\_c \in \mathbb{Z}^{+}:$ $invite\_a \neq invite\_c$ \\
-
+$\forall$ $license\_b, license\_d: license\_b, license\_d$ $\in$ $\{license\_no\}$ \\
+$\forall$ $invite\_a, invite\_c: invite\_a, invite\_c$ $\in$ $\{invite\_code\}$ \\
+%REMOVE
+All license numbers and invite codes belong to their overall respective sets. \\
+\noindent $\forall$ $license\_b \in \mathbb{Z}^{+},$ $\forall$ $license\_d \in
+\mathbb{Z}^{+}:$ 100000 $ \leq license\_b, license\_d \leq$ 999999, $\cap$ $license\_b \neq license\_d$ \\
+\noindent $\forall$ $invite\_a \in \mathbb{Z}^{+},$ $\forall$ $invite\_c \in
+\mathbb{Z}^{+}:$ 100000 $ \leq invite\_a, invite\_c \leq$ 999999, $\cap$ $invite\_a \neq invite\_c$ \\
+%REMOVE
+All the license numbers and invite codes are unique, positive and 6 digits. \\
 
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
@@ -779,14 +786,15 @@ $\forall$ $invite\_a \in \mathbb{Z}^{+},$ $\forall$ $invite\_c \in \mathbb{Z}^{+
 \subsubsection{Assumptions}
 \begin{itemize}
   \item Invite codes are randomly generated.
-  \item No two users will have the same invite codes.
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
-TODO
+\textit{license\_check}: \\
+Input: license
+Transition:
 
 \subsubsection{Local Functions}
-NA?
+NA
 
 
 
