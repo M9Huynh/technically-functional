@@ -522,86 +522,6 @@ set\_analysis\_report & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_analysi
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Generator}
-
-This module's purpose is to display the most recent report, an overall analysis of progress, and rehabilitation insights. \\
-
-%subsubsection{Uses}
-%\begin{itemize}
-%\item recent\_report
-%\item report\_db
-%\item user\_acc\_p
-%\end{itemize}
-
-\subsubsection{Syntax}
-
-\textbf{Exported Constants}
-\\NA
-
-
-\noindent \textbf{Exported Access Programs}
-
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Generates health insights after assessing all past reports} \\
-\hline
-\rowcolor{white}
-generate\_insights & \makecell[lt]{\textit{all\_reports}} & \makecell[lt]{\textit{insights}} & \makecell[lt]{NoActivityError\\NoConnectionError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Generates a specific report} \\
-\hline
-\rowcolor{white}
-generate\_report & \makecell[lt]{\textit{date}\\\textit{time}} & \textit{recent\_report} & \makecell[lt]{CannotGenerateError\\NoActivityError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves specific report from database} \\
-\hline
-\rowcolor{white}
-get\_report & \makecell[lt]{\textit{Date}\\\textit{Time}} & \textit{Report} & \makecell[lt]{NA} \\
-\hline
-
-\end{tabularx}
-\caption{Generator Access Routines}
-\label{tab:generator_routines}
-\end{table}
-\newpage
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-\textit{A}: an instance of user\_acc\_p \\
-\textit{E}: an instance of recent\_analysis\\
-\textit{V}: video \\
-\textit{R}: report \\
-\textit{RR}: recent\_report \\
-
-\noindent \textbf{State Invariant} \\
-$ \forall RR,$ $\exists (A \cap V) $ \\
-$ \forall R,$ $\exists (A \cap V_i|i \geq 1..n, n \in 1..\mathbb{N})$
-
-\subsubsection{Environment Variables}
-\textit{NA}
-
-\subsubsection{Assumptions}
-%TODO
-NA
-
-\subsubsection{Access Routine Semantics}
-%TODO
-TBD
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Account Creation}
@@ -835,14 +755,22 @@ invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite\_code}} & \tex
 \caption{Exported Access Routines}
 \label{tab:user_routines_1}
 \end{table}
-
+\newpage
 \noindent \textbf{State Variables} \\
-\textit{license}: license\_no \\
-\textit{invite}: invite\_code \\
+\textit{A}: user\_account\_p \\
+\textit{B}: user\_account\_pt \\
+\textit{C}: user\_account\_p \\
+\textit{D}: user\_account\_pt \\
+\textit{license\_b}: license\_no \\
+\textit{license\_d}: license\_no \\
+\textit{invite\_a}: invite\_code \\
+\textit{invite\_c}: invite\_code \\
 
-%Check requirements doc
+
 \noindent \textbf{State Invariant} \\
-\textit{NA?}
+$\forall$ $license\_b \in \mathbb{Z}^{+},$ $\forall$ $license\_d \in \mathbb{Z}^{+}:$ $license\_b \neq license\_d$ \\
+$\forall$ $invite\_a \in \mathbb{Z}^{+},$ $\forall$ $invite\_c \in \mathbb{Z}^{+}:$ $invite\_a \neq invite\_c$ \\
+
 
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
