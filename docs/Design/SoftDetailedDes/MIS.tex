@@ -208,9 +208,15 @@ license\_no & Int & Verification of PT & 7.1 \\
 \hline
 invite\_code & String & Given by PT to patient for registration & 7.1 \\
 \hline
-date & String & Date selected by user & 7.1 \\
+is\_valid & Boolean & Used to check validity of user (invite\_code, license\_no) & ? \\
 \hline
-time & String & Time selected by user & 7.2 \\
+acc\_id & Int & Identifier assigned to app users & ? \\
+\hline
+acc\_double & Boolean & Indicates whether an account already exists in the system & ? \\
+\hline
+date & String & Date (YYYYMMDD) & 7.1 \\
+\hline
+time & String & Time (s) & 7.2 \\
 \hline
 recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
 \hline
