@@ -882,11 +882,15 @@ a patient, their view would be restricted to patients under their care.} \\
 \textit{email}: email \\
 \textit{pw}: password \\
 \textit{name}: name \\
-\textit{id}: acc\_id
-
-%TODO - check?
+\textit{id}: acc\_id \\
+\textit{patient}: user\_acc\_p ([\textit{id}, \textit{name}, \textit{p}: role, \textit{bday}: birthday, \textit{email},
+\textit{pw}]) \\ 
+\textit{physio}: user\_acc\_pt ([\textit{id}, \textit{name}, \textit{pt}: role, \textit{ptbday}: birthday, \textit{email},
+\textit{pw}]) \\ 
 \noindent \textit{D(x)}: 'PT\_account\_delete(x)' \\
 \textit{db}: 'User Account database' \\
+\textit{name\_has\_id}: {db.Name} $\mapsto$ \{db.acc\_id\} \\
+\textit{user\_info}: {db.acc\_id} $\mapsto$ \{db.Name, db.role, db.birthday, db.email\} \\
 
 \noindent \textbf{State Invariant} \\
 $\exists$ $acc\_id$ $|$ $(email \cap pw \notin \emptyset) $ \\
@@ -896,22 +900,25 @@ $D(acc\_id) \implies acc\_id \notin db $
 
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
-\textit{touchscreen}: Users will click on the screen to select their desired action
+\textit{touchscreen}: Users will click on the screen to select their desired action \\
 
 \subsubsection{Assumptions}
 \begin{itemize}
   \item If two people have the same name, then it is assumed they have different birthdays. 
-  \item No two users will have the same invite codes.
+  \item No two users have the same invite codes.
+  \item No two PTs have the same license numbers.
 \end{itemize}
-
+%TODO 
 \subsubsection{Access Routine Semantics}
 \textbf{get\_userdb\_info()}
 \begin{itemize}
-  \item Input: Name \\
+  \item Input: name
+  \item Transition: NA
+  \item Output: $\exists$ $n \in db.Name$ $|$  
 \end{itemize}
 
 \subsubsection{Local Functions}
-NA?
+NA
 
 
 
