@@ -300,7 +300,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Services:] Allows physiotherapists to create and customize exercise programs for individual patients, including sets, reps, rest times, and weekly limits. Tracks patient exercise completion and progress over time. Enforces PT-defined limitations on exercise frequency and intensity.
 	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR6, FR10, FR11, FR22, FR27
+	\item[Related Requirements:] FR6, FR9, FR10, FR11, FR22, FR27, SR-AR3
 \end{description}
 
 \subsubsection{Analysis Control Flow Module (M3)}
@@ -309,7 +309,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Services:] Captures video of users performing exercises at minimum 720p resolution and 30 fps. Performs pre-capture environment checks (lighting, framing). Provides recording controls (start, stop, retry). Ensures video meets minimum quality standards before proceeding to analysis.
 	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR7, FR15, FR26, UHR-EOU3
+	\item[Related Requirements:] FR7, FR9, FR13, FR15, FR26, UHR-EOU3
 \end{description}
 
 \subsubsection{Draw Module (M4)}
@@ -327,7 +327,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
     \item[Services:] Handles new user account creations for both patients and PTs with input information. Also generates unique invite codes for PT accounts upon creation for linking patient accounts. Stores user account information securely in a remote database.
     \item[Implemented By:] \progname{}
     \item[Type of Module:] Library Module
-    \item[Related Requirements:]    
+    \item[Related Requirements:] FR1, FR2
 \end{description}
 
 \subsection{Software Decision Module}
@@ -338,14 +338,14 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Implemented By:] \progname{}
 \end{description}
 
-\subsubsection{Database Management Module (M5)}
-\begin{description}
-	\item[Secrets:] The structure, validation, and authorization logic for all user credentials, account data, invite codes, physiotherapist identification numbers, exercise information, and data encryption.
-	\item[Services:] Handles user login, logout, session creation, and session timeout. Verifies user credentials against stored records and manages authentication tokens. Enforces 60-minute inactivity timeout as per SR-AR3. Creates and manages user accounts for both patients and physiotherapists. Validates registration data including government ID, license numbers (for PTs), and invite codes (for patients). Stores and retrieves user profile information securely. Generates unique access codes for physiotherapists to share with patients. Validates patient-submitted access codes and establishes the patient-PT relationship. Manages the patient list for each physiotherapist. Handles patient account deletion requests from PTs.  Maintains a library of at least 10 knee exercises with detailed instructions, demonstration media, and form parameters. Provides exercise information to users on demand. Supports caching for offline access. Encrypts patient data at rest and in transit using industry-standard protocols. Manages encryption keys securely. Provides methods for encrypting and decrypting data as needed by other modules. Ensures compliance with healthcare data security requirements. Enforces role-based access control for patients and physiotherapists. Ensures patients can only access their own data. Ensures PTs can only access data for patients in their patient list. Logs unauthorized access attempts. Validates user permissions before allowing data operations.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR1, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
-\end{description}
+% \subsubsection{Database Management Module (M5)}
+% \begin{description}
+% 	\item[Secrets:] The structure, validation, and authorization logic for all user credentials, account data, invite codes, physiotherapist identification numbers, exercise information, and data encryption.
+% 	\item[Services:] Handles user login, logout, session creation, and session timeout. Verifies user credentials against stored records and manages authentication tokens. Enforces 60-minute inactivity timeout as per SR-AR3. Creates and manages user accounts for both patients and physiotherapists. Validates registration data including government ID, license numbers (for PTs), and invite codes (for patients). Stores and retrieves user profile information securely. Generates unique access codes for physiotherapists to share with patients. Validates patient-submitted access codes and establishes the patient-PT relationship. Manages the patient list for each physiotherapist. Handles patient account deletion requests from PTs.  Maintains a library of at least 10 knee exercises with detailed instructions, demonstration media, and form parameters. Provides exercise information to users on demand. Supports caching for offline access. Encrypts patient data at rest and in transit using industry-standard protocols. Manages encryption keys securely. Provides methods for encrypting and decrypting data as needed by other modules. Ensures compliance with healthcare data security requirements. Enforces role-based access control for patients and physiotherapists. Ensures patients can only access their own data. Ensures PTs can only access data for patients in their patient list. Logs unauthorized access attempts. Validates user permissions before allowing data operations.
+% 	\item[Implemented By:] \progname{}
+% 	\item[Type of Module:] Abstract Object
+% 	\item[Related Requirements:] FR1, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
+% \end{description}
 
 \subsubsection{Valid User Module (M6)}
 \begin{description}
@@ -353,7 +353,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
     \item[Services:] Checks input user information to ensure unique entries into the remote database. Ensures valid invite code during patient account creation to link new account to relevant PT account. Ensures physiotherapist identification numbers are valid through the publicly accessible records during PT account creation.
     \item[Implemented By:] \progname{}
     \item[Type of Module:] Library Module
-    \item[Related Requirements:]    
+    \item[Related Requirements:] FR1, FR3
 \end{description}
 
 \subsubsection{User Account Module (M7)}
@@ -362,7 +362,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
     \item[Services:] User logins (both patient and PT) authorized by checking the remote database for matching email and password. Enables physiotherapists to delete linked patient accounts for housekeeping and service limitation purposes. Additionally, retrieves all relevant user account information from the remote database for other module usage.
     \item[Implemented By:] \progname{}
     \item[Type of Module:] Data Access Module
-    \item[Related Requirements:]
+    \item[Related Requirements:] FR1, FR2, FR4, FR18, FR21, FR22, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2
 \end{description}
 
 \subsubsection{User Activity Module (M8)}
@@ -371,7 +371,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
     \item[Services:] Formats, links, and stores user activity data in the remote database in a table for historic activity summaries. Formats input from the Analyze Module.
     \item[Implemented By:] \progname{}
     \item[Type of Module:] Abstract Object
-    \item[Related Requirements:] 
+    \item[Related Requirements:] FR21, FR25, SR-IR1
 \end{description}
 
 \subsubsection{Exercise Data Module (M9)}
@@ -380,7 +380,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
     \item[Services:] Provides exercise information to users on demand. Maintains a library of knee recovery relevant exercises along with exercise instructions. Allows user specific modification of prescribed exercises by linked PT account.
     \item[Implemented By:] \progname{}
     \item[Type of Module:] Abstract Object
-    \item[Related Requirements:]    
+    \item[Related Requirements:] FR5, FR6, FR13, FR21, MS-AD1, SR-IR1, SR-PR1
 \end{description}
 
 \subsubsection{Performance Statistics Generator Module (M10)}
