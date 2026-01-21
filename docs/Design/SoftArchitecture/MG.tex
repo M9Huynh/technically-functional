@@ -492,10 +492,17 @@ The Metrics Module also passes this relevant information to the Analyze Module i
 The Analyze Module makes necessary calls to the Feedback Module if the user should be told to change form, speed, or other such exercise relevant information.
 The Analyze Module also passes generalized exercise information to the User Activity Module for storing exercise overviews tied to user accounts. \\
 
-The Account Creation, Valid User, User Account, and Exercise Data Modules interact with the external database hosted by Firebase.
+The Account Creation, Valid User, User Account, User Activity, and Exercise Data Modules interact with the external database hosted by Firebase.
+
 The Account Creation Module uploads new account information to a table kept for user information which includes details relevant for login and account validation.
 
-The Account
+The Valid User Module checks the user information table to ensure an account doesn't exist with identical information and that the entered invitation code is valid to an existing physiotherapist account.
+
+The User Account Module both uploads and retrieves information from the user information table for usage on the main account page and for linking relevant uaser activities and exercise data.
+
+The User Activity Module uploads information to an activity tracking table in the database. This table is used to show both the user and the linked physiotherapist the results and overall progress on prescribed exercises.
+
+The Exercise Data Module both uploads and retrieves information from a table for specific exercise alterations. This information is editable by physiotherapist accounts and is referenced by the Analysis Control Flow Module during exercise recording.
 
 \section{Timeline}
 
