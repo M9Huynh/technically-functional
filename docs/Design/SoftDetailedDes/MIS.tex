@@ -319,7 +319,7 @@ The module results in the creation of a single instance of one of the objects li
 \end{itemize}
 
 \noindent\textsuperscript{2} \textit{'Birthday' is an exported constant for distinguishing two users that may have the same name. This will be integral
-in a 'search user' function, which will be implemented in future project iterations.} \\
+in a 'get\_userdb\_info' function.} \\
 
 \noindent \textbf{Exported Access Programs}
 \begin{table}[h]
@@ -492,7 +492,10 @@ This module's purpose is to check whether a potential user is authorized to crea
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}
-\\ \textit{is\_valid}: boolean \\
+\begin{itemize}
+  \item \textit{is\_valid}: is\_valid 
+\end{itemize}
+
 
 
 \noindent \textbf{Exported Access Programs}\\
@@ -533,12 +536,12 @@ invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is
 \textit{B}: user\_account\_pt \\
 \textit{C}: user\_account\_p \\
 \textit{D}: user\_account\_pt \\
-\textit{V}: the set of valid license\_code\\
 \textit{I}: the set of valid invite\_code\\
-\textit{license\_b}: license\_no for user B \\
-\textit{license\_d}: license\_no for user D\\
+\textit{V}: the set of valid license\_code\\
 \textit{invite\_a}: invite\_code for user A\\
+\textit{license\_b}: license\_no for user B \\
 \textit{invite\_c}: invite\_code for user C\\
+\textit{license\_d}: license\_no for user D\\
 \textit{db}: 'User Database' \\
 
 
@@ -563,7 +566,8 @@ All the license numbers and invite codes are unique, positive and 6 digits. \\
 
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item Invite codes are randomly generated and unique.
+  \item Invite codes are randomly generated.
+  \item Invite codes and license numbers are unique.
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
@@ -588,7 +592,7 @@ NA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - User Account}
 
-This module's purpose is to handle the users' accounts in the user database.
+This module's purpose is to handle all of the users' accounts in the user database.
 
 \subsubsection{Uses}
 \begin{itemize}
@@ -605,8 +609,9 @@ This module's purpose is to handle the users' accounts in the user database.
 \textbf{Exported Constants}
 \\ \textit{name}: name\\
 \textit{id}: acc\_id \\
+\textit{birthday}: birthday \\
 
-\textbf{Exported Access Programs}
+\noindent \textbf{Exported Access Programs}
 
 \begin{table}[h]
 \centering
@@ -624,7 +629,7 @@ This module's purpose is to handle the users' accounts in the user database.
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves user account information from the user table} \\
 \hline
 \rowcolor{white}
-get\_userdb\_info$^2$ & \makecell[lt]{\textit{Name}} & \makecell[lt]{\textit{user\_acc\_p}\\\textit{user\_acc\_pt}} & \makecell[lt]{UserNotFoundError\\DownloadError} \\
+get\_userdb\_info$^2$ & \makecell[lt]{\textit{Name}\\\textit{birthday(optional)}} & \makecell[lt]{\textit{user\_acc\_p}\\\textit{user\_acc\_pt}} & \makecell[lt]{UserNotFoundError\\DownloadError} \\
 \hline
 
 \rowcolor{lavender}
@@ -646,7 +651,7 @@ username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \m
 \caption{Exported Access Routines}
 \label{tab:user_routines_1}
 \end{table}
-
+\newpage
 \noindent\textsuperscript{2} \textit{For this function, the output depends on context. For example, if this function was going to be used in one which corresponds to the PT functionality of viewing 
 a patient, their view would be restricted to patients under their care.} \\
 
@@ -763,6 +768,7 @@ PT\_modifies\_exercise & \makecell[lt]{\textit{user\_acc\_p}\\\textit{sets}\\\te
 \textit{name}: name\\
 \textit{acc\_id}: acc\_id\\
 
+\newpage
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
