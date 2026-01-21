@@ -484,7 +484,15 @@ The proposed user interface for the system will attempt to model \href{https://w
 
 \section{Design of Communication Protocols}
 
-Communication between the system and the remote database is handled through the Database Management Module. The module will utilize the API methods of the remote database for the purpose of storing and retreiving data. It is through the database that user communication via comments on past activities will occur.
+Hardware intake is limited to the video feed. This feed, provided by the respective system's hardware layer, is requested and used by the Analysis Control Flow Module.
+This module also overlays respective data returned to it from the Metrics Module.
+Additionally, the metrics module makes API calls to OpenCV and MediaPipe API to determine necessary information such as joint angle, movement speed, exercise duration, and number of repetitions.
+
+The Metrics Module also passes this relevant information to the Analyze Module in real-time where the numerical returns are inspected to ensure exercises are being performed within bounds.
+The Analyze Module makes necessary calls to the Feedback Module if the user should be told to change form, speed, or other such exercise relevant information.
+The Analyze Module also passes generalized exercise information to the User Activity Module for storing exercise overviews tied to user accounts.
+
+Further communication between the system and external resources occurs in the Account Creation, Valid User, User Account, and Exercise Data Modules.
 
 \section{Timeline}
 
