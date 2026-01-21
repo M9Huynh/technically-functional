@@ -41,6 +41,9 @@ urlcolor=cyan          % color of external links
 \definecolor{darkpurple}{RGB}{75,0,130}      % Royal purple
 \definecolor{lavender}{RGB}{230,230,250}     % Lavender
 \definecolor{lightlavender}{RGB}{245,245,255} % Light lavender
+\definecolor{green}{RGB}{0,80,50}
+\definecolor{lightgreen}{RGB}{0,200,120}
+
 
 \newcolumntype{L}{>{\raggedright\arraybackslash}p{0.2\textwidth}}
 \newcolumntype{M}{>{\raggedright\arraybackslash}p{0.15\textwidth}}
@@ -208,9 +211,15 @@ license\_no & Int & Verification of PT & 7.1 \\
 \hline
 invite\_code & String & Given by PT to patient for registration & 7.1 \\
 \hline
-date & String & Date selected by user & 7.1 \\
+is\_valid & Boolean & Used to check validity of user (invite\_code, license\_no) & ? \\
 \hline
-time & String & Time selected by user & 7.2 \\
+acc\_id & Int & Identifier assigned to app users & ? \\
+\hline
+acc\_double & Boolean & Indicates whether an account already exists in the system & ? \\
+\hline
+date & String & Date (YYYYMMDD) & 7.1 \\
+\hline
+time & String & Time (s) & 7.2 \\
 \hline
 recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
 \hline
@@ -269,15 +278,23 @@ good\_to\_record & String & A message informing user that the system is ready to
 
 
 \section{MIS}
-\subsection{Module - Database Management}
-\textit{ADT} \\
+This section describes individual module specifications.\\
+\textit{Note: Some of the mathematics used are preliminary and not all-encompassing. They are defined below for feedback purposes.}
 
-This module creates an instance of UserAccount\_P/PT and is an adapter that connects to the user database. This database consists of these tables:\\
+
+\subsection{Module - Account Creation}
+
+This module enables the creation of an account in the user database. This database consists of the following tables:\\
 \begin{enumerate}
   \item User data: this consists of information such as name, role, email, password, birthday, and license\_no/invite\_code.
-  \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and UserAccount\_P['Name'].
+  \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
   \item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
 \end{enumerate}  
+The module results in the creation of a single instance of one of the objects listed below:\\
+\begin{itemize}
+  \item user\_acc\_p: [\\acc\_id: int,\\ name: String,\\ role: P,\\ birthday: int,\\ email: String,\\ password: String\\]
+  \item user\_acc\_pt: [\\acc\_id: int,\\ name: String,\\ role: PT,\\ birthday: int,\\ email: String,\\ password: String\\]
+\end{itemize}
 
 \subsubsection{Uses}
 \begin{itemize}
@@ -286,31 +303,310 @@ This module creates an instance of UserAccount\_P/PT and is an adapter that conn
 \item email
 \item password 
 \item birthday
-\item license\_no
-\item invite\_code
-\item exercise
-\item time
-\item date
-\item duration
-\item recent\_video
-\item recent\_ analysis
-\item Sets
-\item repetitions
-\item rest\_time
+\item acc\_id 
+\end{itemize}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}\\
+\begin{itemize}
+\item email
+\item password
+\item name
+\item birthday \textsuperscript{2}
+\item acc\_double
+\item acc\_id
+\end{itemize}
+
+\noindent\textsuperscript{2} \textit{'Birthday' is an exported constant for distinguishing two users that may have the same name. This will be integral
+in a 'search user' function, which will be implemented in future project iterations.} \\
+
+\noindent \textbf{Exported Access Programs}
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if an account already exists in the user database.} \\
+\hline
+\rowcolor{white}
+acc\_exists & \makecell[lt]{\textit{name}\\\textit{birthday}} & \textit{acc\_double} & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
+\hline
+
+\end{tabularx}
+\caption{Exported Access Routines}
+\label{tab:user_routines_1}
+\end{table}
+
+\newpage
+
+\noindent \textbf{Exported Access Programs (definitions)} \\
+\textit{E(x)}: 'acc\_exists(x)' \\
+\textit{db}: 'User Account database' \\
+$i, j \in \mathbb{Z}^{+}$ \\
+$\neg (E(i)) \implies$ $db(i).name \neq db(j).name \cup (db(i).name = db(j).name \cap db(i).birthday \neq db(j).birthday)$ \\
+%REMOVE%
+If an account does not already exist, that implies that the names are different, or if they are the same, the birthdays are different.\\
+
+
+
+\subsubsection{Semantics}
+
+
+
+\noindent \textbf{State Variables} \\
+\textit{id}: acc\_id \\
+\textit{name}: name \\
+\textit{role}: role \\
+\textit{email}: email \\
+\textit{dob}: birthday \\
+\textit{pw}: password \\
+\textit{acc\_copy}: acc\_double \\
+\textit{new\_id}: newly created acc\_id \\
+
+\noindent \textbf{State Invariant} \\
+$\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
+%REMOVE%
+If there is no account already present in the user database, that means that there is no acc\_id present \\
+%$ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\_id)$ $=$ $\emptyset$ \\
+$acc\_id \cup new\_id \implies$ $\forall n \in name, r \in role, e \in email, d \in dob$, $n \cap r \cap e \cap d \notin \emptyset$ \\ 
+%REMOVE%
+If there is an account present in the user database, that means none of the fields above are empty
+
+\subsubsection{Environment Variables}
+\textit{screen}: The application's display to the user \\
+\textit{touchscreen}: Users will click on the screen to select their desired action
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item Users with the same name have different birthdays.
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+\textbf{Exported access routines}: NA \\
+
+
+
+\subsubsection{Local Functions}
+\begin{table}[h]
+\centering
+\rowcolors{2}{tableblue}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{green}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lightgreen}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Creates a new user account} \\
+\hline
+\rowcolor{white}
+account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{user\_account\_p\\or\\user\_account\_pt} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+\hline
+
+\rowcolor{lightgreen}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sets user information in database} \\
+\hline
+\rowcolor{white}
+set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{NA} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+\hline
+
+\end{tabularx}
+\caption{Local Routines}
+\label{tab:account_routines}
+\end{table} 
+
+
+\noindent \textbf{Local Routines (definitions)}\\
+\textit{new(x)}: 'account\_create(x)'\\
+\textit{set(y)}: 'set\_user\_info(y)'\\
+\textit{name}: name\\
+\textit{birthday}: birthday\\
+\textit{license}: License\_no \\
+\textit{code}: Invite\_code \\
+\textit{email}: Email\\
+\textit{pw}: password \\
+\textit{patient}: user\_acc\_p\\
+\textit{PT}: user\_acc\_pt\\
+\textit{db}: 'User database'\\
+\textit{new\_db}: updated 'User database' \\
+\textit{acc\_copy}: acc\_double\\
+
+\noindent $\textbf{new(x)}:$ \\
+Given: \textit{x} = form submission from user interface \\
+Pre-condition: $\forall$ $n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$: $\neg acc\_copy(x)$ $\cap$ $(n \cap b \cap e \cap p \cap (l \cup c))$\\
+Function: new(x) \\
+Post-condition: $ new\_db = db \cup x$ \\
+
+%\noindent Opt 2: \\
+%$\neg acc\_copy$ $\cap$ 
+%$n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$ $|$
+%$n \cap b \cap e \cap p \cap (l \cup c)$ $\neq \emptyset$ \\
+
+\noindent $\textbf{set(x)}:$ \\
+Given: \textit{x} \\
+Pre-condition: $\neg acc\_exists(x)$ \\
+Function: set(x) \\
+Post-condition: $ new\_db = db \cup {(x.name, x.birthday, (x.license \cup x.code), x.email, x.pw)}$ \\
+
+\subsubsection{Access Routine Semantics}
+$n \in Name, r \in role, b \in birthday, l \in license\_no, i \in invite\_code, e \in email, p \in password$ \\
+\textit{db}: User database \\
+\textbf{Local routines}: \\
+\textit{account\_create(n, r, b, l OR i, e, p)}:
+\begin{itemize}
+  \item Output: new \textit{user\_account\_p} or \textit{user\_account\_pt} instance
+  \item Transition: $user\_account\_p$ $\cup$ $user\_account\_pt = \emptyset \implies (user\_account\_p$ $\cup$ $user\_account\_pt) \neq \emptyset$
+  \item Exception: Input\_format\_invalid, Required\_field\_empty, Account\_already\_exists, Incorrect\_creds, Invite\_code\_expired 
+\end{itemize}
+
+\noindent \textit{set\_user\_info}: \\
+NA
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Valid user}
+This module's purpose is to check whether a potential user is authorized to create an account.
+
+\subsubsection{Uses}
+\begin{itemize}
+\item \textit{Name}: Name
+\item \textit{role}: role
+\item \textit{invite}: invite\_code
+\item \textit{license}: license\_no
 \end{itemize}
 
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}
-\begin{itemize}
-\item \textit{user\_acc\_p}: ADT
-\item \textit{user\_acc\_pt}: ADT 
-\end{itemize}
+\\ \textit{is\_valid}: boolean \\
+
 
 \noindent \textbf{Exported Access Programs}\\
-\noindent\textsuperscript{1} \textit{For this function, the output depends on context. For example, if this function was going to be used in another one which corresponds to the PT functionality of viewing 
-a patient, their view would be restricted to patients under their care.}
+\begin{table}[h]
+\centering
+\rowcolors{2}{lavender}{white}
+\setlength{\extrarowheight}{3pt}
+\setlength{\arrayrulewidth}{1.2pt}
 
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{darkpurple}
+\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a physiotherapist's license is valid}. \\
+\hline
+\rowcolor{white}
+license\_check & \makecell[lt]{\textit{name}\\\textit{license}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
+\hline
+
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a new patient's invite code is valid.} \\
+\hline
+\rowcolor{white}
+invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
+\hline
+
+
+\end{tabularx}
+\caption{Exported Access Routines}
+\label{tab:user_routines_1}
+\end{table}
+\newpage
+\noindent \textbf{State Variables} \\
+\textit{A}: user\_account\_p \\
+\textit{B}: user\_account\_pt \\
+\textit{C}: user\_account\_p \\
+\textit{D}: user\_account\_pt \\
+\textit{V}: the set of valid license\_code\\
+\textit{I}: the set of valid invite\_code\\
+\textit{license\_b}: license\_no for user B \\
+\textit{license\_d}: license\_no for user D\\
+\textit{invite\_a}: invite\_code for user A\\
+\textit{invite\_c}: invite\_code for user C\\
+\textit{db}: 'User Database' \\
+
+
+\noindent \textbf{State Invariant} \\
+$\forall a, b, c, d \in A, B, C, D$ $\implies$
+$\forall$ $license\_b, license\_d: license\_b, license\_d$ $\in$ $\{license\_no\}$, \\
+$\forall$ $invite\_a, invite\_c: invite\_a, invite\_c$ $\in$ $\{invite\_code\}$ \\
+%REMOVE
+All license numbers and invite codes belong to their overall respective sets. \\
+\noindent $\forall$ $license\_b \in \mathbb{Z}^{+},$ $\forall$ $license\_d \in
+\mathbb{Z}^{+}:$ 100000 $ \leq license\_b, license\_d \leq$ 999999, $\cap$ $license\_b \neq license\_d$ \\
+\noindent $\forall$ $invite\_a \in \mathbb{Z}^{+},$ $\forall$ $invite\_c \in
+\mathbb{Z}^{+}:$ 100000 $ \leq invite\_a, invite\_c \leq$ 999999, $\cap$ $invite\_a \neq invite\_c$ \\
+%REMOVE
+All the license numbers and invite codes are unique, positive and 6 digits. \\
+\textit{is\_valid} $\in$ $\{true, false\}$
+
+
+\subsubsection{Environment Variables}
+\textit{screen}: The application's display to the user \\
+\textit{touchscreen}: Users will click on the screen to select their desired action
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item Invite codes are randomly generated and unique.
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+
+\textbf{\textit{license\_check(license)}}: \\
+Input: license \\
+Transition: \\ %if license code is in valid license codes, then user acc is added \\
+$\forall$ $B \in db$ $\Leftrightarrow$ $\exists$ $license\_b \in V$ \\
+Output: \textit{is\_valid} \\
+\textbf{\textit{invite\_code\_check(invite)}}: \\
+Input: invite \\
+Transition: \\
+$\forall$ $A \in db$ $\Leftrightarrow$ $\exists$ $invite\_a \in I$\\
+Output: \textit{is\_valid} \\
+
+\subsubsection{Local Functions}
+NA
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - User Account}
+
+This module's purpose is to handle the users' accounts in the user database.
+
+\subsubsection{Uses}
+\begin{itemize}
+\item email
+\item password
+\item name
+\item birthday
+\item acc\_id
+\item role
+\end{itemize}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants}
+\\ \textit{name}: name\\
+\textit{id}: acc\_id \\
+
+\textbf{Exported Access Programs}
 
 \begin{table}[h]
 \centering
@@ -328,7 +624,7 @@ a patient, their view would be restricted to patients under their care.}
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves user account information from the user table} \\
 \hline
 \rowcolor{white}
-get\_userdb\_info$^1$ & \makecell[lt]{\textit{Name}} & \makecell[lt]{\textit{user\_acc\_p}\\\textit{user\_acc\_pt}} & \makecell[lt]{UserNotFoundError\\DownloadError} \\
+get\_userdb\_info$^2$ & \makecell[lt]{\textit{Name}} & \makecell[lt]{\textit{user\_acc\_p}\\\textit{user\_acc\_pt}} & \makecell[lt]{UserNotFoundError\\DownloadError} \\
 \hline
 
 \rowcolor{lavender}
@@ -345,32 +641,86 @@ PTaccount\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecel
 username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \makecell[lt]{LoginMatchError} \\
 \hline
 
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} adds analysis results to user activity history} \\
-\hline
-\rowcolor{white}
-add\_analysis\_to\newline\_user\_act & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_analysis}} & NA & \makecell[lt]{UserNotFoundError\\SaveError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} saves video recording for user account} \\
-\hline
-\rowcolor{white}
-save\_video & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_video}} & NA & \makecell[lt]{UserNotFoundError\\UploadError\\VideoTooShortError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves analysis data for a specific date} \\
-\hline
-\rowcolor{white}
-get\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & \textit{recent\_analysis} & \makecell[lt]{UserNotFoundError\\NoAnalysisError\\DownloadError} \\
-\hline
 
 \end{tabularx}
-\caption{Exported Access Routines (Part 1)}
+\caption{Exported Access Routines}
 \label{tab:user_routines_1}
 \end{table}
-\clearpage
+
+\noindent\textsuperscript{2} \textit{For this function, the output depends on context. For example, if this function was going to be used in one which corresponds to the PT functionality of viewing 
+a patient, their view would be restricted to patients under their care.} \\
+
+\noindent \textbf{State Variables} \\
+\textit{email}: email \\
+\textit{pw}: password \\
+\textit{name}: name \\
+\textit{id}: acc\_id \\
+\textit{patient}: user\_acc\_p ([\textit{id}, \textit{name}, \textit{p}: role, \textit{bday}: birthday, \textit{email},
+\textit{pw}]) \\ 
+\textit{physio}: user\_acc\_pt ([\textit{id}, \textit{name}, \textit{pt}: role, \textit{ptbday}: birthday, \textit{email},
+\textit{pw}]) \\ 
+\noindent \textit{D(x)}: 'PT\_account\_delete(x)' \\
+\textit{db}: 'User Account database' \\
+\textit{name\_has\_id}: {db.Name} $\mapsto$ \{db.acc\_id\} \\
+\textit{user\_info}: {db.acc\_id} $\mapsto$ \{db.Name, db.role, db.birthday, db.email\} \\
+
+\noindent \textbf{State Invariant} \\
+$\exists$ $acc\_id$ $|$ $(email \cap pw \notin \emptyset) $ \\
+$D(acc\_id) \implies acc\_id \notin db $
+
+
+
+\subsubsection{Environment Variables}
+\textit{screen}: The application's display to the user \\
+\textit{touchscreen}: Users will click on the screen to select their desired action \\
+
+\subsubsection{Assumptions}
+\begin{itemize}
+  \item If two people have the same name, then it is assumed they have different birthdays. 
+  \item No two users have the same invite codes.
+  \item No two PTs have the same license numbers.
+\end{itemize}
+%TODO 
+\subsubsection{Access Routine Semantics}
+\textbf{get\_userdb\_info()}
+\begin{itemize}
+  \item Input: name
+  \item Transition: NA
+  \item Output: $\exists$ $n \in db.Name$ $|$  
+\end{itemize}
+
+\subsubsection{Local Functions}
+NA
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Exercise Data}
+
+This module consists of and allows manipulation of a patient's exercise data. 
+
+\subsubsection{Uses}
+\begin{itemize}
+\item name
+\item acc\_id
+\item exercise
+\item sets
+\item reps
+\item rest\_time
+\end{itemize}
+
+
+\subsubsection{Syntax}
+
+\noindent \textbf{Exported Constants}
+\\ \textit{exercise}: exercise\\
+\textit{sets}: sets \\
+\textit{reps}: reps \\
+\textit{rest\_time}: rest\_time \\
+
+
+\noindent \textbf{Exported Access Programs}
 \begin{table}[h]
 \centering
 \rowcolors{2}{lavender}{white}
@@ -398,56 +748,47 @@ PT\_modifies\_exercise & \makecell[lt]{\textit{user\_acc\_p}\\\textit{sets}\\\te
 \hline
 
 \end{tabularx}
-\caption{Exported Access Routines (Part 2)}
-\label{tab:user_routines_2}
-\end{table}
+\caption{Exported Access Routines}
 
+\end{table}
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-\textit{A}: an instance of user\_acc\_p \\
-\textit{B}: an instance of user\_acc\_p \\
-\textit{C}: an instance of user\_acc\_pt \\
+\textit{ex}: exercise\\
+\textit{sets}: sets\\
+\textit{reps}: reps\\
+\textit{rest\_time}: rest\_time\\
+\textit{ex\_routine}: [ex, sets, reps, rest\_time]\\
+\textit{name}: name\\
+\textit{acc\_id}: acc\_id\\
+
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
-$\forall A, B, C \in UserDatabase: A[i] \neq B[j] \neq C[k]$  \\
-$0 < A < length(A) \cap A[i] \notin \emptyset$ \\
+$\forall x \in ex\_routine: x \notin \emptyset$ \\
+$\forall x \in \{acc\_id\}: \exists y \in \{ex\_routine\}$ $|$ $count(y) = 1$ \\
+$\forall x \in \{ex\_routine\}$ $|$ $x['sets'] = 1$ $\implies$ $x['rest\_time'] = 0$ \\
 
-\subsubsection{Environment Variables}
+\subsubsection{Environment Variables} %TODO check?
 \textit{screen}: The application's display to the user \\
-\textit{touchscreen}: Users will click on the screen to select their desired functionality
+\textit{touchscreen}: Users will click on the screen to select their desired action \\
 
 \subsubsection{Assumptions}
-NA. %TODO
+\begin{itemize}
+  \item During performance of an exercise, breaks may be needed, but the rest\_time specified maybe 0. In this case, it is assumed that the recording takes the speed of performance into account and records for longer. 
+  \item For the same user, no two exercises with the same name are present.
+\end{itemize}
 
 \subsubsection{Access Routine Semantics}
 %TODO
 
-\noindent \textbf{get\_userdb\_info()}: \\
-NA \textit{(There is no transition taking place)}\\
-\\
-\noindent \textbf{PTaccount\_delete()}: \\
-  \begin{enumerate}
-    \item From the home screen, PT accesses their patient list
-    \item PT selects the desired patient's name
-    \item PT is directed to profile of patient
-    \item PT selects \textit{'Delete Patient'}
-    \item The selected patient is deleted from the user database
-  \end{enumerate}
-
-\noindent \textbf{username\_pw\_match()}: \\
-NA \\
-
-
-\noindent \textbf{Note: the functions are under development and may change over the course of the project}
+\newpage
 
 \subsubsection{Local Functions}
-
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
+\rowcolors{2}{lavender}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
 
@@ -458,28 +799,46 @@ NA \\
 \hline
 
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Creates a new user account} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} provides exercise instructions to user} \\
 \hline
 \rowcolor{white}
-account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{UserAccount\_P\\or\\UserAccount\_PT} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sets user information in database} \\
-\hline
-\rowcolor{white}
-set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{NA} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+add\_ex & \makecell[lt]{\textit{name}\\\textit{exercise}\\\textit{acc\_id}\\\textit{sets}\\\textit{reps}\\\textit{rest\_time}} & \textit{NA} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
 \hline
 
 \end{tabularx}
-\caption{Account Management Access Routines (Part 1)}
-\label{tab:account_routines_1}
+\caption{Local Routines}
+
 \end{table}
 
-\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - User Activity}
+
+This module handles video data of a patient's recorded exercise(s).
+
+\subsubsection{Uses}
+\begin{itemize}
+  \item name
+  \item exercise
+  \item date
+  \item duration
+  \item recent\_video
+  \item recent\_analysis
+  \item overall\_analysis
+
+\end{itemize}
+
+\subsubsection{Syntax}
+
+\noindent \textbf{Exported Constants} \\
+\textit{analysis}: recent\_analysis\\
+\textit{recent\_video}: recent\_video\\
+\textit{analysis\_report}: analysis\_report\\
+
+\noindent \textbf{Exported Access Programs} %TODO fix in and out
 \begin{table}[h]
 \centering
-\rowcolors{2}{tableblue}{white}
+\rowcolors{2}{lavender}{white}
 \setlength{\extrarowheight}{3pt}
 \setlength{\arrayrulewidth}{1.2pt}
 
@@ -490,34 +849,40 @@ set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\
 \hline
 
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves analysis data from database} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} adds analysis results to user activity history} \\
 \hline
 \rowcolor{white}
-send\_db\_analysis & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_analysis& \makecell[lt]{User\_not\_found\\Download\_error} \\
+add\_analysis\_to\newline\_user\_act & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_analysis}} & NA & \makecell[lt]{UserNotFoundError\\SaveError} \\
+\hline
+\rowcolor{lavender}
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} saves video recording for user account} \\
+\hline
+\rowcolor{white}
+save\_video & \makecell[lt]{\textit{user\_acc\_p}\\\textit{recent\_video}} & NA & \makecell[lt]{UserNotFoundError\\UploadError\\VideoTooShortError} \\
 \hline
 
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves video data from database} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves analysis data for a specific date} \\
 \hline
 \rowcolor{white}
-send\_db\_video & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_video & \makecell[lt]{User\_not\_found\\Download\_error} \\
+get\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & \textit{recent\_analysis} & \makecell[lt]{UserNotFoundError\\NoAnalysisError\\DownloadError} \\
 \hline
-
 \rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sets analysis report for user} \\
+\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Saves overall analysis (generated by Generator) to User Activity table.} \\
 \hline
 \rowcolor{white}
-set\_analysis\_report & \makecell[lt]{\textit{UserAccount\_P}} & Recent\_analysis & \makecell[lt]{User\_not\_found\\Download\_error} \\
+save\_overall\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & \textit{recent\_analysis} & \makecell[lt]{UserNotFoundError\\NoAnalysisError\\DownloadError} \\
 \hline
 
 \end{tabularx}
-\caption{Account Management Access Routines (Part 2)}
-\label{tab:account_routines_2}
+\caption{Exported Routines}
+
 \end{table}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Module - Generator}
+\subsection{Module - Performance Statistics Generator}
 
 This module's purpose is to display the most recent report, an overall analysis of progress, and rehabilitation insights. \\
 
@@ -599,9 +964,9 @@ NA
 TBD
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Home}
+\subsection{Module - Profile Activity}
 
-This module displays past exercises, allows viewing of user profile, and directs to the Generator module. PTs are able to comment on their patient's submissions.
+This module displays past exercises, allows viewing of user profile, and directs to the Performance Statistics Generator module. PTs are able to comment on their patient's submissions.
 
 %\subsubsection{Uses}
 
@@ -713,7 +1078,7 @@ get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\O
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Main}
+\subsection{Module - Analysis Control Flow}
 This module handles the video recording, placing markers on it and checking if the patient's form is appropriate for performing the exercise. It does this through the use of external libraries (notably OpenCV).
 
 \subsubsection{Uses}
@@ -1189,18 +1554,32 @@ measure\_duration & \makecell[lt]{\textit{initial\_time}\\\textit{final\_time}} 
 
 
   
-  
+\newpage  
  
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \subsection{Module - Draw}
-NA
+This module is responsible for drawing landmarks by using \textit{MediaPipe} (external library).
 
 
 \subsubsection{Uses}
+\begin{itemize}
+  \item starting\_frame
+  \item processed\_frames\_list
+  \item unprocessed\_frames\_list
+  \item feedback\_instructions
 
+\end{itemize}
+
+\newpage
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}
+\begin{itemize}
+  \item \textit{can\_record}: good\_to\_record
+  \item \textit{fixing\_instructions}: feedback\_instructions
+  \item \textit{processed}: processed\_frames\_list
+\end{itemize}
+
 
 \noindent \textbf{Exported Access Programs}
 \begin{table}[h]
@@ -1218,7 +1597,7 @@ NA
 \multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Checks if the recording environment is appropriate (e.g., lighting, background)} \\
 \hline
 \rowcolor{white}
-record\_check & \makecell[lt]{\textit{starting\_frane}} & \makecell[lt]{\textit{good\_to\_record}} & \makecell[lt]{UserNotFound\\Error\\DownloadError} \\
+record\_check & \makecell[lt]{\textit{starting\_frame}} & \makecell[lt]{\textit{good\_to\_record}} & \makecell[lt]{UserNotFound\\Error\\DownloadError} \\
 \hline
 
 % Analyzes the user's form against a correct form model (determined by Analysis)
@@ -1238,40 +1617,30 @@ draw\_points & \makecell[lt]{\textit{unprocessed\_frames}} & \makecell[lt]{proce
 \hline
 
 \end{tabular}
-\caption{Video Processing Access Routines}
+\caption{Draw Access Routines}
 \label{tab:video_routines}
 \end{table}
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-TODO
+\textit{frames}: unprocessed\_frames\_list\\
+
 
 %Check requirements doc
 \noindent \textbf{State Invariant} \\
-TODO
+
 
 %Environment variables?
 
 \subsubsection{Assumptions}
-TODO
+\begin{itemize}
+  \item User's complete form is in frame.
+  \item The application will not draw points if the user does not comply with instructions given by \textit{record\_check}.
+\end{itemize}
 \subsubsection{Access Routine Semantics}
 TODO
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
 
-%\wss{A module without environment variables or state variables is unlikely to
-  %have a state transition.  In this case a state transition can only occur if
-  %the module is changing the state of another module.}
-
-%\wss{Modules rarely have both a transition and an output.  In most cases you
-  %will have one or the other.}
-
-%\newpage
 
 \subsubsection{Local Functions}
 \begin{table}[h]
