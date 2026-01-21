@@ -490,9 +490,12 @@ Additionally, the metrics module makes API calls to OpenCV and MediaPipe API to 
 
 The Metrics Module also passes this relevant information to the Analyze Module in real-time where the numerical returns are inspected to ensure exercises are being performed within bounds.
 The Analyze Module makes necessary calls to the Feedback Module if the user should be told to change form, speed, or other such exercise relevant information.
-The Analyze Module also passes generalized exercise information to the User Activity Module for storing exercise overviews tied to user accounts.
+The Analyze Module also passes generalized exercise information to the User Activity Module for storing exercise overviews tied to user accounts. \\
 
-Further communication between the system and external resources occurs in the Account Creation, Valid User, User Account, and Exercise Data Modules.
+The Account Creation, Valid User, User Account, and Exercise Data Modules interact with the external database hosted by Firebase.
+The Account Creation Module uploads new account information to a table kept for user information which includes details relevant for login and account validation.
+
+The Account
 
 \section{Timeline}
 
