@@ -284,7 +284,10 @@ This section describes individual module specifications.\\
 
 \subsection{Module - Account Creation}
 
-This module enables the creation of an account in the user database. This database consists of the following tables:\\
+This module enables the creation of an account in the user database. 
+It uses a database to store any information that is essential for other modules to perform their
+actions. A database was used for its ease of manipulation and its comprehensive, multi-functional nature. \\
+It consists of the following tables:\\
 \begin{enumerate}
   \item User data: this consists of information such as name, role, email, password, birthday, and license\_no/invite\_code.
   \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
@@ -440,8 +443,8 @@ set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\
 \textit{pw}: password \\
 \textit{patient}: user\_acc\_p\\
 \textit{PT}: user\_acc\_pt\\
-\textit{db}: 'User database'\\
-\textit{new\_db}: updated 'User database' \\
+\textit{db}: 'User Account'\\
+\textit{new\_db}: updated 'User Account' \\
 \textit{acc\_copy}: acc\_double\\
 
 \noindent $\textbf{new(x)}:$ \\
@@ -480,6 +483,7 @@ NA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Valid user}
 This module's purpose is to check whether a potential user is authorized to create an account.
+For feasible implementation purposes, a file with hard coded invite codes and license numbers will be used.
 
 \subsubsection{Uses}
 \begin{itemize}
@@ -542,7 +546,7 @@ invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is
 \textit{license\_b}: license\_no for user B \\
 \textit{invite\_c}: invite\_code for user C\\
 \textit{license\_d}: license\_no for user D\\
-\textit{db}: 'User Database' \\
+\textit{db}: 'User Account' \\
 
 
 \noindent \textbf{State Invariant} \\
@@ -592,7 +596,8 @@ NA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - User Account}
 
-This module's purpose is to handle all of the users' accounts in the user database.
+This module's purpose is facilitate data manipulation within the user database tables. It was created as a separate component
+to simplify implementation.
 
 \subsubsection{Uses}
 \begin{itemize}
@@ -665,13 +670,13 @@ a patient, their view would be restricted to patients under their care.} \\
 \textit{physio}: user\_acc\_pt ([\textit{id}, \textit{name}, \textit{pt}: role, \textit{ptbday}: birthday, \textit{email},
 \textit{pw}]) \\ 
 \noindent \textit{D(x)}: 'PT\_account\_delete(x)' \\
-\textit{db}: 'User Account database' \\
+\textit{db}: 'User Account' \\
 \textit{name\_has\_id}: {db.Name} $\mapsto$ \{db.acc\_id\} \\
 \textit{user\_info}: {db.acc\_id} $\mapsto$ \{db.Name, db.role, db.birthday, db.email\} \\
 
 \noindent \textbf{State Invariant} \\
 $\exists$ $acc\_id$ $|$ $(email \cap pw \notin \emptyset) $ \\
-$D(acc\_id) \implies acc\_id \notin db $
+%$D(acc\_id) \implies patient \notin db $
 
 
 
@@ -685,25 +690,28 @@ $D(acc\_id) \implies acc\_id \notin db $
   \item No two users have the same invite codes.
   \item No two PTs have the same license numbers.
 \end{itemize}
+
+\noindent \textit{Note: All the modules after this point may have missing information, which will be defined for a future iteration.}
+
 %TODO 
 \subsubsection{Access Routine Semantics}
 \textbf{get\_userdb\_info()}
 \begin{itemize}
-  \item Input: name
+  \item Input: name, birthday(optional)
   \item Transition: NA
-  \item Output: $\exists$ $n \in db.Name$ $|$  
+  \item Output: $\exists$ $n \in db.Name$ $\cup$ $(\exists$ $n \in db.Name$ $\cap$ $b \in db.birthday)$ $\implies$ $patient \in db$ $|$ $patient.Name = n \cap patient.birthday = b$
 \end{itemize}
 
 \subsubsection{Local Functions}
-NA
-
+NA\\
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Exercise Data}
 
-This module consists of and allows manipulation of a patient's exercise data. 
+This module allows manipulation of a patient's exercise instructions data. Despite being a smaller module,
+the functions defined below 
 
 \subsubsection{Uses}
 \begin{itemize}
