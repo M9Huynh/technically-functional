@@ -229,14 +229,14 @@ actually be implemented.
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{4}{0.3\textwidth}{Behaviour-Hiding Module}& User Interface Module\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding Module}& User Interface Module\\
 & Profile Activity Module\\
 & Analysis Control Flow Module\\
 & Draw Module \\
+& Account Creation Module\\
 \midrule
 
-\multirow{9}{0.3\textwidth}{Software Decision Module} & Account Creation Module\\
-& Account Validity Module\\
+\multirow{8}{0.3\textwidth}{Software Decision Module} & Account Validity Module\\
 & User Details Module\\
 & User Activity Module\\
 & Exercise Data Module\\
@@ -321,6 +321,15 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR5, FR14, LFR-ST1, UHR-EOU2, UHR-EOU5, UHR-EOU6
 \end{description}
 
+\subsection{Account Creation Module (M5)}
+\begin{description}
+    \item[Secrets:] The logic for creating and storing both PTs and patient accounts, and creating pysiotherapist invite codes.
+    \item[Services:] Handles new user account creations for both patients and PTs with input information. Also generates unique invite codes for PT accounts upon creation for linking patient accounts. Stores user account information securely in a remote database.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:]
+    \item[Related Requirements:]    
+\end{description}
+
 \subsection{Software Decision Module}
 
 \begin{description}
@@ -338,7 +347,43 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR1, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
 \end{description}
 
-\subsubsection{Performance Statistics Generator Module (M6)}
+\subsection{Valid User Module (M6)}
+\begin{description}
+    \item[Secrets:] The validation and authorization logic for all user credentials (patient and PT), invite codes, and physiotherapist identification numbers.
+    \item[Services:] Checks input user information to ensure unique entries into the remote database. Ensures valid invite code during patient account creation to link new account to relevant PT account. Ensures physiotherapist identification numbers are valid through the publicly accessible records during PT account creation.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:]
+    \item[Related Requirements:]    
+\end{description}
+
+\subsection{User Account Module (M7)}
+\begin{description}
+    \item[Secrets:]
+    \item[Services:]
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:]
+    \item[Related Requirements:]    
+\end{description}
+
+\subsection{User Activity Module (M8)}
+\begin{description}
+    \item[Secrets:]
+    \item[Services:]
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:]
+    \item[Related Requirements:]    
+\end{description}
+
+\subsection{Exercise Data Module (M9)}
+\begin{description}
+    \item[Secrets:]
+    \item[Services:]
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:]
+    \item[Related Requirements:]    
+\end{description}
+
+\subsubsection{Performance Statistics Generator Module (M10)}
 \begin{description}
 	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
 	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
@@ -347,7 +392,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR17, FR19, FR20, FR25
 \end{description}
 
-\subsubsection{Metrics Module (M7)}
+\subsubsection{Metrics Module (M11)}
 \begin{description}
 	\item[Secrets:] The specific computer vision algorithms and implementation details for pose detection, joint tracking, and body landmark identification.
 	\item[Services:] Processes video frames to detect and track body landmarks using pose estimation. Identifies key joints relevant to knee exercises (hip, knee, ankle, foot). Extracts coordinate data for joint positions across video frames. Handles varying lighting conditions and camera angles. Implements the core CV library integration (OpenCV, MediaPipe).
@@ -356,7 +401,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR8, FR12
 \end{description}
 
-\subsubsection{Analyze Module (M8)}
+\subsubsection{Analyze Module (M12)}
 \begin{description}
 	\item[Secrets:] The mathematical models and algorithms for calculating joint angles, range of motion, and determining form correctness based on exercise parameters. Also the mechanism for storing video files through local caching.
 	\item[Services:] Calculates joint angles from landmark coordinates with ±5° accuracy. Measures range of motion with ±10\% accuracy. Compares measured values against exercise-specific acceptable ranges. Detects form deviations and classifies severity. Identifies dangerous movements requiring immediate halt. Measures time-under-tension and exercise duration. Also stores recorded exercise videos securely (encrypted at rest per SR-IR1).
@@ -365,7 +410,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR12, FR13, FR14, FR21, SR-IR1, PR-RFT2, PR-PAR1, PR-PAR2, PR-SCR1, MS-MNT1
 \end{description}
 
-\subsubsection{Feedback Module (M9)}
+\subsubsection{Feedback Module (M13)}
 \begin{description}
 	\item[Secrets:] The rules and logic for converting analysis results into user-friendly feedback messages and instructions.
 	\item[Services:] Generates real-time corrective feedback messages based on form analysis results. Provides step-by-step exercise guidance. Creates descriptive messages for form deviations specifying required adjustments. Triggers safety warnings for dangerous movements.
