@@ -204,11 +204,15 @@ actually be implemented.
 
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Interface Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Home Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Main Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Profile Activity Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Analysis Control Flow Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Draw Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Database Management Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Generator Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Account Creation Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Account Validity Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Details Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Activity Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Exercise Data Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Performance Statistics Generator Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Metrics Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Analyze Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Feedback Module
@@ -225,14 +229,18 @@ actually be implemented.
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{4}{0.3\textwidth}{Behaviour-Hiding Module}& User Interface Module\\
-& Home Module\\
-& Main Module\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding Module}& User Interface Module\\
+& Profile Activity Module\\
+& Analysis Control Flow Module\\
 & Draw Module \\
+& Account Creation Module\\
 \midrule
 
-\multirow{5}{0.3\textwidth}{Software Decision Module} & Database Management Module\\
-& Generator Module\\
+\multirow{8}{0.3\textwidth}{Software Decision Module} & Account Validity Module\\
+& User Details Module\\
+& User Activity Module\\
+& Exercise Data Module\\
+& Performance Statistics Generator Module\\
 & Metrics Module\\
 & Analyze Module\\
 & Feedback Module\\
@@ -286,22 +294,22 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR18, FR19, FR24, FR25
 \end{description}
 
-\subsubsection{Home Module (M2)}
+\subsubsection{Profile Activity Module (M2)}
 \begin{description}
 	\item[Secrets:] The data structures and business logic for managing patient-specific exercise programs, including customization and progress tracking.
 	\item[Services:] Allows physiotherapists to create and customize exercise programs for individual patients, including sets, reps, rest times, and weekly limits. Tracks patient exercise completion and progress over time. Enforces PT-defined limitations on exercise frequency and intensity.
 	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR6, FR10, FR11, FR22, FR27
+	\item[Related Requirements:] FR6, FR9, FR10, FR11, FR22, FR27, SR-AR3
 \end{description}
 
-\subsubsection{Main Module (M3)}
+\subsubsection{Analysis Control Flow Module (M3)}
 \begin{description}
 	\item[Secrets:] The implementation of video recording, including camera configuration, frame rate management, and recording controls.
 	\item[Services:] Captures video of users performing exercises at minimum 720p resolution and 30 fps. Performs pre-capture environment checks (lighting, framing). Provides recording controls (start, stop, retry). Ensures video meets minimum quality standards before proceeding to analysis.
 	\item[Implemented By:] \progname{}
 	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR7, FR15, FR26, UHR-EOU3
+	\item[Related Requirements:] FR7, FR9, FR13, FR15, FR26, UHR-EOU3
 \end{description}
 
 \subsubsection{Draw Module (M4)}
@@ -313,6 +321,15 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR5, FR14, LFR-ST1, UHR-EOU2, UHR-EOU5, UHR-EOU6
 \end{description}
 
+\subsubsection{Account Creation Module (M5)}
+\begin{description}
+    \item[Secrets:] The logic for creating and storing both PTs and patient accounts, and creating pysiotherapist invite codes.
+    \item[Services:] Handles new user account creations for both patients and PTs with input information. Also generates unique invite codes for PT accounts upon creation for linking patient accounts. Stores user account information securely in a remote database.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:] Library Module
+    \item[Related Requirements:] FR1, FR2
+\end{description}
+
 \subsection{Software Decision Module}
 
 \begin{description}
@@ -321,16 +338,52 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Implemented By:] \progname{}
 \end{description}
 
-\subsubsection{Database Management Module (M5)}
+% \subsubsection{Database Management Module (M5)}
+% \begin{description}
+% 	\item[Secrets:] The structure, validation, and authorization logic for all user credentials, account data, invite codes, physiotherapist identification numbers, exercise information, and data encryption.
+% 	\item[Services:] Handles user login, logout, session creation, and session timeout. Verifies user credentials against stored records and manages authentication tokens. Enforces 60-minute inactivity timeout as per SR-AR3. Creates and manages user accounts for both patients and physiotherapists. Validates registration data including government ID, license numbers (for PTs), and invite codes (for patients). Stores and retrieves user profile information securely. Generates unique access codes for physiotherapists to share with patients. Validates patient-submitted access codes and establishes the patient-PT relationship. Manages the patient list for each physiotherapist. Handles patient account deletion requests from PTs.  Maintains a library of at least 10 knee exercises with detailed instructions, demonstration media, and form parameters. Provides exercise information to users on demand. Supports caching for offline access. Encrypts patient data at rest and in transit using industry-standard protocols. Manages encryption keys securely. Provides methods for encrypting and decrypting data as needed by other modules. Ensures compliance with healthcare data security requirements. Enforces role-based access control for patients and physiotherapists. Ensures patients can only access their own data. Ensures PTs can only access data for patients in their patient list. Logs unauthorized access attempts. Validates user permissions before allowing data operations.
+% 	\item[Implemented By:] \progname{}
+% 	\item[Type of Module:] Abstract Object
+% 	\item[Related Requirements:] FR1, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
+% \end{description}
+
+\subsubsection{Valid User Module (M6)}
 \begin{description}
-	\item[Secrets:] The structure, validation, and authorization logic for all user credentials, account data, invite codes, physiotherapist identification numbers, exercise information, and data encryption.
-	\item[Services:] Handles user login, logout, session creation, and session timeout. Verifies user credentials against stored records and manages authentication tokens. Enforces 60-minute inactivity timeout as per SR-AR3. Creates and manages user accounts for both patients and physiotherapists. Validates registration data including government ID, license numbers (for PTs), and invite codes (for patients). Stores and retrieves user profile information securely. Generates unique access codes for physiotherapists to share with patients. Validates patient-submitted access codes and establishes the patient-PT relationship. Manages the patient list for each physiotherapist. Handles patient account deletion requests from PTs.  Maintains a library of at least 10 knee exercises with detailed instructions, demonstration media, and form parameters. Provides exercise information to users on demand. Supports caching for offline access. Encrypts patient data at rest and in transit using industry-standard protocols. Manages encryption keys securely. Provides methods for encrypting and decrypting data as needed by other modules. Ensures compliance with healthcare data security requirements. Enforces role-based access control for patients and physiotherapists. Ensures patients can only access their own data. Ensures PTs can only access data for patients in their patient list. Logs unauthorized access attempts. Validates user permissions before allowing data operations.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR1, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
+    \item[Secrets:] The validation and authorization logic for all user credentials (patient and PT), invite codes, and physiotherapist identification numbers.
+    \item[Services:] Checks input user information to ensure unique entries into the remote database. Ensures valid invite code during patient account creation to link new account to relevant PT account. Ensures physiotherapist identification numbers are valid through the publicly accessible records during PT account creation.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:] Library Module
+    \item[Related Requirements:] FR1, FR3
 \end{description}
 
-\subsubsection{Generator Module (M6)}
+\subsubsection{User Account Module (M7)}
+\begin{description}
+    \item[Secrets:] The authorization logic for existing user actions, and the retrieval and modification logic for user information in the remote database.
+    \item[Services:] User logins (both patient and PT) authorized by checking the remote database for matching email and password. Enables physiotherapists to delete linked patient accounts for housekeeping and service limitation purposes. Additionally, retrieves all relevant user account information from the remote database for other module usage.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:] Data Access Module
+    \item[Related Requirements:] FR1, FR2, FR4, FR18, FR21, FR22, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2
+\end{description}
+
+\subsubsection{User Activity Module (M8)}
+\begin{description}
+    \item[Secrets:] The structure and storage logic for users historic activity data.
+    \item[Services:] Formats, links, and stores user activity data in the remote database in a table for historic activity summaries. Formats input from the Analyze Module.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:] Abstract Object
+    \item[Related Requirements:] FR21, FR25, SR-IR1
+\end{description}
+
+\subsubsection{Exercise Data Module (M9)}
+\begin{description}
+    \item[Secrets:] The structure and storage logic for user relevant exercise data.
+    \item[Services:] Provides exercise information to users on demand. Maintains a library of knee recovery relevant exercises along with exercise instructions. Allows user specific modification of prescribed exercises by linked PT account.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:] Abstract Object
+    \item[Related Requirements:] FR5, FR6, FR13, FR21, MS-AD1, SR-IR1, SR-PR1
+\end{description}
+
+\subsubsection{Performance Statistics Generator Module (M10)}
 \begin{description}
 	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
 	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
@@ -339,7 +392,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR17, FR19, FR20, FR25
 \end{description}
 
-\subsubsection{Metrics Module (M7)}
+\subsubsection{Metrics Module (M11)}
 \begin{description}
 	\item[Secrets:] The specific computer vision algorithms and implementation details for pose detection, joint tracking, and body landmark identification.
 	\item[Services:] Processes video frames to detect and track body landmarks using pose estimation. Identifies key joints relevant to knee exercises (hip, knee, ankle, foot). Extracts coordinate data for joint positions across video frames. Handles varying lighting conditions and camera angles. Implements the core CV library integration (OpenCV, MediaPipe).
@@ -348,7 +401,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR8, FR12
 \end{description}
 
-\subsubsection{Analyze Module (M8)}
+\subsubsection{Analyze Module (M12)}
 \begin{description}
 	\item[Secrets:] The mathematical models and algorithms for calculating joint angles, range of motion, and determining form correctness based on exercise parameters. Also the mechanism for storing video files through local caching.
 	\item[Services:] Calculates joint angles from landmark coordinates with ±5° accuracy. Measures range of motion with ±10\% accuracy. Compares measured values against exercise-specific acceptable ranges. Detects form deviations and classifies severity. Identifies dangerous movements requiring immediate halt. Measures time-under-tension and exercise duration. Also stores recorded exercise videos securely (encrypted at rest per SR-IR1).
@@ -357,7 +410,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR12, FR13, FR14, FR21, SR-IR1, PR-RFT2, PR-PAR1, PR-PAR2, PR-SCR1, MS-MNT1
 \end{description}
 
-\subsubsection{Feedback Module (M9)}
+\subsubsection{Feedback Module (M13)}
 \begin{description}
 	\item[Secrets:] The rules and logic for converting analysis results into user-friendly feedback messages and instructions.
 	\item[Services:] Generates real-time corrective feedback messages based on form analysis results. Provides step-by-step exercise guidance. Creates descriptive messages for form deviations specifying required adjustments. Triggers safety warnings for dangerous movements.
@@ -378,43 +431,46 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-FR1 & M5\\
-FR2 & M5\\
-FR3 & M5\\
-FR5 & M4, M5\\
-FR6 & M2\\
+FR1 & M5, M6, M7\\
+FR2 & M5, M7\\
+FR3 & M6\\
+FR4 & M7\\
+FR5 & M4, M9\\
+FR6 & M2, M9, M10\\
 FR7 & M3\\
-FR8 & M7\\
+FR8 & M3, M11\\
+FR9 & M2, M3\\
 FR10 & M2\\
 FR11 & M2\\
-FR12 & M7, M8\\
-FR13 & M8, M9\\
-FR14 & M4, M8, M9\\
+FR12 & M11, M12\\
+FR13 & M3, M9, M12, M13\\
+FR14 & M4, M12, M13\\
 FR15 & M3\\
-FR16 & M9\\
-FR17 & M6\\
-FR18 & M1, M5\\
-FR19 & M1, M6\\
-FR20 & M6\\
-FR21 & M5, M8\\
-FR22 & M2\\
-FR23 & M5\\
+FR16 & M13\\
+FR17 & M10\\
+FR18 & M1, M7\\
+FR19 & M1, M10\\
+FR20 & M10\\
+FR21 & M7, M8, M9, M12\\
+FR22 & M2, M7\\
+FR23 & M7\\
 FR24 & M1\\
-FR25 & M1, M6\\
+FR25 & M1, M8, M10\\
 FR26 & M3\\
 FR27 & M2\\
 LFR-ST1 & M4\\
-MS-AD1 & M5\\
-MS-MNT1 & M8\\
-PR-PAR1 & M8\\
-PR-PAR2 & M8\\
-PR-RFT2 & M8\\
-PR-SCR1 & M8, M9\\
-SR-AR1 & M5\\
-SR-AR3 & M5\\
-SR-IR1 & M5, M8\\
-SR-PR1 & M5\\
-SR-PR2 & M5\\
+MS-AD1 & M9\\
+MS-MNT1 & M12\\
+PR-PAR1 & M12\\
+PR-PAR2 & M12\\
+PR-RFT2 & M12\\
+PR-SCR1 & M12, M13\\
+SR-AR1 & M7\\
+SR-AR2 & M6\\
+SR-AR3 & M2, M7\\
+SR-IR1 & M7, M8, M9, M12\\
+SR-PR1 & M7, M9\\
+SR-PR2 & M7\\
 UHR-EOU2 & M4\\
 UHR-EOU3 & M3\\
 UHR-EOU5 & M4\\
@@ -430,9 +486,9 @@ UHR-EOU6 & M4\\
 \toprule
 \textbf{AC} & \textbf{Modules}\\
 \midrule
-AC1 & M2, M3, M6, M9\\
-AC2 & M2, M3, M5, M7, M8\\
-AC3 & M3, M7, M8, M9\\
+AC1 & M2, M3, M10, M13\\
+AC2 & M2, M3, M8, M9, M11, M12\\
+AC3 & M3, M11, M12, M13\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
@@ -463,7 +519,7 @@ AC3 & M3, M7, M8, M9\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+\includegraphics[width=0.7\textwidth]{UsesHierarchy_3.png}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
@@ -476,7 +532,32 @@ The proposed user interface for the system will attempt to model \href{https://w
 
 \section{Design of Communication Protocols}
 
-Communication between the system and the remote database is handled through the Database Management Module. The module will utilize the API methods of the remote database for the purpose of storing and retreiving data. It is through the database that user communication via comments on past activities will occur.
+Hardware intake is limited to the video feed. This feed, provided by the respective system's hardware layer, is requested and used by the Analysis Control Flow Module.
+This module also overlays respective data returned to it from the Metrics Module.
+Additionally, the metrics module makes API calls to OpenCV and MediaPipe API to determine necessary information such as joint angle, movement speed, exercise duration, and number of repetitions.
+
+The Metrics Module also passes this relevant information to the Analyze Module in real-time where the numerical returns are inspected to ensure exercises are being performed within bounds.
+The Analyze Module makes necessary calls to the Feedback Module if the user should be told to change form, speed, or other such exercise relevant information.
+The Analyze Module also passes generalized exercise information to the User Activity Module for storing exercise overviews tied to user accounts. \\
+
+The Account Creation, Valid User, User Account, User Activity, and Exercise Data Modules interact with the external database hosted by Firebase.
+
+The Account Creation Module uploads new account information to a table kept for user information which includes details relevant for login and account validation.
+
+The Valid User Module checks the user information table to ensure an account doesn't exist with identical information and that the entered invitation code is valid to an existing physiotherapist account.
+
+The User Account Module both uploads and retrieves information from the user information table for usage on the main account page and for linking relevant uaser activities and exercise data.
+
+The User Activity Module uploads information to an activity tracking table in the database. This table is used to show both the user and the linked physiotherapist the results and overall progress on prescribed exercises.
+
+The Exercise Data Module both uploads and retrieves information from a table for specific exercise alterations. This information is editable by physiotherapist accounts and is referenced by the Analysis Control Flow Module during exercise recording.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{CommProtocols.png}
+\caption{Modules with external communications}
+\label{FigUH}
+\end{figure}
 
 \section{Timeline}
 
