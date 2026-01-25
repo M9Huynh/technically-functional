@@ -1,41 +1,55 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 
-export default function Dashboard() {
+export default function Home() {
   const router = useRouter();
+
+  // TODO later: pull real role from auth state
+  const role: "patient" | "physio" = "patient";
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
+      <Text style={styles.logo}>Physio{"\n"}Companion</Text>
 
-      <Pressable style={styles.card} onPress={() => router.push("/(tabs)/exercises")}>
-        <Text style={styles.cardTitle}>Exercises</Text>
-        <Text style={styles.cardDesc}>Browse exercises, demos, instructions</Text>
-      </Pressable>
+      <Text style={styles.welcome}>Welcome, User!</Text>
 
-      <Pressable style={styles.card} onPress={() => router.push("/(tabs)/record")}>
-        <Text style={styles.cardTitle}>Record Exercise</Text>
-        <Text style={styles.cardDesc}>Record yourself performing an exercise</Text>
-      </Pressable>
+      <View style={styles.row}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            {role === "patient" ? "Your Stats" : "Overall Stats"}
+          </Text>
 
-      <Pressable style={styles.card} onPress={() => router.push("/(tabs)/progress")}>
-        <Text style={styles.cardTitle}>Performance Stats</Text>
-        <Text style={styles.cardDesc}>View your trends and past sessions</Text>
-      </Pressable>
+          <View style={styles.statsGrid}>
+            <View style={styles.statBox}><Text style={styles.statNum}>4</Text><Text style={styles.statLbl}>Completed</Text></View>
+            <View style={styles.statBox}><Text style={styles.statNum}>2</Text><Text style={styles.statLbl}>Comments</Text></View>
+            <View style={styles.statBox}><Text style={styles.statNum}>3</Text><Text style={styles.statLbl}>Streak</Text></View>
+            <View style={styles.statBox}><Text style={styles.statNum}>1</Text><Text style={styles.statLbl}>Today</Text></View>
+          </View>
+        </View>
 
-      <Pressable style={styles.card} onPress={() => router.push("/(tabs)/feedback")}>
-        <Text style={styles.cardTitle}>Feedback / Survey</Text>
-        <Text style={styles.cardDesc}>Submit feedback and short surveys</Text>
-      </Pressable>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            {role === "patient" ? "Activity History" : "Patient Activity History"}
+          </Text>
 
-      <Pressable style={styles.card} onPress={() => router.push("/(tabs)/profile")}>
-        <Text style={styles.cardTitle}>Profile</Text>
-        <Text style={styles.cardDesc}>Manage account info</Text>
-      </Pressable>
+          <View style={styles.historyItem}><Text>📅 Date</Text><Text>Exercise</Text></View>
+          <View style={styles.historyItem}><Text>📅 Date</Text><Text>Exercise</Text></View>
+          <View style={styles.historyItem}><Text>📅 Date</Text><Text>Exercise</Text></View>
+          <View style={styles.historyItem}><Text>📅 Date</Text><Text>Exercise</Text></View>
+        </View>
+      </View>
 
-      <Pressable style={styles.logoutBtn} onPress={() => router.replace("/(auth)/role-select")}>
-        <Text style={styles.logoutText}>Logout</Text>
+      <Pressable
+        style={styles.bigBtn}
+        onPress={() => {
+          if (role === "patient") router.push("/(tabs)/record");
+          else router.push("/(tabs)/profile"); // or later: patient list / edit patient screen
+        }}
+      >
+        <Text style={styles.bigBtnText}>
+          {role === "patient" ? "Record Exercise" : "Edit Patient"}
+        </Text>
       </Pressable>
     </View>
   );
@@ -43,12 +57,45 @@ export default function Dashboard() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
-  title: { fontSize: 28, fontWeight: "800", textAlign: "center", marginBottom: 18 },
+  logo: { fontSize: 34, fontWeight: "800" },
+  welcome: { textAlign: "center", marginTop: 10, fontSize: 18, color: "#444" },
 
-  card: { borderWidth: 1, borderColor: "#eee", borderRadius: 12, padding: 14, marginBottom: 12 },
-  cardTitle: { fontSize: 16, fontWeight: "800", marginBottom: 4 },
-  cardDesc: { color: "#666" },
+  row: { flexDirection: "row", gap: 12, marginTop: 18 },
+  card: {
+    flex: 1,
+    borderRadius: 14,
+    backgroundColor: "#f4f4f4",
+    padding: 12,
+  },
+  cardTitle: { fontWeight: "800", marginBottom: 10 },
 
-  logoutBtn: { marginTop: 12, alignSelf: "center", backgroundColor: "#222", paddingVertical: 12, paddingHorizontal: 18, borderRadius: 10 },
-  logoutText: { color: "#fff", fontWeight: "700" },
+  statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+  statBox: {
+    width: "47%",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 10,
+    alignItems: "center",
+  },
+  statNum: { fontSize: 20, fontWeight: "800" },
+  statLbl: { fontSize: 12, color: "#666" },
+
+  historyItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 8,
+  },
+
+  bigBtn: {
+    alignSelf: "center",
+    marginTop: 18,
+    backgroundColor: "#222",
+    paddingVertical: 14,
+    paddingHorizontal: 22,
+    borderRadius: 18,
+  },
+  bigBtnText: { color: "#fff", fontWeight: "800" },
 });
