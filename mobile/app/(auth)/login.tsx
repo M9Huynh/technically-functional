@@ -1,91 +1,108 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useMemo, useState } from "react";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import ScreenContainer from "../../components/screenContainer";
+import AppLogo from "../../components/appLogo";
+import PrimaryButton from "../../components/primaryButton";
 
 type Role = "patient" | "physio";
 
 export default function Login() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const role = (params.role as Role) ?? "patient";
+  const role = (params.role as Role) || "patient";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const createHref = role === "physio" ? "/(auth)/create-physio" : "/(auth)/create-patient";
+  const createHref = useMemo(() => {
+    return role === "physio" ? "/(auth)/create-physio" : "/(auth)/create-patient";
+  }, [role]);
+
+  const helperText = role === "physio"
+    ? "Physiotherapist login"
+    : "Patient login";
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Physio{"\n"}Companion</Text>
+    <ScreenContainer>
+      <AppLogo />
 
-        <Text style={styles.sectionTitle}>
-          Login ({role === "physio" ? "Physiotherapist" : "Patient"})
-        </Text>
+      <Text style={styles.sub}>{helperText}</Text>
 
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="example@mcmaster.ca"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-        />
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="example@mcmaster.ca"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
 
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="********"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+      <Text style={styles.label}>Password</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="********"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
 
-        <Pressable style={styles.primaryBtn} onPress={() => router.replace("/(tabs)")}>
-          <Text style={styles.primaryBtnText}>Login</Text>
-        </Pressable>
+      <PrimaryButton
+        label="Login"
+        onPress={() => router.replace("/(tabs)")}
+        style={{ marginTop: 18 }}
+      />
 
-        <View style={styles.divider} />
+      <View style={styles.divider} />
 
-        <Text style={styles.smallText}>No account?</Text>
+      <Text style={styles.sectionTitle}>No Account?</Text>
+      <Text style={styles.smallText}>
+        {role === "patient"
+          ? "If you’ve been given an invite code from your physiotherapist, create an account:"
+          : "If you are a physiotherapist looking to assist patients, create an account:"}
+      </Text>
 
-        <Link href={{ pathname: createHref, params: { role } }} asChild>
-          <Pressable style={styles.secondaryBtn}>
-            <Text style={styles.secondaryBtnText}>
-              {role === "physio" ? "Create Physio Account" : "Create Patient Account"}
-            </Text>
-          </Pressable>
-        </Link>
+      <Link
+        href={{ pathname: createHref, params: { role } }}
+        asChild
+      >
+        <View style={styles.secondaryBtn}>
+          <Text style={styles.secondaryBtnText}>
+            {role === "patient" ? "Create Patient Account" : "Create Physio Account"}
+          </Text>
+        </View>
+      </Link>
 
-        <Pressable style={styles.backBtn} onPress={() => router.back()}>
-          <Text style={styles.backText}>Back</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+      <Link href="/(auth)/role-select" asChild>
+        <View style={[styles.linkBtn, { marginTop: 14 }]}>
+          <Text style={styles.linkText}>Back</Text>
+        </View>
+      </Link>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fff" },
-  container: { flex: 1, padding: 22, justifyContent: "center" },
-
-  title: { fontSize: 42, fontWeight: "800", textAlign: "center", marginBottom: 18 },
-
-  sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 10, textAlign: "center" },
+  sub: { textAlign: "center", color: "#666", marginBottom: 10, fontSize: 16 },
 
   label: { fontSize: 14, color: "#333", marginTop: 12, marginBottom: 6 },
-  input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 10, padding: 12 },
+  input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 12, padding: 12 },
 
-  primaryBtn: { backgroundColor: "#222", padding: 14, borderRadius: 10, marginTop: 18, alignItems: "center" },
-  primaryBtnText: { color: "#fff", fontWeight: "700" },
+  divider: { height: 1, backgroundColor: "#eee", marginVertical: 20 },
 
-  divider: { height: 1, backgroundColor: "#eee", marginVertical: 18 },
+  sectionTitle: { fontSize: 18, fontWeight: "800", marginBottom: 6 },
+  smallText: { color: "#666", marginBottom: 12 },
 
-  smallText: { color: "#666", marginBottom: 8 },
-  secondaryBtn: { borderWidth: 1, borderColor: "#222", padding: 14, borderRadius: 10, alignItems: "center" },
+  secondaryBtn: {
+    borderWidth: 1,
+    borderColor: "#222",
+    paddingVertical: 14,
+    borderRadius: 14,
+    alignItems: "center",
+  },
   secondaryBtnText: { fontWeight: "700", color: "#222" },
 
-  backBtn: { marginTop: 14, alignItems: "center" },
-  backText: { color: "#666" },
+  linkBtn: { alignItems: "center" },
+  linkText: { color: "#666" },
 });
