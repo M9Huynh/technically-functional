@@ -51,7 +51,8 @@ class UserActivity:
             acc_id=user.acc_id,
             email=data['email'],
             name=data['name'],
-            birthday=date.fromisoformat(birthday_str) if isinstance(birthday_str, str) else birthday_str,
+            birthday=date.fromisoformat(birthday_str) if isinstance(birthday_str, str) else birthday_str,+
+            
             exercise = data['exercise'],
             duration = data['duration'],
             completed_sets = data['completed_sets'],
