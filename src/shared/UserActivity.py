@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import Literal
+import UserData
 
 @dataclass
 class UserActivity: 
-    name: str
-    acc_id: str
+    user: UserData
+    #acc_id: str
     exercise: str
     duration: float
     completed_sets: int
     completed_reps: int
     real_rest_time: int
-    birthday: date                  #check if needed or not
+    #birthday: date                  #check if needed or not
     exercise_len: float
     max_height: float
     min_height: float
@@ -19,37 +19,56 @@ class UserActivity:
     date_performed: date
     analysis: str
     patient_feedback: str
-    
+
 
 
     def to_dict(self) -> dict:
+        user = self.user
         return {
-            'email': self.email,
-            'name': self.name,
-            'birthday': self.birthday.isoformat(),
-            'acc_id': self.acc_id,
+            'email': user.email,
+            'name': user.name,
+            'birthday': user.birthday.isoformat(),
+            'acc_id': user.acc_id,
             'exercise': self.exercise,
-            'sets': self.sets,
-            'reps': self.reps,
-            'rest_time': self.rest_time,                #need to remember to define rest_time (mins or seconds)
+            'duration': self.duration,
+            'completed_sets': self.completed_sets,
+            'completed_reps': self.completed_reps,
+            'real_rest_time': self.real_rest_time,                #need to remember to define rest_time (mins or seconds)
+            'exercise_len': self.exercise_len,
+            'max_height': self.max_height,
+            'min_height': self.min_height,
+            'target_area': self.target_area,                         #do we need target area?
+            'date_performed': self.date_performed,
+            'analysis': self.analysis,
+            'patient_feedback': self.patient_feedback
         }
     
     @classmethod
-    def from_dict(cls, acc_id: str, data: dict) -> 'ExerciseData':
+    def from_dict(self, acc_id: str, data: dict) -> 'UserActivity':
+        user = self.user
         birthday_str = data['birthday']
-        return cls(
-            acc_id=acc_id,
+        return self(
+            acc_id=user.acc_id,
             email=data['email'],
             name=data['name'],
             birthday=date.fromisoformat(birthday_str) if isinstance(birthday_str, str) else birthday_str,
             exercise = data['exercise'],
-            sets = data['sets'],
-            reps = data['reps'],
-            rest_time = data['rest_time'] 
+            duration = data['duration'],
+            completed_sets = data['completed_sets'],
+            completed_reps = data['completed_reps'],
+            real_rest_time = data['real_rest_time'],
+            exercise_len = data['exercise_len'],
+            max_height = data['max_height'],
+            min_height = data['min_height'],
+            target_area = data['target_area'],
+            date_performed = data['date_performed'],
+            analysis = data['analysis'],
+            patient_feedback = data['patient_feedback']
+
         )
 '''
 if __name__ == '__main__':
-    ex = ExerciseData(
+    u1 = UserActivity(
     acc_id="123",
     email="user@example.com",
     name="Maham S",
@@ -63,7 +82,6 @@ if __name__ == '__main__':
 )
     firebase_data = ex.to_dict()  
     print(firebase_data)
-    ex_from_fb = ExerciseData.from_dict("123", firebase_data)
-    print(ex_from_fb)
-
-'''
+    #ex_from_fb = ExerciseData.from_dict("123", firebase_data)
+   # print(ex_from_fb)
+   '''
