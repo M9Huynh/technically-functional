@@ -12,7 +12,6 @@ import UserData
 
 @dataclass
 class UserActivity: 
-    user: UserData
     name: str
     acc_id: int
     exercise: str
@@ -32,10 +31,9 @@ class UserActivity:
 
 
     def to_dict(self) -> dict:
-        user = self.user
         return {
-            'name': user.name,
-            'acc_id': user.acc_id,
+            'name': self.name,
+            'acc_id': self.acc_id,
             'exercise': self.exercise,
             'duration': self.duration,
             'completed_sets': self.completed_sets,
@@ -52,12 +50,9 @@ class UserActivity:
     
     @classmethod
     def from_dict(self, acc_id: str, data: dict) -> 'UserActivity':
-        user = self.user
-        birthday_str = data['birthday']
         return self(
-            acc_id=user.acc_id,
-            name=data['name'],
-            birthday=date.fromisoformat(birthday_str) if isinstance(birthday_str, str) else birthday_str,  
+            acc_id = acc_id,
+            name = data['name'],
             exercise = data['exercise'],
             duration = data['duration'],                        #decide units (sec/mins?)
             completed_sets = data['completed_sets'],
@@ -75,7 +70,6 @@ class UserActivity:
 
 if __name__ == '__main__':
     u1 = UserActivity(
-    user=UserData,
     name="Maham S",
     acc_id=123,
     exercise="push-up",
@@ -93,6 +87,6 @@ if __name__ == '__main__':
 )
     firebase_data = u1.to_dict()  
     print(firebase_data)
-    #ex_from_fb = ExerciseData.from_dict("123", firebase_data)
-   # print(ex_from_fb)
+    ex_from_fb = UserActivity.from_dict("123", firebase_data)
+    print(ex_from_fb)
    
