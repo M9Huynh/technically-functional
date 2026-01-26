@@ -2,10 +2,19 @@ from dataclasses import dataclass
 from datetime import date
 import UserData
 
+# This class defines a UserData object (see MIS for additional information)
+# and allows conversion to and from a form that functions with firebase.
+
+
+
+'''TODO
+- Add acc_id size check? or add to user account class? IDK'''
+
 @dataclass
 class UserActivity: 
     user: UserData
-    #acc_id: str
+    name: str
+    acc_id: int
     exercise: str
     duration: float
     completed_sets: int
@@ -25,9 +34,7 @@ class UserActivity:
     def to_dict(self) -> dict:
         user = self.user
         return {
-            'email': user.email,
             'name': user.name,
-            'birthday': user.birthday.isoformat(),
             'acc_id': user.acc_id,
             'exercise': self.exercise,
             'duration': self.duration,
@@ -49,12 +56,10 @@ class UserActivity:
         birthday_str = data['birthday']
         return self(
             acc_id=user.acc_id,
-            email=data['email'],
             name=data['name'],
-            birthday=date.fromisoformat(birthday_str) if isinstance(birthday_str, str) else birthday_str,+
-            
+            birthday=date.fromisoformat(birthday_str) if isinstance(birthday_str, str) else birthday_str,  
             exercise = data['exercise'],
-            duration = data['duration'],
+            duration = data['duration'],                        #decide units (sec/mins?)
             completed_sets = data['completed_sets'],
             completed_reps = data['completed_reps'],
             real_rest_time = data['real_rest_time'],
@@ -67,22 +72,27 @@ class UserActivity:
             patient_feedback = data['patient_feedback']
 
         )
-'''
+
 if __name__ == '__main__':
     u1 = UserActivity(
-    acc_id="123",
-    email="user@example.com",
+    user=UserData,
     name="Maham S",
-    birthday=date(2026, 1, 25),
+    acc_id=123,
     exercise="push-up",
-    sets="4",
-    reps="5",
-    rest_time="20"
-
-
+    duration="30",
+    completed_sets=3,
+    completed_reps=5,
+    real_rest_time=30,
+    exercise_len=2.3,
+    max_height=55,
+    min_height=0,
+    target_area="core",
+    date_performed=2025-2-2026,
+    analysis="amazing performance",
+    patient_feedback="great"
 )
-    firebase_data = ex.to_dict()  
+    firebase_data = u1.to_dict()  
     print(firebase_data)
     #ex_from_fb = ExerciseData.from_dict("123", firebase_data)
    # print(ex_from_fb)
-   '''
+   
