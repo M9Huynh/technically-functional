@@ -7,7 +7,7 @@ import PrimaryButton from "../../components/primaryButton";
 
 export default function RoleSelect() {
   const router = useRouter();
-
+  
   return (
     <ScreenContainer>
       <AppLogo />
