@@ -5,16 +5,27 @@ import { useRouter } from "expo-router";
 export default function Home() {
   const router = useRouter();
 
-  // TODO later: pull real role from auth state
+  // Later you will get this from auth state
   const role: "patient" | "physio" = "patient";
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+      {/* HEADER (Logo + Logout) */}
+      <View style={styles.headerRow}>
+        <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+
+        <Pressable
+          style={styles.logoutBtn}
+          onPress={() => router.replace("/(auth)/role-select")}
+        >
+          <Text style={styles.logoutText}>Logout</Text>
+        </Pressable>
+      </View>
 
       <Text style={styles.welcome}>Welcome, User!</Text>
 
       <View style={styles.row}>
+        {/* STATS CARD */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>
             {role === "patient" ? "Your Stats" : "Overall Stats"}
@@ -28,6 +39,7 @@ export default function Home() {
           </View>
         </View>
 
+        {/* ACTIVITY CARD */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>
             {role === "patient" ? "Activity History" : "Patient Activity History"}
@@ -40,11 +52,12 @@ export default function Home() {
         </View>
       </View>
 
+      {/* MAIN ACTION BUTTON */}
       <Pressable
         style={styles.bigBtn}
         onPress={() => {
           if (role === "patient") router.push("/(tabs)/record");
-          else router.push("/(tabs)/profile"); // or later: patient list / edit patient screen
+          else router.push("/(tabs)/profile");
         }}
       >
         <Text style={styles.bigBtnText}>
@@ -57,19 +70,37 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
+
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+
   logo: { fontSize: 34, fontWeight: "800" },
   welcome: { textAlign: "center", marginTop: 10, fontSize: 18, color: "#444" },
 
+  logoutBtn: {
+    backgroundColor: "#eee",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+  },
+  logoutText: { fontSize: 12, fontWeight: "700", color: "#333" },
+
   row: { flexDirection: "row", gap: 12, marginTop: 18 },
+
   card: {
     flex: 1,
     borderRadius: 14,
     backgroundColor: "#f4f4f4",
     padding: 12,
   },
+
   cardTitle: { fontWeight: "800", marginBottom: 10 },
 
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+
   statBox: {
     width: "47%",
     backgroundColor: "#fff",
@@ -77,6 +108,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
   },
+
   statNum: { fontSize: 20, fontWeight: "800" },
   statLbl: { fontSize: 12, color: "#666" },
 
@@ -97,5 +129,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     borderRadius: 18,
   },
+
   bigBtnText: { color: "#fff", fontWeight: "800" },
 });

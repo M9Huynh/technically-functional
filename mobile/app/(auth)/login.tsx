@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
@@ -15,13 +15,9 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const createHref = useMemo(() => {
-    return role === "physio" ? "/(auth)/create-physio" : "/(auth)/create-patient";
-  }, [role]);
+  const helperText = role === "physio" ? "Physiotherapist login" : "Patient login";
 
-  const helperText = role === "physio"
-    ? "Physiotherapist login"
-    : "Patient login";
+  const createRoute = role === "physio" ? "/(auth)/create-physio" : "/(auth)/create-patient";
 
   return (
     <ScreenContainer>
@@ -63,21 +59,20 @@ export default function Login() {
           : "If you are a physiotherapist looking to assist patients, create an account:"}
       </Text>
 
-      <Link
-        href={{ pathname: createHref, params: { role } }}
-        asChild
-      >
-        <View style={styles.secondaryBtn}>
+      {/* ✅ FIXED: Link child must be Pressable, not View */}
+      <Link href={createRoute as any} asChild>
+        <Pressable style={styles.secondaryBtn}>
           <Text style={styles.secondaryBtnText}>
             {role === "patient" ? "Create Patient Account" : "Create Physio Account"}
           </Text>
-        </View>
+        </Pressable>
       </Link>
 
+      {/* ✅ FIXED: Back should also be Pressable */}
       <Link href="/(auth)/role-select" asChild>
-        <View style={[styles.linkBtn, { marginTop: 14 }]}>
+        <Pressable style={[styles.linkBtn, { marginTop: 14 }]}>
           <Text style={styles.linkText}>Back</Text>
-        </View>
+        </Pressable>
       </Link>
     </ScreenContainer>
   );
