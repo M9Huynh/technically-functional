@@ -1,54 +1,70 @@
 import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, StyleSheet, TextInput } from "react-native";
 import { useRouter } from "expo-router";
+import ScreenContainer from "../../components/screenContainer";
+import AppLogo from "../../components/appLogo";
+import PrimaryButton from "../../components/primaryButton";
 
 export default function CreatePhysio() {
   const router = useRouter();
-
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [license, setLicense] = useState("");
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Create Physio Account</Text>
+    <ScreenContainer>
+      <AppLogo small />
 
-        <Text style={styles.label}>Full Name</Text>
-        <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Your name" />
+      <Text style={styles.title}>Create Account - Physiotherapist</Text>
 
-        <Text style={styles.label}>License Number (required)</Text>
-        <TextInput style={styles.input} value={license} onChangeText={setLicense} placeholder="e.g. ON-123456" />
+      <Text style={styles.label}>Full Name</Text>
+      <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Your name" />
 
-        <Pressable
-          style={styles.primaryBtn}
-          onPress={() => {
-            // TODO: validate license for real later
-            router.replace("/(tabs)");
-          }}
-        >
-          <Text style={styles.primaryBtnText}>Create Account</Text>
-        </Pressable>
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        placeholder="example@clinic.com"
+        autoCapitalize="none"
+      />
 
-        <Pressable style={styles.backBtn} onPress={() => router.back()}>
-          <Text style={styles.backText}>Back</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+      <Text style={styles.label}>Password</Text>
+      <TextInput
+        style={styles.input}
+        value={password}
+        onChangeText={setPassword}
+        placeholder="********"
+        secureTextEntry
+      />
+
+      <Text style={styles.label}>License Number (required)</Text>
+      <TextInput
+        style={styles.input}
+        value={license}
+        onChangeText={setLicense}
+        placeholder="e.g., ON-123456"
+        autoCapitalize="characters"
+      />
+
+      <PrimaryButton
+        label="Create Account"
+        onPress={() => router.replace("/(tabs)")}
+        style={{ marginTop: 18 }}
+      />
+
+      <PrimaryButton
+        label="Back"
+        onPress={() => router.back()}
+        style={{ marginTop: 10, backgroundColor: "#444" }}
+      />
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fff" },
-  container: { flex: 1, padding: 22, justifyContent: "center" },
-  title: { fontSize: 28, fontWeight: "800", textAlign: "center", marginBottom: 16 },
-
-  label: { marginTop: 12, marginBottom: 6, color: "#333" },
-  input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 10, padding: 12 },
-
-  primaryBtn: { backgroundColor: "#222", padding: 14, borderRadius: 10, marginTop: 18, alignItems: "center" },
-  primaryBtnText: { color: "#fff", fontWeight: "700" },
-
-  backBtn: { marginTop: 14, alignItems: "center" },
-  backText: { color: "#666" },
+  title: { fontSize: 20, fontWeight: "800", textAlign: "center", marginBottom: 8 },
+  label: { fontSize: 14, color: "#333", marginTop: 12, marginBottom: 6 },
+  input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 12, padding: 12 },
 });
