@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, TextInput } from "react-native";
+import { Text, StyleSheet, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
+import { registerPhysio } from "../../lib/authService";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
@@ -10,7 +11,9 @@ export default function CreatePhysio() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [license, setLicense] = useState("");
+  const [licenseNumber, setLicenseNumber] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   return (
     <ScreenContainer>
@@ -42,15 +45,30 @@ export default function CreatePhysio() {
       <Text style={styles.label}>License Number (required)</Text>
       <TextInput
         style={styles.input}
-        value={license}
-        onChangeText={setLicense}
+        value={licenseNumber}
+        onChangeText={setLicenseNumber}
         placeholder="e.g., ON-123456"
         autoCapitalize="characters"
       />
 
       <PrimaryButton
         label="Create Account"
-        onPress={() => router.replace("/(tabs)")}
+        onPress={async () => {
+          try {
+            setLoading(true);
+            await registerPhysio({
+              name,
+              email,
+              password,
+              licenseNumber,
+            });
+            router.replace("/(tabs)");
+          } catch (e: any) {
+            Alert.alert("Create Account Failed", e?.message ?? "Unknown error");
+          } finally {
+            setLoading(false);
+          }
+        }}
         style={{ marginTop: 18 }}
       />
 
