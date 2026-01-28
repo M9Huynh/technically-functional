@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { login } from "../../lib/authService";
+import { Alert } from "react-native";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
@@ -46,9 +48,18 @@ export default function Login() {
 
       <PrimaryButton
         label="Login"
-        onPress={() => router.replace("/(tabs)")}
+        onPress={async () => {
+          try {
+            await login(email, password);
+            router.replace("/(tabs)");
+          } catch (e: any) {
+            Alert.alert("Login Failed", e?.message ?? "Unknown error");
+          }
+        }}
         style={{ marginTop: 18 }}
       />
+
+
 
       <View style={styles.divider} />
 
@@ -59,7 +70,7 @@ export default function Login() {
           : "If you are a physiotherapist looking to assist patients, create an account:"}
       </Text>
 
-      {/* ✅ FIXED: Link child must be Pressable, not View */}
+      {/*FIXED: Link child must be Pressable, not View */}
       <Link href={createRoute as any} asChild>
         <Pressable style={styles.secondaryBtn}>
           <Text style={styles.secondaryBtnText}>
@@ -68,7 +79,7 @@ export default function Login() {
         </Pressable>
       </Link>
 
-      {/* ✅ FIXED: Back should also be Pressable */}
+      {/*FIXED: Back should also be Pressable */}
       <Link href="/(auth)/role-select" asChild>
         <Pressable style={[styles.linkBtn, { marginTop: 14 }]}>
           <Text style={styles.linkText}>Back</Text>
