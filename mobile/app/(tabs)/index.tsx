@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import { logout } from "../../lib/authService";
+
 
 export default function Home() {
   const router = useRouter();
@@ -16,10 +18,14 @@ export default function Home() {
 
         <Pressable
           style={styles.logoutBtn}
-          onPress={() => router.replace("/(auth)/role-select")}
+          onPress={async () => {
+            await logout(); //Firebase sign out
+            router.replace("/(auth)/role-select"); // go back to role select
+          }}
         >
           <Text style={styles.logoutText}>Logout</Text>
         </Pressable>
+
       </View>
 
       <Text style={styles.welcome}>Welcome, User!</Text>
