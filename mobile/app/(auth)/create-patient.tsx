@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, TextInput } from "react-native";
+import { Text, StyleSheet, TextInput, Alert } from "react-native";
+import { registerPatient } from "../../lib/authService";
 import { useRouter } from "expo-router";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
@@ -11,6 +12,7 @@ export default function CreatePatient() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [inviteCode, setInviteCode] = useState("");
+  const [loading, setLoading] = useState(false);
 
   return (
     <ScreenContainer>
@@ -50,8 +52,23 @@ export default function CreatePatient() {
 
       <PrimaryButton
         label="Create Account"
-        onPress={() => router.replace("/(tabs)")}
-        style={{ marginTop: 18 }}
+       onPress={async () => {
+        try {
+          setLoading(true);
+          await registerPatient({
+            name,
+            email,
+            password,
+            inviteCode,
+          });
+          router.replace("/(tabs)");
+        } catch (e: any) {
+          Alert.alert("Create Account Failed", e?.message ?? "Unknown error");
+        } finally {
+          setLoading(false);
+        }
+      }}
+      style={{ marginTop: 18 }}
       />
 
       <PrimaryButton
