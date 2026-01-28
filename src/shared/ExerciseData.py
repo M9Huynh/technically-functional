@@ -7,20 +7,20 @@ from dataclasses import dataclass
 
 @dataclass
 class ExerciseData: 
-    name: str
-    acc_id: int                 #check if str or int???
-    exercise: str
-    sets: int
-    reps: int
-    rest_time: int
-    min_height: float
-    max_height: float
-    ex_instr: str
+        name: str
+        acc_id: int                 #check if str or int???
+        exercise: str
+        sets: int
+        reps: int
+        rest_time: int
+        min_height: float
+        max_height: float
+        ex_instr: str
 
 
 
-    def to_dict(self) -> dict:
-        return {
+        def to_dict(self) -> dict:
+            return {
             'name': self.name,
             'acc_id': self.acc_id,
             'exercise': self.exercise,
@@ -32,10 +32,10 @@ class ExerciseData:
             'ex_instr': self.ex_instr
         }
     
-    @classmethod
-    def from_dict(cls, acc_id: str, data: dict) -> 'ExerciseData':
+        @classmethod
+        def from_dict(cls, acc_id: str, data: dict) -> 'ExerciseData':
 
-        return cls(
+            return cls(
             acc_id = acc_id,
             name = data['name'],
             exercise = data['exercise'],
