@@ -1,3 +1,4 @@
+# dont need to run this file, run server.py instead
 import cv2 as cv
 import mediapipe as mp
 import os
