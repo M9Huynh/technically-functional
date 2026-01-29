@@ -5,15 +5,30 @@ from firebase_admin import auth, credentials, firestore
 from firebase_admin.exceptions import FirebaseError
 import sys
 import os
-
-
-current_dir = os.path.dirname(os.path.abspath(__file__)) 
-parent_dir = os.path.dirname(current_dir)  
-sys.path.append(parent_dir)
-
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from shared.UserData import UserData
 
-#print(f "imported {UserData}")
+#print("imported {UserData}")
+'''
+
+class DownloadError:
+     pass
+
 
 class UserAccount:
-    
+        def __init__(self, credential_path: str = "serviceAccountKey.json"):
+
+                if not firebase_admin._apps:
+                    cred = credentials.Certificate(credential_path)
+                    firebase_admin.initialize_app(cred)
+            
+                self.db = firestore.client()
+                self.auth = auth
+                print(f"Firebase initialized successfully")
+
+
+if __name__ == "__main__":
+      account = UserAccount("serviceAccountKey.json")
+      print("ok")
+
+'''
