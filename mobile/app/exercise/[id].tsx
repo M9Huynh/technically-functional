@@ -1,7 +1,10 @@
 import React, { useMemo } from "react";
-import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-native";
+import { useRef } from "react";
+import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { RECOMMENDED_EXERCISES, SIMILAR_EXERCISES } from "../../lib/exerciseData";
+
+import { VideoView, useVideoPlayer } from "expo-video";
 
 export default function ExerciseDetail() {
   const router = useRouter();
@@ -11,6 +14,19 @@ export default function ExerciseDetail() {
     const all = [...RECOMMENDED_EXERCISES, ...SIMILAR_EXERCISES];
     return all.find((x) => x.id === id);
   }, [id]);
+
+  // Only load a real video for single-leg-raises for now
+  const videoSource =
+    id === "single-leg-raises"
+      ? require("../../assets/videos/single-leg-raises.mp4")
+      : null;
+
+  const player = useVideoPlayer(videoSource ?? undefined, (p) => {
+    // runs when player is created
+    p.loop = true;
+    // you can uncomment this if you want it to auto-play:
+    // p.play();
+  });
 
   if (!exercise) {
     return (
@@ -24,8 +40,6 @@ export default function ExerciseDetail() {
   }
 
   const goToRecord = () => {
-    // If your Record page accepts params, you can pass exerciseId.
-    // If not, this still navigates correctly.
     router.push({
       pathname: "/(tabs)/record",
       params: { exerciseId: exercise.id, exerciseName: exercise.title },
@@ -37,13 +51,25 @@ export default function ExerciseDetail() {
       <Text style={styles.title}>{exercise.title}</Text>
       {!!exercise.subtitle && <Text style={styles.subtitle}>{exercise.subtitle}</Text>}
 
-      {/* Demo box */}
+      {/* VIDEO (only for single-leg-raises for now) */}
+      {id === "single-leg-raises" && (
+        <View style={styles.videoWrap}>
+          <VideoView
+            style={styles.video}
+            player={player}
+            nativeControls
+            contentFit="contain"
+          />
+        </View>
+      )}
+
+      {/* Demo box
       <View style={styles.demoBox}>
         <Text style={styles.demoTitle}>Demo</Text>
         <Text style={styles.demoText}>
           {exercise.demoText || "Demo: coming soon"}
         </Text>
-      </View>
+      </View> */}
 
       {/* Description */}
       <View style={styles.descBox}>
@@ -61,11 +87,8 @@ export default function ExerciseDetail() {
         <Text style={styles.secondaryBtnText}>Back</Text>
       </Pressable>
 
-      {/* Note for placeholders */}
       {!exercise.enabled && (
-        <Text style={styles.note}>
-          This is a placeholder and not enabled yet.
-        </Text>
+        <Text style={styles.note}>This is a placeholder and not enabled yet.</Text>
       )}
     </ScrollView>
   );
@@ -75,6 +98,18 @@ const styles = StyleSheet.create({
   container: { padding: 18, paddingTop: 24 },
   title: { fontSize: 26, fontWeight: "900", textAlign: "center" },
   subtitle: { textAlign: "center", color: "#666", marginTop: 6, marginBottom: 14 },
+
+  videoWrap: {
+    marginTop: 14,
+    borderRadius: 18,
+    overflow: "hidden",
+    backgroundColor: "#000",
+  },
+  video: {
+    width: "100%",
+    height: 220,
+    backgroundColor: "#000",
+  },
 
   demoBox: {
     borderRadius: 16,

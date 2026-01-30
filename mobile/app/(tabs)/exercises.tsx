@@ -56,7 +56,7 @@ export default function ExercisesTab() {
         ))}
       </View>
 
-      <Text style={styles.sectionTitle}>Similar exercises</Text>
+      <Text style={styles.sectionTitle}>Optional similar exercises</Text>
       <View style={styles.sectionBox}>
         {SIMILAR_EXERCISES.map((ex) => (
           <ExerciseCard key={ex.id} item={ex} onPress={() => openExercise(ex)} />
