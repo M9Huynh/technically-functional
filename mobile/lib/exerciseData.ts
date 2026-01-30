@@ -14,8 +14,8 @@ export const RECOMMENDED_EXERCISES: Exercise[] = [
     title: "Single Leg Raises",
     subtitle: "Recommended #1",
     description:
-      "Lie on your back with one leg bent and the other straight. Tighten your quad and raise the straight leg slowly, then lower with control.",
-    demoText: "Demo: (placeholder) Single Leg Raises video/gif goes here",
+      "Sit up and go through the motions of bending one leg to flexion and extending it to a full extension. Pick one leg, raise the leg slowly, then lower with control.",
+    // demoText: "Demo: (placeholder) Single Leg Raises video/gif goes here",
     enabled: true,
     tags: ["quad", "knee rehab", "beginner"],
   },
