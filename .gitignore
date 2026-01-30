@@ -278,6 +278,3 @@ TSWLatexianTemp*
 # DS_Store file from Mac computers
 .DS_Store
 
-#custom 
-*.json
-config/*.json
