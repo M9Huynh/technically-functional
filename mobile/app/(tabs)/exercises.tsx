@@ -62,14 +62,6 @@ export default function ExercisesTab() {
           <ExerciseCard key={ex.id} item={ex} onPress={() => openExercise(ex)} />
         ))}
       </View>
-
-      <Text style={styles.sectionTitle}>Link to all exercises</Text>
-      <Pressable
-        style={styles.linkBtn}
-        onPress={() => Alert.alert("Demo note", "All exercises page coming soon.")}
-      >
-        <Text style={styles.linkText}>See all exercises →</Text>
-      </Pressable>
     </ScrollView>
   );
 }
