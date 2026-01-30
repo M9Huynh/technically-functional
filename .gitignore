@@ -279,3 +279,6 @@ TSWLatexianTemp*
 .DS_Store
 mobile/assets/videos/
 mobile/assets/videos/
+
+#env file
+.env
