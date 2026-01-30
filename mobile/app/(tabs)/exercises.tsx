@@ -39,9 +39,9 @@ export default function ExercisesTab() {
       return;
     }
     router.push({
-      pathname: "/(tabs)/exercise/[id]",
+      pathname: "/exercise/[id]",
       params: { id: ex.id },
-    });
+    }as any);
     // goes to mobile/app/(tabs)/exercise/[id].tsx
   };
 
@@ -49,8 +49,6 @@ export default function ExercisesTab() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.pageTitle}>Exercises</Text>
       <Text style={styles.pageSub}>Your recommended plan for today</Text>
-
-      {/* Recommended section */}
       <Text style={styles.sectionTitle}>Recommended</Text>
       <View style={styles.sectionBox}>
         {RECOMMENDED_EXERCISES.map((ex) => (
@@ -58,7 +56,6 @@ export default function ExercisesTab() {
         ))}
       </View>
 
-      {/* Similar exercises section */}
       <Text style={styles.sectionTitle}>Similar exercises</Text>
       <View style={styles.sectionBox}>
         {SIMILAR_EXERCISES.map((ex) => (
@@ -66,7 +63,7 @@ export default function ExercisesTab() {
         ))}
       </View>
 
-      {/* Link to all exercises */}
+      <Text style={styles.sectionTitle}>Link to all exercises</Text>
       <Pressable
         style={styles.linkBtn}
         onPress={() => Alert.alert("Demo note", "All exercises page coming soon.")}

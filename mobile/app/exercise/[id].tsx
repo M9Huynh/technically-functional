@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { RECOMMENDED_EXERCISES, SIMILAR_EXERCISES } from "../../../lib/exerciseData";
+import { RECOMMENDED_EXERCISES, SIMILAR_EXERCISES } from "../../lib/exerciseData";
 
 export default function ExerciseDetail() {
   const router = useRouter();
