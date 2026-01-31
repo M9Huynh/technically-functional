@@ -278,7 +278,9 @@ TSWLatexianTemp*
 # DS_Store file from Mac computers
 .DS_Store
 mobile/assets/videos/
-mobile/assets/videos/
+mobile/assets/videos/*.mp4
+*.mp4
+
 
 #env file
 .env
