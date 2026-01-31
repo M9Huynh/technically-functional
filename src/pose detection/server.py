@@ -17,8 +17,9 @@ class FlaskPoseApp:
     def __init__(self):
         self.side = "RIGHT"
         self.pose_detect = mp.solutions.pose.Pose()
-        self.cam = PoseCamera(0, pose_detect=self.pose_detect)
+        self.cam = PoseCamera(0, pose_detect=self.pose_detect) #change number based on what camera you are using (0 for webcam, 1 for external)
         self.analyzer = Analyzer()
+        self.analyzer.start_calibration(duration_s=10.0)
 
 pose_app = FlaskPoseApp()
 
@@ -39,18 +40,25 @@ def process():
         pose_app.analyzer.update(knee_angle)
         stats = pose_app.analyzer.summary()
         
-        cv.putText(frame_landmarks,
-            f"Angle: {knee_angle:.1f} deg",
-            (20,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
-        cv.putText(frame_landmarks,
-            f"ROM: {stats['rom_degree']:.1f}  Min: {stats['min_degree']:.1f}  Max: {stats['max_degree']:.1f}",
-            (20,75), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        # cv.putText(frame_landmarks,
+        #     f"Angle: {knee_angle:.1f} deg",
+        #     (20,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        # cv.putText(frame_landmarks,
+        #     f"ROM: {stats['rom_degree']:.1f}  Min: {stats['min_degree']:.1f}  Max: {stats['max_degree']:.1f}",
+        #     (20,75), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        # cv.putText(frame_landmarks,
+        #     f"Reps: {stats['rep_count']} Rep State: {stats['rep_state']} Avg Duration: {stats['avg_rep_duration']:.1f}",
+        #     (20, 110), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2,)
         
         metrics = {
             "angle": knee_angle,
-            "rom": stats['rom_degree'],
-            "min": stats['min_degree'],
-            "max": stats['max_degree']
+            "rom_degree": stats['rom_degree'],
+            "min_degree": stats['min_degree'],
+            "max_degree": stats['max_degree'],
+            "rep_count" : stats['rep_count'],
+            "current_rep_duration" : stats['current_rep_duration'],
+            "avg_rep_duration" : stats['avg_rep_duration'],
+            "rep_state" : stats['rep_state']
         }
     
     _, buffer = cv.imencode('.jpg', frame_landmarks)

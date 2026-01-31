@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const SERVER_URL = ''; // Replace with your server's IP address and port
+const SERVER_URL = 'http://192.168.2.116:5000'; // Replace with your server's IP address and port
 
 export async function getPoseData() {
   try {
