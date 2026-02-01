@@ -49,7 +49,7 @@ export default function Login() {
         label="Login"
         onPress={async () => {
           try {
-            // ✅ persist role so tabs/home can use it
+            // persist role so tabs/home can use it
             await setUserRole(role);
 
             await login(email, password);
