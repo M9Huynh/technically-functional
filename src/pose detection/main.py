@@ -1,3 +1,4 @@
+# dont need to run this file, run server.py instead
 import cv2 as cv
 import mediapipe as mp
 import os
@@ -13,10 +14,10 @@ class PoseApp:
         self.side = None
         self.pose_detect = mp.solutions.pose.Pose()
         self.cams = {
-            'Sample Video':PoseCamera('right leg knee extension sagittal plane.MP4',pose_detect=self.pose_detect)
+            # 'Sample Video':PoseCamera('right leg knee extension sagittal plane.MP4',pose_detect=self.pose_detect)
             # 'Sample Video':PoseCamera('src/pose detection/knee.MP4',pose_detect=self.pose_detect)
             # 'Sagittal Plane':PoseCamera(0,pose_detect=self.pose_detect)
-            # ,'Frontal Plane': PoseCamera(1, pose_detect=self.pose_detect)
+            'Frontal Plane': PoseCamera(1, pose_detect=self.pose_detect)
         }
         self.analyzer = Analyzer()
 
