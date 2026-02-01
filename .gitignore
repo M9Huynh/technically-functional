@@ -277,16 +277,4 @@ TSWLatexianTemp*
 
 # DS_Store file from Mac computers
 .DS_Store
-
-# Firebase credentials
-serviceAccountKey.json
-*.pem
-*.key
-
-# Environment variables
-.env
-.env.local
-.env*.local
-
-# Encrypted files (if you want to keep them private too)
-firebase.enc
+mobile/lib/poseService.ts
