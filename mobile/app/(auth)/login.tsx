@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { Text, StyleSheet, TextInput, Pressable, View, Alert } from "react-native";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { login } from "../../lib/authService";
@@ -6,6 +6,7 @@ import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
 import { setUserRole } from "../../lib/roleStore";
+import { setUserId } from "@/lib/userStore";
 
 type Role = "patient" | "physio";
 
@@ -51,7 +52,7 @@ export default function Login() {
           try {
             // persist role so tabs/home can use it
             await setUserRole(role);
-
+            await setUserId(email);
             await login(email, password);
             router.replace("/(tabs)");
           } catch (e: any) {
