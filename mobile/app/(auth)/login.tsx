@@ -5,7 +5,7 @@ import { login } from "../../lib/authService";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
-import { setUserRole } from "../../lib/roleStore"; // ✅ ADD
+import { setUserRole } from "../../lib/roleStore";
 
 type Role = "patient" | "physio";
 
