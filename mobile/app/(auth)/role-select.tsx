@@ -4,10 +4,16 @@ import { useRouter } from "expo-router";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
+import { setUserRole, UserRole } from "../../lib/roleStore";
 
 export default function RoleSelect() {
   const router = useRouter();
-  
+
+  const goToLogin = async (role: UserRole) => {
+    await setUserRole(role);
+    router.push({ pathname: "/(auth)/login", params: { role } });
+  };
+
   return (
     <ScreenContainer>
       <AppLogo />
@@ -18,13 +24,13 @@ export default function RoleSelect() {
 
       <PrimaryButton
         label="I’m a Patient"
-        onPress={() => router.push({ pathname: "/(auth)/login", params: { role: "patient" } })}
+        onPress={() => goToLogin("patient")}
         style={{ marginTop: 18 }}
       />
 
       <PrimaryButton
         label="I’m a Physiotherapist"
-        onPress={() => router.push({ pathname: "/(auth)/login", params: { role: "physio" } })}
+        onPress={() => goToLogin("physio")}
         style={{ marginTop: 12 }}
       />
     </ScreenContainer>
