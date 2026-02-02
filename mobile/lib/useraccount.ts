@@ -1,4 +1,4 @@
-// lib/useraccount.ts 
+// TODO: may need to split up farther into more modules
 import { initializeApp } from 'firebase/app';
 import { 
   getAuth, 
@@ -23,9 +23,8 @@ import {
   DocumentData,
 } from 'firebase/firestore';
 
-////////////////////////////FIREBASE CONFIGURATION
+// FIREBASE CONFIGURATION 
 
-// Your Firebase configuration (or import from a config file)
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY || "your-api-key",
   authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || "your-auth-domain",
@@ -35,100 +34,190 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "your-app-id"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-//////////////////////////// TYPES & INTERFACES 
+// TYPES & INTERFACES 
 
-export interface UserData {
+export interface UserAccountData {
   uid: string;
   acc_id: number;
   email: string;
   name: string;
   role: "patient" | "physio";
-  birthday?: string; // ISO format: "1990-01-01"
-  licenseNumber?: string; // For physios only
-  verified?: boolean; // For physios only
-  physioId?: string; // For patients only
-  inviteCode?: string; // For patients only
+  birthday?: string;
+  licenseNumber?: string;
+  verified?: boolean;
+  physioId?: string;
+  inviteCode?: string;
   createdAt?: any;
   updatedAt?: any;
-  deleted?: boolean; // Soft delete flag
+  deleted?: boolean;
   deletedAt?: any;
 }
 
+export interface PTLicenseInfo {
+  licenseNumber: string;
+  province: string;
+  status: 'active' | 'inactive' | 'suspended' | 'expired';
+  verified: boolean;
+  verifiedAt?: any;
+  verifiedBy?: string;
+  notes?: string;
+  createdAt?: any;
+  updatedAt?: any;
+}
+
 // Custom Error Classes
-export class UserNotFoundError extends Error {
+export class UserAccountNotFoundError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "UserNotFoundError";
+    this.name = "UserAccountNotFoundError";
   }
 }
 
-export class DownloadError extends Error {
+export class UserAccountDownloadError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "DownloadError";
+    this.name = "UserAccountDownloadError";
   }
 }
 
-export class FieldEmptyError extends Error {
+export class UserAccountFieldEmptyError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "FieldEmptyError";
+    this.name = "UserAccountFieldEmptyError";
   }
 }
 
-export class LoginMatchError extends Error {
+export class UserAccountLoginMatchError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "LoginMatchError";
+    this.name = "UserAccountLoginMatchError";
   }
 }
 
-export class FirebaseInitializationError extends Error {
+export class PTLicenseValidationError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "FirebaseInitializationError";
+    this.name = "PTLicenseValidationError";
   }
 }
 
-export class NoAvailableIDError extends Error {
+export class UserAccountFirebaseInitializationError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "NoAvailableIDError";
+    this.name = "UserAccountFirebaseInitializationError";
   }
 }
 
-////////////////////////////USERACCOUNT CLASS 
-export class UserAccount {
+export class UserAccountNoAvailableIDError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "UserAccountNoAvailableIDError";
+  }
+}
+
+// USERACCOUNT CLASS
+export class UserAccountService {
   private usersCollection = "users";
   private idPoolCollection = "system";
   private idPoolDoc = "id_pool";
-  private validLicensesCollection = "validLicenses";
+  private validLicensesCollection = "ptLicenses";
   private inviteCodesCollection = "inviteCodes";
   
   private readonly ID_MIN = 10000;
   private readonly ID_MAX = 99999;
 
-  constructor() {
-    // Extra
+  constructor() {}
+
+  // LICENSE VALIDATION FUNCTIONS 
+  // These functions are responsible for checking if entered PT license is valid and exists in the database.
+  //-----------------------------------------------------------------
+
+  licenseFormatValid(licenseNumber: string): boolean {
+    return /^[A-Z]{2}-\d{6}$/.test(licenseNumber.trim().toUpperCase());
   }
 
-  //////////////////////////// ID POOL MANAGEMENT 
+  async validateLicense(licenseNumber: string): Promise<PTLicenseInfo> {
+    if (!licenseNumber) {
+      throw new PTLicenseValidationError("License number is required");
+    }
 
-  /**
-   * Initialize or refresh the ID pool
-   */
+    const lic = licenseNumber.trim().toUpperCase();
+
+    if (!this.licenseFormatValid(lic)) {
+      throw new PTLicenseValidationError(
+        "Invalid license format. Expected format: XX-123456 (e.g., ON-123456)"
+      );
+    }
+
+    try {
+      const licenseRef = doc(db, this.validLicensesCollection, lic);
+      const licenseDoc = await getDoc(licenseRef);
+
+      if (!licenseDoc.exists()) {
+        throw new PTLicenseValidationError(
+          `License number ${lic} not found in system`
+        );
+      }
+
+      const licenseData = licenseDoc.data() as PTLicenseInfo;
+
+      if (licenseData.status !== 'active') {
+        throw new PTLicenseValidationError(
+          `License ${lic} is ${licenseData.status}. Only active licenses are accepted.`
+        );
+      }
+
+      if (!licenseData.verified) {
+        throw new PTLicenseValidationError(
+          `License ${lic} is not verified. Please contact administrator.`
+        );
+      }
+
+      console.log(`License ${lic} validated successfully`);
+      return licenseData;
+
+    } catch (error: any) {
+      if (error instanceof PTLicenseValidationError) {
+        throw error;
+      }
+      console.error("License validation error:", error);
+      throw new PTLicenseValidationError(
+        `Error validating license: ${error.message || "Unknown error"}`
+      );
+    }
+  }
+  async isLicenseAlreadyRegistered(licenseNumber: string): Promise<boolean> {
+    try {
+      const usersRef = collection(db, this.usersCollection);
+      const q = query(
+        usersRef, 
+        where("licenseNumber", "==", licenseNumber.trim().toUpperCase()),
+        where("role", "==", "physio")
+      );
+      
+      const snapshot = await getDocs(q);
+      return !snapshot.empty;
+    } catch (error) {
+      console.error("Error checking if license is registered:", error);
+      return false;
+    }
+  }
+
+  // TODO: include search physio by license no?
+
+  //--------------------------------------------------------------------------------------
+  // ID POOL MANAGEMENT 
+
   async initializeIdPool(): Promise<void> {
     try {
       const poolRef = doc(db, this.idPoolCollection, this.idPoolDoc);
       const poolDoc = await getDoc(poolRef);
 
       if (!poolDoc.exists()) {
-        // Get all used acc_ids
         const usedIds = new Set<number>();
         const usersSnapshot = await getDocs(collection(db, this.usersCollection));
         usersSnapshot.forEach((doc) => {
@@ -138,22 +227,18 @@ export class UserAccount {
           }
         });
 
-        // Generate all possible IDs
         const allPossibleIds = Array.from(
           { length: this.ID_MAX - this.ID_MIN + 1 },
           (_, i) => i + this.ID_MIN
         );
 
-        // Filter out used IDs
         const availableIds = allPossibleIds.filter((id) => !usedIds.has(id));
 
-        // Shuffle for randomness
         for (let i = availableIds.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [availableIds[i], availableIds[j]] = [availableIds[j], availableIds[i]];
         }
 
-        // Store in Firestore
         await setDoc(poolRef, {
           available_ids: availableIds,
           used_ids: Array.from(usedIds),
@@ -169,36 +254,29 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Get a unique acc_id from the pool
-   */
   async getUniqueAccId(): Promise<number> {
     try {
       const poolRef = doc(db, this.idPoolCollection, this.idPoolDoc);
       const poolDoc = await getDoc(poolRef);
 
-      // If pool doesn't exist, initialize it
       if (!poolDoc.exists()) {
         await this.initializeIdPool();
-        return this.getUniqueAccId(); // Try again
+        return this.getUniqueAccId();
       }
 
       const poolData = poolDoc.data();
       let availableIds = poolData?.available_ids || [];
       const usedIds = poolData?.used_ids || [];
 
-      // If pool is empty, refresh it
       if (availableIds.length === 0) {
-        console.log("ID pool empty, refreshing...");
+        console.log("ID pool empty");
         await this.initializeIdPool();
         return this.getUniqueAccId();
       }
 
-      // Take the first available ID
       const acc_id = availableIds.shift()!;
       usedIds.push(acc_id);
 
-      // Update the pool
       await updateDoc(poolRef, {
         available_ids: availableIds,
         used_ids: usedIds,
@@ -210,21 +288,16 @@ export class UserAccount {
       return acc_id;
     } catch (error) {
       console.error("Error getting unique acc_id:", error);
-      // Fallback: Generate random ID
       return this.generateRandomAccId();
     }
   }
 
-  /**
-   * Fallback method: Generate random ID and validate uniqueness
-   */
   private async generateRandomAccId(): Promise<number> {
     const maxAttempts = 100;
     
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const acc_id = Math.floor(this.ID_MIN + Math.random() * (this.ID_MAX - this.ID_MIN + 1));
       
-      // Check if this acc_id is already in use
       const existingUser = await this.getUserByAccId(acc_id);
       
       if (!existingUser) {
@@ -233,22 +306,17 @@ export class UserAccount {
       }
     }
     
-    throw new NoAvailableIDError("Could not generate unique acc_id after maximum attempts");
+    throw new UserAccountNoAvailableIDError("Could not generate unique acc_id");
   }
 
-  /**
-   * Return an acc_id to the pool (when user is deleted)
-   */
   async returnAccIdToPool(acc_id: number): Promise<void> {
     try {
-      // Check if ID is already in use
       const existingUser = await this.getUserByAccId(acc_id);
       if (existingUser) {
         console.log(`Warning: ID ${acc_id} is still in use, not returning to pool`);
         return;
       }
 
-      // Add to current pool
       const poolRef = doc(db, this.idPoolCollection, this.idPoolDoc);
       const poolDoc = await getDoc(poolRef);
 
@@ -257,10 +325,8 @@ export class UserAccount {
         const availableIds = poolData?.available_ids || [];
         const usedIds = poolData?.used_ids || [];
 
-        // Remove from used_ids
         const updatedUsedIds = usedIds.filter((id: number) => id !== acc_id);
         
-        // Add to available_ids if not already there
         if (!availableIds.includes(acc_id)) {
           availableIds.push(acc_id);
         }
@@ -278,39 +344,9 @@ export class UserAccount {
       console.error("Error returning acc_id to pool:", error);
     }
   }
+  // TODO: do we need a get pool contents function? For implementation elsewhere?
 
-  /**
-   * Get ID pool status
-   */
-  async getPoolStatus() {
-    try {
-      const poolRef = doc(db, this.idPoolCollection, this.idPoolDoc);
-      const poolDoc = await getDoc(poolRef);
-
-      if (poolDoc.exists()) {
-        const data = poolDoc.data();
-        return {
-          total_available: data.total_available || 0,
-          available_ids_count: (data.available_ids || []).length,
-          used_ids_count: (data.used_ids || []).length,
-          last_updated: data.last_updated
-        };
-      }
-      return { error: "Pool document not found" };
-    } catch (error) {
-      console.error("Error getting pool status:", error);
-      return { error: String(error) };
-    }
-  }
-
-  // ==================== VALIDATION FUNCTIONS ====================
-
-  /**
-   * Validate license number format
-   */
-  licenseFormatValid(licenseNumber: string): boolean {
-    return /^[A-Z]{2}-\d{6}$/.test(licenseNumber.trim().toUpperCase());
-  }
+  // VALIDATION FUNCTIONS
 
   private validateEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -325,14 +361,11 @@ export class UserAccount {
     return name.trim().length >= 2;
   }
 
-  ////////////////////////////AUTHENTICATION FUNCTIONS 
+  // AUTHENTICATION FUNCTIONS
 
-  /**
-   * Login user with email and password
-   */
-  async login(email: string, password: string): Promise<UserData> {
+  async login(email: string, password: string): Promise<UserAccountData> {
     if (!email || !password) {
-      throw new FieldEmptyError("Email and password are required");
+      throw new UserAccountFieldEmptyError("Email and password are required");
     }
 
     if (!this.validateEmail(email)) {
@@ -345,12 +378,11 @@ export class UserAccount {
 
       const userDoc = await getDoc(doc(db, this.usersCollection, uid));
       if (!userDoc.exists()) {
-        throw new UserNotFoundError("User profile missing in Firestore");
+        throw new UserAccountNotFoundError("User profile does not exist");
       }
 
-      const userData = userDoc.data() as Omit<UserData, "uid">;
+      const userData = userDoc.data() as Omit<UserAccountData, "uid">;
       
-      // Ensure acc_id exists (for backward compatibility)
       if (!userData.acc_id) {
         const acc_id = await this.getUniqueAccId();
         await updateDoc(doc(db, this.usersCollection, uid), { 
@@ -366,16 +398,13 @@ export class UserAccount {
       console.error("Login error:", error);
       
       if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
-        throw new LoginMatchError("Invalid email or password");
+        throw new UserAccountLoginMatchError("Invalid email or password");
       }
       
       throw new Error(error.message || "Login failed");
     }
   }
 
-  /**
-   * Logout current user
-   */
   async logout(): Promise<void> {
     try {
       await signOut(auth);
@@ -386,38 +415,15 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Get current authenticated user data
-   */
-  async getCurrentUser(): Promise<UserData | null> {
-    const user = auth.currentUser;
-    if (!user) return null;
-
-    try {
-      const userDoc = await getDoc(doc(db, this.usersCollection, user.uid));
-      if (!userDoc.exists()) return null;
-
-      const userData = userDoc.data() as Omit<UserData, "uid">;
-      return { uid: user.uid, ...userData };
-    } catch (error) {
-      console.error("Error getting current user:", error);
-      return null;
-    }
-  }
-
-  /**
-   * Register a new physiotherapist
-   */
   async registerPhysio(params: {
     name: string;
     email: string;
     password: string;
     licenseNumber: string;
     birthday?: string;
-  }): Promise<UserData> {
-    // Validate inputs
+  }): Promise<UserAccountData> {
     if (!params.name || !params.email || !params.password || !params.licenseNumber) {
-      throw new FieldEmptyError("All fields are required");
+      throw new UserAccountFieldEmptyError("All fields are required");
     }
 
     if (!this.validateName(params.name)) {
@@ -434,26 +440,27 @@ export class UserAccount {
 
     const lic = params.licenseNumber.trim().toUpperCase();
 
-    // License format check
     if (!this.licenseFormatValid(lic)) {
-      throw new Error("Invalid license format (example: ON-123456)");
+      throw new PTLicenseValidationError(
+        "Invalid license format. Expected format: XX-123456 (e.g., ON-123456)"
+      );
     }
 
-    // License verification (allowlist check)
-    const licSnap = await getDoc(doc(db, this.validLicensesCollection, lic));
-    if (!licSnap.exists() || licSnap.data()?.active !== true) {
-      throw new Error("License not verified or inactive");
+    const licenseData = await this.validateLicense(lic);
+
+    const isAlreadyRegistered = await this.isLicenseAlreadyRegistered(lic);
+    if (isAlreadyRegistered) {
+      throw new PTLicenseValidationError(
+        `License number ${lic} is already registered to another user`
+      );
     }
 
-    // Check if email already exists
     if (await this.emailExists(params.email)) {
       throw new Error("Email already registered");
     }
 
-    // Generate unique acc_id
     const acc_id = await this.getUniqueAccId();
 
-    // Create Firebase Auth user
     const cred = await createUserWithEmailAndPassword(
       auth,
       params.email.trim(),
@@ -461,38 +468,33 @@ export class UserAccount {
     );
     const uid = cred.user.uid;
 
-    // Create Firestore user document
-    const userData: Omit<UserData, "uid"> = {
+    const userData: Omit<UserAccountData, "uid"> = {
       acc_id,
       email: params.email.trim().toLowerCase(),
       name: params.name.trim(),
       role: "physio",
       licenseNumber: lic,
       verified: true,
-      birthday: params.birthday || null,
+      birthday: params.birthday,
       createdAt: serverTimestamp(),
     };
 
     await setDoc(doc(db, this.usersCollection, uid), userData);
 
-    console.log(`Physio registered: ${params.name} (acc_id: ${acc_id})`);
+    console.log(`Physio registered: ${params.name} (License: ${lic}, acc_id: ${acc_id})`);
     
     return { uid, ...userData };
   }
 
-  /**
-   * Register a new patient
-   */
   async registerPatient(params: {
     name: string;
     email: string;
     password: string;
     inviteCode: string;
-    birthday?: string;
-  }): Promise<UserData> {
-    // Validate inputs
-    if (!params.name || !params.email || !params.password || !params.inviteCode) {
-      throw new FieldEmptyError("All fields are required");
+    birthday: string;
+  }): Promise<UserAccountData> {
+    if (!params.name || !params.email || !params.password || !params.inviteCode || !params.birthday) {
+      throw new UserAccountFieldEmptyError("All fields are required");
     }
 
     if (!this.validateName(params.name)) {
@@ -509,7 +511,6 @@ export class UserAccount {
 
     const code = params.inviteCode.trim().toUpperCase();
 
-    // Validate invite code
     const inviteRef = doc(db, this.inviteCodesCollection, code);
     const inviteSnap = await getDoc(inviteRef);
 
@@ -530,15 +531,12 @@ export class UserAccount {
       throw new Error("Invite code missing physio link");
     }
 
-    // Check if email already exists
     if (await this.emailExists(params.email)) {
       throw new Error("Email already registered");
     }
 
-    // Generate unique acc_id
     const acc_id = await this.getUniqueAccId();
 
-    // Create Firebase Auth user
     const cred = await createUserWithEmailAndPassword(
       auth,
       params.email.trim(),
@@ -546,21 +544,19 @@ export class UserAccount {
     );
     const uid = cred.user.uid;
 
-    // Create Firestore user document
-    const userData: Omit<UserData, "uid"> = {
+    const userData: Omit<UserAccountData, "uid"> = {
       acc_id,
       email: params.email.trim().toLowerCase(),
       name: params.name.trim(),
       role: "patient",
       physioId,
       inviteCode: code,
-      birthday: params.birthday || null,
+      birthday: params.birthday,
       createdAt: serverTimestamp(),
     };
 
     await setDoc(doc(db, this.usersCollection, uid), userData);
 
-    // Mark invite code as used
     await updateDoc(inviteRef, {
       used: true,
       usedBy: uid,
@@ -572,9 +568,6 @@ export class UserAccount {
     return { uid, ...userData };
   }
 
-  /**
-   * Validate username and password match
-   */
   async validateCredentials(email: string, password: string): Promise<boolean> {
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
@@ -584,31 +577,9 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Subscribe to authentication state changes
-   */
-  onAuthStateChange(callback: (user: UserData | null) => void) {
-    return onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        try {
-          const userData = await this.getCurrentUser();
-          callback(userData);
-        } catch (error) {
-          console.error("Error getting user data in auth listener:", error);
-          callback(null);
-        }
-      } else {
-        callback(null);
-      }
-    });
-  }
+  // USER MANAGEMENT FUNCTIONS
 
-  ////////////////////////////USER MANAGEMENT FUNCTIONS 
-
-  /**
-   * Get user by acc_id
-   */
-  async getUserByAccId(acc_id: number): Promise<UserData | null> {
+  async getUserByAccId(acc_id: number): Promise<UserAccountData | null> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const q = query(usersRef, where("acc_id", "==", acc_id));
@@ -617,7 +588,7 @@ export class UserAccount {
       if (snapshot.empty) return null;
 
       const doc = snapshot.docs[0];
-      const userData = doc.data() as Omit<UserData, "uid">;
+      const userData = doc.data() as Omit<UserAccountData, "uid">;
       return { uid: doc.id, ...userData };
     } catch (error) {
       console.error("Error getting user by acc_id:", error);
@@ -625,10 +596,7 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Get user by email
-   */
-  async getUserByEmail(email: string): Promise<UserData | null> {
+  async getUserByEmail(email: string): Promise<UserAccountData | null> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const q = query(usersRef, where("email", "==", email.trim().toLowerCase()));
@@ -637,7 +605,7 @@ export class UserAccount {
       if (snapshot.empty) return null;
 
       const doc = snapshot.docs[0];
-      const userData = doc.data() as Omit<UserData, "uid">;
+      const userData = doc.data() as Omit<UserAccountData, "uid">;
       return { uid: doc.id, ...userData };
     } catch (error) {
       console.error("Error getting user by email:", error);
@@ -645,47 +613,19 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Get user by Firebase UID
-   */
-  async getUserById(uid: string): Promise<UserData | null> {
-    try {
-      const userDoc = await getDoc(doc(db, this.usersCollection, uid));
-      if (!userDoc.exists()) return null;
-
-      const userData = userDoc.data() as Omit<UserData, "uid">;
-      return { uid, ...userData };
-    } catch (error) {
-      console.error("Error getting user by ID:", error);
-      return null;
-    }
-  }
-
-  /**
-   * Check if a user with given email exists
-   */
   async emailExists(email: string): Promise<boolean> {
     const user = await this.getUserByEmail(email);
     return user !== null;
   }
 
-  /**
-   * Update user profile
-   */
-  async updateUser(userData: UserData): Promise<boolean> {
+  async updateUser(userData: UserAccountData): Promise<boolean> {
     try {
-      if (!userData.acc_id) {
-        throw new Error("UserData must have a valid acc_id for update");
-      }
-
-      // Find the user by acc_id
       const existingUser = await this.getUserByAccId(userData.acc_id);
       if (!existingUser) {
-        throw new UserNotFoundError(`No user found with acc_id: ${userData.acc_id}`);
+        throw new UserAccountNotFoundError(`No user found with acc_id: ${userData.acc_id}`);
       }
 
-      // Update the document
-      const updateData: Partial<UserData> = {
+      const updateData: Partial<UserAccountData> = {
         name: userData.name,
         email: userData.email,
         birthday: userData.birthday,
@@ -693,7 +633,6 @@ export class UserAccount {
         updatedAt: serverTimestamp(),
       };
 
-      // Only update licenseNumber if it's a physio
       if (userData.role === "physio" && userData.licenseNumber) {
         updateData.licenseNumber = userData.licenseNumber;
       }
@@ -708,24 +647,18 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Delete a user by acc_id and return ID to pool
-   */
   async deleteUserByAccId(acc_id: number): Promise<boolean> {
     try {
-      // Find the user by acc_id
       const user = await this.getUserByAccId(acc_id);
       if (!user) {
-        throw new UserNotFoundError(`No user found with acc_id: ${acc_id}`);
+        throw new UserAccountNotFoundError(`No user found with acc_id: ${acc_id}`);
       }
 
-      // Soft delete: mark as deleted
       await updateDoc(doc(db, this.usersCollection, user.uid), {
         deleted: true,
         deletedAt: serverTimestamp(),
       });
 
-      // Return ID to pool
       await this.returnAccIdToPool(acc_id);
 
       console.log(`User with acc_id ${acc_id} deleted successfully`);
@@ -736,14 +669,11 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Delete a user by email and return ID to pool
-   */
   async deleteUserByEmail(email: string): Promise<boolean> {
     try {
       const user = await this.getUserByEmail(email);
       if (!user) {
-        throw new UserNotFoundError(`No user found with email: ${email}`);
+        throw new UserAccountNotFoundError(`No user found with email: ${email}`);
       }
 
       return await this.deleteUserByAccId(user.acc_id);
@@ -753,51 +683,11 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Delete a user by Firebase UID
-   */
-  async deleteUserById(uid: string): Promise<boolean> {
-    try {
-      const user = await this.getUserById(uid);
-      if (!user) {
-        throw new UserNotFoundError(`No user found with uid: ${uid}`);
-      }
 
-      return await this.deleteUserByAccId(user.acc_id);
-    } catch (error) {
-      console.error("Error deleting user by ID:", error);
-      return false;
-    }
-  }
 
-  ////////////////////////////QUERY FUNCTIONS 
+  // QUERY FUNCTIONS
 
-  /**
-   * Get all users by role
-   */
-  async getUsersByRole(role: "patient" | "physio"): Promise<UserData[]> {
-    try {
-      const usersRef = collection(db, this.usersCollection);
-      const q = query(usersRef, where("role", "==", role));
-      const snapshot = await getDocs(q);
-
-      const users: UserData[] = [];
-      snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserData, "uid">;
-        users.push({ uid: doc.id, ...userData });
-      });
-
-      return users;
-    } catch (error) {
-      console.error("Error getting users by role:", error);
-      return [];
-    }
-  }
-
-  /**
-   * Get patients for a specific physio
-   */
-  async getPatientsByPhysio(physioId: string): Promise<UserData[]> {
+  async getPatientsByPhysio(physioId: string): Promise<UserAccountData[]> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const q = query(
@@ -807,9 +697,9 @@ export class UserAccount {
       );
       const snapshot = await getDocs(q);
 
-      const patients: UserData[] = [];
+      const patients: UserAccountData[] = [];
       snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserData, "uid">;
+        const userData = doc.data() as Omit<UserAccountData, "uid">;
         patients.push({ uid: doc.id, ...userData });
       });
 
@@ -820,19 +710,16 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Get user(s) by name
-   */
-  async getUsersByName(name: string): Promise<UserData[]> {
+  async getUsersByName(name: string): Promise<UserAccountData[]> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const snapshot = await getDocs(usersRef);
 
       const searchTerm = name.toLowerCase().trim();
-      const users: UserData[] = [];
+      const users: UserAccountData[] = [];
 
       snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserData, "uid">;
+        const userData = doc.data() as Omit<UserAccountData, "uid">;
         if (userData.name.toLowerCase().includes(searchTerm)) {
           users.push({ uid: doc.id, ...userData });
         }
@@ -845,17 +732,14 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Get all users
-   */
-  async getAllUsers(): Promise<UserData[]> {
+  async getAllUsers(): Promise<UserAccountData[]> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const snapshot = await usersRef.get();
 
-      const users: UserData[] = [];
+      const users: UserAccountData[] = [];
       snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserData, "uid">;
+        const userData = doc.data() as Omit<UserAccountData, "uid">;
         users.push({ uid: doc.id, ...userData });
       });
 
@@ -866,20 +750,10 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Count users by role
-   */
-  async countUsersByRole(role: string): Promise<number> {
-    const users = await this.getUsersByRole(role as "patient" | "physio");
-    return users.length;
-  }
 
-  //////////////////////////// SPECIALIZED FUNCTIONS 
+  // SPECIALIZED FUNCTIONS
 
-  /**
-   * Retrieves user account information from the user table
-   */
-  async getUserdbInfo(name: string, birthday?: string): Promise<{ patients: UserData[]; physios: UserData[] }> {
+  async getUserdbInfo(name: string, birthday?: string): Promise<{ patients: UserAccountData[]; physios: UserAccountData[] }> {
     try {
       let usersRef = collection(db, this.usersCollection);
       let q = query(usersRef, where("name", "==", name));
@@ -890,18 +764,18 @@ export class UserAccount {
 
       const snapshot = await getDocs(q);
 
-      const userAccounts: UserData[] = [];
+      const userAccounts: UserAccountData[] = [];
       snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserData, "uid">;
+        const userData = doc.data() as Omit<UserAccountData, "uid">;
         userAccounts.push({ uid: doc.id, ...userData });
       });
 
       if (userAccounts.length === 0) {
-        throw new UserNotFoundError(`No user found with name: ${name}`);
+        throw new UserAccountNotFoundError(`No user found with name: ${name}`);
       }
 
-      const patients: UserData[] = [];
-      const physios: UserData[] = [];
+      const patients: UserAccountData[] = [];
+      const physios: UserAccountData[] = [];
 
       userAccounts.forEach(userData => {
         if (userData.role === 'patient') {
@@ -914,85 +788,95 @@ export class UserAccount {
       return { patients, physios };
     } catch (error) {
       console.error(`Error retrieving user info: ${error}`);
-      throw new DownloadError(`Failed to download user data: ${error}`);
+      throw new UserAccountDownloadError(`Failed to download user data: ${error}`);
     }
   }
 
-  /**
-   * Allows PT to delete a patient account from the system
-   */
-  async PTaccountDelete(name: string, email: string): Promise<void> {
-    if (!name || !email) {
-      throw new FieldEmptyError("Name and email fields cannot be empty");
+  async PTaccountDelete(physioEmail: string, patientName: string, patientEmail: string): Promise<void> {
+  if (!physioEmail || !patientName || !patientEmail) {
+    throw new UserAccountFieldEmptyError("Physio email, patient name, and patient email are required");
+  }
+
+  try {
+    const physio = await this.getUserByEmail(physioEmail);
+    if (!physio) {
+      throw new UserAccountNotFoundError(`Physio with email '${physioEmail}' not found`);
     }
 
-    try {
-      // Find user by name and email
-      const usersRef = collection(db, this.usersCollection);
-      const q = query(usersRef, where('name', '==', name), where('email', '==', email));
-      const snapshot = await getDocs(q);
+    if (physio.role !== "physio") {
+      throw new Error("Only physiotherapists can delete patient accounts");
+    }
+    const usersRef = collection(db, this.usersCollection);
+    const q = query(
+      usersRef, 
+      where("name", "==", patientName), 
+      where("email", "==", patientEmail),
+      where("role", "==", "patient")
+    );
+    const snapshot = await getDocs(q);
 
-      if (snapshot.empty) {
-        throw new UserNotFoundError(`No user found with name '${name}' and email '${email}'`);
-      }
+    if (snapshot.empty) {
+      throw new UserAccountNotFoundError(
+        `No patient found with name '${patientName}' and email '${patientEmail}'`
+      );
+    }
+    const patientsToDelete = snapshot.docs.filter(doc => {
+      const data = doc.data();
+      return data.physioId === physio.uid; // Compare with physio's UID
+    });
 
-      const deletePromises = snapshot.docs.map(async (doc) => {
-        // Get acc_id before deleting
-        const data = doc.data();
-        const accId = data.acc_id;
+    if (patientsToDelete.length === 0) {
+      throw new Error(
+        `Patient '${patientName}' (${patientEmail}) does not belong to physio '${physio.name}'`
+      );
+    }
+    const deletePromises = patientsToDelete.map(async (doc) => {
+      const data = doc.data();
+      const accId = data.acc_id;
 
-        // Soft delete the document
-        await updateDoc(doc.ref, {
-          deleted: true,
-          deletedAt: serverTimestamp(),
-        });
-
-        // Return ID to pool
-        if (accId) {
-          await this.returnAccIdToPool(accId);
-        }
-
-        console.log(`Successfully deleted user: ${name} (${email}) with acc_id: ${accId}`);
+      await updateDoc(doc.ref, {
+        deleted: true,
+        deletedAt: serverTimestamp(),
       });
 
-      await Promise.all(deletePromises);
-    } catch (error) {
-      console.error(`Error deleting user account: ${error}`);
-      throw error;
-    }
-  }
+      if (accId) {
+        await this.returnAccIdToPool(accId);
+      }
 
-  /**
-   * Verifies if username and password match for authentication
-   */
+      console.log(
+        `Physio '${physio.name}' deleted patient: ${patientName} (${patientEmail}) with acc_id: ${accId}`
+      );
+    });
+
+    await Promise.all(deletePromises);
+  } catch (error) {
+    console.error(`Error deleting patient account: ${error}`);
+    throw error;
+  }
+}
   async usernamePwMatch(email: string, password: string): Promise<boolean> {
     try {
       const userData = await this.getUserByEmail(email);
 
       if (!userData) {
-        throw new LoginMatchError("Invalid email or password");
+        throw new UserAccountLoginMatchError("Invalid email or password");
       }
 
-      // Note: In a real app, you should verify the password through Firebase Auth
-      // not by comparing stored passwords. This is for demonstration.
       const isValid = await this.validateCredentials(email, password);
       
       if (isValid) {
         console.log(`Successful login for user: ${email}`);
         return true;
       } else {
-        throw new LoginMatchError("Invalid email or password");
+        throw new UserAccountLoginMatchError("Invalid email or password");
       }
     } catch (error) {
       console.error(`Error during login verification: ${error}`);
-      throw new LoginMatchError("Authentication failed");
+      throw new UserAccountLoginMatchError("Authentication failed");
     }
   }
 
-  /**
-   * Authenticate user and return UserData if successful
-   */
-  async authenticateUser(email: string, password: string): Promise<UserData | null> {
+  async authenticateUser(email: string, password: string): Promise<UserAccountData | null> {
     try {
       if (await this.usernamePwMatch(email, password)) {
         return await this.getUserByEmail(email);
@@ -1003,24 +887,6 @@ export class UserAccount {
     }
   }
 
-  /**
-   * Test Firestore connection
-   */
-  async testConnection(): Promise<boolean> {
-    try {
-      const usersRef = collection(db, this.usersCollection);
-      const snapshot = await usersRef.limit(1).get();
-      console.log("Firestore connection test successful!");
-      return true;
-    } catch (error) {
-      console.error(`Firestore connection test failed: ${error}`);
-      return false;
-    }
-  }
-
-  /**
-   * Initialize the system
-   */
   async initializeSystem(): Promise<void> {
     try {
       await this.initializeIdPool();
@@ -1032,20 +898,10 @@ export class UserAccount {
   }
 }
 
-////////////////////////// CREATE DEFAULT INSTANCE 
+// CREATE DEFAULT INSTANCE
 
-// Create a default instance for easy importing
-const userAccount = new UserAccount();
+const userAccount = new UserAccountService();
 
-// Initialize system (optional - can be called manually)
-userAccount.initializeSystem().catch(console.error);
-
-///////////////////////////// EXPORTS 
+// EXPORTS
 
 export default userAccount;
-
-// Also export the class for custom instances if needed
-export { UserAccount };
-
-// Export types
-export type { UserData };
