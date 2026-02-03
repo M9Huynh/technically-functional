@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { UserActivity } from "./temp";
+import { format, isSameDay, subDays } from "date-fns";
 
 export type ActivitySummary = {
   totalActivities: number;
@@ -47,4 +48,29 @@ export async function getUserActivities(uid: string): Promise<UserActivity[]> {
       streak: 0, // This would be calculated from activity dates TODO
       today: activities.filter(a => a.date_performed === new Date().toISOString().split('T')[0]).length,
     };
+  }
+
+  export async function repsChartData(uid: string): Promise<{ label: string; value: number }[]> {
+    const activities = await getUserActivities(uid);
+    const last7Days = Array.from({ length: 7 }).map((_, i) => {
+      const date = subDays(new Date(), i);
+      const dateStr = format(date, "yyyy-MM-dd");
+      const reps = activities
+        .filter(a => a.date_performed === dateStr)
+        .reduce((sum, current) => sum + (current.completed_reps || 0), 0);
+      return { label: new Date(dateStr).toLocaleDateString(undefined, { weekday: 'short' }), value: reps };
+    });
+    return last7Days.reverse();
+  }
+
+  export async function exerciseChartData(uid: string): Promise<{ label: string; value: number }[]> {
+    const activities = await getUserActivities(uid);
+    const last7Days = Array.from({ length: 7 }).map((_, i) => {
+      const date = subDays(new Date(), i);
+      const dateStr = format(date, "yyyy-MM-dd");
+      const acts = activities
+        .filter(a => a.date_performed === dateStr).length;
+      return { label: new Date(dateStr).toLocaleDateString(undefined, { weekday: 'short' }), value: acts };
+    });
+    return last7Days.reverse();
   }
