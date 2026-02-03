@@ -20,7 +20,6 @@ import {
   query,
   where,
   getDocs,
-  DocumentData,
 } from 'firebase/firestore';
 
 // FIREBASE CONFIGURATION 
