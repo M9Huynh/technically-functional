@@ -23,7 +23,7 @@ export default function Profile() {
       <Text style={styles.subtitle}>E-Mail</Text>
       <Text style={styles.text}>{userData?.email || "No email available"}</Text>
       <Text style={styles.subtitle}>Birthday</Text>
-      <Text style={styles.text}>{new Date(userData?.birthday || 0).toLocaleDateString(undefined, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) || "No birthday available"}</Text>
+      <Text style={styles.text}>{new Date(userData?.birthday + "T12:00:00" || 0).toLocaleDateString(undefined, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) || "No birthday available"}</Text>
     </View>
   );
 }

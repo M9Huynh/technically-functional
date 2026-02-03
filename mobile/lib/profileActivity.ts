@@ -6,6 +6,8 @@ import {
   getDoc,
   getDocs,
   doc,
+  setDoc,
+  addDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { UserActivity } from "./temp";
@@ -17,6 +19,15 @@ export type ActivitySummary = {
   streak: number;
   today: number;
 };
+
+export type CommentData = {
+  author: string;
+  cid: string;
+  actid: string;
+  uid: string;
+  date: string;
+  comment: string;
+}
 
 export async function getActivitiesFromEmail(email: string) {
   const db = getFirestore();
@@ -73,4 +84,35 @@ export async function getUserActivities(uid: string): Promise<UserActivity[]> {
       return { label: new Date(dateStr).toLocaleDateString(undefined, { weekday: 'short' }), value: acts };
     });
     return last7Days.reverse();
+  }
+
+  export async function getComments(actid: string): Promise<CommentData[]> {
+    const commentsRef = collection(db, "comments");
+    const q = query(commentsRef, where("actid", "==", actid));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => doc.data() as CommentData);
+  }
+
+  export async function postComment(actid: string, uid: string, comment: string): Promise<void> {
+    const com = {
+      actid,
+    }
+    const commentsRef = collection(db, "comments");
+    const docRef = await addDoc(commentsRef, com);
+    const realcom = {
+      cid: docRef.id,
+      actid,
+      uid,
+      date: new Date().toISOString(),
+      comment,
+      author: await getName(uid),
+    }
+    await setDoc(docRef, realcom);
+  }
+
+  export async function getName(uid: string): Promise<string> {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    if (!userDoc.exists()) return "Unknown User";
+    const userData = userDoc.data();
+    return userData.name || "Unnamed User";
   }

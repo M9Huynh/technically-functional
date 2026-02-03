@@ -17,6 +17,7 @@ export interface UserData {
 }
 
 export interface UserActivity {
+    actid: string;
     analysis: string;
     completed_reps: number;
     completed_sets: number;
