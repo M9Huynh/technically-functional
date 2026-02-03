@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase";
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, getDocs } from "firebase/firestore";
 
 export interface UserData {
   uid: string;
@@ -14,6 +14,23 @@ export interface UserData {
   inviteCode?: string; // For patients only
   createdAt?: any;
   updatedAt?: any;
+}
+
+export interface UserActivity {
+    analysis: string;
+    completed_reps: number;
+    completed_sets: number;
+    date_performed: string; // ISO format: "2023-10-05T14:48:00.000Z"
+    duration: number;
+    email: string;
+    exercise: string;
+    max_height: number;
+    min_height: number;
+    name: string;
+    patient_feedback: string;
+    real_rest_time: number;
+    target_area: string;
+    uid: string;
 }
 
 export async function getCurrentUser(): Promise<UserData | null> {

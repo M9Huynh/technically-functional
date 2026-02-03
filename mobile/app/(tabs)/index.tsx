@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { logout } from "../../lib/authService";
 import { getUserRole, clearUserRole, UserRole } from "../../lib/roleStore";
 import { UserData, getCurrentUser } from "../../lib/temp";
+import { getUserActivities, getUserSummary } from "../../lib/profileActivity";
 
 export default function Home() {
   const router = useRouter();
@@ -11,17 +12,22 @@ export default function Home() {
   const [role, setRole] = useState<UserRole>("patient"); // default is fine
   const [roleReady, setRoleReady] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [activities, setActivities] = useState<any[]>([]);
+  const [summary, setSummary] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
       const saved = await getUserRole();
       const currentUser = await getCurrentUser();
       setUserData(currentUser);
+      const acts = currentUser ? await getUserActivities(currentUser.uid) : []; setActivities(acts);
+      const sum = currentUser ? await getUserSummary(currentUser.uid) : null; setSummary(sum);
+      
       if (saved) setRole(saved);
       setRoleReady(true);
     })();
   }, []);
-
+  
   if (!roleReady) {
     return <View style={styles.container} />;
   }
@@ -48,26 +54,27 @@ export default function Home() {
       <View style={styles.row}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>
-            {role === "patient" ? "Your Stats" : "Overall Stats"}
+        {role === "patient" ? "Your Stats" : "Overall Stats"}
           </Text>
-
+          
           <View style={styles.statsGrid}>
-            <View style={styles.statBox}><Text style={styles.statNum}>4</Text><Text style={styles.statLbl}>Completed</Text></View>
-            <View style={styles.statBox}><Text style={styles.statNum}>2</Text><Text style={styles.statLbl}>Comments</Text></View>
-            <View style={styles.statBox}><Text style={styles.statNum}>3</Text><Text style={styles.statLbl}>Streak</Text></View>
-            <View style={styles.statBox}><Text style={styles.statNum}>1</Text><Text style={styles.statLbl}>Today</Text></View>
+        <View style={styles.statBox}><Text style={styles.statNum}>{summary?.totalActivities || 0}</Text><Text style={styles.statLbl}>Completed</Text></View>
+        <View style={styles.statBox}><Text style={styles.statNum}>{summary?.totalComments || 0}</Text><Text style={styles.statLbl}>Comments</Text></View>
+        <View style={styles.statBox}><Text style={styles.statNum}>{summary?.streak || 0}</Text><Text style={styles.statLbl}>Streak</Text></View>
+        <View style={styles.statBox}><Text style={styles.statNum}>{summary?.today || 0}</Text><Text style={styles.statLbl}>Today</Text></View>
           </View>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>
-            {role === "patient" ? "Activity History" : "Patient Activity History"}
+        {role === "patient" ? "Activity History" : "Patient Activity History"}
           </Text>
-
-          <View style={styles.historyItem}><Text>📅 Date</Text><Text>Exercise</Text></View>
-          <View style={styles.historyItem}><Text>📅 Date</Text><Text>Exercise</Text></View>
-          <View style={styles.historyItem}><Text>📅 Date</Text><Text>Exercise</Text></View>
-          <View style={styles.historyItem}><Text>📅 Date</Text><Text>Exercise</Text></View>
+          {activities.map((activity, index) => (
+        <View key={index} style={styles.historyItem}>
+          <Text>📅 {activity.date_performed || "N/A"}</Text>
+          <Text>{activity.name || "Exercise"}</Text>
+        </View>
+          ))}
         </View>
       </View>
 
