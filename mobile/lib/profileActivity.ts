@@ -12,6 +12,8 @@ import {
 import { db } from "./firebase";
 import { UserActivity } from "./temp";
 import { format, isSameDay, subDays } from "date-fns";
+import { UserData } from "./temp";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type ActivitySummary = {
   totalActivities: number;
@@ -28,6 +30,8 @@ export type CommentData = {
   date: string;
   comment: string;
 }
+
+const USER_KEY = "selectedRole"
 
 export async function getActivitiesFromEmail(email: string) {
   const db = getFirestore();
@@ -115,4 +119,17 @@ export async function getUserActivities(uid: string): Promise<UserActivity[]> {
     if (!userDoc.exists()) return "Unknown User";
     const userData = userDoc.data();
     return userData.name || "Unnamed User";
+  }
+
+  export async function setSelectedUser(uid: string): Promise<void> {
+    await AsyncStorage.setItem(USER_KEY, uid);
+  }
+
+  export async function getSelectedUser(): Promise<string | null> {
+    const v = AsyncStorage.getItem(USER_KEY);
+    return v;
+  }
+
+  export async function clearSelectedUser() {
+    await AsyncStorage.removeItem(USER_KEY);
   }
