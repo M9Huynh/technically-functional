@@ -1,36 +1,87 @@
-import React from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Text, StyleSheet, TextInput, Alert } from "react-native";
+import { registerPatient } from "../../lib/authService";
+import { useRouter } from "expo-router";
+import ScreenContainer from "../../components/screenContainer";
+import AppLogo from "../../components/appLogo";
+import PrimaryButton from "../../components/primaryButton";
 
 export default function CreatePatient() {
   const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
+  const [loading, setLoading] = useState(false);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Create Patient Account</Text>
-        <Text style={styles.text}>Form later. Next: invite code.</Text>
+    <ScreenContainer>
+      <AppLogo small />
 
-        <Link href="/(auth)/invite-code" asChild>
-          <Pressable style={styles.btn}>
-            <Text style={styles.btnText}>Continue</Text>
-          </Pressable>
-        </Link>
+      <Text style={styles.title}>Create Account - Patient</Text>
 
-        <Pressable style={[styles.btn, { marginTop: 10 }]} onPress={() => router.back()}>
-          <Text style={styles.btnText}>Back</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+      <Text style={styles.label}>Full Name</Text>
+      <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Your name" />
+
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        placeholder="example@mcmaster.ca"
+        autoCapitalize="none"
+      />
+
+      <Text style={styles.label}>Password</Text>
+      <TextInput
+        style={styles.input}
+        value={password}
+        onChangeText={setPassword}
+        placeholder="********"
+        secureTextEntry
+      />
+
+      <Text style={styles.label}>Invite Code (required)</Text>
+      <TextInput
+        style={styles.input}
+        value={inviteCode}
+        onChangeText={setInviteCode}
+        placeholder="3XAMPLE"
+        autoCapitalize="characters"
+      />
+
+      <PrimaryButton
+        label="Create Account"
+       onPress={async () => {
+        try {
+          setLoading(true);
+          await registerPatient({
+            name,
+            email,
+            password,
+            inviteCode,
+          });
+          router.replace("/(tabs)");
+        } catch (e: any) {
+          Alert.alert("Create Account Failed", e?.message ?? "Unknown error");
+        } finally {
+          setLoading(false);
+        }
+      }}
+      style={{ marginTop: 18 }}
+      />
+
+      <PrimaryButton
+        label="Back"
+        onPress={() => router.back()}
+        style={{ marginTop: 10, backgroundColor: "#444" }}
+      />
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fff" },
-  container: { flex: 1, padding: 20, justifyContent: "center" },
-  title: { fontSize: 28, fontWeight: "700", marginBottom: 10, textAlign: "center" },
-  text: { textAlign: "center", color: "#666" },
-  btn: { backgroundColor: "#222", padding: 12, borderRadius: 10, marginTop: 20, alignItems: "center" },
-  btnText: { color: "#fff", fontWeight: "600" },
+  title: { fontSize: 20, fontWeight: "800", textAlign: "center", marginBottom: 8 },
+  label: { fontSize: 14, color: "#333", marginTop: 12, marginBottom: 6 },
+  input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 12, padding: 12 },
 });
