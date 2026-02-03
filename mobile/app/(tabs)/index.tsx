@@ -3,16 +3,20 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { logout } from "../../lib/authService";
 import { getUserRole, clearUserRole, UserRole } from "../../lib/roleStore";
+import { UserData, getCurrentUser } from "../../lib/temp";
 
 export default function Home() {
   const router = useRouter();
 
   const [role, setRole] = useState<UserRole>("patient"); // default is fine
   const [roleReady, setRoleReady] = useState(false);
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
     (async () => {
       const saved = await getUserRole();
+      const currentUser = await getCurrentUser();
+      setUserData(currentUser);
       if (saved) setRole(saved);
       setRoleReady(true);
     })();
@@ -39,7 +43,7 @@ export default function Home() {
         </Pressable>
       </View>
 
-      <Text style={styles.welcome}>Welcome, User!</Text>
+      <Text style={styles.welcome}>Welcome, {userData?.name}!</Text>
 
       <View style={styles.row}>
         <View style={styles.card}>

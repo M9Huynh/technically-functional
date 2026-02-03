@@ -7,9 +7,9 @@ import {
   getDocs,
 } from "firebase/firestore";
 
-export async function fetchActivityHsitory(uid: string) {
+export async function getActivitiesFromEmail(email: string) {
   const db = getFirestore();
-  const historyCol = collection(db, "activityHistory");
-  const q = query(historyCol, where("userId", "==", uid));
+  const historyCol = collection(db, "activities");
+  const q = query(historyCol, where("email", "==", email));
   const querySnapshot = await getDocs(q);
 }

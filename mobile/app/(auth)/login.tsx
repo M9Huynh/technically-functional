@@ -6,7 +6,7 @@ import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
 import { setUserRole } from "../../lib/roleStore";
-import { setUserId } from "@/lib/userStore";
+import { setUserEmail } from "@/lib/emailStore";
 
 type Role = "patient" | "physio";
 
@@ -52,7 +52,10 @@ export default function Login() {
           try {
             // persist role so tabs/home can use it
             await setUserRole(role);
-            await setUserId(email);
+
+            // persist email so tabs/home can use it
+            await setUserEmail(email);
+
             await login(email, password);
             router.replace("/(tabs)");
           } catch (e: any) {
