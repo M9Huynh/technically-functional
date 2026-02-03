@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   logoutBtn: { backgroundColor: "#eee", paddingVertical: 6, paddingHorizontal: 12, borderRadius: 12 },
   logoutText: { fontSize: 12, fontWeight: "700", color: "#333" },
   row: { flexDirection: "row", gap: 12, marginTop: 18 },
-  card: { flex: 1, borderRadius: 14, backgroundColor: "#f4f4f4", padding: 12 },
+  card: { flex: 1, borderRadius: 14, backgroundColor: "#f4f4f4", padding: 5 },
   cardTitle: { fontWeight: "800", marginBottom: 10 },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   statBox: { width: "47%", backgroundColor: "#fff", borderRadius: 12, padding: 10, alignItems: "center" },

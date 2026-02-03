@@ -43,8 +43,8 @@ export async function getUserActivities(uid: string): Promise<UserActivity[]> {
     const activities = await getUserActivities(uid);
     return {
       totalActivities: activities.length,
-      totalComments: 0, // This would be calculated from comments in the database
-      streak: 0, // This would be calculated from activity dates
+      totalComments: 0, // This would be calculated from comments in the database TODO
+      streak: 0, // This would be calculated from activity dates TODO
       today: activities.filter(a => a.date_performed === new Date().toISOString().split('T')[0]).length,
     };
   }
