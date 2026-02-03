@@ -15,10 +15,10 @@ export default function ExerciseDetail() {
     return all.find((x) => x.id === id);
   }, [id]);
 
-  // Only load a real video for single-leg-raises for now
+  // Only load a real video for exercise_demo_vid for now
   const videoSource =
-    id === "single-leg-raises"
-      ? require("../../assets/videos/single-leg-raises.mp4")
+    id === "exercise_demo_vid"
+      ? require("../../assets/videos/exercise_demo_vid.mp4")
       : null;
 
   const player = useVideoPlayer(videoSource ?? undefined, (p) => {
@@ -51,8 +51,8 @@ export default function ExerciseDetail() {
       <Text style={styles.title}>{exercise.title}</Text>
       {!!exercise.subtitle && <Text style={styles.subtitle}>{exercise.subtitle}</Text>}
 
-      {/* VIDEO (only for single-leg-raises for now) */}
-      {id === "single-leg-raises" && (
+      {/* VIDEO (only for exercise_demo_vid for now) */}
+      {id === "exercise_demo_vid" && (
         <View style={styles.videoWrap}>
           <VideoView
             style={styles.video}
