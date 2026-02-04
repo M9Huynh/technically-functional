@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 import { exerciseChartData, repsChartData } from "../../lib/profileActivity";
-import { getCurrentUser } from "@/lib/temp";
+import { getCurrentUser } from "@/lib/profileActivity";
 
 export default function Progress() {
   const [repsData, setRepsData] = useState<{ label: string; value: number }[]>([]);

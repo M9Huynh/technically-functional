@@ -3,32 +3,73 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { logout } from "../../lib/authService";
 import { getUserRole, clearUserRole, UserRole } from "../../lib/roleStore";
-import { UserData, getCurrentUser } from "../../lib/temp";
+import {
+  getCurrentUser,
+  getSelectedUserID,
+  setSelectedUserID,
+} from "../../lib/profileActivity";
+import userAccount, { UserData } from "@/lib/useraccount";
 import { getUserActivities, getUserSummary } from "../../lib/profileActivity";
+import { UserAccountService } from "@/lib/useraccount";
 
 export default function Home() {
   const router = useRouter();
+  const uas = new UserAccountService();
 
   const [role, setRole] = useState<UserRole>("patient"); // default is fine
   const [roleReady, setRoleReady] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [activities, setActivities] = useState<any[]>([]);
   const [summary, setSummary] = useState<any>(null);
+  const [patients, setPatients] = useState<UserData[]>([]);
+  const [selectedPatient, setStateSelectedPatient] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     (async () => {
-      const saved = await getUserRole();
+      const savedRole = await getUserRole();
+      if (savedRole) setRole(savedRole);
+
       const currentUser = await getCurrentUser();
       setUserData(currentUser);
-      const acts = currentUser ? await getUserActivities(currentUser.uid) : [];
-      setActivities(acts);
+
       const sum = currentUser ? await getUserSummary(currentUser.uid) : null;
       setSummary(sum);
-
-      if (saved) setRole(saved);
+      
       setRoleReady(true);
     })();
   }, []);
+
+  useEffect(() => {
+    if (role !== "physio" || !userData?.uid) return;
+
+    (async () => {
+      setPatients(await uas.getPatientsByPhysio(userData.uid));
+    }
+    )
+  }, [roleReady, role, userData?.uid]);
+
+  useEffect(() => {
+    if (!userData?.uid) return;
+
+    (async () => {
+      if (role === "patient")
+        setActivities(await getUserActivities(userData.uid));
+      else if (selectedPatient) {
+          setActivities(await getUserActivities(selectedPatient));
+        }
+      }
+    )
+  }, [role, userData?.uid, selectedPatient]);
+
+  useEffect(() => {
+    if (role !== "patient" || !userData?.uid) return;
+
+    (async () => {
+      setSummary(await getUserSummary(userData.uid));
+    })
+  }, [role, userData?.uid]);
 
   if (!roleReady) {
     return <View style={styles.container} />;
@@ -58,32 +99,43 @@ export default function Home() {
           <Text style={styles.cardTitle}>
             {role === "patient" ? "Your Stats" : "Overall Stats"}
           </Text>
-          {role === "patient" ?
-          <View style={styles.statsGrid}>
-            <View style={styles.statBox}>
-              <Text style={styles.statNum}>
-                {summary?.totalActivities || 0}
-              </Text>
-              <Text style={styles.statLbl}>Completed</Text>
+          {role === "patient" ? (
+            <View style={styles.statsGrid}>
+              <View style={styles.statBox}>
+                <Text style={styles.statNum}>
+                  {summary?.totalActivities || 0}
+                </Text>
+                <Text style={styles.statLbl}>Completed</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statNum}>
+                  {summary?.totalComments || 0}
+                </Text>
+                <Text style={styles.statLbl}>Comments</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statNum}>{summary?.streak || 0}</Text>
+                <Text style={styles.statLbl}>Streak</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statNum}>{summary?.today || 0}</Text>
+                <Text style={styles.statLbl}>Today</Text>
+              </View>
             </View>
-            <View style={styles.statBox}>
-              <Text style={styles.statNum}>{summary?.totalComments || 0}</Text>
-              <Text style={styles.statLbl}>Comments</Text>
-            </View>
-            <View style={styles.statBox}>
-              <Text style={styles.statNum}>{summary?.streak || 0}</Text>
-              <Text style={styles.statLbl}>Streak</Text>
-            </View>
-            <View style={styles.statBox}>
-              <Text style={styles.statNum}>{summary?.today || 0}</Text>
-              <Text style={styles.statLbl}>Today</Text>
-            </View>
-          </View>
-          :
-          <View style={styles.historyItem}>
-            <Text>No Style On It</Text>
-          </View>
-}         
+          ) : (
+            patients.map((patient) => (
+              <Pressable
+                key={patient.uid}
+                style={styles.historyItem}
+                onPress={() => {
+                  setSelectedUserID(patient.uid);
+                  setStateSelectedPatient(patient.uid);
+                }}
+              >
+                <Text>{patient.name}</Text>
+              </Pressable>
+            ))
+          )}
         </View>
 
         <View style={styles.card}>
@@ -95,7 +147,7 @@ export default function Home() {
           {activities.map((activity, index) => (
             <View key={index} style={styles.historyItem}>
               <Text>📅 {activity.date_performed || "N/A"}</Text>
-              <Text>{activity.name || "Exercise"}</Text>
+              <Text>{activity.exercise || "Exercise"}</Text>
             </View>
           ))}
         </View>

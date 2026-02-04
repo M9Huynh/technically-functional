@@ -9,13 +9,14 @@ import {
   KeyboardAvoidingView,
   TextInput,
 } from "react-native";
-import { UserData, getCurrentUser } from "../../lib/temp";
+import { UserData } from "../../lib/useraccount";
 import {
   getComments,
   getUserActivities,
   CommentData,
   postComment,
   getName,
+  getCurrentUser
 } from "../../lib/profileActivity";
 
 export default function Feedback() {

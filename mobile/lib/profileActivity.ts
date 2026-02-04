@@ -9,10 +9,10 @@ import {
   setDoc,
   addDoc,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { auth, db } from "./firebase";
 import { UserActivity } from "./temp";
 import { format, isSameDay, subDays } from "date-fns";
-import { UserData } from "./temp";
+import { UserData } from "./useraccount";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type ActivitySummary = {
@@ -32,6 +32,22 @@ export type CommentData = {
 }
 
 const USER_KEY = "selectedRole"
+
+export async function getCurrentUser(): Promise<UserData | null> {
+  const user = auth.currentUser;
+  if (!user) return null;
+
+  try {
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (!userDoc.exists()) return null;
+
+    const userData = userDoc.data() as Omit<UserData, "uid">;
+    return { uid: user.uid, ...userData };
+  } catch (error) {
+    console.error("Error getting current user:", error);
+    return null;
+  }
+}
 
 export async function getActivitiesFromEmail(email: string) {
   const db = getFirestore();

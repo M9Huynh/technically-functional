@@ -21,7 +21,7 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
-
+import {auth, db} from './firebase'
 // FIREBASE CONFIGURATION 
 
 const firebaseConfig = {
@@ -33,13 +33,9 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "your-app-id"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
 // TYPES & INTERFACES 
 
-export interface UserAccountData {
+export interface UserData {
   uid: string;
   acc_id: number;
   email: string;
@@ -362,7 +358,7 @@ export class UserAccountService {
 
   // AUTHENTICATION FUNCTIONS
 
-  async login(email: string, password: string): Promise<UserAccountData> {
+  async login(email: string, password: string): Promise<UserData> {
     if (!email || !password) {
       throw new UserAccountFieldEmptyError("Email and password are required");
     }
@@ -380,7 +376,7 @@ export class UserAccountService {
         throw new UserAccountNotFoundError("User profile does not exist");
       }
 
-      const userData = userDoc.data() as Omit<UserAccountData, "uid">;
+      const userData = userDoc.data() as Omit<UserData, "uid">;
       
       if (!userData.acc_id) {
         const acc_id = await this.getUniqueAccId();
@@ -420,7 +416,7 @@ export class UserAccountService {
     password: string;
     licenseNumber: string;
     birthday?: string;
-  }): Promise<UserAccountData> {
+  }): Promise<UserData> {
     if (!params.name || !params.email || !params.password || !params.licenseNumber) {
       throw new UserAccountFieldEmptyError("All fields are required");
     }
@@ -467,7 +463,7 @@ export class UserAccountService {
     );
     const uid = cred.user.uid;
 
-    const userData: Omit<UserAccountData, "uid"> = {
+    const userData: Omit<UserData, "uid"> = {
       acc_id,
       email: params.email.trim().toLowerCase(),
       name: params.name.trim(),
@@ -491,7 +487,7 @@ export class UserAccountService {
     password: string;
     inviteCode: string;
     birthday: string;
-  }): Promise<UserAccountData> {
+  }): Promise<UserData> {
     if (!params.name || !params.email || !params.password || !params.inviteCode || !params.birthday) {
       throw new UserAccountFieldEmptyError("All fields are required");
     }
@@ -543,7 +539,7 @@ export class UserAccountService {
     );
     const uid = cred.user.uid;
 
-    const userData: Omit<UserAccountData, "uid"> = {
+    const userData: Omit<UserData, "uid"> = {
       acc_id,
       email: params.email.trim().toLowerCase(),
       name: params.name.trim(),
@@ -578,7 +574,7 @@ export class UserAccountService {
 
   // USER MANAGEMENT FUNCTIONS
 
-  async getUserByAccId(acc_id: number): Promise<UserAccountData | null> {
+  async getUserByAccId(acc_id: number): Promise<UserData | null> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const q = query(usersRef, where("acc_id", "==", acc_id));
@@ -587,7 +583,7 @@ export class UserAccountService {
       if (snapshot.empty) return null;
 
       const doc = snapshot.docs[0];
-      const userData = doc.data() as Omit<UserAccountData, "uid">;
+      const userData = doc.data() as Omit<UserData, "uid">;
       return { uid: doc.id, ...userData };
     } catch (error) {
       console.error("Error getting user by acc_id:", error);
@@ -595,7 +591,7 @@ export class UserAccountService {
     }
   }
 
-  async getUserByEmail(email: string): Promise<UserAccountData | null> {
+  async getUserByEmail(email: string): Promise<UserData | null> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const q = query(usersRef, where("email", "==", email.trim().toLowerCase()));
@@ -604,7 +600,7 @@ export class UserAccountService {
       if (snapshot.empty) return null;
 
       const doc = snapshot.docs[0];
-      const userData = doc.data() as Omit<UserAccountData, "uid">;
+      const userData = doc.data() as Omit<UserData, "uid">;
       return { uid: doc.id, ...userData };
     } catch (error) {
       console.error("Error getting user by email:", error);
@@ -617,14 +613,14 @@ export class UserAccountService {
     return user !== null;
   }
 
-  async updateUser(userData: UserAccountData): Promise<boolean> {
+  async updateUser(userData: UserData): Promise<boolean> {
     try {
       const existingUser = await this.getUserByAccId(userData.acc_id);
       if (!existingUser) {
         throw new UserAccountNotFoundError(`No user found with acc_id: ${userData.acc_id}`);
       }
 
-      const updateData: Partial<UserAccountData> = {
+      const updateData: Partial<UserData> = {
         name: userData.name,
         email: userData.email,
         birthday: userData.birthday,
@@ -686,7 +682,7 @@ export class UserAccountService {
 
   // QUERY FUNCTIONS
 
-  async getPatientsByPhysio(physioId: string): Promise<UserAccountData[]> {
+  async getPatientsByPhysio(physioId: string): Promise<UserData[]> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const q = query(
@@ -696,9 +692,9 @@ export class UserAccountService {
       );
       const snapshot = await getDocs(q);
 
-      const patients: UserAccountData[] = [];
+      const patients: UserData[] = [];
       snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserAccountData, "uid">;
+        const userData = doc.data() as Omit<UserData, "uid">;
         patients.push({ uid: doc.id, ...userData });
       });
 
@@ -709,16 +705,16 @@ export class UserAccountService {
     }
   }
 
-  async getUsersByName(name: string): Promise<UserAccountData[]> {
+  async getUsersByName(name: string): Promise<UserData[]> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const snapshot = await getDocs(usersRef);
 
       const searchTerm = name.toLowerCase().trim();
-      const users: UserAccountData[] = [];
+      const users: UserData[] = [];
 
       snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserAccountData, "uid">;
+        const userData = doc.data() as Omit<UserData, "uid">;
         if (userData.name.toLowerCase().includes(searchTerm)) {
           users.push({ uid: doc.id, ...userData });
         }
@@ -731,14 +727,14 @@ export class UserAccountService {
     }
   }
 
-  async getAllUsers(): Promise<UserAccountData[]> {
+  async getAllUsers(): Promise<UserData[]> {
     try {
       const usersRef = collection(db, this.usersCollection);
       const snapshot = await usersRef.get();
 
-      const users: UserAccountData[] = [];
+      const users: UserData[] = [];
       snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserAccountData, "uid">;
+        const userData = doc.data() as Omit<UserData, "uid">;
         users.push({ uid: doc.id, ...userData });
       });
 
@@ -752,7 +748,7 @@ export class UserAccountService {
 
   // SPECIALIZED FUNCTIONS
 
-  async getUserdbInfo(name: string, birthday?: string): Promise<{ patients: UserAccountData[]; physios: UserAccountData[] }> {
+  async getUserdbInfo(name: string, birthday?: string): Promise<{ patients: UserData[]; physios: UserData[] }> {
     try {
       let usersRef = collection(db, this.usersCollection);
       let q = query(usersRef, where("name", "==", name));
@@ -763,9 +759,9 @@ export class UserAccountService {
 
       const snapshot = await getDocs(q);
 
-      const userAccounts: UserAccountData[] = [];
+      const userAccounts: UserData[] = [];
       snapshot.forEach((doc) => {
-        const userData = doc.data() as Omit<UserAccountData, "uid">;
+        const userData = doc.data() as Omit<UserData, "uid">;
         userAccounts.push({ uid: doc.id, ...userData });
       });
 
@@ -773,8 +769,8 @@ export class UserAccountService {
         throw new UserAccountNotFoundError(`No user found with name: ${name}`);
       }
 
-      const patients: UserAccountData[] = [];
-      const physios: UserAccountData[] = [];
+      const patients: UserData[] = [];
+      const physios: UserData[] = [];
 
       userAccounts.forEach(userData => {
         if (userData.role === 'patient') {
@@ -875,7 +871,7 @@ export class UserAccountService {
     }
   }
 
-  async authenticateUser(email: string, password: string): Promise<UserAccountData | null> {
+  async authenticateUser(email: string, password: string): Promise<UserData | null> {
     try {
       if (await this.usernamePwMatch(email, password)) {
         return await this.getUserByEmail(email);

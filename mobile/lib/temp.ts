@@ -1,20 +1,6 @@
 import { auth, db } from "./firebase";
 import { getDoc, doc, getDocs } from "firebase/firestore";
-
-export interface UserData {
-  uid: string;
-  acc_id: number;
-  email: string;
-  name: string;
-  role: "patient" | "physio";
-  birthday?: string; // ISO format: "1990-01-01"
-  licenseNumber?: string; // For physios only
-  verified?: boolean; // For physios only
-  physioId?: string; // For patients only - linking to their physio
-  inviteCode?: string; // For patients only
-  createdAt?: any;
-  updatedAt?: any;
-}
+import { UserData } from "./useraccount"
 
 export interface UserActivity {
     actid: string;

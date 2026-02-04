@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { UserData } from "../../lib/temp";
-import { getCurrentUser } from "../../lib/temp";
+import { UserData } from "../../lib/useraccount";
+import { getCurrentUser } from "../../lib/profileActivity";
 
 export default function Profile() {
 
