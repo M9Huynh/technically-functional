@@ -121,15 +121,15 @@ export async function getUserActivities(uid: string): Promise<UserActivity[]> {
     return userData.name || "Unnamed User";
   }
 
-  export async function setSelectedUser(uid: string): Promise<void> {
+  export async function setSelectedUserID(uid: string): Promise<void> {
     await AsyncStorage.setItem(USER_KEY, uid);
   }
 
-  export async function getSelectedUser(): Promise<string | null> {
+  export async function getSelectedUserID(): Promise<string | null> {
     const v = AsyncStorage.getItem(USER_KEY);
     return v;
   }
 
-  export async function clearSelectedUser() {
+  export async function clearSelectedUserID() {
     await AsyncStorage.removeItem(USER_KEY);
   }
