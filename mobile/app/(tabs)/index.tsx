@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { logout } from "../../lib/authService";
 import { getUserRole, clearUserRole, UserRole } from "../../lib/roleStore";
 import {
+  clearSelectedUserID,
   getCurrentUser,
   getSelectedUserID,
   setSelectedUserID,
@@ -84,6 +85,8 @@ export default function Home() {
           onPress={async () => {
             await logout();
             await clearUserRole();
+            await clearSelectedUserID();
+            console.log(await getSelectedUserID());
             router.replace("/(auth)/role-select");
           }}
         >

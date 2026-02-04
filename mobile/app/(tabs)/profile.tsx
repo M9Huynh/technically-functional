@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { UserData } from "../../lib/useraccount";
-import { getCurrentUser } from "../../lib/profileActivity";
+import { getCurrentUser, getSelectedUser } from "../../lib/profileActivity";
+import { getUserRole, UserRole } from "@/lib/roleStore";
 
 export default function Profile() {
-
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [role, setRole] = useState<UserRole>("patient");
+  const [roleReady, setRoleReady] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
-      const currentUser = await getCurrentUser();
-      setUserData(currentUser);
+      const r = await getUserRole();
+      if (r) setRole(r);
+      setRoleReady(true);
     })();
   }, []);
+
+  useEffect(() => {
+    if (!roleReady) return;
+    (async () => {
+      if (role === "patient") setUserData(await getCurrentUser())
+      else setUserData(await getSelectedUser())
+    })();
+  }, [role, roleReady]);
 
   return (
     <View style={styles.container}>
@@ -23,16 +34,36 @@ export default function Profile() {
       <Text style={styles.subtitle}>E-Mail</Text>
       <Text style={styles.text}>{userData?.email || "No email available"}</Text>
       <Text style={styles.subtitle}>Birthday</Text>
-      <Text style={styles.text}>{new Date(userData?.birthday + "T12:00:00" || 0).toLocaleDateString(undefined, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) || "No birthday available"}</Text>
+      <Text style={styles.text}>
+        {new Date(userData?.birthday + "T12:00:00" || 0).toLocaleDateString(
+          undefined,
+          { weekday: "long", year: "numeric", month: "long", day: "numeric" },
+        ) || "No birthday available"}
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
-  headerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
   logo: { fontSize: 34, fontWeight: "800" },
-  title: { fontSize: 22, fontWeight: "800", marginBottom: 10, justifyContent: "center", textAlign: "center" },
-  subtitle: { fontSize: 18, fontWeight: "600", marginTop: 20, marginBottom: 10 },
-  text: { color: "#666", fontSize: 16},
+  title: {
+    fontSize: 22,
+    fontWeight: "800",
+    marginBottom: 10,
+    justifyContent: "center",
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  text: { color: "#666", fontSize: 16 },
 });
