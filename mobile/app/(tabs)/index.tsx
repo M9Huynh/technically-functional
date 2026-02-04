@@ -96,7 +96,7 @@ export default function Home() {
       <View style={styles.row}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>
-            {role === "patient" ? "Your Stats" : "Overall Stats"}
+            {role === "patient" ? "Your Stats" : "Linked Patients"}
           </Text>
           {role === "patient" ? (
             <View style={styles.statsGrid}>
@@ -122,18 +122,33 @@ export default function Home() {
               </View>
             </View>
           ) : (
-            patients.map((patient) => (
-              <Pressable
-                key={patient.uid}
-                style={styles.historyItem}
-                onPress={() => {
-                  setSelectedUserID(patient.uid);
-                  setStateSelectedPatient(patient.uid);
-                }}
-              >
-                <Text>{patient.name}</Text>
-              </Pressable>
-            )))}
+            patients.map((patient) => {
+              const isSelected = patient.uid === selectedPatient;
+
+              return (
+                <Pressable
+                  key={patient.uid}
+                  onPress={() => {
+                    setSelectedUserID(patient.uid); // persistent storage
+                    setStateSelectedPatient(patient.uid); // UI state
+                  }}
+                  style={[
+                    styles.historyItem,
+                    isSelected && styles.selectedItem,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.patientName,
+                      isSelected && styles.selectedText,
+                    ]}
+                  >
+                    {patient.name}
+                  </Text>
+                </Pressable>
+              );
+            })
+          )}
         </View>
 
         <View style={styles.card}>
@@ -230,5 +245,20 @@ const styles = StyleSheet.create({
   refreshText: {
     fontWeight: "700",
     color: "#333",
+  },
+  selectedItem: {
+    backgroundColor: "#222",
+    borderWidth: 2,
+    borderColor: "#000",
+  },
+
+  patientName: {
+    fontWeight: "600",
+    color: "#333",
+  },
+
+  selectedText: {
+    color: "#fff",
+    fontWeight: "800",
   },
 });

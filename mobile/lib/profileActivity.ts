@@ -14,6 +14,7 @@ import { UserActivity } from "./temp";
 import { format, isSameDay, subDays } from "date-fns";
 import { UserData } from "./useraccount";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserAccountService } from "./useraccount";
 
 export type ActivitySummary = {
   totalActivities: number;
@@ -32,6 +33,7 @@ export type CommentData = {
 }
 
 const USER_KEY = "selectedRole"
+const uas = new UserAccountService();
 
 export async function getCurrentUser(): Promise<UserData | null> {
   const user = auth.currentUser;
@@ -47,6 +49,12 @@ export async function getCurrentUser(): Promise<UserData | null> {
     console.error("Error getting current user:", error);
     return null;
   }
+}
+
+export async function getCurrentUserID(): Promise<string | null> {
+  const user = auth.currentUser;
+  if (!user) return null;
+  return user.uid;
 }
 
 export async function getActivitiesFromEmail(email: string) {
@@ -144,6 +152,19 @@ export async function getUserActivities(uid: string): Promise<UserActivity[]> {
   export async function getSelectedUserID(): Promise<string | null> {
     const v = AsyncStorage.getItem(USER_KEY);
     return v;
+  }
+
+  export async function getSelectedUser(): Promise<UserData | null> {
+    try {
+    const userDoc = await getDoc(doc(db, "users", USER_KEY));
+    if (!userDoc.exists()) return null;
+
+    const userData = userDoc.data() as Omit<UserData, "uid">;
+    return { uid: USER_KEY, ...userData };
+  } catch (error) {
+    console.error("Error getting current user:", error);
+    return null;
+  }
   }
 
   export async function clearSelectedUserID() {
