@@ -25,6 +25,7 @@ export default function Home() {
   const [selectedPatient, setStateSelectedPatient] = useState<string | null>(
     null,
   );
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -36,19 +37,18 @@ export default function Home() {
 
       const sum = currentUser ? await getUserSummary(currentUser.uid) : null;
       setSummary(sum);
-      
+
       setRoleReady(true);
     })();
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => {
     if (role !== "physio" || !userData?.uid) return;
 
     (async () => {
       setPatients(await uas.getPatientsByPhysio(userData.uid));
-    }
-    )
-  }, [roleReady, role, userData?.uid]);
+    })();
+  }, [roleReady, role, userData?.uid, refreshKey]);
 
   useEffect(() => {
     if (!userData?.uid) return;
@@ -57,19 +57,18 @@ export default function Home() {
       if (role === "patient")
         setActivities(await getUserActivities(userData.uid));
       else if (selectedPatient) {
-          setActivities(await getUserActivities(selectedPatient));
-        }
+        setActivities(await getUserActivities(selectedPatient));
       }
-    )
-  }, [role, userData?.uid, selectedPatient]);
+    })();
+  }, [role, userData?.uid, selectedPatient, refreshKey]);
 
   useEffect(() => {
     if (role !== "patient" || !userData?.uid) return;
 
     (async () => {
       setSummary(await getUserSummary(userData.uid));
-    })
-  }, [role, userData?.uid]);
+    })();
+  }, [role, userData?.uid, refreshKey]);
 
   if (!roleReady) {
     return <View style={styles.container} />;
@@ -134,8 +133,7 @@ export default function Home() {
               >
                 <Text>{patient.name}</Text>
               </Pressable>
-            ))
-          )}
+            )))}
         </View>
 
         <View style={styles.card}>
@@ -163,6 +161,12 @@ export default function Home() {
         <Text style={styles.bigBtnText}>
           {role === "patient" ? "Record Exercise" : "Edit Patient"}
         </Text>
+      </Pressable>
+      <Pressable
+        style={styles.refreshBtn}
+        onPress={() => setRefreshKey((k) => k + 1)}
+      >
+        <Text style={styles.refreshText}>🔄 Refresh</Text>
       </Pressable>
     </View>
   );
@@ -214,4 +218,17 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
   bigBtnText: { color: "#fff", fontWeight: "800" },
+  refreshBtn: {
+    alignSelf: "center",
+    marginTop: 14,
+    backgroundColor: "#eaeaea",
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 14,
+  },
+
+  refreshText: {
+    fontWeight: "700",
+    color: "#333",
+  },
 });
