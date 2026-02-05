@@ -16,25 +16,37 @@ import {
   CommentData,
   postComment,
   getName,
-  getCurrentUser
+  getCurrentUser,
+  getSelectedUser,
 } from "../../lib/profileActivity";
+import { getUserRole, UserRole } from "@/lib/roleStore";
 
 export default function Feedback() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [activities, setActivities] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<any | null>(null);
+  const [role, setRole] = useState<UserRole>("patient");
 
   useEffect(() => {
     (async () => {
+      const r = await getUserRole();
+      if (r) setRole(r);
+
       const currentUser = await getCurrentUser();
-      setUserData(currentUser);
-      if (currentUser) {
-        const acts = await getUserActivities(currentUser.uid);
-        setActivities(acts);
-      }
+      const selectedUser = await getSelectedUser();
+      if (role === "patient") setUserData(currentUser);
+      else setUserData(selectedUser);
     })();
   }, []);
+
+  useEffect(() => {
+    if (!userData) return;
+    (async () => {
+      const acts = await getUserActivities(userData.uid);
+      setActivities(acts);
+    })();
+  }, [userData]);
 
   return (
     <View style={styles.container}>
@@ -52,7 +64,9 @@ export default function Feedback() {
           <Text style={styles.title}>{activity.exercise}</Text>
           <Text style={styles.leftText}>
             Completed On:{" "}
-            {new Date(activity.date_performed + "T12:00:00").toLocaleDateString()}
+            {new Date(
+              activity.date_performed + "T12:00:00",
+            ).toLocaleDateString()}
           </Text>
           <Text style={styles.leftText}>
             Reps: {activity.completed_reps || 0}
@@ -77,7 +91,6 @@ export default function Feedback() {
     </View>
   );
 }
-
 
 function ActivityModalContent({
   activity,
@@ -140,7 +153,6 @@ function ActivityModalContent({
   );
 }
 
-
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
   headerRow: {
@@ -176,7 +188,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 15,
   },
-    overlay: {
+  overlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",

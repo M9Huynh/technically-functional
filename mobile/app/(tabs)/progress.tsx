@@ -78,6 +78,9 @@ export default function Progress() {
   if (!selectedUser) {
     return (
       <View style={styles.container}>
+        <View style={styles.headerRow}>
+          <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+        </View>
         <Text style={styles.text}>Please select a patient on the Home page to begin.</Text>
       </View>
     );

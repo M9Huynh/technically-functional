@@ -20,8 +20,8 @@ export default function Profile() {
   useEffect(() => {
     if (!roleReady) return;
     (async () => {
-      if (role === "patient") setUserData(await getCurrentUser())
-      else setUserData(await getSelectedUser())
+      if (role === "patient") setUserData(await getCurrentUser());
+      else setUserData(await getSelectedUser());
     })();
   }, [role, roleReady]);
 
@@ -65,5 +65,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },
-  text: { color: "#666", fontSize: 16 },
+  text: { color: "#666", fontSize: 16, textAlign: "center" },
 });

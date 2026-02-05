@@ -175,7 +175,9 @@ export async function getSelectedUserID(): Promise<string | null> {
 }
 
 export async function getSelectedUser(): Promise<UserData | null> {
-  return uas.getUserData(USER_KEY);
+  const r = await AsyncStorage.getItem(USER_KEY)
+  if (!r) return null;
+  return uas.getUserData(r);
 }
 
 export async function clearSelectedUserID() {
