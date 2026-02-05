@@ -18,8 +18,9 @@ export default function ExerciseDetail() {
   // Only load a real video for exercise_demo_vid for now
   const videoSource =
     id === "exercise_demo_vid"
-      ? require("../../assets/videos/exercise_demo_vid.mp4")
-      : null;
+          ? require("../../assets/videos/exercise_demo_vid.mp4")
+          : null;
+    
 
   const player = useVideoPlayer(videoSource ?? undefined, (p) => {
     // runs when player is created
