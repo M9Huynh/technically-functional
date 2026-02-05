@@ -291,3 +291,5 @@ serviceAccountKey.json
 
 # Encrypted files (if you want to keep them private too)
 firebase.enc
+src/sample/left.mp4
+src/sample/right.mp4

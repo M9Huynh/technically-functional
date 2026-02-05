@@ -17,7 +17,8 @@ class FlaskPoseApp:
     def __init__(self):
         self.side = "RIGHT"
         self.pose_detect = mp.solutions.pose.Pose()
-        self.cam = PoseCamera(0, pose_detect=self.pose_detect) #change number based on what camera you are using (0 for webcam, 1 for external)
+        #self.cam = PoseCamera(0, pose_detect=self.pose_detect) #change number based on what camera you are using (0 for webcam, 1 for external)
+        self.cam = PoseCamera('src/sample/right.mp4', pose_detect=self.pose_detect)
         self.analyzer = Analyzer()
         self.analyzer.start_calibration(duration_s=10.0)
 
