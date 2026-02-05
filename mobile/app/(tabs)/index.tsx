@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Clipboard } from "react-native";
 import { useRouter } from "expo-router";
 import { logout } from "../../lib/authService";
 import { getUserRole, clearUserRole, UserRole } from "../../lib/roleStore";
 import {
   clearSelectedUserID,
   getCurrentUser,
+  getPhysioInviteCode,
   getSelectedUserID,
   setSelectedUserID,
 } from "../../lib/profileActivity";
@@ -26,7 +27,8 @@ export default function Home() {
   const [selectedPatient, setStateSelectedPatient] = useState<string | null>(
     null,
   );
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [invite, setInvite] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -41,15 +43,16 @@ export default function Home() {
 
       setRoleReady(true);
     })();
-  }, [refreshKey]);
+  }, []);
 
   useEffect(() => {
     if (role !== "physio" || !userData?.uid) return;
 
     (async () => {
       setPatients(await uas.getPatientsByPhysio(userData.uid));
+      setInvite(await getPhysioInviteCode(userData.uid));
     })();
-  }, [roleReady, role, userData?.uid, refreshKey]);
+  }, [roleReady, role, userData?.uid]);
 
   useEffect(() => {
     if (!userData?.uid) return;
@@ -61,7 +64,7 @@ export default function Home() {
         setActivities(await getUserActivities(selectedPatient));
       }
     })();
-  }, [role, userData?.uid, selectedPatient, refreshKey]);
+  }, [role, userData?.uid, selectedPatient]);
 
   useEffect(() => {
     if (role !== "patient" || !userData?.uid) return;
@@ -69,7 +72,7 @@ export default function Home() {
     (async () => {
       setSummary(await getUserSummary(userData.uid));
     })();
-  }, [role, userData?.uid, refreshKey]);
+  }, [role, userData?.uid]);
 
   if (!roleReady) {
     return <View style={styles.container} />;
@@ -86,7 +89,6 @@ export default function Home() {
             await logout();
             await clearUserRole();
             await clearSelectedUserID();
-            console.log(await getSelectedUserID());
             router.replace("/(auth)/role-select");
           }}
         >
@@ -180,12 +182,21 @@ export default function Home() {
           {role === "patient" ? "Record Exercise" : "Edit Patient"}
         </Text>
       </Pressable>
-      <Pressable
-        style={styles.refreshBtn}
-        onPress={() => setRefreshKey((k) => k + 1)}
-      >
-        <Text style={styles.refreshText}>🔄 Refresh</Text>
-      </Pressable>
+      {role === "physio" && invite && (
+        <View style={styles.inviteContainer}>
+          <Text style={styles.invite}>Invite Code: {invite}</Text>
+          <Pressable
+            style={styles.copyBtn}
+            onPress={() => {
+              Clipboard.setString(invite);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            }}
+          >
+            <Text style={styles.copyBtnText}>{copied ? "Copied!" : "Copy"}</Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }
@@ -263,5 +274,34 @@ const styles = StyleSheet.create({
   selectedText: {
     color: "#fff",
     fontWeight: "800",
+  },
+  text: {
+    color: "#666",
+    textAlign: "center",
+    justifyContent: "center",
+    fontSize: 16,
+    marginTop: 10,
+  },
+  inviteContainer: {
+    alignItems: "center",
+    marginTop: 20,
+  },
+  invite: {
+    textAlign: "center",
+    fontSize: 18,
+    color: "#444",
+    fontWeight: "600",
+    marginBottom: 10,
+  },
+  copyBtn: {
+    backgroundColor: "#177AD5",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  copyBtnText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 14,
   },
 });

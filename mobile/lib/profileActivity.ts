@@ -183,3 +183,12 @@ export async function getSelectedUser(): Promise<UserData | null> {
 export async function clearSelectedUserID() {
   await AsyncStorage.removeItem(USER_KEY);
 }
+
+export async function getPhysioInviteCode(physioID: string): Promise<string | null> {
+  const usersRef = await collection(db, "inviteCodes");
+  const q = query(usersRef, where("physioId", "==", physioID));
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return null;
+  const userDoc = snapshot.docs[0];
+  return userDoc.id || null;
+}
