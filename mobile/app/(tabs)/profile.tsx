@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { UserData } from "../../lib/useraccount";
 import { getCurrentUser, getSelectedUser } from "../../lib/profileActivity";
 import { getUserRole, UserRole } from "@/lib/roleStore";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Profile() {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -17,31 +18,48 @@ export default function Profile() {
     })();
   }, []);
 
-  useEffect(() => {
-    if (!roleReady) return;
-    (async () => {
-      if (role === "patient") setUserData(await getCurrentUser());
-      else setUserData(await getSelectedUser());
-    })();
-  }, [role, roleReady]);
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.headerRow}>
-        <Text style={styles.logo}>Physio{"\n"}Companion</Text>
-      </View>
-      <Text style={styles.title}>{userData?.name || ""}'s Profile</Text>
-      <Text style={styles.subtitle}>E-Mail</Text>
-      <Text style={styles.text}>{userData?.email || "No email available"}</Text>
-      <Text style={styles.subtitle}>Birthday</Text>
-      <Text style={styles.text}>
-        {new Date(userData?.birthday + "T12:00:00" || 0).toLocaleDateString(
-          undefined,
-          { weekday: "long", year: "numeric", month: "long", day: "numeric" },
-        ) || "No birthday available"}
-      </Text>
-    </View>
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!roleReady) return;
+      (async () => {
+        if (role === "patient") setUserData(await getCurrentUser());
+        else setUserData(await getSelectedUser());
+      })();
+    }, [role, roleReady]),
   );
+
+  if (role === "physio" && !userData) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerRow}>
+          <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+        </View>
+        <Text style={styles.text}>
+          Please select a patient on the Home page to begin.
+        </Text>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerRow}>
+          <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+        </View>
+        <Text style={styles.title}>{userData?.name || ""}'s Profile</Text>
+        <Text style={styles.subtitle}>E-Mail</Text>
+        <Text style={styles.text}>
+          {userData?.email || "No email available"}
+        </Text>
+        <Text style={styles.subtitle}>Birthday</Text>
+        <Text style={styles.text}>
+          {new Date(userData?.birthday + "T12:00:00" || 0).toLocaleDateString(
+            undefined,
+            { weekday: "long", year: "numeric", month: "long", day: "numeric" },
+          ) || "No birthday available"}
+        </Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
