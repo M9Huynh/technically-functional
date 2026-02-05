@@ -17,9 +17,10 @@ import {
   postComment,
   getName,
   getCurrentUser,
-  getSelectedUser,
+  getSelectedUserID,
 } from "../../lib/profileActivity";
 import { getUserRole, UserRole } from "@/lib/roleStore";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Feedback() {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -27,69 +28,89 @@ export default function Feedback() {
   const [visible, setVisible] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<any | null>(null);
   const [role, setRole] = useState<UserRole>("patient");
-
+  const [selectedUser, setSelectedUser] = useState<string>("");
   useEffect(() => {
     (async () => {
       const r = await getUserRole();
       if (r) setRole(r);
 
       const currentUser = await getCurrentUser();
-      const selectedUser = await getSelectedUser();
-      if (role === "patient") setUserData(currentUser);
-      else setUserData(selectedUser);
+      setUserData(currentUser);
     })();
   }, []);
 
-  useEffect(() => {
-    if (!userData) return;
-    (async () => {
-      const acts = await getUserActivities(userData.uid);
-      setActivities(acts);
-    })();
-  }, [userData]);
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>Physio{"\n"}Companion</Text>
-
-      {activities.map((activity, index) => (
-        <Pressable
-          key={index}
-          style={styles.card}
-          onPress={() => {
-            setSelectedActivity(activity);
-            setVisible(true);
-          }}
-        >
-          <Text style={styles.title}>{activity.exercise}</Text>
-          <Text style={styles.leftText}>
-            Completed On:{" "}
-            {new Date(
-              activity.date_performed + "T12:00:00",
-            ).toLocaleDateString()}
-          </Text>
-          <Text style={styles.leftText}>
-            Reps: {activity.completed_reps || 0}
-          </Text>
-        </Pressable>
-      ))}
-
-      <Modal visible={visible} animationType="slide" transparent>
-        <View style={styles.overlay}>
-          <View style={styles.modal}>
-            <ActivityModalContent
-              activity={selectedActivity}
-              userId={userData?.uid ?? ""}
-              onClose={() => {
-                setVisible(false);
-                setSelectedActivity(null);
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
-    </View>
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!userData) return;
+      (async () => {
+        if (role === "patient") {
+          setActivities(await getUserActivities(userData.uid));
+        } else {
+          const s = await getSelectedUserID();
+          if (s) {
+            setSelectedUser(s);
+            setActivities(await getUserActivities(s));
+          }
+        }
+      })();
+    }, [userData, role]),
   );
+
+  if (role === "physio" && !selectedUser) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerRow}>
+          <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+        </View>
+        <Text style={styles.text}>
+          Please select a patient on the Home page to begin.
+        </Text>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+
+        {activities.map((activity, index) => (
+          <Pressable
+            key={index}
+            style={styles.card}
+            onPress={() => {
+              setSelectedActivity(activity);
+              setVisible(true);
+            }}
+          >
+            <Text style={styles.title}>{activity.exercise}</Text>
+            <Text style={styles.leftText}>
+              Completed On:{" "}
+              {new Date(
+                activity.date_performed + "T12:00:00",
+              ).toLocaleDateString()}
+            </Text>
+            <Text style={styles.leftText}>
+              Reps: {activity.completed_reps || 0}
+            </Text>
+          </Pressable>
+        ))}
+
+        <Modal visible={visible} animationType="slide" transparent>
+          <View style={styles.overlay}>
+            <View style={styles.modal}>
+              <ActivityModalContent
+                activity={selectedActivity}
+                userId={userData?.uid ?? ""}
+                onClose={() => {
+                  setVisible(false);
+                  setSelectedActivity(null);
+                }}
+              />
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  }
 }
 
 function ActivityModalContent({
@@ -113,11 +134,17 @@ function ActivityModalContent({
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{activity.exercise}</Text>
-        <Pressable onPress={onClose}>
-          <Text>✕</Text>
-        </Pressable>
+      <View style={styles.headerBody}>
+        <View style={styles.header}>
+          <Text style={[styles.title, { textAlign: "left", flex: 1 }]}>{activity.exercise}</Text>
+          <Pressable onPress={onClose} style={styles.closeBtn}>
+            <Text>✕</Text>
+          </Pressable>
+        </View>
+        <Text style={styles.leftText}>Reps: {activity.completed_reps}</Text>
+        <Text style={styles.leftText}>Duration: {activity.duration}s</Text>
+        <Text style={styles.leftText}>Max Angle: {activity.max_height}°</Text>
+        <Text style={styles.leftText}>Min Angle: {activity.min_height}°</Text>
       </View>
 
       <FlatList
@@ -175,12 +202,17 @@ const styles = StyleSheet.create({
     color: "#666",
     fontSize: 16,
     marginBottom: 10,
+    width: "100%",
   },
   rightText: {
     textAlign: "right",
     color: "#666",
     fontSize: 16,
     marginBottom: 10,
+  },
+  closeBtn: {
+    alignSelf: "flex-start",
+    padding: 6,
   },
   card: {
     borderRadius: 14,
@@ -202,7 +234,13 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "flex-start",
+    padding: 16,
+    borderBottomWidth: 1,
+  },
+  headerBody: {
+    flexDirection: "column",
+    alignItems: "flex-start",
     padding: 16,
     borderBottomWidth: 1,
   },

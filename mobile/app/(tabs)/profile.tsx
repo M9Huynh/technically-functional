@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { UserData } from "../../lib/useraccount";
-import { getCurrentUser, getSelectedUser } from "../../lib/profileActivity";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import { UserAccountService, UserData } from "../../lib/useraccount";
+import { getCurrentUser, getSelectedUser, clearSelectedUserID } from "../../lib/profileActivity";
 import { getUserRole, UserRole } from "@/lib/roleStore";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -9,7 +9,7 @@ export default function Profile() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [role, setRole] = useState<UserRole>("patient");
   const [roleReady, setRoleReady] = useState<boolean>(false);
-
+  const uas = new UserAccountService();
   useEffect(() => {
     (async () => {
       const r = await getUserRole();
@@ -57,6 +57,40 @@ export default function Profile() {
             { weekday: "long", year: "numeric", month: "long", day: "numeric" },
           ) || "No birthday available"}
         </Text>
+        {role === "physio" && userData?.uid && (
+          <Pressable
+            style={styles.deleteBtn}
+            onPress={() => {
+              Alert.alert(
+                "Confirm Delete",
+                `Delete patient ${userData?.name || "this patient"}? This cannot be undone.`,
+                [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: async () => {
+                      try {
+                        const ok = await uas.deleteUserById(userData.uid!);
+                        if (ok) {
+                          await clearSelectedUserID();
+                          setUserData(null);
+                          Alert.alert("Deleted", "Patient account deleted.");
+                        } else {
+                          Alert.alert("Error", "Failed to delete patient.");
+                        }
+                      } catch (e) {
+                        Alert.alert("Error", "Failed to delete patient.");
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            <Text style={styles.deleteBtnText}>Delete Patient</Text>
+          </Pressable>
+        )}
       </View>
     );
   }
@@ -84,4 +118,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   text: { color: "#666", fontSize: 16, textAlign: "center" },
+  deleteBtn: {
+    marginTop: 24,
+    alignSelf: "center",
+    backgroundColor: "#ff4d4f",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  deleteBtnText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
+  },
 });

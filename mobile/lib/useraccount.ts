@@ -701,6 +701,22 @@ export class UserAccountService {
     }
   }
 
+  async deleteUserById(uid: string): Promise<boolean> {
+    try {
+      const userDoc = await getDoc(doc(db, this.usersCollection,uid));
+      await updateDoc(doc(db, this.usersCollection, uid), {
+        deleted: true,
+        deletedAt: serverTimestamp(),
+      });
+      
+      if(!userDoc.exists()) return false;
+      const userData = userDoc.data();
+      this.returnAccIdToPool(userData.acc_id);
+      return true;
+    } catch {return false;}
+    
+  }
+
   async deleteUserByAccId(acc_id: number): Promise<boolean> {
     try {
       const user = await this.getUserByAccId(acc_id);
