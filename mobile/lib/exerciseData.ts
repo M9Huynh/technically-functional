@@ -11,11 +11,11 @@ export type Exercise = {
 
 export const RECOMMENDED_EXERCISES: Exercise[] = [
  {
-   id: "single-leg-raises",
-   title: "Single Leg Raises",
+   id: "exercise_demo_vid",
+   title: "Seated Knee Flexion-Extension Exercse",
    subtitle: "Recommended #1",
    description:
-     "Sit up and go through the motions of bending one leg to flexion and extending it to a full extension. Pick one leg, raise the leg slowly, then lower with control.",
+     "This exercise involves repeatedly bending (flexion) and straightening (extension) the knee joint through a controlled range of motion. It helps improve knee mobility, muscle activation, and functional movement.",
    // demoText: "Demo: (placeholder) Single Leg Raises video/gif goes here",
    enabled: true,
    tags: ["quad", "knee rehab", "beginner"],
