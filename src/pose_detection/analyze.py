@@ -24,7 +24,7 @@ class Analyzer:
         self.rep_durations = []
 
         self.flexion_threshold= .7
-        self.extension_threshold = .8
+        self.extension_threshold = .7
 
         self.rep_state = ""
 

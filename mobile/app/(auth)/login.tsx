@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
+import React, { useId, useState } from "react";
+import { Text, StyleSheet, TextInput, Pressable, View, Alert } from "react-native";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { login } from "../../lib/authService";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
+import { setUserRole } from "../../lib/roleStore";
 
 type Role = "patient" | "physio";
 
@@ -16,7 +18,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const helperText = role === "physio" ? "Physiotherapist login" : "Patient login";
-
   const createRoute = role === "physio" ? "/(auth)/create-physio" : "/(auth)/create-patient";
 
   return (
@@ -46,7 +47,17 @@ export default function Login() {
 
       <PrimaryButton
         label="Login"
-        onPress={() => router.replace("/(tabs)")}
+        onPress={async () => {
+          try {
+            // persist role so tabs/home can use it
+            await setUserRole(role);
+
+            await login(email, password);
+            router.replace("/(tabs)");
+          } catch (e: any) {
+            Alert.alert("Login Failed", e?.message ?? "Unknown error");
+          }
+        }}
         style={{ marginTop: 18 }}
       />
 
@@ -59,7 +70,6 @@ export default function Login() {
           : "If you are a physiotherapist looking to assist patients, create an account:"}
       </Text>
 
-      {/* ✅ FIXED: Link child must be Pressable, not View */}
       <Link href={createRoute as any} asChild>
         <Pressable style={styles.secondaryBtn}>
           <Text style={styles.secondaryBtnText}>
@@ -68,7 +78,6 @@ export default function Login() {
         </Pressable>
       </Link>
 
-      {/* ✅ FIXED: Back should also be Pressable */}
       <Link href="/(auth)/role-select" asChild>
         <Pressable style={[styles.linkBtn, { marginTop: 14 }]}>
           <Text style={styles.linkText}>Back</Text>
@@ -80,15 +89,11 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   sub: { textAlign: "center", color: "#666", marginBottom: 10, fontSize: 16 },
-
   label: { fontSize: 14, color: "#333", marginTop: 12, marginBottom: 6 },
   input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 12, padding: 12 },
-
   divider: { height: 1, backgroundColor: "#eee", marginVertical: 20 },
-
   sectionTitle: { fontSize: 18, fontWeight: "800", marginBottom: 6 },
   smallText: { color: "#666", marginBottom: 12 },
-
   secondaryBtn: {
     borderWidth: 1,
     borderColor: "#222",
@@ -97,7 +102,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   secondaryBtnText: { fontWeight: "700", color: "#222" },
-
   linkBtn: { alignItems: "center" },
   linkText: { color: "#666" },
 });
