@@ -16,18 +16,20 @@ def angle_deg(a, b, c):
     return math.degrees(math.acos(cosv))
 
 def knee_angle_from_result(res, side="RIGHT"):
-    if not res or not getattr(res, "pose_landmarks", None):
+    if not res or not hasattr(res, 'pose_landmarks') or not res.pose_landmarks:
         return None
-
-    lm = res.pose_landmarks.landmark
-    ids = RIGHT if side.upper().startswith("R") else LEFT
-
-    def pt(i):
-        l = lm[i]
-        return (l.x, l.y)
-
-    hip   = pt(ids["hip"])
-    knee  = pt(ids["knee"])
-    ankle = pt(ids["ankle"])
-
-    return angle_deg(hip, knee, ankle)
+    
+    try:
+        landmarks = res.pose_landmarks[0]
+        ids = RIGHT if side.upper().startswith("R") else LEFT
+        
+        def pt(i):
+            lm = landmarks[i]
+            return (lm.x, lm.y)
+        
+        hip   = pt(ids["hip"])
+        knee  = pt(ids["knee"])
+        ankle = pt(ids["ankle"])
+        return angle_deg(hip, knee, ankle)
+    except (IndexError, AttributeError, TypeError):
+        return None
