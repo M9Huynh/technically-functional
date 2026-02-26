@@ -1,145 +1,127 @@
+import os
+import base64
+import threading
 import cv2 as cv
+import numpy as np
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
-import os
-from flask import Flask, jsonify
-from flask_cors import CORS
-import base64
-from draw import PoseCamera
+
+from draw import PoseCamera, extract_landmarks, get_pose_connections
 from analyze import Analyzer
 from metrics import knee_angle_from_result
-import threading
-import time
 
 os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
 
-class IPCameraPoseApp:
-    def __init__(self, phone_ip, phone_port=8080):
-        self.side = "RIGHT"
-        
+def b64_to_bgr_image(b64_str: str):
+    img_bytes = base64.b64decode(b64_str)
+    np_arr = np.frombuffer(img_bytes, np.uint8)
+    frame = cv.imdecode(np_arr, cv.IMREAD_COLOR)
+    return frame
+
+class PoseBackend:
+    def __init__(self):
+        self.lock = threading.Lock()
+
+        HERE = os.path.dirname(os.path.abspath(__file__))
+        MODEL_PATH = os.path.join(HERE, "pose_landmarker_heavy.task")
+        if not os.path.exists(MODEL_PATH):
+            raise RuntimeError(f"Model file missing at: {MODEL_PATH}")
+
         options = vision.PoseLandmarkerOptions(
-            base_options=python.BaseOptions(model_asset_path='pose_landmarker_heavy.task'),
+            base_options=python.BaseOptions(model_asset_path=MODEL_PATH),
             running_mode=vision.RunningMode.IMAGE,
             num_poses=1,
             min_pose_detection_confidence=0.5,
             min_pose_presence_confidence=0.5,
-            min_tracking_confidence=0.5
+            min_tracking_confidence=0.5,
         )
-        self.pose_detect = vision.PoseLandmarker.create_from_options(options)
+        pose_detect = vision.PoseLandmarker.create_from_options(options)
 
-        self.phone_ip = phone_ip
-        self.phone_port = phone_port
-        self.video_url = f"http://{phone_ip}:{phone_port}/video"
-        
-        self.cap = cv.VideoCapture(self.video_url)
-        self.cap.set(cv.CAP_PROP_BUFFERSIZE, 1) 
-        
-        self.target_width = 640
-        self.target_height = 480
-        
-        self.cam = PoseCamera(None, pose_detect=self.pose_detect)
-        self.cam.display_size = (self.target_width, self.target_height)
-        
+        self.cam = PoseCamera(None, pose_detect=pose_detect)
+        self.reset()
+
+    def reset(self):
         self.analyzer = Analyzer()
         self.analyzer.start_calibration(duration_s=10.0)
-        
-        self.latest_frame = None
-        self.latest_result = None
-        self.latest_metrics = None
-        self.frame_lock = threading.Lock()
-        self.running = True
-        
-        self.frame_skip = 2
-        self.frame_count = 0
-        
-        # Start processing thread
-        self.thread = threading.Thread(target=self._processing_loop)
-        self.thread.daemon = True
-        self.thread.start()
-        
-            
-    def _processing_loop(self):
-        while self.running:
-            try:
-                ret, frame = self.cap.read()
-                if not ret or frame is None:
-                    time.sleep(0.1)
-                    continue
-                    
-                frame = cv.resize(frame, (self.target_width, self.target_height))
-                self.frame_count += 1
-                
-                with self.frame_lock:
-                    self.latest_frame = frame
-                    
-                    if self.frame_count % self.frame_skip == 0:
-                        result = self.cam.process_pose(frame)
-                        
-                        if result and result.pose_landmarks:
-                            knee_angle = knee_angle_from_result(result, side=self.side)
-                            if knee_angle:
-                                self.analyzer.update(knee_angle)
-                                metrics = self.analyzer.summary()
-                                metrics['current_angle'] = round(knee_angle, 1)
-                                self.latest_metrics = metrics
-            except:
-                time.sleep(0.1)   
 
-    def get_frame_with_landmarks(self):
-        with self.frame_lock:
-            if self.latest_frame is not None:
-                if self.latest_result is not None and self.latest_result.pose_landmarks:
-                    frame_copy = self.latest_frame.copy()
-                    frame_with_landmarks = self.cam.draw_landmarks(self.latest_result, frame_copy)
-                    return frame_with_landmarks
-                else:
-                    return self.latest_frame.copy()
-            return None
-    
-    def get_current_metrics(self):
-        """Get the latest metrics"""
-        with self.frame_lock:
-            if self.latest_metrics:
-                return self.latest_metrics.copy()
-            return {
-                "current_angle": 0,
-                "min_degree": 0,
-                "max_degree": 0,
-                "rom_degree": 0,
-                "rep_count": 0,
-                "current_rep_duration": 0,
-                "avg_rep_duration": 0,
-                "rep_state": "None",
-                "calibrating": True,
-                "cal_time_left": 10.0,
-                }        
+    def default_metrics(self):
+        return {
+            "angle": 0,
+            "min_degree": 0,
+            "max_degree": 0,
+            "rom_degree": 0,
+            "rep_count": 0,
+            "current_rep_duration": 0,
+            "avg_rep_duration": 0,
+            "rep_state": "None",
+            "calibrating": True,
+            "cal_time_left": 10.0,
+        }
 
-PHONE_IP = "192.168.2.88"  #phone's ip
-pose_app = IPCameraPoseApp(phone_ip=PHONE_IP)
+pose_app = PoseBackend()
 
-@app.route('/', methods=['GET'])
-def process():    
-    frame_landmarks = pose_app.get_frame_with_landmarks()
-    metrics = pose_app.get_current_metrics()
+@app.route("/reset", methods=["POST"])
+def reset_backend():
+    with pose_app.lock:
+        pose_app.reset()
+    return jsonify({"ok": True})
 
-    if frame_landmarks is None:
+@app.route("/process_frame", methods=["POST"])
+def process_frame():
+    data = request.get_json(silent=True) or {}
+    b64 = data.get("imageBase64")
+    side = data.get("side", "RIGHT")
+    mirrored = bool(data.get("mirrored", True))
+    legs_only = bool(data.get("legsOnly", True))
+
+    if not b64:
         return jsonify({
-            "error": "Waiting for phone feed",
-            "image": None,
-            "metrics": metrics,
-        })
-    
-    _, buffer = cv.imencode('.jpg', frame_landmarks, [cv.IMWRITE_JPEG_QUALITY, 70])
-    img_str = base64.b64encode(buffer).decode('utf-8')
-    
-    return jsonify({
-        "image": img_str,
-        "metrics": metrics,
-    })
+            "error": "Missing imageBase64",
+            "landmarks": None,
+            "connections": get_pose_connections(legs_only),
+            "metrics": pose_app.default_metrics(),
+        }), 400
 
-if __name__ == '__main__':
-    print("Open in browser: http://localhost:5000")    
-    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+    frame = b64_to_bgr_image(b64)
+    if frame is None:
+        return jsonify({
+            "error": "Could not decode image",
+            "landmarks": None,
+            "connections": get_pose_connections(legs_only),
+            "metrics": pose_app.default_metrics(),
+        }), 400
+
+    frame = cv.resize(frame, (640, 480))
+
+    # flip for front camera BEFORE mediapipe
+    if mirrored:
+        frame = cv.flip(frame, 1)
+
+    with pose_app.lock:
+        res = pose_app.cam.process_pose(frame)
+
+        landmarks = extract_landmarks(res)
+        metrics = pose_app.default_metrics()
+
+        if landmarks is not None:
+            knee_angle = knee_angle_from_result(res, side=side)
+            if knee_angle is not None:
+                pose_app.analyzer.update(knee_angle)
+                metrics = pose_app.analyzer.summary()
+                metrics["angle"] = round(float(knee_angle), 1)
+
+        return jsonify({
+            "landmarks": landmarks,
+            "connections": get_pose_connections(legs_only),
+            "metrics": metrics
+        })
+
+if __name__ == "__main__":
+    print("Flask running on http://0.0.0.0:5001")
+    app.run(host="0.0.0.0", port=5001, debug=False, threaded=True)
