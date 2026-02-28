@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Redirect } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
 
 import ScreenContainer from "@/components/screenContainer";
@@ -8,37 +8,59 @@ import PrimaryButton from "../../components/primaryButton";
 
 import Svg, { Circle, Line } from "react-native-svg";
 
-import { processFrame, resetBackend, Landmark, Connection, Side, Facing } from "../../lib/poseService";
+import {
+  processFrame,
+  resetBackend,
+  Landmark,
+  Connection,
+  Side,
+  Facing,
+} from "../../lib/poseService";
 import { saveMetrics } from "../../lib/metricsService";
+import { getUserRole, UserRole } from "../../lib/roleStore";
 
 export default function Record() {
   const router = useRouter();
 
+  // Role guard hooks
+  const [role, setRole] = useState<UserRole | null>(null);
+  const [loadingRole, setLoadingRole] = useState(true);
+
+  // Camera hooks (MUST be before any return)
   const cameraRef = useRef<any>(null);
   const [permission, requestPermission] = useCameraPermissions();
 
+  // Other hooks
   const [streaming, setStreaming] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
   const [metrics, setMetrics] = useState<any>(null);
 
-  // user choices
   const [side, setSide] = useState<Side | null>(null);
   const [facing, setFacing] = useState<Facing>("front");
 
-  // NEW: overlay data
   const [landmarks, setLandmarks] = useState<Landmark[] | null>(null);
   const [connections, setConnections] = useState<Connection[]>([]);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const busyRef = useRef(false);
 
+  // Load role once
+  useEffect(() => {
+    const loadRole = async () => {
+      const r = await getUserRole();
+      setRole(r);
+      setLoadingRole(false);
+    };
+    loadRole();
+  }, []);
+
+  // Ask for camera permission
   useEffect(() => {
     if (!permission) return;
     if (!permission.granted) requestPermission();
-  }, [permission]);
+  }, [permission, requestPermission]);
 
-  // streaming loop
+  // Streaming loop
   useEffect(() => {
     if (!streaming) {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -79,6 +101,20 @@ export default function Record() {
     };
   }, [streaming, side, facing]);
 
+  // Now safe to return
+
+  if (loadingRole) {
+    return (
+      <ScreenContainer>
+        <Text style={styles.text}>Loading...</Text>
+      </ScreenContainer>
+    );
+  }
+
+  if (role === "physio") {
+    return <Redirect href="/" />;
+  }
+
   const handleToggleRecording = async () => {
     if (!side) {
       Alert.alert("Choose a knee first", "Select Right or Left knee before recording.");
@@ -86,7 +122,6 @@ export default function Record() {
     }
 
     if (!streaming) {
-      // Start: reset rep count + calibration
       try {
         await resetBackend();
       } catch (e) {
@@ -146,22 +181,17 @@ export default function Record() {
 
   return (
     <ScreenContainer>
-      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        {/* Live camera + overlay */}
+      <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.cameraBox}>
           <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
 
-          {/* Overlay landmarks (no flashing, drawn on live view) */}
           {landmarks && landmarks.length > 0 && (
             <Svg style={StyleSheet.absoluteFill} width="100%" height="100%" viewBox="0 0 1 1">
-              {/* draw connections first */}
               {connections.map(([a, b], idx) => {
                 const A = landmarks[a];
                 const B = landmarks[b];
                 if (!A || !B) return null;
 
-                // We already flipped the frame in backend when mirrored,
-                // so we DO NOT mirror again here.
                 return (
                   <Line
                     key={`l-${idx}`}
@@ -175,7 +205,6 @@ export default function Record() {
                 );
               })}
 
-              {/* points */}
               {landmarks.map((p, i) => (
                 <Circle key={`p-${i}`} cx={p.x} cy={p.y} r={0.008} fill="lime" />
               ))}
@@ -183,50 +212,54 @@ export default function Record() {
           )}
         </View>
 
-        {/* Side selection */}
-        <View style={styles.row}>
-          <PrimaryButton
-            label={side === "RIGHT" ? "Right Knee Selected" : "Select Right Knee"}
-            onPress={() => setSide("RIGHT")}
-          />
-          <PrimaryButton
-            label={side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"}
-            onPress={() => setSide("LEFT")}
-          />
+        <View style={styles.kneeRow}>
+          <View style={styles.kneeBtn}>
+            <PrimaryButton
+              label={side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"}
+              onPress={() => setSide("LEFT")}
+            />
+          </View>
+          <View style={styles.kneeBtn}>
+            <PrimaryButton
+              label={side === "RIGHT" ? "Right Knee Selected" : "Select Right Knee"}
+              onPress={() => setSide("RIGHT")}
+            />
+          </View>
+        </View>
+        {/* adding pill for selection text */}
+        <View style={styles.pill}>
+          <Text style={styles.pillText}>
+            {side ? (side === "RIGHT" ? "Right knee" : "Left knee") : "No knee selected"} •{" "}
+            {facing === "front" ? "Front camera" : "Back camera"}
+          </Text>
         </View>
 
-        <Text style={styles.selectionText}>
-          Selected: {side ? (side === "RIGHT" ? "Right Knee" : "Left Knee") : "None"} • Camera:{" "}
-          {facing === "front" ? "Front" : "Back"}
-        </Text>
-
-        {/* Camera switch */}
         <PrimaryButton
           label={`Switch to ${facing === "front" ? "back" : "front"} camera`}
           onPress={() => setFacing((f) => (f === "front" ? "back" : "front"))}
+          style={{ marginTop: 8 }}
         />
 
-        {/* Start/stop */}
         <PrimaryButton
           label={streaming ? "Stop Recording" : "Start Recording"}
           onPress={handleToggleRecording}
+          style={{ marginTop: 10 }}
         />
 
-        {/* Save */}
         <PrimaryButton
           label={isSaving ? "Saving..." : "Save Metrics & View Progress"}
           onPress={handleSaveMetrics}
+          style={{ marginTop: 10 }}
         />
 
-        {/* Metrics */}
-        <View style={{ marginTop: 16 }}>
-          <Text style={styles.title}>Live Metrics</Text>
-          <Text>Angle: {metrics?.angle ?? 0}</Text>
-          <Text>ROM: {metrics?.rom_degree ?? 0}</Text>
-          <Text>Min: {metrics?.min_degree ?? 0}</Text>
-          <Text>Max: {metrics?.max_degree ?? 0}</Text>
-          <Text>Reps: {metrics?.rep_count ?? 0}</Text>
-          <Text>State: {metrics?.rep_state ?? "None"}</Text>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Live Metrics</Text>
+
+          <View style={styles.metricRow}><Text style={styles.metricLabel}>Angle</Text><Text style={styles.metricValue}>{metrics?.angle ?? 0}</Text></View>
+          <View style={styles.metricRow}><Text style={styles.metricLabel}>ROM</Text><Text style={styles.metricValue}>{metrics?.rom_degree ?? 0}</Text></View>
+          <View style={styles.metricRow}><Text style={styles.metricLabel}>Min</Text><Text style={styles.metricValue}>{metrics?.min_degree ?? 0}</Text></View>
+          <View style={styles.metricRow}><Text style={styles.metricLabel}>Max</Text><Text style={styles.metricValue}>{metrics?.max_degree ?? 0}</Text></View>
+          <View style={[styles.metricRow, { borderBottomWidth: 0 }]}><Text style={styles.metricLabel}>Reps</Text><Text style={styles.metricValue}>{metrics?.rep_count ?? 0}</Text></View>
         </View>
       </ScrollView>
     </ScreenContainer>
@@ -237,8 +270,21 @@ const styles = StyleSheet.create({
   text: { color: "#666", textAlign: "center" },
   title: { fontSize: 20, fontWeight: "800", marginBottom: 8 },
 
-  cameraBox: { height: 260, borderRadius: 14, overflow: "hidden", marginBottom: 12 },
+  cameraBox: { height: 260, borderRadius: 18, overflow: "hidden", marginBottom: 14, backgroundColor: "#000", borderWidth: 1, borderColor: "#eee",},
   camera: { width: "100%", height: "100%" },
+  content: { padding: 16, paddingBottom: 40 },
+
+  card: { marginTop: 16, backgroundColor: "#fff", borderRadius: 16, padding: 14, borderWidth: 1, borderColor: "#eee",},
+  cardTitle: { fontSize: 18, fontWeight: "800", marginBottom: 10 },
+  metricRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: "#f2f2f2",},
+  metricLabel: { color: "#555", fontWeight: "600" },
+  metricValue: { color: "#111", fontWeight: "800" },
+
+  kneeRow: { flexDirection: "row", gap: 12, marginBottom: 10 },
+  kneeBtn: { flex: 1 },
+
+  pill: { backgroundColor: "#F5F5F5", borderRadius: 12, paddingVertical: 10, paddingHorizontal: 12, marginBottom: 12, borderWidth: 1, borderColor: "#EAEAEA",},
+  pillText: { textAlign: "center", color: "#333", fontWeight: "600" },
 
   selectionText: { marginBottom: 10, color: "#333", fontWeight: "600", textAlign: "center" },
   row: { flexDirection: "row", gap: 10, marginBottom: 10 },
