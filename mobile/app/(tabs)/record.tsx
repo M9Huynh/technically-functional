@@ -8,7 +8,15 @@ import PrimaryButton from "../../components/primaryButton";
 
 import Svg, { Circle, Line } from "react-native-svg";
 
-import { processFrame, resetBackend, Landmark, Connection, Side, Facing } from "../../lib/poseService";
+import { 
+  resetBackend, 
+  connectWebSocket,
+  sendFrame,
+  Landmark, 
+  Connection, 
+  Side, 
+  Facing 
+} from "../../lib/poseService";
 import { saveMetrics } from "../../lib/metricsService";
 
 export default function Record() {
@@ -19,6 +27,8 @@ export default function Record() {
 
   const [streaming, setStreaming] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [wsConnected, setWsConnected] = useState(false);
+  const [frameTime, setFrameTime] = useState(0);
 
   const [metrics, setMetrics] = useState<any>(null);
 
@@ -26,58 +36,90 @@ export default function Record() {
   const [side, setSide] = useState<Side | null>(null);
   const [facing, setFacing] = useState<Facing>("front");
 
-  // NEW: overlay data
+  // overlay data
   const [landmarks, setLandmarks] = useState<Landmark[] | null>(null);
   const [connections, setConnections] = useState<Connection[]>([]);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const busyRef = useRef(false);
+  const disconnectRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (!permission) return;
     if (!permission.granted) requestPermission();
   }, [permission]);
 
-  // streaming loop
+  // streaming loop with WebSocket
   useEffect(() => {
-    if (!streaming) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      intervalRef.current = null;
+    if (!streaming || !side) {
+      // Cleanup when stopping
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      if (disconnectRef.current) {
+        disconnectRef.current();
+        disconnectRef.current = null;
+      }
+      setWsConnected(false);
       return;
     }
 
-    intervalRef.current = setInterval(async () => {
-      if (busyRef.current) return;
-      if (!cameraRef.current) return;
-      if (!side) return;
+    console.log('🎥 Starting WebSocket streaming...');
+    
+    // Connect WebSocket
+    disconnectRef.current = connectWebSocket(
+      // onMessage callback
+      (data) => {
+        if (data?.metrics) setMetrics(data.metrics);
+        setLandmarks(data?.landmarks ?? null);
+        setConnections(data?.connections ?? []);
+        if (data.processing_time) {
+          setFrameTime(data.processing_time);
+        }
+      },
+      // onError callback
+      (error) => {
+        console.error('WebSocket error:', error);
+        Alert.alert('Connection Error', 'Lost connection to server. Stopping recording.');
+        setStreaming(false);
+      }
+    );
 
-      busyRef.current = true;
+    setWsConnected(true);
+
+    // Send frames continuously
+    intervalRef.current = setInterval(async () => {
+      if (!cameraRef.current) return;
 
       try {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
-          quality: 0.2,
+          quality: 0.1,
+          width: 160,
+          height: 120,
           skipProcessing: true,
-          width: 320,   // or 480
-          height: 240
         });
 
-        if (!photo?.base64) return;
-
-        const data = await processFrame(photo.base64, side, facing);
-
-        if (data?.metrics) setMetrics(data.metrics);
-        setLandmarks(data?.landmarks ?? null);
-        setConnections(data?.connections ?? []);
+        if (photo?.base64) {
+          sendFrame(photo.base64, side, facing);
+        }
       } catch (e) {
-        console.log("Frame error:", e);
-      } finally {
-        busyRef.current = false;
+        console.log('Capture error:', e);
       }
-    }, 50);
+    }, 100); // Send every 100ms (aiming for 10 FPS)
 
+    // Cleanup
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      console.log('🛑 Stopping WebSocket streaming...');
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      if (disconnectRef.current) {
+        disconnectRef.current();
+        disconnectRef.current = null;
+      }
+      setWsConnected(false);
     };
   }, [streaming, side, facing]);
 
@@ -109,7 +151,7 @@ export default function Record() {
       setIsSaving(true);
 
       await saveMetrics({
-        angle: metrics.angle || 0,
+        angle: metrics.current_angle || metrics.angle || 0,
         rom_degree: metrics.rom_degree || 0,
         min_degree: metrics.min_degree || 0,
         max_degree: metrics.max_degree || 0,
@@ -149,11 +191,21 @@ export default function Record() {
   return (
     <ScreenContainer>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+        {/* Connection Status */}
+        <View style={styles.statusContainer}>
+          <Text style={[styles.statusText, wsConnected ? styles.connected : styles.disconnected]}>
+            WebSocket: {wsConnected ? '✅ Connected' : '❌ Disconnected'}
+          </Text>
+          {frameTime > 0 && (
+            <Text style={styles.statusText}>Frame time: {frameTime}ms</Text>
+          )}
+        </View>
+
         {/* Live camera + overlay */}
         <View style={styles.cameraBox}>
           <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
 
-          {/* Overlay landmarks (no flashing, drawn on live view) */}
+          {/* Overlay landmarks */}
           {landmarks && landmarks.length > 0 && (
             <Svg style={StyleSheet.absoluteFill} width="100%" height="100%" viewBox="0 0 1 1">
               {/* draw connections first */}
@@ -162,8 +214,6 @@ export default function Record() {
                 const B = landmarks[b];
                 if (!A || !B) return null;
 
-                // We already flipped the frame in backend when mirrored,
-                // so we DO NOT mirror again here.
                 return (
                   <Line
                     key={`l-${idx}`}
@@ -223,12 +273,16 @@ export default function Record() {
         {/* Metrics */}
         <View style={{ marginTop: 16 }}>
           <Text style={styles.title}>Live Metrics</Text>
-          <Text>Angle: {metrics?.angle ?? 0}</Text>
+          <Text>Angle: {metrics?.current_angle ?? metrics?.angle ?? 0}</Text>
           <Text>ROM: {metrics?.rom_degree ?? 0}</Text>
           <Text>Min: {metrics?.min_degree ?? 0}</Text>
           <Text>Max: {metrics?.max_degree ?? 0}</Text>
           <Text>Reps: {metrics?.rep_count ?? 0}</Text>
           <Text>State: {metrics?.rep_state ?? "None"}</Text>
+          <Text>Calibrating: {metrics?.calibrating ? "Yes" : "No"}</Text>
+          {metrics?.cal_time_left > 0 && (
+            <Text>Cal time left: {metrics.cal_time_left}s</Text>
+          )}
         </View>
       </ScrollView>
     </ScreenContainer>
@@ -238,17 +292,17 @@ export default function Record() {
 const styles = StyleSheet.create({
   text: { color: "#666", textAlign: "center" },
   title: { fontSize: 20, fontWeight: "800", marginBottom: 8 },
-
   cameraBox: { height: 260, borderRadius: 14, overflow: "hidden", marginBottom: 12 },
   camera: { width: "100%", height: "100%" },
-
   selectionText: { marginBottom: 10, color: "#333", fontWeight: "600", textAlign: "center" },
   row: { flexDirection: "row", gap: 10, marginBottom: 10 },
+  statusContainer: { 
+    flexDirection: "row", 
+    justifyContent: "space-between", 
+    marginBottom: 8,
+    paddingHorizontal: 4 
+  },
+  statusText: { fontSize: 12, fontWeight: "500" },
+  connected: { color: "green" },
+  disconnected: { color: "red" },
 });
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 18 },
-//   title: { fontSize: 22, fontWeight: "800", marginBottom: 8 },
-//   subheading: { fontSize: 18, fontWeight: "200", marginBottom: 8 },
-//   text: { color: "#666", textAlign: "center" },
-// });
