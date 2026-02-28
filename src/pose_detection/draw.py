@@ -16,12 +16,15 @@ POSE_CONNECTIONS = frozenset([
     (27, 29), (28, 30), (29, 31), (30, 32), (27, 31), (28, 32)
 ])
 
-# optional(not sure if we need this, maybe remove??): less clutter for knee exercise (reduces jitter)
+# less clutter for knee exercise (reduces jitter)
 LEG_CONNECTIONS = frozenset([
     (23, 25), (25, 27), (27, 31),   # left hip->knee->ankle->foot
     (24, 26), (26, 28), (28, 32),   # right hip->knee->ankle->foot
     (23, 24)                        # hips connection
 ])
+
+# Lower body landmarks indices (hips, knees, ankles)
+LOWER_BODY_INDICES = [23, 24, 25, 26, 27, 28]
 
 def get_pose_connections(legs_only: bool = True):
     """
@@ -38,6 +41,20 @@ def extract_landmarks(res):
         return None
     lms = res.pose_landmarks[0]
     return [{"x": float(p.x), "y": float(p.y), "z": float(p.z)} for p in lms]
+
+def extract_lower_body_landmarks(res):
+    """
+    Extract ONLY lower body landmarks (hips, knees, ankles) for faster processing.
+    Returns a list of landmarks with x,y,z coordinates.
+    """
+    if not res or not res.pose_landmarks or len(res.pose_landmarks) == 0:
+        return None
+    
+    lms = res.pose_landmarks[0]
+    return [
+        {"x": float(lms[i].x), "y": float(lms[i].y), "z": float(lms[i].z)}
+        for i in LOWER_BODY_INDICES
+    ]
 
 class PoseCamera:
     def __init__(self, camera_index=0, width=640, height=480, pose_detect=None):

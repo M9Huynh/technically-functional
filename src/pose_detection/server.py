@@ -9,7 +9,7 @@ from flask_cors import CORS
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-from draw import PoseCamera, extract_landmarks, get_pose_connections
+from draw import PoseCamera, extract_landmarks, extract_lower_body_landmarks, get_pose_connections
 from analyze import Analyzer
 from metrics import knee_angle_from_result
 
@@ -29,7 +29,7 @@ class PoseBackend:
         self.lock = threading.Lock()
 
         HERE = os.path.dirname(os.path.abspath(__file__))
-        MODEL_PATH = os.path.join(HERE, "pose_landmarker_heavy.task")
+        MODEL_PATH = os.path.join(HERE, "pose_landmarker_lite.task")
         if not os.path.exists(MODEL_PATH):
             raise RuntimeError(f"Model file missing at: {MODEL_PATH}")
 
@@ -106,7 +106,10 @@ def process_frame():
     with pose_app.lock:
         res = pose_app.cam.process_pose(frame)
 
-        landmarks = extract_landmarks(res)
+        if legs_only:
+            landmarks = extract_lower_body_landmarks(res)  # Use new function
+        else:
+            landmarks = extract_landmarks(res)
         metrics = pose_app.default_metrics()
 
         if landmarks is not None:

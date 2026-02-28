@@ -56,8 +56,10 @@ export default function Record() {
       try {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
-          quality: 0.25,
+          quality: 0.2,
           skipProcessing: true,
+          width: 320,   // or 480
+          height: 240
         });
 
         if (!photo?.base64) return;
@@ -72,7 +74,7 @@ export default function Record() {
       } finally {
         busyRef.current = false;
       }
-    }, 350);
+    }, 50);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
