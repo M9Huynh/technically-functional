@@ -1,14 +1,15 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRef } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { RECOMMENDED_EXERCISES, SIMILAR_EXERCISES } from "../../lib/exerciseData";
-
+import { getExercise, RECOMMENDED_EXERCISES, SIMILAR_EXERCISES } from "../../lib/exerciseData";
+import { Exercise } from "../../lib/exerciseData";
 import { VideoView, useVideoPlayer } from "expo-video";
 
 export default function ExerciseDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const [currentExercise, setCurrentExercise] = useState<Exercise | null>(null);
 
   const exercise = useMemo(() => {
     const all = [...RECOMMENDED_EXERCISES, ...SIMILAR_EXERCISES];
@@ -17,7 +18,7 @@ export default function ExerciseDetail() {
 
   // Only load a real video for exercise_demo_vid for now
   const videoSource =
-    id === "exercise_demo_vid"
+    id === "BiwnYLGyBbsctvDr3BaL"
       ? require("../../assets/videos/exercise_demo_vid.mp4")
       : null;
 
@@ -28,7 +29,22 @@ export default function ExerciseDetail() {
     // p.play();
   });
 
-  if (!exercise) {
+  const goToRecord = () => {
+    router.push({
+      pathname: "/(tabs)/record",
+      params: { exerciseId: currentExercise?.id, exerciseName: currentExercise?.title },
+    });
+  };
+
+  useEffect(() => {
+    (async () => {
+      const ex = await getExercise(id);
+      if (ex) setCurrentExercise(ex);
+    })();
+  }, [id]);
+
+
+  if (!currentExercise) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Exercise not found</Text>
@@ -39,20 +55,13 @@ export default function ExerciseDetail() {
     );
   }
 
-  const goToRecord = () => {
-    router.push({
-      pathname: "/(tabs)/record",
-      params: { exerciseId: exercise.id, exerciseName: exercise.title },
-    });
-  };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{exercise.title}</Text>
-      {!!exercise.subtitle && <Text style={styles.subtitle}>{exercise.subtitle}</Text>}
+      <Text style={styles.title}>{currentExercise?.title}</Text>
+      {!!currentExercise?.subtitle && <Text style={styles.subtitle}>{currentExercise.subtitle}</Text>}
 
       {/* VIDEO (only for exercise_demo_vid for now) */}
-      {id === "exercise_demo_vid" && (
+      {id === "BiwnYLGyBbsctvDr3BaL" && (
         <View style={styles.videoWrap}>
           <VideoView
             style={styles.video}
@@ -74,7 +83,7 @@ export default function ExerciseDetail() {
       {/* Description */}
       <View style={styles.descBox}>
         <Text style={styles.sectionTitle}>Description</Text>
-        <Text style={styles.descText}>{exercise.description}</Text>
+        <Text style={styles.descText}>{currentExercise?.description}</Text>
       </View>
 
       {/* Record button */}
@@ -86,17 +95,13 @@ export default function ExerciseDetail() {
       <Pressable style={styles.secondaryBtn} onPress={() => router.back()}>
         <Text style={styles.secondaryBtnText}>Back</Text>
       </Pressable>
-
-      {!exercise.enabled && (
-        <Text style={styles.note}>This is a placeholder and not enabled yet.</Text>
-      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { padding: 18, paddingTop: 24 },
-  title: { fontSize: 26, fontWeight: "900", textAlign: "center" },
+  title: { fontSize: 26, fontWeight: "900", textAlign: "center", marginTop: 24 },
   subtitle: { textAlign: "center", color: "#666", marginTop: 6, marginBottom: 14 },
 
   videoWrap: {

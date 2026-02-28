@@ -1,3 +1,5 @@
+import { collection, doc, getDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
+
 export type Exercise = {
  id: string;
  title: string;
@@ -12,7 +14,7 @@ export type Exercise = {
 export const RECOMMENDED_EXERCISES: Exercise[] = [
  {
    id: "exercise_demo_vid",
-   title: "Seated Knee Flexion-Extension Exercse",
+   title: "Seated Knee Flexion-Extension Exercise",
    subtitle: "Recommended #1",
    description:
      "This exercise involves repeatedly bending (flexion) and straightening (extension) the knee joint through a controlled range of motion. It helps improve knee mobility, muscle activation, and functional movement.",
@@ -54,4 +56,26 @@ export const SIMILAR_EXERCISES: Exercise[] = [
  },
 ];
 
+export async function getExercisesById(uid: string): Promise<Exercise[] | undefined> {
+  const db = getFirestore();
+  const exerciseCol = collection(db, "userExercises");
+  const q = query(exerciseCol, where("userid", "==", uid));
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return undefined;
+  }
+  const docs = querySnapshot.docs.map((doc) => doc.data() as Exercise);
+  return docs;
+}
 
+export async function getExercise(exid: string): Promise<Exercise | undefined> {
+  const db = getFirestore();
+  const exerciseCol = collection(db, "userExercises");
+  const ex = getDoc(doc(exerciseCol, exid));
+  if (!ex) {
+    return undefined;
+  }
+  const ex_data = (await ex).data();
+  console.log("Fetched exercise data:", ex_data);
+  return ex_data as Exercise;
+}
