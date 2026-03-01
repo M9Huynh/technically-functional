@@ -20,8 +20,8 @@ export default function PrimaryButton({
 const styles = StyleSheet.create({
   btn: {
     backgroundColor: "#222",
-    paddingVertical: 14,
-    paddingHorizontal: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
