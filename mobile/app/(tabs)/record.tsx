@@ -5,6 +5,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 
 import ScreenContainer from "@/components/screenContainer";
 import PrimaryButton from "../../components/primaryButton";
+import FeedbackOverlay from "../../components/FeedbackOverlay";
 
 import Svg, { Circle, Line } from "react-native-svg";
 
@@ -291,6 +292,9 @@ export default function Record() {
               ))}
             </Svg>
           )}
+                  {streaming && (
+                      <FeedbackOverlay metrics={metrics} />
+                  )}
         </View>
 
         <View style={styles.kneeRow}>
