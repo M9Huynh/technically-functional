@@ -1,4 +1,4 @@
-// ✅ IMPORTANT: mock local firebase.ts FIRST so initializeApp/env never runs
+// IMPORTANT: mock local firebase.ts FIRST so initializeApp/env never runs
 jest.mock("../firebase", () => ({
   auth: {},
   db: {},
@@ -66,7 +66,7 @@ describe("authService - tests in table order", () => {
       licenseNumber: "on-123456",
     });
 
-    // ✅ Assert Firestore write happened to users/newPhysio with normalized fields
+    // Assert Firestore write happened to users/newPhysio with normalized fields
     expect(setDoc).toHaveBeenCalledWith(
       expect.objectContaining({ collection: "users", id: "newPhysio" }),
       expect.objectContaining({
@@ -130,7 +130,7 @@ describe("authService - tests in table order", () => {
       inviteCode: " abcd ",
     });
 
-    // ✅ Assert user profile written
+    // Assert user profile written
     expect(setDoc).toHaveBeenCalledWith(
       expect.objectContaining({ collection: "users", id: "newPatient" }),
       expect.objectContaining({
@@ -143,7 +143,7 @@ describe("authService - tests in table order", () => {
       })
     );
 
-    // ✅ Assert invite marked used with correct uid
+    // Assert invite marked used with correct uid
     expect(updateDoc).toHaveBeenCalledWith(
       expect.objectContaining({ collection: "inviteCodes", id: "ABCD" }),
       { used: true, usedBy: "newPatient" }
