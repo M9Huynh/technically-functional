@@ -115,7 +115,7 @@ export async function getSelectedExercises(
     return undefined;
   }
   const exercises = querySnapshot.docs.map((doc) => doc.data() as Exercise);
-  //console.log("Selected exercises for user", uid, ":", exercises);
+  console.log("Selected exercises for user", uid, ":", exercises);
   return exercises;
 }
 

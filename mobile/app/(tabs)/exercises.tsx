@@ -88,18 +88,26 @@ export default function ExercisesTab() {
   }, []);
 
   useFocusEffect(
-      React.useCallback(() => {
-        if (!roleReady) return;
-        (async () => {
-          if (userRole === "physio") {
-            const selectedUser = await getSelectedUserID();
-            setSelectedUser(selectedUser);
+    React.useCallback(() => {
+      if (!roleReady) return;
+      (async () => {
+        if (userRole === "physio") {
+          // fetch the currently selected patient id and then use that
+          // value directly when loading exercises. previously we used
+          // `selectedUser` state which hadn't been updated yet, so the
+          // first call always passed an empty string and `selectedIds`
+          // ended up empty until a hot reload triggered the effect again.
+          const su = await getSelectedUserID();
+          setSelectedUser(su);
+          if (su) {
+            const sue = await getSelectedExercises(su);
+            if (sue) setSelectedIds(sue.map((ex) => ex.title));
+            else setSelectedIds([]);
           }
-          const su = await getSelectedExercises(selectedUser || "");
-          if (su) setSelectedIds(su.map((ex) => ex.title));
-        })();
-      }, [roleReady, userRole]),
-    );
+        }
+      })();
+    }, [roleReady, userRole])
+  );
 
   useEffect(() => {
     if (!userData?.uid) return;
@@ -113,6 +121,18 @@ export default function ExercisesTab() {
       }
     })();
   }, [userData?.uid, selectedUser, userRole]);
+
+  // whenever the selected user id changes we should refresh the list of
+  // selected exercise titles so the checkboxes reflect the database state
+  useEffect(() => {
+    if (userRole === "physio" && selectedUser) {
+      (async () => {
+        const sue = await getSelectedExercises(selectedUser);
+        if (sue) setSelectedIds(sue.map((ex) => ex.title));
+        else setSelectedIds([]);
+      })();
+    }
+  }, [userRole, selectedUser]);
 
   const toggleSelection = (ex: Exercise) => {
     setSelectedIds((prev) => {
@@ -142,10 +162,21 @@ export default function ExercisesTab() {
     removeUserExercise(selectedUser || "", id);
   };
 
-  const modifyInstructions = (ex: Exercise) => {
-    // open modal and preload text
+  const modifyInstructions = async (ex: Exercise) => {
+    // open modal and preload text. if the exercise has already been
+    // assigned to the patient we want to show the customized description
+    // stored in the userExercises collection rather than the generic text
+    // from the general library.
     setModalExercise(ex);
-    setModalText(ex.description);
+
+    if (selectedUser) {
+      const assigned = await getSelectedExercises(selectedUser);
+      const match = assigned?.find((u) => u.title === ex.title);
+      setModalText(match?.description ?? ex.description);
+    } else {
+      setModalText(ex.description);
+    }
+
     setModalVisible(true);
   };
 
@@ -157,7 +188,7 @@ export default function ExercisesTab() {
 
   // if we haven't determined the role yet, avoid rendering anything
   if (userRole === null) {
-    return null; // could show spinner if desired
+    return null;
   }
 
   // Role-based rendering
