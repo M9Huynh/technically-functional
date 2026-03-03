@@ -18,7 +18,7 @@ export default function ExerciseDetail() {
 
   // Only load a real video for exercise_demo_vid for now
   const videoSource =
-    id === "BiwnYLGyBbsctvDr3BaL"
+    currentExercise?.title === "Seated Knee Flexion-Extension Exercise"
       ? require("../../assets/videos/exercise_demo_vid.mp4")
       : null;
 

@@ -6,6 +6,9 @@ import {
   Pressable,
   Alert,
   ScrollView,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import {
@@ -13,9 +16,17 @@ import {
   SIMILAR_EXERCISES,
   Exercise,
   getExercisesById,
+  getGeneralExercises,
+  getSelectedExercises,
+  addUserExercise,
+  removeUserExercise,
+  updateUserExercise,
 } from "../../lib/exerciseData";
 import { UserData } from "@/lib/useraccount";
 import { getCurrentUser } from "@/lib/temp";
+import { getUserRole, UserRole } from "@/lib/roleStore";
+import { getSelectedUserID } from "@/lib/profileActivity";
+import { useFocusEffect } from "@react-navigation/native";
 
 function ExerciseCard({
   item,
@@ -25,10 +36,7 @@ function ExerciseCard({
   onPress: () => void;
 }) {
   return (
-    <Pressable
-      onPress={onPress}
-      style={[styles.card]}
-    >
+    <Pressable onPress={onPress} style={[styles.card]}>
       <View style={{ flex: 1 }}>
         <Text style={styles.cardTitle}>{item.title}</Text>
         {!!item.subtitle && (
@@ -45,7 +53,16 @@ function ExerciseCard({
 export default function ExercisesTab() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [userExercises, setUserExercises] = useState<Exercise[]>([]);
+  const [selectedIds, setSelectedIds] = useState<String[]>([]);
+  const [physioExercises, setPhysioExercises] = useState<Exercise[]>([]);
+  const [roleReady, setRoleReady] = useState(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalText, setModalText] = useState("");
+  const [modalExercise, setModalExercise] = useState<Exercise | null>(null);
 
   const openExercise = (ex: Exercise) => {
     router.push({
@@ -63,45 +80,213 @@ export default function ExercisesTab() {
   }, []);
 
   useEffect(() => {
+    (async () => {
+      const r = await getUserRole();
+      setUserRole(r);
+      setRoleReady(true);
+    })();
+  }, []);
+
+  useFocusEffect(
+      React.useCallback(() => {
+        if (!roleReady) return;
+        (async () => {
+          if (userRole === "physio") {
+            const selectedUser = await getSelectedUserID();
+            setSelectedUser(selectedUser);
+          }
+          const su = await getSelectedExercises(selectedUser || "");
+          if (su) setSelectedIds(su.map((ex) => ex.title));
+        })();
+      }, [roleReady, userRole]),
+    );
+
+  useEffect(() => {
     if (!userData?.uid) return;
     (async () => {
-      const exercises = await getExercisesById(userData.uid);
-      setUserExercises(exercises || []);
+      if (userRole === "physio") {
+        const physioExs = await getGeneralExercises();
+        setPhysioExercises(physioExs || []);
+      } else if (userRole === "patient") {
+        const exercises = await getExercisesById(userData.uid);
+        setUserExercises(exercises || []);
+      }
     })();
-  }, [userData?.uid]);
+  }, [userData?.uid, selectedUser, userRole]);
 
+  const toggleSelection = (ex: Exercise) => {
+    setSelectedIds((prev) => {
+      const next = [...prev];
+      const id = ex.title;
+      const index = next.indexOf(id);
+      if (index !== -1) {
+        next.splice(index, 1);
+        onUnchecked(id);
+      } else {
+        next.push(id);
+        onChecked(ex);
+      }
+      return next;
+    });
+  };
+
+  const onChecked = (ex: Exercise) => {
+    // placeholder action when a physio selects an exercise for a user
+    console.log("Selected exercise", ex.title, "for user", selectedUser);
+    addUserExercise(selectedUser || "", ex);
+  };
+
+  const onUnchecked = (id: string) => {
+    // placeholder action when a physio deselects an exercise
+    console.log("Deselected exercise", id, "for user", selectedUser);
+    removeUserExercise(selectedUser || "", id);
+  };
+
+  const modifyInstructions = (ex: Exercise) => {
+    // open modal and preload text
+    setModalExercise(ex);
+    setModalText(ex.description);
+    setModalVisible(true);
+  };
+
+  const updateInstructions = (ex: Exercise, newDesc: string) => {
+    // placeholder for updating instructions in database
+    console.log("Updated instructions for exercise", ex.title, ":", newDesc);
+    updateUserExercise(selectedUser || "", ex.title, newDesc);
+  };
+
+  // if we haven't determined the role yet, avoid rendering anything
+  if (userRole === null) {
+    return null; // could show spinner if desired
+  }
+
+  // Role-based rendering
+  if (userRole === "physio") {
+    if (!selectedUser) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.headerRow}>
+            <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+          </View>
+          <Text style={styles.text}>
+            Please select a patient on the Home page to begin.
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <ScrollView contentContainerStyle={styles.container}>
+          <Text style={styles.pageTitle}>Exercises (physio view)</Text>
+          <Text style={styles.pageSub}>
+            Select which exercises are available and modify instructions as
+            needed.
+          </Text>
+          <View style={styles.sectionBox}>
+            {physioExercises.map((ex) => {
+              const checked = selectedIds.includes(ex.title);
+              return (
+                <View key={ex.title} style={styles.physioRow}>
+                  <Pressable onPress={() => toggleSelection(ex)}>
+                    <Text style={styles.checkbox}>{checked ? "☑" : "☐"}</Text>
+                  </Pressable>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.cardTitle}>{ex.title}</Text>
+                    {!!ex.description && (
+                      <Text style={styles.cardSubtitle} numberOfLines={1}>
+                        {ex.description}
+                      </Text>
+                    )}
+                  </View>
+                  {checked && (
+                    <Pressable
+                      style={styles.modifyBtn}
+                      onPress={() => modifyInstructions(ex)}
+                    >
+                      <Text style={styles.modifyText}>Modify instructions</Text>
+                    </Pressable>
+                  )}
+                </View>
+              );
+            })}
+          </View>
+        <Modal visible={modalVisible} animationType="slide" transparent>
+          <View style={styles.overlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>Modify instructions</Text>
+              <TextInput
+                style={styles.modalInput}
+                multiline
+                value={modalText}
+                onChangeText={setModalText}
+                placeholder="Enter description"
+              />
+              <View style={styles.modalButtonRow}>
+                <Pressable
+                  style={[styles.modalBtn, styles.modalCancel]}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.modalBtnText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.modalBtn, styles.modalSave]}
+                  onPress={() => {
+                    if (modalExercise) {
+                      updateInstructions(modalExercise, modalText);
+                    }
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text style={styles.modalBtnText}>Save</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        </ScrollView>
+      );
+    }
+  }
+
+  // default patient view
   if (userExercises.length !== 0) {
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.pageTitle}>Exercises</Text>
-      <Text style={styles.pageSub}>Your available exercises are shown below.</Text>
-      <View style={styles.sectionBox}>
-        {userExercises.map((ex) => (
-          <ExerciseCard
-            key={ex.id}
-            item={ex}
-            onPress={() => openExercise(ex)}
-          />
-        ))}
-      </View>
-    </ScrollView>
-  );
-} else {
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.pageTitle}>Exercises</Text>
-      <Text style={styles.pageSub}>Your physiotherapist hasn't assigned any exercises yet. {"\n\n"}
-        Check back later!
-      </Text>
-    </ScrollView>
-  );
-} 
-
+    return (
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.pageTitle}>Exercises</Text>
+        <Text style={styles.pageSub}>
+          Your available exercises are shown below.
+        </Text>
+        <View style={styles.sectionBox}>
+          {userExercises.map((ex) => (
+            <ExerciseCard
+              key={ex.id}
+              item={ex}
+              onPress={() => openExercise(ex)}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    );
+  } else {
+    return (
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.pageTitle}>Exercises</Text>
+        <Text style={styles.pageSub}>
+          Your physiotherapist hasn't assigned any exercises yet. {"\n\n"}
+          Check back later!
+        </Text>
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 18, paddingTop: 24 },
-  pageTitle: { fontSize: 28, fontWeight: "800", textAlign: "center", marginTop: 24 },
+  container: { backgroundColor: "#fff", padding: 18, paddingTop: 60 },
+  pageTitle: {
+    fontSize: 28,
+    fontWeight: "800",
+    textAlign: "center",
+    marginTop: 24,
+  },
   pageSub: {
     marginTop: 6,
     color: "#666",
@@ -137,4 +322,86 @@ const styles = StyleSheet.create({
 
   linkBtn: { marginTop: 18, alignSelf: "center" },
   linkText: { color: "#222", fontWeight: "800" },
+
+  physioRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+    gap: 8,
+  },
+  checkbox: {
+    fontSize: 18,
+    width: 24,
+    textAlign: "center",
+  },
+  modifyBtn: {
+    marginLeft: "auto",
+    backgroundColor: "#222",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+  },
+  modifyText: {
+    color: "#fff",
+    fontWeight: "700",
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  logo: { fontSize: 34, fontWeight: "800" },
+  text: {
+    color: "#666",
+    textAlign: "center",
+    justifyContent: "center",
+    fontSize: 16,
+  },
+
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 16,
+    width: "90%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "800",
+    marginBottom: 12,
+  },
+  modalInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    minHeight: 80,
+    textAlignVertical: "top",
+  },
+  modalButtonRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 12,
+    gap: 10,
+  },
+  modalBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  modalCancel: {
+    backgroundColor: "#ccc",
+  },
+  modalSave: {
+    backgroundColor: "#222",
+  },
+  modalBtnText: {
+    color: "#fff",
+    fontWeight: "700",
+  },
 });
