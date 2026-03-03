@@ -11,6 +11,10 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{array}
 
 \input{../Comments.tex}
 \input{../Common.tex}
@@ -228,6 +232,124 @@ This document ...
 This section will not be appropriate for every project.
 
 \section{Unit Testing}
+
+The following section outlines the unit tests created for all of the
+modules.
+
+\newcounter{testcase}
+\newcommand{\testcount}{\stepcounter{testcase}\thetestcase}
+\renewcommand{\arraystretch}{1.2} % Adjust row height for readability
+
+\subsection{Authentication Services}
+
+\subsubsection{Account Creation Module}
+The following tests in Table \ref{table:account_creation_tests} verify the functionality of the account creation module for both physiotherapists and patients, including validation checks and successful user creation workflows.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.5cm}
+    >{\raggedright\arraybackslash}p{4.5cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Account Creation Module Test Cases}
+  \label{table:account_creation_tests}
+  \endlastfoot
+
+  TC\testcount &  & Register physiotherapist with valid license format and a license that exists in \texttt{validLicenses} with \texttt{active=true}. &
+  Auth user is created. Firestore \texttt{users/\{uid\}} document is written with \texttt{role="physio"}, trimmed name, lowercased email, uppercased license number, \texttt{verified=true}, and \texttt{createdAt}. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register physiotherapist with an invalid license format (e.g., missing dash or incorrect digits). &
+  Error \texttt{"Invalid license format (example: ON-123456)."} is thrown. No Auth user is created. No Firestore writes occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register physiotherapist with valid format but license is not found in \texttt{validLicenses} or \texttt{active != true}. &
+  Error \texttt{"License not verified."} is thrown. No Auth user is created. No Firestore writes occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with invite code that exists in \texttt{inviteCodes}, is \texttt{active=true}, \texttt{used=false}, and includes a \texttt{physioId}. &
+  Auth user is created. Firestore \texttt{users/\{uid\}} document is written with \texttt{role="patient"}, trimmed name, lowercased email, stored \texttt{physioId}, normalized invite code, and \texttt{createdAt}. Invite is updated with \texttt{used=true} and \texttt{usedBy=\{uid\}}. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with an invite code that does not exist in \texttt{inviteCodes}. &
+  Error \texttt{"Invalid invite code."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with an invite code that exists but \texttt{active=false}. &
+  Error \texttt{"Invite code inactive."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with an invite code that exists but \texttt{used=true}. &
+  Error \texttt{"Invite code already used."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with an invite code that exists but missing \texttt{physioId}. &
+  Error \texttt{"Invite code missing physio link."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
+  All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
+\subsubsection{Valid User Module}
+The following tests in Table \ref{table:valid_user_tests} verify the functionality of the valid user module by ensuring that successful authentication requires an existing Firestore user profile for both physiotherapist and patient roles.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.5cm}
+    >{\raggedright\arraybackslash}p{4.5cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Valid User Module Test Cases}
+  \label{table:valid_user_tests}
+  \endlastfoot
+
+  TC\testcount &  & Login with valid credentials for a physiotherapist whose Firestore profile \texttt{users/\{uid\}} exists and contains \texttt{role="physio"}. &
+  Login returns an object containing the \texttt{uid} and stored profile data (including role and user fields). No errors occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Login with valid credentials for a patient whose Firestore profile \texttt{users/\{uid\}} exists and contains \texttt{role="patient"}. &
+  Login returns an object containing the \texttt{uid} and stored profile data (including role and user fields). No errors occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Login with valid credentials where the Firestore profile \texttt{users/\{uid\}} does not exist. &
+  Error \texttt{"User profile missing in Firestore."} is thrown and login is rejected. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Logout after a user session is active. &
+  The Auth sign-out operation is called once and completes without error. &
+  All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
 
 \section{Changes Due to Testing}
 
