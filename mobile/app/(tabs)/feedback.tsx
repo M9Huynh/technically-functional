@@ -8,6 +8,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { UserData } from "../../lib/useraccount";
 import {
@@ -69,7 +70,7 @@ export default function Feedback() {
     );
   } else {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Text style={styles.logo}>Physio{"\n"}Companion</Text>
 
         {activities.map((activity, index) => (
@@ -108,7 +109,7 @@ export default function Feedback() {
             </View>
           </View>
         </Modal>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -181,7 +182,7 @@ function ActivityModalContent({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
+  container: { backgroundColor: "#fff", padding: 18, paddingTop: 60 },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
