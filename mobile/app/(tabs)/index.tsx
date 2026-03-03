@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Pressable, Clipboard } from "react-native";
+import { View, Text, StyleSheet, Pressable, Clipboard, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { logout } from "../../lib/authService";
 import { getUserRole, clearUserRole, UserRole } from "../../lib/roleStore";
@@ -13,6 +13,7 @@ import {
 import userAccount, { UserData } from "@/lib/useraccount";
 import { getUserActivities, getUserSummary } from "../../lib/profileActivity";
 import { UserAccountService } from "@/lib/useraccount";
+// (removed reanimated ScrollView import)
 
 export default function Home() {
   const router = useRouter();
@@ -99,7 +100,7 @@ export default function Home() {
       <Text style={styles.welcome}>Welcome, {userData?.name}!</Text>
 
       <View style={styles.row}>
-        <View style={styles.card}>
+        <View style={styles.stat_card}>
           <Text style={styles.cardTitle}>
             {role === "patient" ? "Your Stats" : "Linked Patients"}
           </Text>
@@ -156,7 +157,12 @@ export default function Home() {
           )}
         </View>
 
-        <View style={styles.card}>
+        <ScrollView
+          style={styles.ex_card}
+          nestedScrollEnabled={true}
+          showsVerticalScrollIndicator={true}
+          contentContainerStyle={{ paddingBottom: 8 }}
+        >
           <Text style={styles.cardTitle}>
             {role === "patient"
               ? "Activity History"
@@ -168,7 +174,7 @@ export default function Home() {
               <Text>{activity.exercise || "Exercise"}</Text>
             </View>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
       <Pressable
@@ -218,11 +224,12 @@ const styles = StyleSheet.create({
   },
   logoutText: { fontSize: 12, fontWeight: "700", color: "#333" },
   row: { flexDirection: "row", gap: 12, marginTop: 18 },
-  card: { flex: 1, borderRadius: 14, backgroundColor: "#f4f4f4", padding: 5 },
+  stat_card: { width: "30%", borderRadius: 14, backgroundColor: "#f4f4f4", padding: 5 },
+  ex_card: { flex: 1, borderRadius: 14, backgroundColor: "#f4f4f4", padding: 5, maxHeight: 325 },
   cardTitle: { fontWeight: "800", marginBottom: 10 },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   statBox: {
-    width: "47%",
+    width: "100%",
     backgroundColor: "#fff",
     borderRadius: 12,
     padding: 10,
