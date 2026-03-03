@@ -11,6 +11,10 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{array}
 
 \input{../Comments.tex}
 \input{../Common.tex}
@@ -69,16 +73,293 @@ This document ...
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}
+
+\begin{enumerate}
+
+\item \textbf{test-UT-1 : Navigation Clarity}
+
+\textbf{Initial State:} App installed on a mobile device; user logged in.
+
+\textbf{Input:} User was asked to find and open the exercise screen, start a recording session, and return to the dashboard without assistance.
+
+\textbf{Output:} User successfully navigated through the required screens without confusion. Feedback indicated labels and buttons were clear.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-2 : Instruction Clarity During Exercise}
+
+\textbf{Initial State:} User on the record exercise screen with camera access enabled.
+
+\textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback instructing the user to remain within the camera frame. Once proper positioning was detected, the user was able to start and stop recording and save the session.
+
+\textbf{Output:} User reported that instructions were clear and prompts matched the required actions. Minor wording improvements were noted and updated.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-3 : Survey Questionnaire -- ui\_testing}
+
+\textbf{Initial State:} App accessible to testers on mobile devices.
+
+\textbf{Input:} Five users completed a short usability questionnaire rating navigation (1--5), clarity (1--5), and overall ease of use (1--5).
+
+\textbf{Output:} Average rating across categories was $\geq$ 4/5. Minor UI refinements (font size and button spacing) were applied based on feedback.
+
+\textbf{Result:} Pass
+
+\end{enumerate}
 		
 \subsection{Performance}
 
-\subsection{etc.}
+\begin{enumerate}
+
+\item \textbf{test-PR-1 : Exercise Interface Response Time -- ex\_int\_speed}
+
+\textbf{Initial State:} User logged in on a mobile device; backend server running.
+
+\textbf{Input:} User started pose analysis from the exercise screen. Screen recording timestamps were used to measure the time from tapping ``Start'' to the first visible feedback/result. Five trials were conducted.
+
+\textbf{Output:} Measured response times were 1.87s, 1.92s, 1.79s, 1.95s, and 1.84s. The average end-to-end response time was 1.87 seconds ($\leq$ 2 seconds).
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-PR-2 : Repeated Use Performance}
+
+\textbf{Initial State:} Application running normally on mobile device.
+
+\textbf{Input:} User completed 10 consecutive ``Start $\rightarrow$ Analyze $\rightarrow$ Stop'' cycles.
+
+\textbf{Output:} No significant slowdown was observed across trials. Response times remained within acceptable range and no crashes occurred.
+
+\textbf{Result:} Pass
+
+\end{enumerate}
+
+\subsection{Reliability / Fault Tolerance}
+
+\begin{enumerate}
+
+\item \textbf{test-RFT-1 : Backend Failure Handling -- fail\_recovery}
+
+\textbf{Initial State:} User actively using the application while connected to backend.
+
+\textbf{Input:} Backend server was manually terminated during active analysis.
+
+\textbf{Output:} Application displayed a network error message and remained responsive (no crash). After backend restart, the user was able to retry and continue normal operation.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-RFT-2 : Network Interruption During Upload -- Interrupted\_vid}
+
+\textbf{Initial State:} User uploading recorded exercise video.
+
+\textbf{Input:} WiFi connection was disabled mid-upload and restored after approximately 10 seconds.
+
+\textbf{Output:} Application detected upload failure and displayed a retry option. User retried successfully and uploaded video was verified to be intact.
+
+\textbf{Result:} Pass
+
+\end{enumerate}
+
+\subsection{Security}
+
+\begin{enumerate}
+
+\item \textbf{test-SR-1 : Unauthorized Access to Protected Endpoint}
+
+\textbf{Initial State:} Backend server running with authentication enabled.
+
+\textbf{Input:} A request was sent to a protected endpoint without authentication credentials or token.
+
+\textbf{Output:} Server returned HTTP 401 Unauthorized. No protected data was returned.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-SR-2 : Invalid Credentials Login}
+
+\textbf{Initial State:} Application login screen available.
+
+\textbf{Input:} Login attempted using an email not registered in the database or incorrect password.
+
+\textbf{Output:} System denied login and displayed an appropriate error message without exposing internal system details.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+
+\end{enumerate}
+
+\subsection{Maintainability and Support}
+
+\begin{enumerate}
+
+\item \textbf{test-MS-1 : Reproducible Setup}
+
+\textbf{Initial State:} Fresh machine with no prior installation.
+
+\textbf{Input:} Project repository was cloned and installed using instructions provided in README (frontend and backend setup).
+
+\textbf{Output:} Application ran successfully without missing dependencies. All documented setup steps were sufficient to reproduce the system.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-MS-2 : Code Review and Quality Assurance}
+
+\textbf{Initial State:} Revision 0 completed.
+
+\textbf{Input:} Multiple peer code reviews were conducted through pull requests and issue tracking. Unit tests were executed to validate core functionality, including pose angle calculations and analysis logic. UI components were reviewed for usability, clarity of instructions, and error handling. Identified issues were documented and resolved using version control workflows.
+
+\textbf{Output:} Core analysis functions passed unit testing. UI refinements were implemented based on peer feedback. Code structure maintained clear separation between modules and frontend components. No major functional issues were identified during review.
+
+\textbf{Result:} Pass
+
+\end{enumerate}
 	
 \section{Comparison to Existing Implementation}	
 
 This section will not be appropriate for every project.
 
 \section{Unit Testing}
+
+The following section outlines the unit tests created for all of the
+modules.
+
+\newcounter{testcase}
+\newcommand{\testcount}{\stepcounter{testcase}\thetestcase}
+\renewcommand{\arraystretch}{1.2} % Adjust row height for readability
+
+\subsection{Authentication Services}
+
+\subsubsection{Account Creation Module}
+The following tests in Table \ref{table:account_creation_tests} verify the functionality of the account 
+creation module for both physiotherapists and patients, including validation checks and successful user 
+creation workflows.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.5cm}
+    >{\raggedright\arraybackslash}p{4.5cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Account Creation Module Test Cases}
+  \label{table:account_creation_tests}
+  \endlastfoot
+
+  TC\testcount &  & Register physiotherapist with valid license format and a license that exists in 
+  \texttt{validLicenses} with \texttt{active=true}. & Auth user is created. Firestore \texttt{users/\{uid\}} 
+  document is written with \texttt{role="physio"}, trimmed name, lowercased email, uppercased license number, 
+  \texttt{verified=true}, and \texttt{createdAt}. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register physiotherapist with an invalid license format (e.g., missing dash or incorrect digits). 
+  & Error \texttt{"Invalid license format (example: ON-123456)."} is thrown. No Auth user is created. No Firestore 
+  writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register physiotherapist with valid format but license is not found in \texttt{validLicenses} or
+   \texttt{active != true}. & Error \texttt{"License not verified."} is thrown. No Auth user is created. No Firestore 
+   writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with invite code that exists in \texttt{inviteCodes}, is \texttt{active=true}, 
+  \texttt{used=false}, and includes a \texttt{physioId}. & Auth user is created. Firestore \texttt{users/\{uid\}} 
+  document is written with \texttt{role="patient"}, trimmed name, lowercased email, stored \texttt{physioId}, 
+  normalized invite code, and \texttt{createdAt}. Invite is updated with \texttt{used=true} and 
+  \texttt{usedBy=\{uid\}}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with an invite code that does not exist in \texttt{inviteCodes}. &
+  Error \texttt{"Invalid invite code."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with an invite code that exists but \texttt{active=false}. &
+  Error \texttt{"Invite code inactive."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with an invite code that exists but \texttt{used=true}. &
+  Error \texttt{"Invite code already used."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Register patient with an invite code that exists but missing \texttt{physioId}. &
+  Error \texttt{"Invite code missing physio link."} is thrown. No Auth user is created. No Firestore writes/updates 
+  occur. & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
+\subsubsection{Valid User Module}
+The following tests in Table \ref{table:valid_user_tests} verify the functionality of the valid user module by 
+ensuring that successful authentication requires an existing Firestore user profile for both physiotherapist and 
+patient roles.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.5cm}
+    >{\raggedright\arraybackslash}p{4.5cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Valid User Module Test Cases}
+  \label{table:valid_user_tests}
+  \endlastfoot
+
+  TC\testcount &  & Login with valid credentials for a physiotherapist whose Firestore profile \texttt{users/\{uid\}} 
+  exists and contains \texttt{role="physio"}. & Login returns an object containing the \texttt{uid} and stored 
+  profile data (including role and user fields). No errors occur. & All assertions pass. 
+  & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Login with valid credentials for a patient whose Firestore profile \texttt{users/\{uid\}} 
+  exists and contains \texttt{role="patient"}. & Login returns an object containing the \texttt{uid} and 
+  stored profile data (including role and user fields). No errors occur. & All assertions pass. 
+  & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Login with valid credentials where the Firestore profile \texttt{users/\{uid\}} does not exist. &
+  Error \texttt{"User profile missing in Firestore."} is thrown and login is rejected. & 
+  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC\testcount &  & Logout after a user session is active. &
+  The Auth sign-out operation is called once and completes without error. &
+  All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
 
 \section{Changes Due to Testing}
 
