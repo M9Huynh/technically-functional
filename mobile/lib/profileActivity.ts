@@ -73,6 +73,12 @@ export async function getUserActivities(uid: string): Promise<UserActivity[]> {
     snapshot.forEach((doc) => {
       activities.push(doc.data() as UserActivity);
     });
+    // sort by date_performed in descending order (most recent first)
+    activities.sort((a, b) => {
+      const dateA = new Date(a.date_performed).getTime();
+      const dateB = new Date(b.date_performed).getTime();
+      return dateB - dateA;
+    });
     return activities;
   } catch (error) {
     console.error("Error getting user activities:", error);
@@ -82,12 +88,32 @@ export async function getUserActivities(uid: string): Promise<UserActivity[]> {
 
 export async function getUserSummary(uid: string): Promise<ActivitySummary> {
   const activities = await getUserActivities(uid);
+  const dates = activities.map((a) =>
+    new Date(a.date_performed).toISOString().split("T")[0]
+  );
+  let streakCount = 0;
+  const today = new Date();
+  
+  const commentsRef = collection(db, "comments");
+  const q = query(commentsRef, where("uid", "==", uid));
+  const commentsSnapshot = await getDocs(q);
+  const totalComments = commentsSnapshot.size;
+
+  while (true) {
+    const checkDate = new Date(today);
+    checkDate.setDate(today.getDate() - streakCount);
+    const dateStr = checkDate.toISOString().split("T")[0];
+    if (!dates.includes(dateStr)) break;
+    streakCount += 1;
+  }
+
   return {
     totalActivities: activities.length,
-    totalComments: 0, // This would be calculated from comments in the database TODO
-    streak: 0, // This would be calculated from activity dates TODO
+    totalComments: totalComments,
+    streak: streakCount,
     today: activities.filter(
-      (a) => a.date_performed === new Date().toISOString().split("T")[0],
+      (a) =>
+        a.date_performed === new Date().toISOString().split("T")[0],
     ).length,
   };
 }
