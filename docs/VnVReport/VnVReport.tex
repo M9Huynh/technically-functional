@@ -235,6 +235,8 @@ This section will not be appropriate for every project.
 
 The following section outlines the unit tests created for all of the
 modules.
+%Note that some of the modules may not exist in the VnV plan, since the plan consisted of overarching functionalities.
+%The tests listed here are testing isolated components that are more granular. 
 
 \newcounter{testcase}
 \newcommand{\testcount}{\stepcounter{testcase}\thetestcase}
@@ -361,10 +363,69 @@ patient roles.
 \end{longtable}
 
 \subsection{User Account module}
+The tests below outline the User Account module functionality. Note that many new functions were added for this
+iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+database and the various other components.
 
 
+
+\begin{longtable}{|c|p{1.5cm}|p{4cm}|p{4cm}|p{2.75cm}|c|}
+  \hline
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+
+  \multicolumn{6}{|c|}{\textbf{Continued from previous page}} \\
+  \hline
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \hline
+  \endhead
+
+  \multicolumn{6}{|r|}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \hline
+  \caption{User Account Service Test Cases}
+  \label{table:user_account_tests}
+  \endlastfoot
+
+  % USER MANAGEMENT FUNCTIONS
+  \multicolumn{6}{|c|}{\textbf{USER MANAGEMENT FUNCTIONS}} \\ \hline
+  
+  TC13 & FR-101 & Get User Data: Test with valid UID, non-existent UID, and empty UID. & Valid UID returns \texttt{UserData}; non-existent returns null; empty throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC14 & FR-102/103 & User Lookup: Test get user by email and email existence check with registered and unregistered emails. & Registered email returns user and true; unregistered returns null and false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC15 & FR-104 & Update User: Test update user data. & Valid update returns true. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC16 & FR-105/106 & Delete User: Test delete by UID and by email with valid and non-existent cases. & Valid cases return true; non-existent return false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  % QUERY FUNCTIONS
+  \multicolumn{6}{|c|}{\textbf{QUERY FUNCTIONS}} \\ \hline
+  
+  TC17 & FR-201/202/203 & User Queries: Test get patients by physioId, search by name, and get all users. & Returns correctly filtered arrays; errors return empty arrays. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  % SPECIALIZED FUNCTIONS
+  \multicolumn{6}{|c|}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
+  
+  TC18 & FR-301 & User Info Lookup: Test getUserdbInfo with name only and with name+birthday filter. & Returns categorized patients/physios correctly; filtering works as expected. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC19 & FR-302 & PT Account Delete: Test with valid physio, non-physio user, and non-existent patient. & Valid case deletes patient; non-physio throws error; non-existent throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC20 & FR-303/304 & Authentication Flow: Test usernamePwMatch and authenticateUser with valid credentials, invalid password, and non-existent user. & Valid returns true/user; invalid throws appropriate errors; non-existent returns null. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC21 & FR-305 & System Initialization: Test initializeSystem. & Logs success message to console. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  % VALIDATION HELPERS
+  \multicolumn{6}{|c|}{\textbf{VALIDATION HELPERS}} \\ \hline
+  
+  TC22 & FR-401 & Credential Validation: Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+\end{longtable}
 
 \section{Changes Due to Testing}
+
 
 \wss{This section should highlight how feedback from the users and from 
 the supervisor (when one exists) shaped the final product.  In particular 
