@@ -366,24 +366,24 @@ patient roles.
 The tests below outline the User Account module functionality. Note that many new functions were added for this
 iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
 database and the various other components.
+\newpage
 
 
-
-\begin{longtable}{|c|p{1.5cm}|p{4cm}|p{4cm}|p{2.75cm}|c|}
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
   \hline
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
   \hline
   \endfirsthead
 
-  \multicolumn{6}{|c|}{\textbf{Continued from previous page}} \\
+  \multicolumn{6}{r}{\textit{Continued from previous page}} \\
   \hline
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
   \hline
   \endhead
 
-  \multicolumn{6}{|r|}{\textit{Continued on next page}} \\
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
   \endfoot
 
   \hline
@@ -392,7 +392,7 @@ database and the various other components.
   \endlastfoot
 
   % USER MANAGEMENT FUNCTIONS
-  \multicolumn{6}{|c|}{\textbf{USER MANAGEMENT FUNCTIONS}} \\ \hline
+  \multicolumn{6}{c}{\textbf{USER MANAGEMENT FUNCTIONS}} \\ \hline
   
   TC13 & FR-101 & Get User Data: Test with valid UID, non-existent UID, and empty UID. & Valid UID returns \texttt{UserData}; non-existent returns null; empty throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
   
@@ -403,12 +403,12 @@ database and the various other components.
   TC16 & FR-105/106 & Delete User: Test delete by UID and by email with valid and non-existent cases. & Valid cases return true; non-existent return false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 
   % QUERY FUNCTIONS
-  \multicolumn{6}{|c|}{\textbf{QUERY FUNCTIONS}} \\ \hline
+  \multicolumn{6}{c}{\textbf{QUERY FUNCTIONS}} \\ \hline
   
   TC17 & FR-201/202/203 & User Queries: Test get patients by physioId, search by name, and get all users. & Returns correctly filtered arrays; errors return empty arrays. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 
   % SPECIALIZED FUNCTIONS
-  \multicolumn{6}{|c|}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
+  \multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
   
   TC18 & FR-301 & User Info Lookup: Test getUserdbInfo with name only and with name+birthday filter. & Returns categorized patients/physios correctly; filtering works as expected. & All assertions pass. & \cellcolor{green} Pass \\ \hline
   
@@ -419,7 +419,7 @@ database and the various other components.
   TC21 & FR-305 & System Initialization: Test initializeSystem. & Logs success message to console. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 
   % VALIDATION HELPERS
-  \multicolumn{6}{|c|}{\textbf{VALIDATION HELPERS}} \\ \hline
+  \multicolumn{6}{c}{\textbf{VALIDATION HELPERS}} \\ \hline
   
   TC22 & FR-401 & Credential Validation: Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 \end{longtable}
