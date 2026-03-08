@@ -16,71 +16,171 @@
 
 \section{Introduction}
 This document contains questions that participants will be asked by the investigator. These questions provide
-a roadmap of the application functionalities and investigators are urged to pursue their own line of questioning
-regarding these functionalities. Throughout the application's testing, the investigator is urged to time 
+a roadmap of the application functionalities and investigators are free to pursue their own line of questioning
+regarding these functionalities. Throughout the application's testing, the investigator will time 
 the duration spent on each section.  Details such as timing justification, survey duration and participant information 
 can be found in the Usability Report. %TODO reference pls
 
 
-\section{Creating an account}
-After participant verification, the application will be downloaded on the their device.
-The participant will be asked to launch the application and will proceed through each stage below.
+\section{Creating an account} 
 
-\textbf{'Please click on 'create account' to be redirected to the account creation functionality.'} \\
-Invite code will be provided by investigator\\
-Are the different elements on the screen appropriately positioned? \textbf{YES/NO} \\
-\textit{If the participant selects the 'NO' option, please inquire further.} \\
-Is the font sufficiently visible?\\
-Do the colors used have a good contrast?\\
-Are the buttons sized well?\\
-Functionality use: \\
-Rate the difficulty level for creating an account: low, medium, high \\
-Were the visual elements arranged logically?\\
-(if not, ask which one)\\
-Do you have any comments/improvements for account creation? \\
-Once the account has been created, the next step will be navigation to the home screen. Initially, the home screen will be empty.\\
+After participant verification, the application will be downloaded on the their device. The participant 
+will be asked to launch the application and will proceed through each stage below. \\
+
+\noindent \textbf{Please click on 'create account' to be redirected to the account creation functionality. An invite code/PT license 
+number should be provided to the participant. The duration to accomplish this task should be recorded.}\\ 
+\textit{If the participant selects the \textbf{NO} option for any \textbf{YES/NO} questions, please inquire further.} 
+
+\subsection{UI}
+\begin{enumerate}
+    \item Are the different elements on the screen logically positioned? \textbf{YES/NO} 
+    \item Is the text font size sufficient for reading?
+    \item Can you clearly distinguish between the different colours on the screen?
+    \item Are the buttons appropriately sized?
+\end{enumerate}
+
+\subsection{Functionality}
+\begin{enumerate}
+    \setcounter{enumi}{4}
+    \item Rate the difficulty level for creating an account: low, medium, high
+    \\\textbf{Very easy \qquad Easy \qquad Somewhat difficult \qquad Difficult}
+    \item Do you have any comments/improvements for account creation?
+\end{enumerate}
+\textbf{Once the account has been created, the next step will be navigation to the home screen. 
+Initially, the home screen will be empty. It will be populated once an exercise has been recorded.}
 %Ideal case - would be recording time to get through this task
 %However, with a limited pool size, any mean's correctness is harder to assert
 %We can still record how long it takes but not sure how insightful it will be %TODO confirm with Eman
 
+\section{Patient tests}
 
-\section{Recording an exercise - patient ONLY}
-'The dashboard (?) will be populated once you have recorded and submitted the exercises.'\\
-Was the 'record' symbol on the bottom tab helpful in deciphering what the specific button does? \\
-'Once participant has clicked on it, it will take them to the record page' \\
-First impression: Are the visual elements arranged logically?\\
-Are the functions of each button clearly defined? \\
-In your opinion, is the app effectively detecting the relevant body part? \\
-Is the app displaying position modification instructions ('form not in frame') clearly and effectively? \\
-Is the app detecting form discrepencies (angle too small etc) to a high level of accuracy? \\
+\subsection{Homescreen}
+This is the page that is navigated to after the user has successfully signed in. 
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Are the functions (on the bottom) of each button clearly defined? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+
+\subsection{Recording an exercise}
+\textbf{Partcipant will click on the button at the bottom of the homescreen which will lead them to the 'Record' page}
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Are the functions of each button clearly defined? \textbf{YES/NO}
+    \item Do the icons navigate to their correct page? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate} 
+\subsubsection{Functionality}
+\begin{enumerate}
+    \item Is the app displaying detectable area (of the form) appropriately? \textbf{YES/NO} 
+    \\\textbf{The participant will proceed to perform the exercise once they are in position}
+    \item Is the app effectively detecting the relevant body part? \textbf{YES/NO}
+    \item Is the app detecting form discrepencies (angle too small etc) to a high level of accuracy? \textbf{YES/NO}
+    \item Is the app displaying position modification instructions clearly and effectively? \textbf{YES/NO}
+    \item Is each rep being detected correctly/accurately? \textbf{YES/NO}
+    \item In your opinion, how accurate do you think the detection is? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+
+
 %recording time in this case does not really fill the purpose it does for other functionalities
 %reason? As opposed to a simple button click, this function is more physically involved
 %physical ability plays a bigger role for recording and physical ability may be very different
-Is each rep being detected correctly/accurately? \\
-In your opinion, how accurate do you think the detection is? \\
-Any comments/improvements for this?
+
 
 %TODO - current version of app is a little slow in detecting reps; this was one of the early goals (MAYBE). write about 
 % how that isnt feasible for cpastone timeline (only found this during app dev)
 
-\section{Homepage} %TODO check name 
-\section{Tab selection} %TODO should this be under homepage? idk
-\section{Viewing stats} %bar graphs etc
-\section{exercise mods PT only}
-How easy is it to mod patient ex? \\
-How easy is it to comment? \\
-Are the comments displayed in a logical manner? \\
-Is viewing patient stats presented in a logical way? \\
+\subsection{Exercise page}
+\textbf{The participant will be asked to navigate to the 'Exercises' page.}
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Do the icons navigate to their correct page? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+
+\subsubsection{Functionality}
+\begin{enumerate}
+    \item Are the instructions clear and easy to follow without being overwhelming? \textbf{YES/NO}
+    \item Is the example video showing how to perform the exercise helpful? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+%Maybe simpler ex instructions might be better for the patient but thats up to the PT
+\subsection{Progress} %bar graphs etc
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Any additional information that could be included?
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{PT tests}
+\subsection{Homescreen}
+This is the page that is navigated to after the PT has successfully signed in. 
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+    \\\textbf{PT clicks on a previous exercise that has been recorded on the homepage and is redirected to the feedback page.}
+\end{enumerate}
+
+\subsection{Progress} %bar graphs etc
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Any additional information that could be included?
+\end{enumerate}
+
+\subsection{Exercise page}
+\textbf{The participant will be asked to navigate to the 'Exercises' page.}
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Do the icons navigate to their correct page? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+\subsubsection{Functionality}
+\begin{enumerate}
+    \item How easy is it to modify patient exercises? 
+    \item Any comments/improvements for this?
+\end{enumerate}
+
+\subsection{Feedback}
+The patient's exercise history is displayed in further detail on this page (compared to the homepage). Additionally, the PT is
+able to leave comments on individual past patient exercise performances as well. 
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+
+\subsubsection{Functionality}
+\textbf{The participant clicks on a specific performance, which directs to the comment page.}
+\begin{enumerate}
+    \item Is the detail displayed under a specific past performance sufficient? \textbf{YES/NO}
+    \item Is the ability to leave comments on a performance useful? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+    %Potential idea: are they asking if they could view the actual vid? Don't want to put words into
+    %their mouth so pls don't ask about this.
+\end{enumerate}
+
 %random thought - how fast are patient stats visible to PT? do PTs see it on their end immediately?
-
-
-\section{Uncategorized questions}
-Are the ex instructions clear? \\
-Is the video below ex instructions clear? \\
-
-%TODO profile page inquiry - maybe make a UI section for these qs?
-
-
-
 
 \end{document}
