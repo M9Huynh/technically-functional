@@ -88,7 +88,7 @@ describe('metricsService', () => {
         exists: () => false
       });
 
-      await expect(saveMetrics(mockMetricsData)).rejects.toThrow('User data not found in firebase');
+      await expect(saveMetrics(mockMetricsData)).rejects.toThrow('User data not found in Firestore');
     });
 
     it('should save metrics', async () => {
