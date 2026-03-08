@@ -366,9 +366,10 @@ patient roles.
 \subsection{User Account module}
 The tests below outline the User Account module functionality. Note that many new functions were added for this
 iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
-database and the various other components.
-\newpage
-
+database and the various other components. Additionally, there may be some overlap between the Account Creation module
+and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
+due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
+and the User Account module test cases extend that to testing for invalid and non-existent users.
 
 \begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
   \hline
