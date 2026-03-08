@@ -15,6 +15,7 @@
 \usepackage{booktabs}
 \usepackage[table]{xcolor}
 \usepackage{array}
+\usepackage{float}
 
 \input{../Comments.tex}
 \input{../Common.tex}
@@ -355,7 +356,7 @@ patient roles.
   Error \texttt{"User profile missing in Firestore."} is thrown and login is rejected. & 
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount & , SR-AR3 & Logout after a user session is active. &
+  TC\testcount & & Logout after a user session is active. &
   The Auth sign-out operation is called once and completes without error. &
   All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
@@ -384,8 +385,148 @@ TypeScript tests can be run similarly, though they run with \texttt{Jest} and th
  allowing us to be able to quickly identify both the passing and failing tests immediately.
 		
 \section{Trace to Requirements}
-		
-\section{Trace to Modules}		
+
+This section maps the tests performed to the requirements they validate, providing traceability between verification activities and project requirements.
+
+\begin{table}[H]
+  \centering
+  \caption{Functional Requirements and Corresponding Test Sections}
+  \begin{tabular}{p{0.42\textwidth}p{0.42\textwidth}}
+    \toprule \textbf{Test Section} & \textbf{Functional Requirement(s)} \\
+    \midrule
+    Account Creation Module Tests (TC1--TC3) & FR1.1, FR1.2 \\
+    Patient Registration Tests (TC4--TC8) & FR1.1, FR1.3, FR2, FR3 \\
+    User Authentication Tests (TC9--TC11) & FR1, FR1.1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:sections_requirements}
+\end{table}
+
+Table \ref{tab:sections_requirements} shows the functional requirements and their corresponding test sections, ensuring all relevant requirements have been properly tested.
+
+\begin{table}[H]
+  \centering
+  \caption{Look \& Feel Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-lf}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    UT-1 & LFR-AP1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Table \ref{tab:nfr-trace-lf} maps the Look \& Feel test cases to their corresponding non-functional requirements.
+
+\begin{table}[H]
+  \centering
+  \caption{Usability \& Humanity Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-uh}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    UT-2 & UHR-EOU2, UHR-LRN1 \\
+    UT-3 & UHR-EOU1, LFR-ST1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The usability and humanity requirements and their corresponding test cases are shown in Table \ref{tab:nfr-trace-uh}.
+
+\begin{table}[H]
+  \centering
+  \caption{Performance Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    PR-1 & PR-SL1, PR-SL2 \\
+    PR-2 & PR-SL1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-perf}
+\end{table}
+
+Performance requirements and their test cases are outlined in Table \ref{tab:nfr-trace-perf}.
+
+\begin{table}[H]
+  \centering
+  \caption{Robustness \& Fault-Tolerance Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    RFT-1 & PR-RFT1 \\
+    RFT-2 & PR-RFT2 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-rft}
+\end{table}
+
+Table \ref{tab:nfr-trace-rft} shows the robustness and fault-tolerance requirements along with their test cases.
+
+\begin{table}[H]
+  \centering
+  \caption{Operational \& Environmental Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    MS-1 & OER-WE1, OER-PR1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-ope}
+\end{table}
+
+Table \ref{tab:nfr-trace-ope} shows the operational and environmental requirements along with their corresponding test cases.
+
+\begin{table}[H]
+  \centering
+  \caption{Maintenance \& Support Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    MS-2 & PR-SER1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-ms}
+\end{table}
+
+The maintenance and support requirements and their corresponding test cases are shown in Table \ref{tab:nfr-trace-ms}.
+
+\begin{table}[H]
+  \centering
+  \caption{Security Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    SR-1 & SR-AR1 \\
+    SR-2 & SR-AR1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-sec}
+\end{table}
+
+Table \ref{tab:nfr-trace-sec} outlines the security requirements and their corresponding test cases.
+
+\section{Trace to Modules}	
+
+This section maps test cases to the specific modules they validated, organized by architectural levels to ensure comprehensive verification of our system.
+
+\begin{table}[H]
+  \centering
+  \caption{Tests for Core Modules}
+  \begin{tabular}{p{0.38\textwidth}p{0.42\textwidth}}
+    \toprule \textbf{Test ID} & \textbf{Module} \\
+    \midrule
+    TC1--TC8 & M5 (Account Creation Module) \\
+    TC9--TC12 & M6 (Valid User Module) \\
+    test-UT-1, test-UT-2, test-UT-3, test-PR-1, test-PR-2, test-RFT-1, test-RFT-2 & M1 (User Interface Module) \\
+    test-SR-1, test-SR-2 & M5 (Account Creation Module), M6 (Valid User Module) \\
+    test-MS-1, test-MS-2 & M1 (User Interface Module), M5 (Account Creation Module), M6 (Valid User Module) \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:core_modules_tests}
+\end{table}
+
+Table \ref{tab:core_modules_tests} shows the mapping between test cases and the core modules they verify.	
 
 \section{Code Coverage Metrics}
 
