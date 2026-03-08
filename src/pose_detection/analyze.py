@@ -75,6 +75,8 @@ class Analyzer:
                 self.current_rep = None
 
     def update(self, angle:float):
+        if angle is None:
+            return
 
         if self.is_calibrating:
             self._calibrate_with_angle(angle)
