@@ -273,39 +273,39 @@ creation workflows.
   \label{table:account_creation_tests}
   \endlastfoot
 
-  TC\testcount &  & Register physiotherapist with valid license format and a license that exists in 
+  TC\testcount & FR1.1, FR1.2 & Register physiotherapist with valid license format and a license that exists in 
   \texttt{validLicenses} with \texttt{active=true}. & Auth user is created. Firestore \texttt{users/\{uid\}} 
   document is written with \texttt{role="physio"}, trimmed name, lowercased email, uppercased license number, 
   \texttt{verified=true}, and \texttt{createdAt}. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register physiotherapist with an invalid license format (e.g., missing dash or incorrect digits). 
+  TC\testcount & FR1.1, FR1.2 & Register physiotherapist with an invalid license format (e.g., missing dash or incorrect digits). 
   & Error \texttt{"Invalid license format (example: ON-123456)."} is thrown. No Auth user is created. No Firestore 
   writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register physiotherapist with valid format but license is not found in \texttt{validLicenses} or
+  TC\testcount & FR1.1, FR1.2 & Register physiotherapist with valid format but license is not found in \texttt{validLicenses} or
    \texttt{active != true}. & Error \texttt{"License not verified."} is thrown. No Auth user is created. No Firestore 
    writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with invite code that exists in \texttt{inviteCodes}, is \texttt{active=true}, 
+  TC\testcount & FR1.1, FR1.3, FR2, FR3 & Register patient with invite code that exists in \texttt{inviteCodes}, is \texttt{active=true}, 
   \texttt{used=false}, and includes a \texttt{physioId}. & Auth user is created. Firestore \texttt{users/\{uid\}} 
   document is written with \texttt{role="patient"}, trimmed name, lowercased email, stored \texttt{physioId}, 
   normalized invite code, and \texttt{createdAt}. Invite is updated with \texttt{used=true} and 
   \texttt{usedBy=\{uid\}}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with an invite code that does not exist in \texttt{inviteCodes}. &
+  TC\testcount & FR1.3, FR3 & Register patient with an invite code that does not exist in \texttt{inviteCodes}. &
   Error \texttt{"Invalid invite code."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with an invite code that exists but \texttt{active=false}. &
+  TC\testcount & FR1.3, FR3 & Register patient with an invite code that exists but \texttt{active=false}. &
   Error \texttt{"Invite code inactive."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with an invite code that exists but \texttt{used=true}. &
+  TC\testcount & FR1.3, FR2 & Register patient with an invite code that exists but \texttt{used=true}. &
   Error \texttt{"Invite code already used."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with an invite code that exists but missing \texttt{physioId}. &
+  TC\testcount & FR1.3, FR2 & Register patient with an invite code that exists but missing \texttt{physioId}. &
   Error \texttt{"Invite code missing physio link."} is thrown. No Auth user is created. No Firestore writes/updates 
   occur. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
@@ -341,21 +341,21 @@ patient roles.
   \label{table:valid_user_tests}
   \endlastfoot
 
-  TC\testcount &  & Login with valid credentials for a physiotherapist whose Firestore profile \texttt{users/\{uid\}} 
+  TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials for a physiotherapist whose Firestore profile \texttt{users/\{uid\}} 
   exists and contains \texttt{role="physio"}. & Login returns an object containing the \texttt{uid} and stored 
   profile data (including role and user fields). No errors occur. & All assertions pass. 
   & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Login with valid credentials for a patient whose Firestore profile \texttt{users/\{uid\}} 
+  TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials for a patient whose Firestore profile \texttt{users/\{uid\}} 
   exists and contains \texttt{role="patient"}. & Login returns an object containing the \texttt{uid} and 
   stored profile data (including role and user fields). No errors occur. & All assertions pass. 
   & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Login with valid credentials where the Firestore profile \texttt{users/\{uid\}} does not exist. &
+  TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials where the Firestore profile \texttt{users/\{uid\}} does not exist. &
   Error \texttt{"User profile missing in Firestore."} is thrown and login is rejected. & 
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Logout after a user session is active. &
+  TC\testcount & , SR-AR3 & Logout after a user session is active. &
   The Auth sign-out operation is called once and completes without error. &
   All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
