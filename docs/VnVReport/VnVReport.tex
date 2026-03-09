@@ -434,11 +434,12 @@ and Valid User module. While the modules themselves perform a few different func
 due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
 and the User Account module test cases extend that to testing for invalid and non-existent users.
 
+
 \begin{longtable}{c
-    >{\raggedright\arraybackslash}p{1.5cm}
-    >{\raggedright\arraybackslash}p{4.5cm}
+    >{\raggedright\arraybackslash}p{1.2cm}
     >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{3cm} c}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -484,6 +485,91 @@ and the User Account module test cases extend that to testing for invalid and no
   TC33 & & Send POST requests with \texttt{side="RIGHT"} and \texttt{side="LEFT"} parameters. & \texttt{knee\_angle\_from\_result} is called twice with correct side parameters: first with 'RIGHT', then with 'LEFT'. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
   TC34 & & Send POST request with valid image but simulate decoding error by returning None. & Response status 400 with error message in JSON. & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
+\subsection{Analyze module}
+The tests below outline the Analyze module functionality. Note that many new functions were added for this
+iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+database and the various other components. Additionally, there may be some overlap between the Account Creation module
+and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
+due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
+and the User Account module test cases extend that to testing for invalid and non-existent users.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Analysis Module Test Cases}
+  \label{table:analyzer_tests}
+  \endlastfoot
+  
+  TC35 & & Initialize Analyzer with default values. & \texttt{started=False}, \texttt{min\_angle=0.0}, \texttt{max\_angle=0.0}, \texttt{is\_calibrating=False}, \texttt{cal\_start\_ts=None}, \texttt{cal\_duration\_s=10.0}, \texttt{cal\_min=None}, \texttt{cal\_max=None}, \texttt{rep\_count=0}, \texttt{current\_rep=None}, \texttt{rep\_durations=[]}, \texttt{rep\_state=""}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC36 & & Call \texttt{start\_calibration (duration\_s=5.0)}. & \texttt{is\_calibrating=True}, \texttt{cal\_duration\_s=5.0}, \texttt{cal\_start\_ts} is set, \texttt{cal\_min=None}, \texttt{cal\_max=None}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC37 & & During calibration, update with angles [30, 45, 60, 50, 70, 20]. & \texttt{cal\_min} updates to min value (20), \texttt{cal\_max} updates to max value (70). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC38 & & During calibration with duration 0.1s, update with angle 50 at t=100.05s (within duration), then angle 60 at t=100.16s (past duration). & First update: \texttt{is\_calibrating} remains True. Second update: \texttt{is\_calibrating} becomes False, \texttt{started} becomes True, \texttt{min\_angle=50}, \texttt{max\_angle=60}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC39 & & During calibration, call \texttt{\_calibrate\_with\_angle(None)}. & Calibration ignores None values. \texttt{cal\_min} and \texttt{cal\_max} remain None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  
+  TC40 & & Set \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, \texttt{started=True} & \texttt{rep\_state} is either "Extension" or empty. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC41 & & With rep state "Extension", update with angle 35. & Rep state transitions to "Flexion". \texttt{current\_rep} timestamp is updated. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC42 & & With rep state "Flexion" and \texttt{current\_rep=100.0}, update with angle 68 at t=101.5s (1.5s later). & Rep state transitions to "Extension". Rep count increments to 1. Rep duration of 1.5s is recorded. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC43 & & With rep state "Flexion" but \texttt{current\_rep=None}, update with angle 68. & Rep state transitions to "Extension" but no rep is counted. Rep count remains 0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC44 & & Call \texttt{update(25)} and \texttt{update(75)} and verify min/max expansion via \texttt{\_rep\_update}. & \texttt{min\_angle} updates to 25, \texttt{max\_angle} updates to 75. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC45 & & During calibration mode, call \texttt{update(45.0)}. & \texttt{\_calibrate\_ with\_angle} is called with 45.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC46 & & Before \texttt{started} is set, call \texttt{update(45.0)}. & \texttt{min\_angle} and \texttt{max\_angle} are both set to 45.0. \texttt{started} becomes True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC47 & & With \texttt{started=True}, \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, call \texttt{update(20.0)}. & \texttt{min\_angle} updates to 20.0. \texttt{max\_angle} remains 70.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC48 & & With \texttt{started=True}, \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, call \texttt{update(80.0)}. & \texttt{max\_angle} updates to 80.0. \texttt{min\_angle} remains 30.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC49 & & With \texttt{started=True}, call \texttt{update(None)}. & Values remain unchanged: \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC50 & & With \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, \texttt{rep\_count=5}, \texttt{rep\_state="Extension"}, \texttt{rep\_durations=[1.2, 1.3, 1.1, 1.4, 1.2]}, call \texttt{summary()}. & Summary contains all expected keys: \texttt{min\_degree}, \texttt{max\_degree}, \texttt{rom\_degree}, \texttt{calibrating}, \texttt{cal\_time\_left}, \texttt{rep\_count}, \texttt{current\_rep\_duration}, \texttt{avg\_rep\_duration}, \texttt{rep\_state}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC51 & & With \texttt{min\_angle=30.123}, \texttt{max\_angle=70.456}, \texttt{rep\_count=5}, \texttt{rep\_state="Extension"}, \texttt{rep\_durations=[1.2, 1.3, 1.1, 1.4, 1.2]}, call \texttt{summary()}. & \texttt{min\_degree} rounds to 30.1, \texttt{max\_degree} rounds to 70.5, \texttt{rom\_degree} calculates to 40.3. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC52 & & During calibration with \texttt{cal\_start\_ts=100.0}, \texttt{cal\_duration\_s=10.0}, at current time 105.0, call \texttt{summary()}. & \texttt{calibrating=True}, \texttt{cal\_time\_left=5.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC53 & & When not calibrating, call \texttt{summary()}. & \texttt{calibrating=False}, \texttt{cal\_time\_left=0.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC54 & & With \texttt{rep\_durations=[]} (no reps completed), call \texttt{summary()}. & \texttt{avg\_rep\_ duration=0}, \texttt{current\_rep\_ duration=0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC55 & & With \texttt{current\_rep=100.0} and \texttt{rep\_durations=[1.2, 1.3]}, at current time 101.5, call \texttt{summary()}. & \texttt{current\_rep\_ duration=1.5}, \texttt{avg\_rep\_ duration=1.25}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC56 & & With \texttt{min\_angle=50.0}, \texttt{max\_angle=50.0}, \texttt{started=True}, call \texttt{\_rep\_update(50.0)}. & Function handles gracefully without division by zero errors. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC57 & & With \texttt{started=True}, \texttt{min\_angle=-10.0}, \texttt{max\_angle=30.0}, update with angle -20.0 then 40.0. & \texttt{min\_angle} expands to -20.0, \texttt{max\_angle} expands to 40.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC58 & & With \texttt{started=True}, \texttt{min\_angle=0.0}, \texttt{max\_angle=180.0}, update with angle 200.0. & \texttt{max\_angle} expands to 200.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC59 & & With \texttt{min\_angle=50.0}, \texttt{max\_angle=50.0}, \texttt{started=True}, \texttt{rep\_state="Extension"}, call \texttt{\_rep\_update(50.0)}. & No state change occurs. Rep state remains "Extension". Rep count remains 0. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
 \section{Changes Due to Testing}
