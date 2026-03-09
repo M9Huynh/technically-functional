@@ -623,6 +623,63 @@ and the User Account module test cases extend that to testing for invalid and no
   TC67 & & Call \texttt{draw\_landmarks()} with a mock result and a numpy array frame. & Returns the frame. OpenCV's \texttt{line} and \texttt{circle} functions are called to draw the pose landmarks. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
+\subsection{Draw module}
+The tests below outline the Draw module functionality. Note that many new functions were added for this
+iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+database and the various other components. Additionally, there may be some overlap between the Account Creation module
+and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
+due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
+and the User Account module test cases extend that to testing for invalid and non-existent users.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Metrics Module Test Cases}
+  \label{table:metrics_tests}
+  \endlastfoot
+
+  TC68 & & Call \texttt{angle\_deg()} with points forming a 90-degree angle: a=(0,1), b=(1,1), c=(1,0). & Returns 90.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC69 & & Call \texttt{angle\_deg()} with points forming a 45-degree angle: a=(0,1), b=(1,1), c=(0,0). & Returns 45.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC70 & & Call \texttt{angle\_deg()} with points forming a 180-degree straight line: a=(0,1), b=(1,1), c=(2,1). & Returns 180.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC71 & & Call \texttt{angle\_deg()} with None values for each parameter position: (None, (1,1), (1,0)), ((0,1), None, (1,0)), ((0,1), (1,1), None). & Returns None for all three cases. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  
+  TC72 & & Call \texttt{knee\_angle\_ from\_result()} with a valid mock result containing right leg landmarks (hip=24, knee=26, ankle=28) forming a 90-degree angle. & Returns a valid angle value between 0 and 180 degrees. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC73 & & Call \texttt{knee\_angle\_ from\_result()} with a valid mock result containing left leg landmarks (hip=23, knee=25, ankle=27) forming a 90-degree angle. & Returns a valid angle value between 0 and 180 degrees. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC74 & & Call \texttt{knee\_angle\_from\_result()} with None instead of a result object. & Returns None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC75 & & Call \texttt{knee\_angle\_from\_result()} with a result object that has \texttt{pose\_landmarks=None}. & Returns None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC76 & & Modify the mock result by setting the right knee landmark (index 26) to None, then call \texttt{knee\_angle\_from\_result()} with side="RIGHT". & Returns None due to missing landmark. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC77 & & Modify the mock result by setting the left knee landmark (index 25) to None, then call \texttt{knee\_angle\_from\_result()} with side="LEFT". & Returns None due to missing landmark. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC78 & & Set the mock result's \texttt{pose\_landmarks} to an empty list and call \texttt{knee\_angle\_from\_result()}. & Returns None due to empty landmarks. & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
 \section{Changes Due to Testing}
 
 There were a few changes that were implemented as a result of testing. Note that some of these changes are in progress. 
