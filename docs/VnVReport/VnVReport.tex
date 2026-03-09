@@ -15,6 +15,7 @@
 \usepackage{booktabs}
 \usepackage[table]{xcolor}
 \usepackage{array}
+\usepackage{float}
 
 \input{../Comments.tex}
 \input{../Common.tex}
@@ -235,6 +236,8 @@ This section will not be appropriate for every project.
 
 The following section outlines the unit tests created for all of the
 modules.
+%Note that some of the modules may not exist in the VnV plan, since the plan consisted of overarching functionalities.
+%The tests listed here are testing isolated components that are more granular. 
 
 \newcounter{testcase}
 \newcommand{\testcount}{\stepcounter{testcase}\thetestcase}
@@ -273,39 +276,39 @@ creation workflows.
   \label{table:account_creation_tests}
   \endlastfoot
 
-  TC\testcount &  & Register physiotherapist with valid license format and a license that exists in 
+  TC\testcount & FR1.1, FR1.2 & Register physiotherapist with valid license format and a license that exists in 
   \texttt{validLicenses} with \texttt{active=true}. & Auth user is created. Firestore \texttt{users/\{uid\}} 
   document is written with \texttt{role="physio"}, trimmed name, lowercased email, uppercased license number, 
   \texttt{verified=true}, and \texttt{createdAt}. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register physiotherapist with an invalid license format (e.g., missing dash or incorrect digits). 
+  TC\testcount & FR1.1, FR1.2 & Register physiotherapist with an invalid license format (e.g., missing dash or incorrect digits). 
   & Error \texttt{"Invalid license format (example: ON-123456)."} is thrown. No Auth user is created. No Firestore 
   writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register physiotherapist with valid format but license is not found in \texttt{validLicenses} or
+  TC\testcount & FR1.1, FR1.2 & Register physiotherapist with valid format but license is not found in \texttt{validLicenses} or
    \texttt{active != true}. & Error \texttt{"License not verified."} is thrown. No Auth user is created. No Firestore 
    writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with invite code that exists in \texttt{inviteCodes}, is \texttt{active=true}, 
+  TC\testcount & FR1.1, FR1.3, FR2, FR3 & Register patient with invite code that exists in \texttt{inviteCodes}, is \texttt{active=true}, 
   \texttt{used=false}, and includes a \texttt{physioId}. & Auth user is created. Firestore \texttt{users/\{uid\}} 
   document is written with \texttt{role="patient"}, trimmed name, lowercased email, stored \texttt{physioId}, 
   normalized invite code, and \texttt{createdAt}. Invite is updated with \texttt{used=true} and 
   \texttt{usedBy=\{uid\}}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with an invite code that does not exist in \texttt{inviteCodes}. &
+  TC\testcount & FR1.3, FR3 & Register patient with an invite code that does not exist in \texttt{inviteCodes}. &
   Error \texttt{"Invalid invite code."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with an invite code that exists but \texttt{active=false}. &
+  TC\testcount & FR1.3, FR3 & Register patient with an invite code that exists but \texttt{active=false}. &
   Error \texttt{"Invite code inactive."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with an invite code that exists but \texttt{used=true}. &
+  TC\testcount & FR1.3, FR2 & Register patient with an invite code that exists but \texttt{used=true}. &
   Error \texttt{"Invite code already used."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Register patient with an invite code that exists but missing \texttt{physioId}. &
+  TC\testcount & FR1.3, FR2 & Register patient with an invite code that exists but missing \texttt{physioId}. &
   Error \texttt{"Invite code missing physio link."} is thrown. No Auth user is created. No Firestore writes/updates 
   occur. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
@@ -341,27 +344,108 @@ patient roles.
   \label{table:valid_user_tests}
   \endlastfoot
 
-  TC\testcount &  & Login with valid credentials for a physiotherapist whose Firestore profile \texttt{users/\{uid\}} 
+  TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials for a physiotherapist whose Firestore profile \texttt{users/\{uid\}} 
   exists and contains \texttt{role="physio"}. & Login returns an object containing the \texttt{uid} and stored 
   profile data (including role and user fields). No errors occur. & All assertions pass. 
   & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Login with valid credentials for a patient whose Firestore profile \texttt{users/\{uid\}} 
+  TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials for a patient whose Firestore profile \texttt{users/\{uid\}} 
   exists and contains \texttt{role="patient"}. & Login returns an object containing the \texttt{uid} and 
   stored profile data (including role and user fields). No errors occur. & All assertions pass. 
   & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Login with valid credentials where the Firestore profile \texttt{users/\{uid\}} does not exist. &
+  TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials where the Firestore profile \texttt{users/\{uid\}} does not exist. &
   Error \texttt{"User profile missing in Firestore."} is thrown and login is rejected. & 
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount &  & Logout after a user session is active. &
+  TC\testcount & & Logout after a user session is active. &
   The Auth sign-out operation is called once and completes without error. &
   All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
+\subsection{User Account module}
+The tests below outline the User Account module functionality. Note that many new functions were added for this
+iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+database and the various other components. Additionally, there may be some overlap between the Account Creation module
+and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
+due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
+and the User Account module test cases extend that to testing for invalid and non-existent users.
+
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+  \hline
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+
+  \multicolumn{6}{r}{\textit{Continued from previous page}} \\
+  \hline
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \hline
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \hline
+  \caption{User Account Service Test Cases}
+  \label{table:user_account_tests}
+  \endlastfoot
+
+  % USER MANAGEMENT FUNCTIONS
+  \multicolumn{6}{c}{\textbf{USER MANAGEMENT FUNCTIONS}} \\ \hline
+  
+  TC13 & FR23, FR21 & Get User Data: Test with valid \texttt{uid}, non-existent \texttt{uid}, and empty \texttt{uid}. & Valid \texttt{uid} returns \texttt{UserData}; non-existent returns null; empty throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC14 & FR21 & User Lookup: Test get user by email and email existence check with registered and unregistered emails. & Registered email returns user and true; unregistered returns null and false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC15 & FR2, FR6, FR22 & Update User: Test update user data. & Valid update returns true. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC16 & FR4 & Delete User: Test delete by \texttt{uid} and by email with valid and non-existent cases. & Valid cases return true; non-existent return false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  % QUERY FUNCTIONS
+  \multicolumn{6}{c}{\textbf{QUERY FUNCTIONS}} \\ \hline
+  
+  TC17 & FR18 & User Queries: Test get patients by physioId, search by name, and get all users. & Returns correctly filtered arrays; errors return empty arrays. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  % SPECIALIZED FUNCTIONS
+  \multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
+  
+  TC18 & FR21, FR25 & User Info Lookup: Test getUserdbInfo with name only and with name+birthday filter. & Returns categorized patients/physios correctly; filtering works as expected. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC19 & FR2, FR4, FR22 & PT\_Account\_Delete: Test with valid physio, non-physio user, and non-existent patient. & Valid case deletes patient; non-physio throws error; non-existent throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC20 & SR-AR1, SR-PR1 & Test usernamePwMatch and authenticateUser with valid credentials, invalid password, and non-existent user. & Valid returns true/user; invalid throws appropriate errors; non-existent returns null. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+  
+  TC21 & SR-AR1, SR-AR2 & System Initialization: Test initializeSystem. & Logs success message to console. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  % VALIDATION HELPERS
+  \multicolumn{6}{c}{\textbf{VALIDATION HELPERS}} \\ \hline
+  
+  TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+\end{longtable}
 
 \section{Changes Due to Testing}
+
+There were a few changes that were implemented as a result of testing. Note that some of these changes are in progress. 
+
+\subsection{Usability Testing Results}
+Analyses from usability testing revealed important user experience insights which has provided clarity with what should
+be the focus for further development. A subset of recommendations will be developed further, while others will be tabled 
+as out of scope due to project timeline constraints. 
+There were a total of 5 participants in the study, with 2 being PTs, and the rest were those who satisfied the pool criteria.
+The diverse perspectives proved to be essential by honing in on elements that may provide substantial added value to the 
+application. Both user flows (PT and patient) were tested with the corresponding participants. \\
+The physiotherapist participants had 2 recommendations: A more comprehensive exercise activity record (eg. adding sets in addition to reps) 
+for a clearer picture on the patient's performance, and inclusion of a post-exercise feedback form to provide an insight into performance.
+(eg. modifying the rep count due to patient's increased pain). \\
+The other participants highlighted the need for audio cues while performing the exercise. Reading the instructions from
+the acceptable distance necessary for proper application function was troublesome. Secondly, additional data on the Progress tab would
+be beneficial for patients to keep track, in a non-technical context, of their recovery. \\
+See \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{Usability Report} for additional information.\\
+\textit{Note: The usability testing has been completed, but the document's Results and Discussion still remain.}\\
+
 
 \wss{This section should highlight how feedback from the users and from 
 the supervisor (when one exists) shaped the final product.  In particular 
@@ -369,10 +453,163 @@ the feedback from the Rev 0 demo to the supervisor (or to potential users)
 should be highlighted.}
 
 \section{Automated Testing}
+
+In terms of automated testing, all of the tests for the Python backend as well as the individual modules 
+on the TypeScript frontend of the mobile application are automated. The Python tests are run using \texttt{Pytest} 
+by simply typing \texttt{pytest} in the command line in the correct root project directory. These tests validate core backend functionality such as 
+pose metric calculations and helper functions used during exercise processing. All the 
+TypeScript tests can be run similarly, though they run with \texttt{Jest} and through running the following command: 
+\texttt{npm run test}. Ultimately, these tests focus on validating frontend logic including authentication and user account
+ management, user activity tracking, exercise data handling, performance statistics generation, and the feedback 
+ module that displays live feedback to users and allows both the physiotherapistss and patients the opopruntity 
+ to leave comments regarding the user's respective session. It is important to note that the Firebase services and 
+ camera components are mocked during testing so that we are able to seperately test the logic functionality. 
+ Also, the results for both the backend and frontend automated test suites are printed to the console, ultimately 
+ allowing us to be able to quickly identify both the passing and failing tests immediately.
 		
 \section{Trace to Requirements}
-		
-\section{Trace to Modules}		
+
+This section maps the tests performed to the requirements they validate, providing traceability between verification activities and project requirements.
+
+\begin{table}[H]
+  \centering
+  \caption{Functional Requirements and Corresponding Test Sections}
+  \begin{tabular}{p{0.42\textwidth}p{0.42\textwidth}}
+    \toprule \textbf{Test Section} & \textbf{Functional Requirement(s)} \\
+    \midrule
+    Account Creation Module Tests (TC1--TC3) & FR1.1, FR1.2 \\
+    Patient Registration Tests (TC4--TC8) & FR1.1, FR1.3, FR2, FR3 \\
+    User Authentication Tests (TC9--TC11) & FR1, FR1.1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:sections_requirements}
+\end{table}
+
+Table \ref{tab:sections_requirements} shows the functional requirements and their corresponding test sections, ensuring all relevant requirements have been properly tested.
+
+\begin{table}[H]
+  \centering
+  \caption{Look \& Feel Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-lf}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    UT-1 & LFR-AP1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Table \ref{tab:nfr-trace-lf} maps the Look \& Feel test cases to their corresponding non-functional requirements.
+
+\begin{table}[H]
+  \centering
+  \caption{Usability \& Humanity Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-uh}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    UT-2 & UHR-EOU2, UHR-LRN1 \\
+    UT-3 & UHR-EOU1, LFR-ST1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The usability and humanity requirements and their corresponding test cases are shown in Table \ref{tab:nfr-trace-uh}.
+
+\begin{table}[H]
+  \centering
+  \caption{Performance Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    PR-1 & PR-SL1, PR-SL2 \\
+    PR-2 & PR-SL1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-perf}
+\end{table}
+
+Performance requirements and their test cases are outlined in Table \ref{tab:nfr-trace-perf}.
+
+\begin{table}[H]
+  \centering
+  \caption{Robustness \& Fault-Tolerance Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    RFT-1 & PR-RFT1 \\
+    RFT-2 & PR-RFT2 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-rft}
+\end{table}
+
+Table \ref{tab:nfr-trace-rft} shows the robustness and fault-tolerance requirements along with their test cases.
+
+\begin{table}[H]
+  \centering
+  \caption{Operational \& Environmental Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    MS-1 & OER-WE1, OER-PR1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-ope}
+\end{table}
+
+Table \ref{tab:nfr-trace-ope} shows the operational and environmental requirements along with their corresponding test cases.
+
+\begin{table}[H]
+  \centering
+  \caption{Maintenance \& Support Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    MS-2 & PR-SER1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-ms}
+\end{table}
+
+The maintenance and support requirements and their corresponding test cases are shown in Table \ref{tab:nfr-trace-ms}.
+
+\begin{table}[H]
+  \centering
+  \caption{Security Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    SR-1 & SR-AR1 \\
+    SR-2 & SR-AR1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-sec}
+\end{table}
+
+Table \ref{tab:nfr-trace-sec} outlines the security requirements and their corresponding test cases.
+
+\section{Trace to Modules}	
+
+This section maps test cases to the specific modules they validated, organized by architectural levels to ensure comprehensive verification of our system.
+
+\begin{table}[H]
+  \centering
+  \caption{Tests for Core Modules}
+  \begin{tabular}{p{0.38\textwidth}p{0.42\textwidth}}
+    \toprule \textbf{Test ID} & \textbf{Module} \\
+    \midrule
+    TC1--TC8 & M5 (Account Creation Module) \\
+    TC9--TC12 & M6 (Valid User Module) \\
+    test-UT-1, test-UT-2, test-UT-3, test-PR-1, test-PR-2, test-RFT-1, test-RFT-2 & M1 (User Interface Module) \\
+    test-SR-1, test-SR-2 & M5 (Account Creation Module), M6 (Valid User Module) \\
+    test-MS-1, test-MS-2 & M1 (User Interface Module), M5 (Account Creation Module), M6 (Valid User Module) \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:core_modules_tests}
+\end{table}
+
+Table \ref{tab:core_modules_tests} shows the mapping between test cases and the core modules they verify.	
 
 \section{Code Coverage Metrics}
 

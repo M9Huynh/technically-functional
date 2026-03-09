@@ -3,6 +3,7 @@ module.exports = {
   testEnvironment: "node",
   testMatch: ["**/__tests__/**/*.test.ts"],
   moduleFileExtensions: ["ts", "js", "json"],
+  roots: ["<rootDir>/lib"],
 
   // ✅ This prevents Jest from ever loading real firebase/expo internals
   moduleNameMapper: {
@@ -12,11 +13,23 @@ module.exports = {
     "^@react-native-async-storage/async-storage$": "<rootDir>/lib/__mocks__/async-storage.ts",
   },
 
-  // ts-jest config (safe defaults)
-  globals: {
-    "ts-jest": {
-      tsconfig: "tsconfig.json",
-      isolatedModules: true,
-    },
+  collectCoverageFrom: [
+    "lib/**/*.ts",
+    "!lib/**/*.d.ts",
+    "!lib/**/__tests__/**",
+    "!lib/**/__mocks__/**",
+  ],
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.json"
+      }
+    ]
   },
+
+  // ts-jest config (safe defaults)
+
+  //Added this - Maham
+  clearMocks: true,
 };
