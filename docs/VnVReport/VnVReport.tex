@@ -81,9 +81,11 @@ This document ...
 
 \textbf{Initial State:} App installed on a mobile device; user logged in.
 
-\textbf{Input:} User was asked to find and open the exercise screen, start a recording session, and return to the dashboard without assistance.
+\textbf{Input:} User was asked to find and open the exercise screen, start a recording session, 
+and return to the dashboard without assistance.
 
-\textbf{Output:} User successfully navigated through the required screens without confusion. Feedback indicated labels and buttons were clear.
+\textbf{Output:} User successfully navigated through the required screens without confusion. Feedback 
+indicated labels and buttons were clear.
 
 \textbf{Result:} Pass
 
@@ -93,9 +95,11 @@ This document ...
 
 \textbf{Initial State:} User on the record exercise screen with camera access enabled.
 
-\textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback instructing the user of any adjustments.
+\textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback 
+instructing the user of any adjustments.
 
-\textbf{Output:} User reported that instructions were clear and prompts matched the required actions. Minor wording improvements were noted and updated.
+\textbf{Output:} User reported that instructions were clear and prompts matched the required actions. 
+Minor wording improvements were noted and updated.
 
 \textbf{Result:} Pass
 
@@ -121,9 +125,11 @@ This document ...
 
 \textbf{Initial State:} User logged in on a mobile device; backend server running.
 
-\textbf{Input:} User started pose analysis from the exercise screen. Screen recording timestamps were used to measure the time from tapping ``Start'' to the first visible feedback/result. Five trials were conducted.
+\textbf{Input:} User started recording from the record screen. Screen recording timestamps were 
+used to measure the time from tapping ``Start'' to the first visible feedback/result. There were five trials conducted.
 
-\textbf{Output:} Measured response times were 1.87s, 1.92s, 1.79s, 1.95s, and 1.84s. The average end-to-end response time was 1.87 seconds ($\leq$ 2 seconds).
+\textbf{Output:} Measured response times were 1.87s, 1.92s, 1.79s, 1.95s, and 1.84s. The average end-to-end 
+response time was 1.87 seconds ($\leq$ 2 seconds).
 
 \textbf{Result:} Pass
 
@@ -133,9 +139,10 @@ This document ...
 
 \textbf{Initial State:} Application running normally on mobile device.
 
-\textbf{Input:} User completed 10 consecutive ``Start $\rightarrow$ Analyze $\rightarrow$ Stop'' cycles.
+\textbf{Input:} User completed 10 consecutive ``Start $\rightarrow$ Record Exercise $\rightarrow$ Stop'' cycles.
 
-\textbf{Output:} No significant slowdown was observed across trials. Response times remained within acceptable range and no crashes occurred.
+\textbf{Output:} There was no significant slowdown observed across the 10 trials. Additionally, the response times were all within acceptable 
+range and no crashes took place.
 
 \textbf{Result:} Pass
 
@@ -151,7 +158,8 @@ This document ...
 
 \textbf{Input:} Backend server was manually terminated during active analysis.
 
-\textbf{Output:} Application displayed a network error message and remained responsive (no crash). After backend restart, the user was able to retry and continue normal operation.
+\textbf{Output:} Application displayed a network error message and remained responsive (no crash). After backend 
+restart, the user was able to retry and continue normal operation.
 
 \textbf{Result:} Pass
 
@@ -163,7 +171,8 @@ This document ...
 
 \textbf{Input:} WiFi connection was disabled mid-upload and restored after approximately 10 seconds.
 
-\textbf{Output:} Application detected upload failure and displayed a retry option. User retried successfully and uploaded video was verified to be intact.
+\textbf{Output:} Application detected upload failure and displayed a retry option. User retried successfully and 
+uploaded video was verified to be intact.
 
 \textbf{Result:} Pass
 
@@ -177,9 +186,9 @@ This document ...
 
 \textbf{Initial State:} Backend server running with authentication enabled.
 
-\textbf{Input:} A request was sent to a protected endpoint without authentication credentials or token.
+\textbf{Input:} A request was sent to a protected endpoint without authentication credentials.
 
-\textbf{Output:} Server returned HTTP 401 Unauthorized. No protected data was returned.
+\textbf{Output:} Server returned HTTP 401 Unauthorized. Additionally, no protected data was returned.
 
 \textbf{Result:} Pass
 
@@ -191,7 +200,8 @@ This document ...
 
 \textbf{Input:} Login attempted using an email not registered in the database or incorrect password.
 
-\textbf{Output:} System denied login and displayed an appropriate error message without exposing internal system details.
+\textbf{Output:} System denied login and displayed an appropriate error message without exposing any 
+system details.
 
 \textbf{Result:} Pass
 
@@ -208,9 +218,11 @@ This document ...
 
 \textbf{Initial State:} Fresh machine with no prior installation.
 
-\textbf{Input:} Project repository was cloned and installed using instructions provided in README (frontend and backend setup).
+\textbf{Input:} Project repository was cloned and installed using instructions provided in README 
+(the frontend and backend setup).
 
-\textbf{Output:} Application ran successfully without missing dependencies. All documented setup steps were sufficient to reproduce the system.
+\textbf{Output:} Application ran successfully without missing dependencies. All documented setup steps were 
+sufficient to successfully reproduce the system.
 
 \textbf{Result:} Pass
 
@@ -220,9 +232,14 @@ This document ...
 
 \textbf{Initial State:} Revision 0 completed.
 
-\textbf{Input:} Multiple peer code reviews were conducted through pull requests and issue tracking. Unit tests were executed to validate core functionality, including pose angle calculations and analysis logic. UI components were reviewed for usability, clarity of instructions, and error handling. Identified issues were documented and resolved using version control workflows.
+\textbf{Input:} Numerous peer code reviews were conducted through pull requests and issue tracking. 
+The unit tests were executed to validate core functionality, including the metric calculations and functional logic. 
+The UI components were reviewed for usability, clarity of instructions, and error handling. Moreover, the identified 
+issues were documented and resolved.
 
-\textbf{Output:} Core analysis functions passed unit testing. UI refinements were implemented based on peer feedback. Code structure maintained clear separation between modules and frontend components. No major functional issues were identified during review.
+\textbf{Output:} The core functions passed unit testing. The UI refinements were implemented based on peer 
+feedback. The code structure maintained clear separation between modules and frontend components. Overall, there 
+were no major functional issues identified during review.
 
 \textbf{Result:} Pass
 
@@ -463,7 +480,7 @@ TypeScript tests can be run similarly, though they run with \texttt{Jest} and th
  management, user activity tracking, exercise data handling, performance statistics generation, and the feedback 
  module that displays live feedback to users and allows both the physiotherapistss and patients the opopruntity 
  to leave comments regarding the user's respective session. It is important to note that the Firebase services and 
- camera components are mocked during testing so that we are able to seperately test the logic functionality. 
+ camera components are mocked during testing so that we are able to separately test the logic functionality. 
  Also, the results for both the backend and frontend automated test suites are printed to the console, ultimately 
  allowing us to be able to quickly identify both the passing and failing tests immediately.
 		
