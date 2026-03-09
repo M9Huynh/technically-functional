@@ -572,6 +572,57 @@ and the User Account module test cases extend that to testing for invalid and no
   TC59 & & With \texttt{min\_angle=50.0}, \texttt{max\_angle=50.0}, \texttt{started=True}, \texttt{rep\_state="Extension"}, call \texttt{\_rep\_update(50.0)}. & No state change occurs. Rep state remains "Extension". Rep count remains 0. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
+\subsection{Draw module}
+The tests below outline the Draw module functionality. Note that many new functions were added for this
+iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+database and the various other components. Additionally, there may be some overlap between the Account Creation module
+and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
+due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
+and the User Account module test cases extend that to testing for invalid and non-existent users.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Draw Module Test Cases}
+  \label{table:draw_tests}
+  \endlastfoot
+  
+  TC60 & & Call \texttt{get\_pose\_connections (legs\_only=False)} and verify against \texttt{POSE\_CONNECTIONS}. & \texttt{POSE\_CONNECTIONS} and \texttt{LEG\_CONNECTIONS} has length greater than 0 length. \texttt{LEG\_CONNECTIONS} length is less than \texttt{POSE\_CONNECTIONS}, and the set of connections from \texttt{get\_pose\_connections(False)} equals the set of \texttt{POSE\_CONNECTIONS}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC61 & & Call \texttt{get\_pose\_connections (legs\_only=True)} and verify against \texttt{LEG\_CONNECTIONS}. & The connections returned equals the set of \texttt{LEG\_CONNECTIONS}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC62 & & Call \texttt{extract\_landmarks()} with a valid pose result containing 33 landmarks. & Returns a list of 33 landmarks. Each landmark has x, y, z values that are close to the expected i/33 values. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC63 & & Call \texttt{extract\_landmarks()} with None and with an empty result (pose\_landmarks=None). & Returns None for both. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC64 & & Initialize PoseCamera with mocked VideoCapture and mocked PoseLandmarker. & Camera initializes successfully. \texttt{display\_size} is set to (640, 480). \texttt{cap.set} is called to configure frame dimensions. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC65 & & Call \texttt{get\_frame()} with mocked camera that returns a numpy array frame. & Returns (True, frame) where frame is a numpy array. Frame is resized to display dimensions. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC66 & & Call \texttt{process\_pose()} with a mocked frame. & Returns a mock result. The pose detector's \texttt{detect} method is called once with the converted RGB image. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC67 & & Call \texttt{draw\_landmarks()} with a mock result and a numpy array frame. & Returns the frame. OpenCV's \texttt{line} and \texttt{circle} functions are called to draw the pose landmarks. & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
 \section{Changes Due to Testing}
 
 There were a few changes that were implemented as a result of testing. Note that some of these changes are in progress. 
