@@ -1,4 +1,4 @@
-// test-useraccount.js
+ // test-useraccount.js
 
 process.env.EXPO_PUBLIC_FIREBASE_API_KEY = "test-api-key";
 process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN = "test-auth-domain";

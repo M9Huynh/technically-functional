@@ -9,6 +9,7 @@ module.exports = {
     "^firebase/auth$": "<rootDir>/lib/__mocks__/firebase-auth.ts",
     "^firebase/firestore$": "<rootDir>/lib/__mocks__/firebase-firestore.ts",
     "^firebase/app$": "<rootDir>/lib/__mocks__/firebase-app.ts",
+    "^@react-native-async-storage/async-storage$": "<rootDir>/lib/__mocks__/async-storage.ts",
   },
 
   // ts-jest config (safe defaults)
