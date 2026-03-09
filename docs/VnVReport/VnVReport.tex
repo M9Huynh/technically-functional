@@ -365,7 +365,7 @@ patient roles.
 
 \subsection{User Account module}
 The tests below outline the User Account module functionality. Note that many new functions were added for this
-iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+iteration. Currently, it serves as an interface between the 
 database and the various other components. Additionally, there may be some overlap between the Account Creation module
 and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
 due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
@@ -608,6 +608,8 @@ This section maps test cases to the specific modules they validated, organized b
     \midrule
     TC1--TC8 & M5 (Account Creation Module) \\
     TC9--TC12 & M6 (Valid User Module) \\
+    TC13--TC19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account Module), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
+    TC20--TC22 & M1 (User Interface), M7 (User Account Module) \\
     test-UT-1, test-UT-2, test-UT-3, test-PR-1, test-PR-2, test-RFT-1, test-RFT-2 & M1 (User Interface Module) \\
     test-SR-1, test-SR-2 & M5 (Account Creation Module), M6 (Valid User Module) \\
     test-MS-1, test-MS-2 & M1 (User Interface Module), M5 (Account Creation Module), M6 (Valid User Module) \\
