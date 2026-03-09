@@ -71,6 +71,356 @@ This document ...
 
 \section{Functional Requirements Evaluation}
 
+\begin{enumerate}
+	
+	\item \textbf{test-TC1 : Physiotherapist Registration (Valid License)}
+	
+	\textbf{Initial State:} App launched; registration screen accessible; Firebase Auth and Firestore active.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with a valid license format and an active license in \texttt{validLicenses}.
+	
+	\textbf{Output:} Auth user created. Firestore \texttt{users/\{uid\}} written with \texttt{role="physio"}, \texttt{verified=true}, and \texttt{createdAt}. All assertions passed.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC2 : Physiotherapist Registration (Invalid License Format)}
+	
+	\textbf{Initial State:} App launched; registration screen accessible.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with an invalid license format (missing dash or incorrect digits).
+	
+	\textbf{Output:} Error ``Invalid license format'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC3 : Physiotherapist Registration (Unverified License)}
+	
+	\textbf{Initial State:} App launched; registration screen accessible.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with valid format but license not found or \texttt{active=false} in \texttt{validLicenses}.
+	
+	\textbf{Output:} Error ``License not verified'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC4 : Patient Registration (Valid Invite Code)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} collection seeded with an active, unused code containing a \texttt{physioId}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a valid invite code.
+	
+	\textbf{Output:} Auth user created. Firestore \texttt{users/\{uid\}} written with \texttt{role="patient"} and stored \texttt{physioId}. Invite code updated with \texttt{used=true} and \texttt{usedBy=\{uid\}}.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC5 : Patient Registration (Non-Existent Invite Code)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} collection does not contain the submitted code.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a code that does not exist in \texttt{inviteCodes}.
+	
+	\textbf{Output:} Error ``Invalid invite code'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC6 : Patient Registration (Inactive Invite Code)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with \texttt{active=false}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with an inactive invite code.
+	
+	\textbf{Output:} Error ``Invite code inactive'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC7 : Patient Registration (Already Used Invite Code)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with \texttt{used=true}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with an already used invite code.
+	
+	\textbf{Output:} Error ``Invite code already used'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC8 : Patient Registration (Invite Code Missing Physio Link)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with no \texttt{physioId} field.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a code missing a \texttt{physioId}.
+	
+	\textbf{Output:} Error ``Invite code missing physio link'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC9 : User Login (Valid Physiotherapist Credentials)}
+	
+	\textbf{Initial State:} Login screen available; Firestore contains a profile with \texttt{role="physio"}.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid PT credentials.
+	
+	\textbf{Output:} Login returns object with \texttt{uid} and profile data including \texttt{role="physio"}. No errors thrown.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC10 : User Login (Valid Patient Credentials)}
+	
+	\textbf{Initial State:} Login screen available; Firestore contains a profile with \texttt{role="patient"}.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid patient credentials.
+	
+	\textbf{Output:} Login returns object with \texttt{uid} and profile data including \texttt{role="patient"}. No errors thrown.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC11 : User Login (Missing Firestore Profile)}
+	
+	\textbf{Initial State:} Login screen available; valid Firebase Auth credentials exist but no Firestore profile.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid credentials.
+	
+	\textbf{Output:} Error ``User profile missing in Firestore'' thrown. Login rejected.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC12 : User Logout}
+	
+	\textbf{Initial State:} User session active.
+	
+	\textbf{Input:} \texttt{logoutUser()} called.
+	
+	\textbf{Output:} Auth sign-out called once and completes without error.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC13 : Get User Data}
+	
+	\textbf{Initial State:} Firestore populated with test user documents.
+	
+	\textbf{Input:} \texttt{getUserData()} called with a valid uid, a non-existent uid, and an empty uid.
+	
+	\textbf{Output:} Valid uid returns \texttt{UserData}. Non-existent uid returns null. Empty uid throws an error.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC14 : User Lookup by Email}
+	
+	\textbf{Initial State:} Firestore populated with test user documents.
+	
+	\textbf{Input:} \texttt{getUserByEmail()} called with a registered email and an unregistered email.
+	
+	\textbf{Output:} Registered email returns user object and true. Unregistered email returns null and false.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC15 : Update User Data}
+	
+	\textbf{Initial State:} Firestore populated with test user documents.
+	
+	\textbf{Input:} \texttt{updateUser()} called with a valid update payload.
+	
+	\textbf{Output:} Update returns true. Changes reflected in Firestore.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC16 : Delete User}
+	
+	\textbf{Initial State:} Firestore populated with test user documents.
+	
+	\textbf{Input:} \texttt{deleteUser()} called with a valid uid, a valid email, and a non-existent case.
+	
+	\textbf{Output:} Valid cases return true. Non-existent case returns false.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC17 : User Queries}
+	
+	\textbf{Initial State:} Firestore populated with linked PT and patient records.
+	
+	\textbf{Input:} \texttt{getPatientsByPhysioId()}, \texttt{searchByName()}, and \texttt{getAllUsers()} called.
+	
+	\textbf{Output:} Each function returns correctly filtered arrays. Errors return empty arrays.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC18 : User Info Lookup}
+	
+	\textbf{Initial State:} Firestore populated with linked PT and patient records.
+	
+	\textbf{Input:} \texttt{getUserdbInfo()} called with name only and with name and birthday filter.
+	
+	\textbf{Output:} Returns categorized patients and physiotherapists correctly. Birthday filter works as expected.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC19 : PT Account Delete}
+	
+	\textbf{Initial State:} Firestore populated with a valid physiotherapist and linked patient.
+	
+	\textbf{Input:} \texttt{deletePTAccount()} called with a valid physio, a non-physio user, and a non-existent patient.
+	
+	\textbf{Output:} Valid case deletes patient successfully. Non-physio and non-existent cases throw appropriate errors.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC20 : User Authentication Validation}
+	
+	\textbf{Initial State:} Firestore populated with test user credentials.
+	
+	\textbf{Input:} \texttt{usernamePwMatch()} and \texttt{authenticateUser()} called with valid credentials, an invalid password, and a non-existent user.
+	
+	\textbf{Output:} Valid credentials return true and user object. Invalid password throws an error. Non-existent user returns null.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC21 : System Initialization}
+	
+	\textbf{Initial State:} System not yet initialized.
+	
+	\textbf{Input:} \texttt{initializeSystem()} called.
+	
+	\textbf{Output:} Success message logged to console. No errors thrown.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC22 : Credential Validation}
+	
+	\textbf{Initial State:} User account exists in Firestore.
+	
+	\textbf{Input:} \texttt{validateCredentials()} called with a correct password and an incorrect password.
+	
+	\textbf{Output:} Correct password returns true. Incorrect password returns false.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-4 : Account Creation (Usability)}
+	
+	\textbf{Initial State:} App installed on participant's device; invite code and PT license number provided.
+	
+	\textbf{Input:} Participant launched the app, selected their role, and completed account creation.
+	
+	\textbf{Output:} All participants created accounts successfully without assistance. PT license and invite code fields completed without difficulty. Minor font size feedback noted and resolved.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-5 : Exercise Recording Initiation}
+	
+	\textbf{Initial State:} Patient logged in on mobile device; camera permission granted; backend server running.
+	
+	\textbf{Input:} Participant navigated to the Record screen and pressed Start Recording.
+	
+	\textbf{Output:} Camera activated and pose detection began. On-screen prompts instructed participant to enter the detectable frame area. Navigation and button labels reported as clear.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-6 : Real-Time Pose Detection and Form Feedback}
+	
+	\textbf{Initial State:} Patient positioned within camera frame; pose detection active; backend returning joint angle and ROM metrics.
+	
+	\textbf{Input:} Participant performed knee extension repetitions.
+	
+	\textbf{Output:} App detected relevant body landmarks and displayed appropriate form feedback overlays. Rep count incremented correctly. Detection accuracy was reported as satisfactory.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-7 : Exercise Page (Instructions)}
+	
+	\textbf{Initial State:} Patient logged in; Exercises tab accessible.
+	
+	\textbf{Input:} Participant navigated to the Exercises page and reviewed listed exercises.
+	
+	\textbf{Output:} Exercises displayed with names, target muscle groups, set/rep counts, and step-by-step instructions. Instructions reported as clear and easy to follow.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-8 : Progress Screen (Session History)}
+	
+	\textbf{Initial State:} Patient logged in with at least one completed session stored in Firestore.
+	
+	\textbf{Input:} Participant navigated to the Progress tab.
+	
+	\textbf{Output:} Session history displayed with ROM and rep count data. Layout was readable and logically arranged. Participants suggested adding sets and pain level as future enhancements.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-9 : PT Dashboard (Patient List and Activity)}
+	
+	\textbf{Initial State:} Physiotherapist logged in; at least one linked patient with recorded sessions.
+	
+	\textbf{Input:} PT participant reviewed the home dashboard and selected a patient to view their activity history.
+	
+	\textbf{Output:} Dashboard displayed linked patients and activity history. Patient detail view showed session history and ROM chart. Layout reported as clear and sufficient for clinical use.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-10 : PT Feedback Submission}
+	
+	\textbf{Initial State:} Physiotherapist logged in; patient session detail page accessible.
+	
+	\textbf{Input:} PT participant selected a session entry and submitted a written comment.
+	
+	\textbf{Output:} Feedback saved to Firestore and associated with the session. Comment visible from the patient's session view. PT participants rated the feature as clinically useful.
+	
+	\textbf{Result:} Pass
+	
+\end{enumerate}
+
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}
