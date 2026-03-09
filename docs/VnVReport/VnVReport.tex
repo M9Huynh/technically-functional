@@ -93,7 +93,7 @@ This document ...
 
 \textbf{Initial State:} User on the record exercise screen with camera access enabled.
 
-\textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback instructing the user to remain within the camera frame. Once proper positioning was detected, the user was able to start and stop recording and save the session.
+\textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback instructing the user of any adjustments.
 
 \textbf{Output:} User reported that instructions were clear and prompts matched the required actions. Minor wording improvements were noted and updated.
 
@@ -562,20 +562,6 @@ Table \ref{tab:nfr-trace-ope} shows the operational and environmental requiremen
 
 \begin{table}[H]
   \centering
-  \caption{Maintenance \& Support Tests and Corresponding Requirements}
-  \begin{tabular}{cc}
-    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
-    \midrule
-    MS-2 & PR-SER1 \\
-    \bottomrule
-  \end{tabular}
-  \label{tab:nfr-trace-ms}
-\end{table}
-
-The maintenance and support requirements and their corresponding test cases are shown in Table \ref{tab:nfr-trace-ms}.
-
-\begin{table}[H]
-  \centering
   \caption{Security Tests and Corresponding Requirements}
   \begin{tabular}{cc}
     \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
@@ -649,5 +635,82 @@ graduate attribute of Reflection.
   if you got your CI working earlier in the project?  What are your plans to use
   CI for testing in future projects?
 \end{enumerate}
+
+\subsubsection*{Vaisnavi:}
+\begin{itemize}
+  \item \textit{What went well while writing this deliverable?} \\
+
+    One thing that went well while writing this deliverable was our ability to collaborate 
+    and efficiently split up the tasks and sections of this report. Specifically, in the case of 
+    the unit tests and traceability, we decided as a group for each member to derive the unit tests and 
+    traceability based on the sections of the app that they had worked on. This aided efficiency and productivity 
+    overall, and allowed the report to come together easily.
+
+  \item \textit{What pain points did you experience during this
+    deliverable, and how did you resolve them?}\\
+
+    One of the biggest pain points I experienced during this deliverable was actually writing the unit tests. 
+    Writing the tests was actually harder than I expected because mocking the Firebase database was something I had 
+    never done before. Since our authentication and valid user logic uses the Firebase database, we had to mock those 
+    database calls instead of using the real database, which took some time to learn and figure out. There was 
+    definitely a learning curve, but after looking through examples and testing different approaches, I was able to 
+    get the mocks working properly. In the end, it helped me better understand how to test code that depends on 
+    external services.
+
+\end{itemize}
+
+\subsubsection*{Group}
+\begin{itemize}
+  \item \textit{Which parts of this document stemmed from speaking to
+      your client(s) or
+    a proxy (e.g. your peers)? Which ones were not, and why?} \\
+
+    Parts of this document stemmed from speaking to our clients, specifically by receiving feedback 
+    from our peers who acted as proxies for physiotherapy patients. When demonstrating our application, 
+    they interacted with the system and gave relevant, useful feedback on the usability of the interface 
+    as well as how clear and easy to grasp the real-time exercise feedback was. This mainly had an impact 
+    on the sections related to usability testing, interface design, and how feedback is presented to users, 
+    especially the requirement for clear instructions and visible/audio cues during exercises. Moreover, the 
+    other parts of the document, such as functional requirement evaluation and technical implementation, did 
+    not come directly from speaking to our clients. These were based on the requirements defined in our SRS and 
+    the testing done by our core team, since these parts relate more to the development logic and system reliability 
+    rather than user interaction.
+
+
+  \item \textit{In what ways was the Verification and Validation
+        (VnV) Plan different
+        from the activities that were actually conducted for VnV?  If there were
+        differences, what changes required the modification in the plan?  Why did
+        these changes occur?  Would you be able to anticipate these
+        changes in future
+        projects?  If there weren't any differences, how was your team
+        able to clearly
+        predict a feasible amount of effort and the right tasks needed
+        to build the
+        evidence that demonstrates the required quality?  (It is
+          expected that most
+      teams will have had to deviate from their original VnV Plan.)}\\
+
+
+  \item \textit{Reflect on your use of CI for continuous integration testing (regression
+  testing). Did your CI work to gatekeep your PRs?  Would it have been helpful
+  if you got your CI working earlier in the project?  What are your plans to use
+  CI for testing in future projects?} \\
+
+    Our project currently uses GitHub Actions for CI, but as of right now, the workflow is limited and 
+    mainly displays the pull request activity and build checks. With our implemented unit tests for both 
+    the frontend and backend, we want to integrate these directly into the CI pipeline. Specifically, the 
+    GitHub Actions workflow could be configured to automatically run the Jest test suite for the TypeScript 
+    frontend and the Pytest test suite for the Python backend whenever a pull request is opened or updated. 
+    In this case, if any test fails, the workflow would essentially fail, which would ultimately prevent changes 
+    from being merged until the issue is resolved. With this proposed change, this would make the CI pipeline much 
+    more effective for regression testing, as it would automatically verify that new code trying to be merged in 
+    does not break existing functionality. It is important to note that it would have been helpful to set this up 
+    earlier in the project, and as a result, for future projects, we would aim to do so. Thus, overall for future 
+    projects, we would plan to set up CI earlier and integrate our automated test suites (such as Jest and Pytest) 
+    so that the tests run automatically on every pull request and prevent merges if any tests fail.
+
+
+\end{itemize}
 
 \end{document}
