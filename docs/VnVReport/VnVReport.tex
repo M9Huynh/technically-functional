@@ -680,6 +680,103 @@ and the User Account module test cases extend that to testing for invalid and no
   TC78 & & Set the mock result's \texttt{pose\_landmarks} to an empty list and call \texttt{knee\_angle\_from\_result()}. & Returns None due to empty landmarks. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
+\subsection{Draw module}
+The tests below outline the Draw module functionality. Note that many new functions were added for this
+iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+database and the various other components. Additionally, there may be some overlap between the Account Creation module
+and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
+due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
+and the User Account module test cases extend that to testing for invalid and non-existent users.
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Pose Service Module Test Cases}
+  \label{table:poseservice_tests}
+  \endlastfoot
+
+  TC79 & & Call \texttt{processFrame()} with front camera facing, RIGHT side, and a valid base64 image. Mock successful API response. & Function calls axios.post with correct URL, payload includes \texttt{mirrored: true}, \texttt{side: "RIGHT"}, \texttt{legsOnly: true}. Returns the mocked response data with landmarks, connections, and metrics. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC80 & & Call \texttt{processFrame()} with back camera facing, LEFT side. & Function calls axios.post with \texttt{mirrored: false} in the payload. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC81 & & Call \texttt{processFrame()} and simulate a network error. & Function throws an error with message "Network error". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC82 & & Call \texttt{resetBackend()} and mock successful response. & Function calls axios.post to \texttt{/reset} endpoint with timeout 8000ms. Returns successfully. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC83 & & Call \texttt{resetBackend()} and simulate a failure. & Function throws an error with message "Reset failed". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+\end{longtable}
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Metrics Service Module Test Cases}
+  \label{table:metricsservice_tests}
+  \endlastfoot
+
+  TC84 & & Call \texttt{saveMetrics()} when no user is logged in (getAuth returns null). & Function throws error "User must be logged in to save metrics". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC85 & & Call \texttt{saveMetrics()} when user is logged in but user document does not exist in Firestore. & Function throws error "User data not found in Firestore". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC86 & & Call \texttt{saveMetrics()} with valid metrics data and mocked Firebase responses. & Returns document ID "mock-doc-id". Verifies Firestore calls: doc, getDoc, collection, addDoc. Saved data contains correct fields including actid with timestamp, analysis="pending", exercise="Knee Extension", completed\_reps=8, max\_height=70.5, min\_height=30.1, duration=1, user info, current\_angle=45.6, rom\_degree=40.4, rep\_state="Extension", avg\_rep\_duration=1.2, current\_rep\_duration=0.5. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC87 & & Call \texttt{saveMetrics()} with minimal metrics data (missing optional avg\_rep\_duration and current\_rep\_duration). & Saved data has avg\_rep\_duration=0, current\_rep\_duration=0, duration=0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC88 & & Call \texttt{saveMetrics()} when user document exists but has no name field. & Saved data uses "Unknown User" for the name field. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC89 & & Call \texttt{saveSessionData()} when no user is logged in. & Function throws error "User must be logged in". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC90 & & Call \texttt{saveSessionData()} with valid session data. & Returns document ID "mock-doc-id". Saved data contains actid with "session\_" prefix, analysis="completed", completed\_reps=8, duration=1, exercise="Knee Extension Session", max\_height=70.5, min\_height=30.1, average\_rom=40.4, total\_reps=8, avg\_rep\_duration=1.2. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC91 & & Call \texttt{saveSessionData()} without avgRepDuration (uses session duration instead). & Saved data has duration calculated from startTime and endTime (0 seconds), and avg\_rep\_duration is undefined. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC92 & & Call \texttt{saveSessionData()} when user document does not exist. & Saved data uses "Unknown User" for the name field. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC93 & & Call \texttt{getUserDisplayName()} with logged in user and existing user document with name field. & Returns "Test User". Verifies doc and getDoc calls with correct parameters. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC94 & & Call \texttt{getUserDisplayName()} when user document exists but has no name field. & Returns user email "test@example.com". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC95 & & Call \texttt{getUserDisplayName()} when no user is logged in. & Returns "Unknown User". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC96 & & Call \texttt{getUserDisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
 \section{Changes Due to Testing}
 
 There were a few changes that were implemented as a result of testing. Note that some of these changes are in progress. 
