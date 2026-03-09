@@ -15,56 +15,66 @@
 \newpage
 \section{Pre-session Questionnaire}
 \subsection{\textbf{Participant Experience Information}}
-\begin{enumerate}
-    \item What is your name?
-    \item How old are you?
-    \item What gender do you identify with? 
-    \item What is your occupation?
-\end{enumerate} 
-\textbf{Questions $1-4$}
-These are used to confirm the identity of the participant being interviewed. \\
-\begin{enumerate}
-    \setcounter{enumi}{4}
-        \item Have you ever had a knee injury? \textbf{Yes/No/NA}
-
-        \item If \textbf{YES}, was it in the past 5 years?
-        \item If \textbf{YES}, have you had physiotherapy after your knee surgery?
-        \item If \textbf{NO}, have you had another kind of orthopaedic surgery?
-        \item If \textbf{NA}, do you personally know anyone who has experienced a knee injury? \textbf{YES/NO}
-
-        \item How long did your post-operative physiotherapy last?
-        \item Were you prescribed knee extensions as an exercise to do at home?
-        \item In your opinion, did you encounter any trouble performing knee extensions? \textbf{YES/NO}
-\end{enumerate}
-This examines the participant's experiences. In an ideal case, the participant will have personally had a 
-knee injury in the past. '5 years' is a consertive amount of time that was chosen, because technology is ever-changing, 
+The first few questions of this survey are used to confirm the identity of the participant being interviewed. \\
+The next few questions examine the participant's experiences. '5 years' is a consertive amount of time that was chosen, because technology is ever-changing, 
 and is projected to change in the near future (https://www.hunimed.eu/news/10-ways-technology-is-changing-healthcare/).
-In addition, the level of care that was received previously may have been very different than what is practiced today.
+In addition, the level of care that was received previously may have been very different than what is practiced today 
+(https://prod.mgma.com/articles/from-error-to-excellence-redesigning-care-whole-system-quality). \\
 Experience with a personal orthopaedic surgery has a minor overlap with having a knee surgery due to their similar nature.
 In that sense, an orthopaedic patient may be more empathetic to those that have had surgeries recently. They may also impart
 their first-hand understanding of such an experience and provide richer, more nuanced insights into the potential 
 benefit and use of the application. 
-\section{\textbf{DEVICE LITERACY}}
-\begin{enumerate}
-    \setcounter{enumi}{8}
-    \item What do you use your mobile device for?
-    \item How comfortable are you using the camera function? 
-    \\\textbf{Very comfortable\qquad Somewhat comfortable\qquad Comfortable\qquad \\Not comfortable}
-    \item Do you know what a mobile phone tripod is? (selfie stick)
-    \item How comfortable are you using the tripod?
-    \\\textbf{Very comfortable\qquad Somewhat comfortable\qquad Comfortable\qquad \\Not comfortable} 
-\end{enumerate}
-\section{\textbf{PRIVACY}}
-This section outlines some private aspects involved in conducting a usability test. These statements 
-should be confirmed with participants to ensure that a well-informed decision to participate has been made. 
-\begin{enumerate}
-    \item Participant identification information will be stored on a database. 
-    \item Information extracted from the recording used in the application will also be stored on a database.
-    \item The database used in the application adheres to data privacy standards and regulations. %TODO add firestore privacy ref
-    \item All participant data will be deleted within (2 weeks?) after storage. 
-    \item Information access is restricted to any external parties (except the application developers for the duration mentioned above).
-    \item All participant data will be deleted within (2 weeks?) after storage. 
-\end{enumerate}
+\subsection{\textbf{Participant device literacy}}
+In order to properly operate the application, there is a minimum level of device literacy needed. These questions specifically
+target smartphone users. Some populations may not have equal access to the level of care (socioeconomic reasons) (https://www.cmaj.ca/content/185/6/E263) that is assumed 
+for this application's use, and that is somewhat portrayed through the use of these questions. The purpose of these questions asserts the
+need for further exploration if/when the target audience is widened and should further development of the application occurs. \\  %check with everyone if this sounds like bs
+
+\subsection{\textbf{Participant perspective on privacy}}
+This section outlines some private aspects involved in using the app. These statements 
+should be confirmed with participants to ensure that a well-informed decision to participate and use it has been made.
+
+\section{Session questionnaire}
+\subsection{Create Account}
+The account creation functionality is a similar one to that of existing apps. It uses a conventional flow that should be familiar to users.
+The ease of this process is evaluated. 
+Once a participant has created an account, they are directed to the Homescreen. This page has different capabilities based
+on the type of user. \\
+\subsection{Homescreen}
+On a patient's screen, it displays a history of completed exercises and their dates. %TODO address this in discussion using input given by Kevin
+On a PT's screen, it displays the names of their patients. Once they have selected a patient, the screen is populated
+with the patient's activity. Both the patient's and PT's homescreen only serve as a record, displaying patient activity history. 
+Since both patient and PTs pages look very similar, the main questions posed for this section are
+UI perspectives. Drawing on both perspectives, these questions serve to validate the homescreen's minimal aesthetic,
+confirming that it contains only essential information and is not visually cluttered. The same logic follows the progress
+tab. \\
+
+\subsection{Exercise}
+Despite the UI being almost the same, there is a functional difference when the two types of users 
+interact with the Exercises page which is addressed by the questions.\\
+In the case of the patient, the questions aim to determine whether the elements are presented clearly and in a straightforward manner.
+The example video under the complete exercise instructions was implemented at a later stage, necessitating investigation into whether
+it was a helpful decision. \\
+In the PT's case, an additional functionality is introduced. While the exercise list maintains the same appearance, clicking on the 
+exercise reveals a text box which allows modifications to be made to the instructions. The intuitiveness and ease needed to be ascertained. \\
+
+\subsection{Record}
+PTs are unable to access this function and the page remains inaccessible. This functionality is not intended for them and was not
+developed further. 
+However, the patient's view provides additional features. The UI elements were assessed to confirm visual appropriateness. 
+The following questions in the section evaluate whether the app successfully carries out its primary purpose. 
+
+
+%TODO Feedback page 
+
+
+
+
+%TODO post 
 
 
 \end{document}
+
+
+
+
