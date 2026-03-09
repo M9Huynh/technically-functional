@@ -410,10 +410,11 @@ and the User Account module test cases extend that to testing for invalid and no
   TC17 & FR18 & User Queries: Test get patients by physioId, search by name, and get all users. & Returns correctly filtered arrays; errors return empty arrays. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 
   % SPECIALIZED FUNCTIONS
-  \multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
+  %\multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
   
   TC18 & FR21, FR25 & User Info Lookup: Test getUserdbInfo with name only and with name+birthday filter. & Returns categorized patients/physios correctly; filtering works as expected. & All assertions pass. & \cellcolor{green} Pass \\ \hline
-  
+  %SPECIALIZED FUNCTIONS
+  \multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline  
   TC19 & FR2, FR4, FR22 & PT\_Account\_Delete: Test with valid physio, non-physio user, and non-existent patient. & Valid case deletes patient; non-physio throws error; non-existent throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
   
   TC20 & SR-AR1, SR-PR1 & Test usernamePwMatch and authenticateUser with valid credentials, invalid password, and non-existent user. & Valid returns true/user; invalid throws appropriate errors; non-existent returns null. & All assertions pass. & \cellcolor{green} Pass \\ \hline
@@ -480,7 +481,13 @@ This section maps the tests performed to the requirements they validate, providi
     Account Creation Module Tests (TC1--TC3) & FR1.1, FR1.2 \\
     Patient Registration Tests (TC4--TC8) & FR1.1, FR1.3, FR2, FR3 \\
     User Authentication Tests (TC9--TC11) & FR1, FR1.1 \\
-    \bottomrule
+    \midrule
+    \textit{User Account Tests} \\
+    \midrule
+    User Management Functions (TC13--TC16) & FR2, FR4, FR6, FR21, FR22, FR23 \\
+    User Query Function (TC17--TC18) & FR18, FR21, FR25 \\
+    Specialized functions (TC19--TC21) & FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1\\
+    Validation helpers (TC22) & FR1, SR-AR1 \\
   \end{tabular}
   \label{tab:sections_requirements}
 \end{table}
