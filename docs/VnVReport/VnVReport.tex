@@ -91,7 +91,7 @@ This document ...
 
 \item \textbf{test-UT-2 : Instruction Clarity During Exercise}
 
-\textbf{Initial State:} User on the record exercise screen with camera access enabled.
+\textbf{Initial State:} User is on the record exercise screen with camera access enabled.
 
 \textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback instructing the user to remain within the camera frame. Once proper positioning was detected, the user was able to start and stop recording and save the session.
 
@@ -105,7 +105,7 @@ This document ...
 
 \textbf{Initial State:} App accessible to testers on mobile devices.
 
-\textbf{Input:} Five users completed a short usability questionnaire rating navigation (1--5), clarity (1--5), and overall ease of use (1--5).
+\textbf{Input:} Five users completed a short usability questionnaire addressing ease of use, clarity and navigation.
 
 \textbf{Output:} Average rating across categories was $\geq$ 4/5. Minor UI refinements (font size and button spacing) were applied based on feedback.
 
@@ -250,11 +250,11 @@ The following tests in Table \ref{table:account_creation_tests} verify the funct
 creation module for both physiotherapists and patients, including validation checks and successful user 
 creation workflows.
 
-\begin{longtable}{c
-    >{\raggedright\arraybackslash}p{1.5cm}
-    >{\raggedright\arraybackslash}p{4.5cm}
-    >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{3cm} c}
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+   % >{\raggedright\arraybackslash}p{1.5cm}
+    %>{\raggedright\arraybackslash}p{4.5cm}
+    %>{\raggedright\arraybackslash}p{4cm}
+    %>{\raggedright\arraybackslash}p{3cm} c}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -318,11 +318,11 @@ The following tests in Table \ref{table:valid_user_tests} verify the functionali
 ensuring that successful authentication requires an existing Firestore user profile for both physiotherapist and 
 patient roles.
 
-\begin{longtable}{c
-    >{\raggedright\arraybackslash}p{1.5cm}
-    >{\raggedright\arraybackslash}p{4.5cm}
-    >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{3cm} c}
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+   % >{\raggedright\arraybackslash}p{1.5cm}
+    %>{\raggedright\arraybackslash}p{4.5cm}
+    %>{\raggedright\arraybackslash}p{4cm}
+    %>{\raggedright\arraybackslash}p{3cm} c}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
