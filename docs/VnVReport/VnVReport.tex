@@ -426,6 +426,66 @@ and the User Account module test cases extend that to testing for invalid and no
   TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 \end{longtable}
 
+\subsection{Analysis Control Flow Module}
+The tests below outline the Analysis Control Flow module functionality. Note that many new functions were added for this
+iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+database and the various other components. Additionally, there may be some overlap between the Account Creation module
+and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
+due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
+and the User Account module test cases extend that to testing for invalid and non-existent users.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.5cm}
+    >{\raggedright\arraybackslash}p{4.5cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Analysis Control Flow Module Test Cases}
+  \label{table:analysis_control_tests}
+  \endlastfoot
+
+  TC23 & & Start the PoseBackend with mocked values. & PoseBackend init values work as intended successfully and \texttt{is\_calibrating} is set to True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  
+
+  TC24 & & Call \texttt{reset()} method on PoseBackend. & Previous analyzer is replaced with a newer analyzer object. New one has \texttt{is\_calibrating} set to True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC25 & & Send POST request to \texttt{/reset} endpoint. & Response status 200 with JSON \texttt{\{"ok": true\}}. Backend reset method is called. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC26 & & Send POST request to \texttt{/process\_frame} with empty image data. & Response status 400 with error message \texttt{"Missing imageBase64"}. Landmarks is null. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC27 & & Send POST request to \texttt{/process\_frame} with invalid base64 image string. & Response status 400 with error message. No frame processing occurs. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC28 & & Send POST request to \texttt{/process\_frame} with valid base64 image, \texttt{side="RIGHT"}, \texttt{mirrored=true}, \texttt{legsOnly=true}. Landmarks detected. & Response status 200. Contains all landmarks (33). Metrics contain correct values (angle=45.6, rep\_count=5, rep\_state="Extension"). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC29 & & Send POST request to \texttt{/process\_frame} with valid image but no pose landmarks detected. & Response status 200. Landmarks is null. Default metrics returned with \texttt{calibrating=True}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC30 & & Send POST request to \texttt{/process\_frame} with \texttt{mirrored=True} and verify frame flipping. & Frame is flipped horizontally before processing. \texttt{cv2.flip} is called once with the frame. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC31 & & Send POST request to \texttt{/process\_frame} with \texttt{mirrored=False} and verify no frame flipping. & Frame is not flipped. \texttt{cv2.flip} is not called. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC32 & & Test \texttt{b64\_to\_bgr\_image} helper function with a valid test image. & Function correctly decodes base64 string back to a numpy array with expected dimensions (100, 100, 3). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC33 & & Send POST requests with \texttt{side="RIGHT"} and \texttt{side="LEFT"} parameters. & \texttt{knee\_angle\_from\_result} is called twice with correct side parameters: first with 'RIGHT', then with 'LEFT'. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC34 & & Send POST request with valid image but simulate decoding error by returning None. & Response status 400 with error message in JSON. & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
 \section{Changes Due to Testing}
 
 There were a few changes that were implemented as a result of testing. Note that some of these changes are in progress. 
