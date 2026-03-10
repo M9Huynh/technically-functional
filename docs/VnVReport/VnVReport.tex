@@ -35,7 +35,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
+March 9th, 2026 & 1.0 & Created inital version of VnV Report\\
 Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
@@ -49,11 +49,18 @@ Date 2 & 1.1 & Notes\\
   \toprule		
   \textbf{symbol} & \textbf{description}\\
   \midrule 
-  T & Test\\
+  TC & Test Case\\
+  UT & Usability Test\\
+  PR & Performance Test\\
+  RFT & Reliability/Fault Tolerance Test\\
+  SR & Security Test\\
+  MS & Maintainability and Support Test\\
+  FR & Functional Requirement\\
+  SR-AR & Security Access Requirement\\
   \bottomrule
 \end{tabular}\\
 
-\wss{symbols, abbreviations or acronyms -- you can reference the SRS tables if needed}
+% \wss{symbols, abbreviations or acronyms -- you can reference the SRS tables if needed}
 
 \newpage
 
@@ -471,22 +478,22 @@ should be highlighted.}
 
 \section{Automated Testing}
 
-In terms of automated testing, all of the tests for the Python backend as well as the individual modules 
-on the TypeScript frontend of the mobile application are automated. The Python tests are run using \texttt{Pytest} 
-by simply typing \texttt{pytest} in the command line in the correct root project directory. These tests validate core backend functionality such as 
-pose metric calculations and helper functions used during exercise processing. All the 
-TypeScript tests can be run similarly, though they run with \texttt{Jest} and through running the following command: 
-\texttt{npm run test}. Ultimately, these tests focus on validating frontend logic including authentication and user account
+In terms of automated testing, all of the tests for the TypeScript frontend modules as well as the Python backend 
+are automated. When it comes to running the tests, the Python tests are run using \texttt{Pytest} by simply typing \texttt{pytest} in the command line in the correct 
+root project directory. These tests validate core backend functionality such as the metric calculations and helper 
+functions utilized during exercise processing. Additionally, all of the TypeScript tests can be run in the same manner, however, they run 
+with \texttt{Jest} and through running the following command: \texttt{npm run test} instead. Ultimately, these tests focus on validating frontend logic including authentication and user account
  management, user activity tracking, exercise data handling, performance statistics generation, and the feedback 
  module that displays live feedback to users and allows both the physiotherapistss and patients the opopruntity 
- to leave comments regarding the user's respective session. It is important to note that the Firebase services and 
+ to leave comments regarding the user's respective session. It is important to note that the Firebase calls and 
  camera components are mocked during testing so that we are able to separately test the logic functionality. 
- Also, the results for both the backend and frontend automated test suites are printed to the console, ultimately 
+ Also, the results for both the frontend and backend automated test suites are printed to the console, ultimately 
  allowing us to be able to quickly identify both the passing and failing tests immediately.
 		
 \section{Trace to Requirements}
 
-This section maps the tests performed to the requirements they validate, providing traceability between verification activities and project requirements.
+The following section showcases the mapping between the various tests performed to the specific requirements that 
+they validate, ultimately displaying the traceability to requirements.
 
 \begin{table}[H]
   \centering
