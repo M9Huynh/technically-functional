@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1773112880111" clover="3.2.0">
-  <project timestamp="1773112880111" name="All files">
+<coverage generated="1773129743892" clover="3.2.0">
+  <project timestamp="1773129743892" name="All files">
     <metrics statements="511" coveredstatements="457" conditionals="144" coveredconditionals="119" methods="80" coveredmethods="69" elements="735" coveredelements="645" complexity="0" loc="511" ncloc="511" packages="1" files="9" classes="9"/>
     <file name="authService.ts" path="C:\Users\cdieb\OneDrive\Documents\technically-functional\mobile\lib\authService.ts">
       <metrics statements="39" coveredstatements="38" conditionals="16" coveredconditionals="16" methods="5" coveredmethods="4"/>
@@ -262,7 +262,7 @@
       <line num="138" count="35" type="stmt"/>
       <line num="139" count="35" type="stmt"/>
       <line num="140" count="63" type="stmt"/>
-      <line num="141" count="8" type="cond" truecount="2" falsecount="0"/>
+      <line num="141" count="9" type="cond" truecount="2" falsecount="0"/>
       <line num="142" count="35" type="stmt"/>
       <line num="149" count="5" type="stmt"/>
       <line num="150" count="5" type="stmt"/>

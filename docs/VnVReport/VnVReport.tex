@@ -618,7 +618,7 @@ modules.
 
 \subsection{Authentication}
 
-\subsubsection{Account Creation Module}
+\subsubsection{Account Creation Module Tests}
 The following tests in Table \ref{table:account_creation_tests} verify the functionality of the account 
 creation module for both physiotherapists and patients, including validation checks and successful user 
 creation workflows.
@@ -686,7 +686,7 @@ creation workflows.
   occur. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsubsection{Valid User Module}
+\subsubsection{Valid User Module Tests}
 The following tests in Table \ref{table:valid_user_tests} verify the functionality of the valid user module.
 
 \begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
@@ -734,7 +734,7 @@ The following tests in Table \ref{table:valid_user_tests} verify the functionali
   All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsection{User Account module}
+\subsection{User Account Module Tests}
 The tests below outline the User Account module functionality. Note that many new functions were added for this
 iteration. Currently, it serves as an interface between the 
 database and the various other components. Additionally, there may be some overlap between the Account Creation module
@@ -798,7 +798,7 @@ and the User Account module test cases extend that to testing for invalid and no
   TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 \end{longtable}
 
-\subsection{Live Feedback Module}
+\subsection{Live Feedback Module Tests}
 The following tests in Table \ref{table:live_feedback_tests} verify the functionality of the live 
 feedback module, including real-time corrective message generation, safety warning triggers, rep 
 counting, and physiotherapist comment submission and retrieval.
@@ -858,15 +858,10 @@ counting, and physiotherapist comment submission and retrieval.
 	All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 	
-\subsection{Video Capture and Review module}
+\subsection{Video Capture and Review Tests}
 The tests below outline the Video Capture and Review functionality. Some of the interactions with following tests as well as other modules may touch on the video capture and review module, but the tests below are focused on the core functionalities of the module itself.
 
-\begin{longtable}{c
-    >{\raggedright\arraybackslash}p{1.2cm}
-    >{\raggedright\arraybackslash}p{2cm}
-    >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{2.75cm}c}
+\begin{longtable}{cp{1.2cm}p{2cm}p{4cm}p{4cm}p{2.75cm}c}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -884,7 +879,7 @@ The tests below outline the Video Capture and Review functionality. Some of the 
   \endfoot
 
   \bottomrule
-  \caption{Video Capture and Review Module Test Cases}
+  \caption{Video Capture and Review Test Cases}
   \label{table:video_capture_tests}
   \endlastfoot
   
@@ -905,7 +900,7 @@ The tests below outline the Video Capture and Review functionality. Some of the 
   TC38 & FR14 & Call \texttt{draw\_landmarks()} with a mock result and a numpy array frame. & Returns the frame. OpenCV's \texttt{line} and \texttt{circle} functions are called to draw the pose landmarks. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsection{Computer Vision and Form Analysis Module}
+\subsection{Computer Vision and Form Analysis Tests}
 The following tests in Table \ref{table:computer_vision_tests} verify the functionality of the computer vision and form analysis module by ensuring that joint angles are accurately calculated, knee angles are correctly extracted from pose landmarks, the analyzer calibrates to the user’s range of motion, repetitions are counted properly, and summary metrics are generated as expected.
 
 \begin{longtable}{c
@@ -930,7 +925,7 @@ The following tests in Table \ref{table:computer_vision_tests} verify the functi
   \endfoot
 
   \bottomrule
-  \caption{Computer Vision and Form Analysis Module Test Cases}
+  \caption{Computer Vision and Form Analysis Test Cases}
   \label{table:computer_vision_tests}
   \endlastfoot
 
@@ -954,7 +949,7 @@ The following tests in Table \ref{table:computer_vision_tests} verify the functi
 
   TC48 & FR26 & Modify the mock result by setting the left knee landmark (index 25) to None, then call \texttt{knee\_angle\_from\_result()} with side="LEFT". & Returns None due to missing landmark. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC49 & FR26 & Set the mock result's \texttt{pose\_landmarks} to an empty list and call \texttt{knee\_angle\_from\_result()}. & Returns None due to empty landmarks. & All assertions pass. & \cellcolor{green} Pass \\
+  TC49 & FR26 & Set the mock result's \texttt{pose\_landmarks} to an empty list and call \texttt{knee\_angle\_from\_result()}. & Returns None due to empty landmarks. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
   TC50 & FR12 & Initialize Analyzer with default values. & \texttt{started=False}, \texttt{min\_angle=0.0}, \texttt{max\_angle=0.0}, \texttt{is\_calibrating=False}, \texttt{cal\_start\_ts=None}, \texttt{cal\_duration\_s=10.0}, \texttt{cal\_min=None}, \texttt{cal\_max=None}, \texttt{rep\_count=0}, \texttt{current\_rep=None}, \texttt{rep\_durations=[]}, \texttt{rep\_state=""}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
@@ -1007,7 +1002,7 @@ The following tests in Table \ref{table:computer_vision_tests} verify the functi
   TC74 & FR8 & With \texttt{min\_angle=50.0}, \texttt{max\_angle=50.0}, \texttt{started=True}, \texttt{rep\_state="Extension"}, call \texttt{\_rep\_update(50.0)}. & No state change occurs. Rep state remains "Extension". Rep count remains 0. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsection{Performance and Latency Module}
+\subsection{Performance and Latency Tests}
 The following tests in Table \ref{table:performance_latency_tests} verify the functionality of the performance and latency module by ensuring that the backend services initialize correctly, API endpoints respond appropriately to valid and invalid requests, frame processing handles mirroring and landmark detection correctly, frontend services communicate with the backend, and exercise metrics are saved to Firestore with proper error handling.
 
 \begin{longtable}{c
@@ -1032,7 +1027,7 @@ The following tests in Table \ref{table:performance_latency_tests} verify the fu
   \endfoot
 
   \bottomrule
-  \caption{Performance and Latency Module Test Cases}
+  \caption{Performance and Latency Test Cases}
   \label{table:performance_latency_tests}
   \endlastfoot
 
@@ -1097,7 +1092,7 @@ The following tests in Table \ref{table:performance_latency_tests} verify the fu
   TC104 & FR1.1 & Call \texttt{getUserDisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsection{Profile Activity Module}
+\subsection{Profile Activity Module Tests}
 The following tests in Table \ref{table:profile_activity_tests} verify the functionality of the profile activity module. 
 This module is responsible for storing, retrieving, and handling user activity data, stored user data, summary data, and chart data.
 The tests ensure this functionality works as expected under various conditions, including valid inputs, edge cases, and error scenarios.
@@ -1125,48 +1120,95 @@ The tests ensure this functionality works as expected under various conditions, 
   \endlastfoot
 
   TC105 & FR21, FR23 & Test getCurrentUser with correct inputs. & Returns the correct user object. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC106 & FR21, FR23 & Test getCurrentUser with no current user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC107 & FR21, FR23 & Test getCurrentUser with non-existent user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC108 & FR21, FR23 & Test getCurrentUser with Firestore error. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC109 & FR21, FR23 & Test getCurrentUserID with correct inputs. & Returns the correct user ID. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC110 & FR21, FR23 & Test getCurrentUserID with no current user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC111 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with correct inputs. & Returns the correct array of activities. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC112 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with no activities. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC113 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with Firestore error. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC114 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with incorrect uid. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC115 & FR10, FR11, FR17 & Test getUserSummary with correct inputs. & Returns the correct summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC116 & FR10, FR11, FR17 & Test getUserSummary with correct inputs but duplicate dates. & Returns the correct summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC117 & FR10, FR11, FR17 & Test getUserSummary with Firestore error. & Returns zero summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC118 & FR10, FR18 & Test repsChartData with correct inputs. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC119 & FR10, FR18 & Test repsChartData with correct inputs and duplicate dates. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC120 & FR10, FR18 & Test repsChartData with activities but no reps. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC121 & FR10, FR18 & Test repsChartData with no activites. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC122 & FR10, FR18 & Test repsChartData with firestore error. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC123 & FR10, FR18 & Test exerciseChartData with correct data. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC124 & FR10, FR18 & Test exerciseChartData with correct data and duplicate dates. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC125 & FR10, FR18 & Test exerciseChartData with no activities. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC126 & FR10, FR18 & Test exerciseChartData with firestore error. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC127 & FR10, FR11, FR18, FR19, FR22 & Test getComments with correct inputs and data. & Returns the correct comment data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC128 & FR10, FR11, FR18, FR19, FR22 & Test getComments with no existing comments. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC129 & FR10, FR11, FR18, FR19, FR22 & Test getComments with firestore error. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC130 & FR10, FR11, FR18, FR19, FR22 & Test postComment with correct inputs and data. & Calls collection and update functions with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC131 & FR10, FR11, FR18, FR19, FR22 & Test postComment with an empty comment. & Should not call collection, addDoc, or setDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC132 & FR10, FR11, FR18, FR19, FR22 & Test postComment with firestore error. & Should not call setDoc, but should proceed until addDoc errors. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC133 & FR18, FR21 & Test getName with correct inputs and data. & Returns the corresponding user's name. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC134 & FR18, FR21 & Test getName with an unknown user. & Returns 'Unknown User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC135 & FR18, FR21 & Test getName with a user with no name. & Returns 'Unnamed User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC136 & FR18, FR21 & Test getName with firestore error. & Returns 'Unknown User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC137 & FR17, FR18, FR19, FR22 & Test setSelectedUserID with a valid userID. & Calls AsyncStorage with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC138 & FR17, FR18, FR19, FR22 & Test setSelectedUserID with an empty userID. & Does not call AsyncStorage. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC139 & FR17, FR18, FR19, FR22 & Test getSelectedUserID when a userID is stored. & Returns the correct stored userID. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC140 & FR17, FR18, FR19, FR22 & Test getSelectedUserID when no userID is stored. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC141 & FR17, FR18, FR19, FR22 & Test getSelectedUser when a user is stored. & Returns the stored UserData structure. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC142 & FR17, FR18, FR19, FR22 & Test getSelectedUser when no user is stored. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC143 & FR17, FR18, FR19, FR22 & Test clearSelectedUserID on AsyncStorage. & Calls AsyncStorage.removeItem with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC144 & FR2, FR3 & Test getPhysioInviteCode when an invite code exists. & Returns the corresponding physio invite code. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC145 & FR2, FR3 & Test getPhysioInviteCode when no invite code exists. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC146 & FR2, FR3 & Test getPhysioInviteCode when userID is invalid. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
 \end{longtable}
+
+\subsection{Exercise Data Module Tests}
+The following tests in Table \ref{table:exercise_data_tests} verify the functionality of the exercise data module.
+This module is responsible for storing, retrieving, and handling user exercise data, general exercise data for assignable exercises by physios, and assigned exercises for given users.
+This function also facilitates the modification, addition, and deletion of exercises for users by their assigned physios.
+The tests outlined in the table ensure that all of this functionality works as expected under various conditions, including valid inputs, edge cases, and error scenarios.
 
 \begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
   \hline
@@ -1191,24 +1233,43 @@ The tests ensure this functionality works as expected under various conditions, 
   \endlastfoot
 
   TC147 & FR5, FR18, FR21, FR27 & Tests getExercisesById with valid userID and exercise data & Returns the corresponding user's exercises. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC148 & FR5, FR18, FR21, FR27 & Tests getExercisesById with valid userID but no exercise data & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC149 & FR5, FR18, FR21, FR27 & Tests getExercisesById with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC150 & FR5, FR18, FR21, FR27 & Tests getExercise with valid exerciseID & Returns the corresponding exercise. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC151 & FR5, FR18, FR21, FR27 & Tests getExercise with an invalid exerciseID & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC152 & FR5, FR18, FR21, FR27 & Tests getExercise with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC153 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises when general exercises exist & Returns a list of all exercises. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC154 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises when no general exercises exist & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC155 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC156 & FR6, FR18, FR21 & Tests removeUserExercise with valid userID and exercise data & Calls deleteDoc with the expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC157 & FR6, FR18, FR21 & Tests removeUserExercise with valid userID but invalid exercise data & Does not call deleteDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC158 & FR6, FR18, FR21 & Tests removeUserExercise with firestore error & Does not call deleteDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC159 & FR6, FR18, FR21 & Tests addUserExercise with valid userID and exercise data & Calls addDoc and updateDoc with the expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC160 & FR6, FR18, FR21 & Tests addUserExercise with firestore error & Does not call updateDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC161 & FR6, FR18, FR21 & Tests updateUserExercise with valid userID and exercise data & Calls updateDoc with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC162 & FR6, FR18, FR21 & Tests updateUserExercise with valid userID but invalid exercise data & Does not call updateDoc with bad inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC163 & FR6, FR18, FR21 & Tests updateUserExercise with firestore error & Does not call updateDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC164 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with valid user ID and exercise data. & Returns corresponding exercise data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC165 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with valid user ID but no exercise data. & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  
   TC166 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
 
 \end{longtable}
@@ -1258,25 +1319,83 @@ with \texttt{Jest} and through running the following command: \texttt{npm run te
 The following section showcases the mapping between the various tests performed to the specific requirements that 
 they validate, ultimately displaying the traceability to requirements.
 
-\begin{table}[H]
-  \centering
+\begin{longtable}{p{0.42\textwidth}p{0.42\textwidth}}
   \caption{Functional Requirements and Corresponding Test Cases}
-  \begin{tabular}{p{0.42\textwidth}p{0.42\textwidth}}
-    \toprule \textbf{Test Cases} & \textbf{Functional Requirement(s)} \\
-    \midrule
-    Account Creation Module Tests (TC1--TC3) & FR1.1, FR1.2 \\
-    Patient Registration Tests (TC4--TC8) & FR1.1, FR1.3, FR2, FR3 \\
-    User Authentication Tests (TC9--TC11) & FR1, FR1.1 \\
-    \midrule
-    \textit{User Account Tests} \\
-    \midrule
-    User Management Functions (TC13--TC16) & FR2, FR4, FR6, FR21, FR22, FR23 \\
-    User Query Function (TC17--TC18) & FR18, FR21, FR25 \\
-    Specialized functions (TC19--TC21) & FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1\\
-    Validation helpers (TC22) & FR1, SR-AR1 \\
-  \end{tabular}
-  \label{tab:sections_requirements}
-\end{table}
+  \label{tab:functional_requirements_trace} \\
+  \toprule \textbf{Test Cases} & \textbf{Functional Requirement(s)} \\
+  \midrule
+  \multicolumn{2}{c}{\textit{Account Creation Tests}} \\
+  \midrule
+  TC1-3 & FR1.1, FR1.2 \\
+  TC4-8 & FR1.1, FR1.3, FR2, FR3 \\
+  TC9-11 & FR1, FR1.1 \\
+  \midrule
+  \multicolumn{2}{c}{\textit{User Account Tests}} \\
+  \midrule
+  TC13-16 & FR2, FR4, FR6, FR21, FR22, FR23 \\
+  TC17-18 & FR18, FR21, FR25 \\
+  TC19-21 & FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1 \\
+  TC22 & FR1, SR-AR1 \\
+  \midrule
+  \multicolumn{2}{c}{\textit{Live Feedback Module Tests}} \\
+  \midrule
+  TC23-25 & FR13, FR14 \\
+  TC26 & FR16 \\
+  TC27-28 & FR14 \\
+  TC29 & FR20, FR25 \\
+  TC30 & FR19, FR25 \\
+  \midrule
+  \multicolumn{2}{c}{\textit{Video Capture and Review Tests}} \\
+  \midrule
+  TC31-33, 37 & FR12 \\
+  TC34 & FR26 \\
+  TC35-36 & FR7 \\
+  TC38 & FR14 \\
+  \midrule
+  \multicolumn{2}{c}{\textit{Computer Vision and Form Analysis Tests}} \\
+  \midrule
+  TC39-41, 43, 44, 50 & FR12 \\
+  TC42, 45-49 & FR26 \\
+  TC51-53, 60, 62, 63, 67 & FR8, FR27 \\
+  TC54, 64 & FR8, FR26 \\
+  TC55 & FR8, FR16 \\
+  TC56 & FR8, FR14 \\
+  TC57, 58, 70 & FR8, FR11 \\
+  TC59, 61, 71 & FR8, FR12 \\
+  TC65, 66, 68, 69 & FR11, FR17 \\
+  TC72, 73 & FR12, FR26 \\
+  TC74 & FR8 \\
+  \midrule
+  \multicolumn{2}{c}{\textit{Performance and Latency Tests}} \\
+  \midrule
+  TC75, 85 & FR12 \\
+  TC76, 77, 90, 91 & FR8 \\
+  TC78, 79, 81, 86 & FR7, FR26 \\
+  TC80 & FR7, FR12 \\
+  TC82-84, 87-89 & FR7 \\
+  TC92 & FR1, FR1.1 \\
+  TC93, 96, 100-102 & FR1.1, FR21 \\
+  TC94, 95, 99 & FR11, FR21 \\
+  TC97, 103 & FR1 \\
+  TC98 & FR11, FR17, FR21 \\
+  TC104 & FR1.1, FR21 \\
+  \midrule
+  \multicolumn{2}{c}{\textit{Profile Activity Module Tests}} \\
+  \midrule
+  TC105-110 & FR21, FR23 \\
+  TC111-114 & FR10, FR11, FR17, FR18, FR21 \\
+  TC115-117 & FR10, FR11, FR17 \\
+  TC118-126 & FR10, FR18 \\
+  TC127-132 & FR10, FR11, FR18, FR19, FR22 \\
+  TC133-136 & FR18, FR21 \\
+  TC137-143 & FR17, FR18, FR19, FR22 \\
+  TC144-146 & FR2, FR3 \\
+  \midrule
+  \multicolumn{2}{c}{\textit{Exercise Data Module Tests}} \\
+  \midrule
+  TC147-155, 164-166 & FR5, FR18, FR21, FR27 \\
+  TC156-163 & FR6, FR18, FR21 \\
+\end{longtable}
 
 Table \ref{tab:sections_requirements} showcases both the functional requirements and their respective test cases.
 
@@ -1366,31 +1485,26 @@ respective non-functional requirements.
 The following section displays the traceability of each of the test cases to the specific modules they validated, 
 which ultimately showcases the overall verification of our system.
 
-\begin{table}[H]
-  \centering
+\begin{longtable}{p{0.42\textwidth}p{0.42\textwidth}}
   \caption{Tests for all of the Modules}
-  \begin{tabular}{p{0.38\textwidth}p{0.42\textwidth}}
+  \label{tab:core_modules_tests} \\
     \toprule \textbf{Test ID} & \textbf{Module} \\
     \midrule
-    TC1--TC8 & M5 (Account Creation) \\
-    TC9--TC12 & M6 (Valid User) \\
-    TC13--TC19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
-    TC20--TC22 & M1 (User Interface), M7 (User Account) \\
+    TC1-8 & M5 (Account Creation) \\
+    TC9-12 & M6 (Valid User) \\
+    TC13-19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
+    TC20-22 & M1 (User Interface), M7 (User Account) \\
+    TC23-30 & M3 (Analysis Control Flow), M11 (Metrics), M12 (Analyze), M13 (Feedback) \\
+    TC31-38 & M11 (Metrics), M12 (Analyze) \\
+    TC39-74 & M3 (Analysis Control Flow), M4 (Draw), M11 (Metrics), M12 (Analyze) \\
+    TC75-104 & M3 (Analysis Control Flow), M4 (Draw), M11 (Metrics), M12 (Analyze), M13 (Feedback) \\
+    TC105-146 & M1 (User Interface), M2 (Profile Activity), M7 (User Details), M9 (Exercise Data) \\
+    TC147-166 & M1 (User Interface), M9 (Exercise Data) \\
     UT-1, UT-2, UT-3, PR-1, PR-2, RFT-1, RFT-2 & M1 (User Interface) \\
     SR-1, SR-2 & M5 (Account Creation), M6 (Valid User) \\
     MS-1, MS-2 & M1 (User Interface), M5 (Account Creation), M6 (Valid User) \\
-    TC1--TC8 & M5 (Account Creation Module) \\
-    TC9--TC12 & M6 (Valid User Module) \\
-    TC13--TC19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account Module), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
-    TC20--TC22 & M1 (User Interface), M7 (User Account Module) \\
-    TC23--TC30 & M10 (Angle Analysis), M11 (Feedback Generation), M12 (Reporting), M13 (Dashboard) \\
-    UT-1, UT-2, UT-3, PR-1, PR-2, RFT-1, RFT-2 & M1 (User Interface Module) \\
-    SR-1, SR-2 & M5 (Account Creation Module), M6 (Valid User Module) \\
-    MS-1, MS-2 & M1 (User Interface Module), M5 (Account Creation Module), M6 (Valid User Module) \\
     \bottomrule
-  \end{tabular}
-  \label{tab:core_modules_tests}
-\end{table}
+\end{longtable}
 
 Table \ref{tab:core_modules_tests} maps each of the test cases to their 
 respective modules.
@@ -1414,11 +1528,30 @@ The backend code has a total coverage of 97\%, with all modules having coverage 
 
 Some areas of improvement would be to fully test each backend module to reach 100\% coverage. This would be included in future testing plans but the current coverage points to the reliability of the backend code.
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{type_script_coverage.png}
+    \caption{Detailed TypeScript Code Coverage.}
+    \label{fig:type_script_coverage_close}
+\end{figure}
+
+  The front end currently tested code has a total coverage of 80\%, with major module implementations at or above 80\% coverage. UserAccount module currently contains the lowest coverage as several of the functions were implemented originally and are now deprecated and unused, therefor not tested. The high coverage, at or above 97\% for most of the modules, shows the testing's extensiveness into statement, branch, and function coverage.
+
+  There is room for improvement in the UserAccount module to remove the deprecated functions and increase the coverage. Additionally, there are some minor gaps in testing for some of the modules that could be filled in to reach even higher coverage. Overall, the current coverage indicates that the majority of the front end code is well-tested and will perform as intended.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{type_script_coverage_close.png}
+    \caption{Detailed TypeScript Code Coverage Close Up.}
+    \label{fig:type_script_coverage_close}
+  \end{figure}
+
+
 \section{Extras}
 
-\wss{Summary of the status of your extras.  If feasible, the extras should be
-complete by the time of writing the VnV report.  If the extras are not complete,
-you should summarize the plans for completing them.}
+The Usability Report, found \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{here}, contains the results and analysis from the usability testing conducted on our application. The report is not complete at this time, but performing these tests helped to ensure the system was meeting the non-functional requirements set out at the start of the year. Between now and the final submission, the report will be completed and will include a discussion of the results and recommendations for future development, along with the changes request and realized between now and final demonstration.
+
+The Design Thinking Document is yet to be completed, as incorporating the feedback from usability testing seemed like a unique opportunity to add an additional layer of design to the report. Now that the usability testing has been completed, the design thinking document is a near top priority and will be iterated throughout the coming weeks.
 
 \bibliographystyle{plainnat}
 \bibliography{../../refs/References}
@@ -1532,10 +1665,10 @@ graduate attribute of Reflection.
 \subsubsection*{Cieran:}
 \begin{itemize}
   \item \textit{What went well while writing this deliverable?} \\
-
+  Learning to use Jest and getting to put into practice all the things I learned from software testing was a great experience. We implemented several tests and explored sample test suite coverage in the class, but actually getting hands on and having to derive tests myself, imagine inputs, edge cases, error scenarios, and problematic inputs was a great learning experience. I think the entire team did a great job at writing tests for their respective modules and a great job on the report overall, completing it in a timely manner and communicating well throughout the process. Specifically, everyone came together for the usability testing to ensure the data we gathered came from as many unique sources and demographics as possible, and could lead to the design of many more implementable improvements both in and out of scope.
     
   \item \textit{What pain points did you experience during this deliverable, and how did you resolve them?}\\
-
+  I was responsible for the traceability section of the document, one which required the input of my teammates to develop and came across some time management issues within my own limitations. Since the traceability section required the input of my teammates, I had to wait for them to complete their respective sections and derive their tests before I could complete the traceability. This was a bit of a bottleneck for me, but I was able to manage it by communicating with my teammates and ensuring that they were aware of the importance of completing their sections in a timely manner so that I could complete the traceability. Additionally, I had to manage my own time effectively to ensure that I could complete the traceability once I had all the necessary information from my teammates. Overall, it was a bit of a challenge, but through communication and time management, I was able to successfully complete the traceability section. Additionally, my own issue, I had very limited knowledge on Jest and TypeScript implementation and testing, so I had to learn how to use Jest on my own beginner implementations in TypeScript, which had a learning curve but I feel has taught me to make better TypeScript and React code overall.
     
 \end{itemize}
 
