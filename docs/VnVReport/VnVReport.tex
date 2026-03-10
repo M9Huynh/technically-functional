@@ -16,6 +16,7 @@
 \usepackage[table]{xcolor}
 \usepackage{array}
 \usepackage{float}
+\usepackage{graphicx}
 
 \input{../Comments.tex}
 \input{../Common.tex}
@@ -794,6 +795,245 @@ and the User Account module test cases extend that to testing for invalid and no
   TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 \end{longtable}
 
+\subsection{Video Capture and Review module}
+The tests below outline the Video Capture and Review functionality. Some of the interactions with following tests as well as other modules may touch on the video capture and review module, but the tests below are focused on the core functionalities of the module itself.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Video Capture and Review Module Test Cases}
+  \label{table:video_capture_tests}
+  \endlastfoot
+  
+  TC23 & FR12 & Call \texttt{get\_pose\_connections(legs\_only=False)} and verify against \texttt{POSE\_CONNECTIONS}. & \texttt{POSE\_CONNECTIONS} and \texttt{LEG\_CONNECTIONS} have length greater than 0. \texttt{LEG\_CONNECTIONS} length is less than \texttt{POSE\_CONNECTIONS}, and the set of connections from \texttt{get\_pose\_connections(False)} equals the set of \texttt{POSE\_CONNECTIONS}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC24 & FR12 & Call \texttt{get\_pose\_connections(legs\_only=True)} and verify against \texttt{LEG\_CONNECTIONS}. & The connections returned equal the set of \texttt{LEG\_CONNECTIONS}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC25 & FR12 & Call \texttt{extract\_landmarks()} with a valid pose result containing 33 landmarks. & Returns a list of 33 landmarks. Each landmark has x, y, z values that are close to the expected i/33 values. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC26 & FR26 & Call \texttt{extract\_landmarks()} with None and with an empty result (pose\_landmarks=None). & Returns None for both. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC27 & FR7 & Initialize PoseCamera with mocked VideoCapture and mocked PoseLandmarker. & Camera initializes successfully. \texttt{display\_size} is set to (640, 480). \texttt{cap.set} is called to configure frame dimensions. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC28 & FR7 & Call \texttt{get\_frame()} with mocked camera that returns a numpy array frame. & Returns (True, frame) where frame is a numpy array. Frame is resized to display dimensions. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC29 & FR12 & Call \texttt{process\_pose()} with a mocked frame. & Returns a mock result. The pose detector's \texttt{detect} method is called once with the converted RGB image. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC30 & FR14 & Call \texttt{draw\_landmarks()} with a mock result and a numpy array frame. & Returns the frame. OpenCV's \texttt{line} and \texttt{circle} functions are called to draw the pose landmarks. & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
+\subsection{Computer Vision and Form Analysis Module}
+The following tests in Table \ref{table:computer_vision_tests} verify the functionality of the computer vision and form analysis module by ensuring that joint angles are accurately calculated, knee angles are correctly extracted from pose landmarks, the analyzer calibrates to the user’s range of motion, repetitions are counted properly, and summary metrics are generated as expected.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Computer Vision and Form Analysis Module Test Cases}
+  \label{table:computer_vision_tests}
+  \endlastfoot
+
+  TC31 & FR12 & Call \texttt{angle\_deg()} with points forming a 90-degree angle: a=(0,1), b=(1,1), c=(1,0). & Returns 90.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC32 & FR12 & Call \texttt{angle\_deg()} with points forming a 45-degree angle: a=(0,1), b=(1,1), c=(0,0). & Returns 45.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC33 & FR12 & Call \texttt{angle\_deg()} with points forming a 180-degree straight line: a=(0,1), b=(1,1), c=(2,1). & Returns 180.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC34 & FR26 & Call \texttt{angle\_deg()} with None values for each parameter position: (None, (1,1), (1,0)), ((0,1), None, (1,0)), ((0,1), (1,1), None). & Returns None for all three cases. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC35 & FR12 & Call \texttt{knee\_angle\_from\_result()} with a valid mock result containing right leg landmarks (hip=24, knee=26, ankle=28) forming a 90-degree angle. & Returns a valid angle value between 0 and 180 degrees. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC36 & FR12 & Call \texttt{knee\_angle\_from\_result()} with a valid mock result containing left leg landmarks (hip=23, knee=25, ankle=27) forming a 90-degree angle. & Returns a valid angle value between 0 and 180 degrees. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC37 & FR26 & Call \texttt{knee\_angle\_from\_result()} with None instead of a result object. & Returns None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC38 & FR26 & Call \texttt{knee\_angle\_from\_result()} with a result object that has \texttt{pose\_landmarks=None}. & Returns None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC39 & FR26 & Modify the mock result by setting the right knee landmark (index 26) to None, then call \texttt{knee\_angle\_from\_result()} with side="RIGHT". & Returns None due to missing landmark. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC40 & FR26 & Modify the mock result by setting the left knee landmark (index 25) to None, then call \texttt{knee\_angle\_from\_result()} with side="LEFT". & Returns None due to missing landmark. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC41 & FR26 & Set the mock result's \texttt{pose\_landmarks} to an empty list and call \texttt{knee\_angle\_from\_result()}. & Returns None due to empty landmarks. & All assertions pass. & \cellcolor{green} Pass \\
+
+  TC42 & FR12 & Initialize Analyzer with default values. & \texttt{started=False}, \texttt{min\_angle=0.0}, \texttt{max\_angle=0.0}, \texttt{is\_calibrating=False}, \texttt{cal\_start\_ts=None}, \texttt{cal\_duration\_s=10.0}, \texttt{cal\_min=None}, \texttt{cal\_max=None}, \texttt{rep\_count=0}, \texttt{current\_rep=None}, \texttt{rep\_durations=[]}, \texttt{rep\_state=""}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC43 & FR8, FR27 & Call \texttt{start\_calibration(duration\_s=5.0)}. & \texttt{is\_calibrating=True}, \texttt{cal\_duration\_s=5.0}, \texttt{cal\_start\_ts} is set, \texttt{cal\_min=None}, \texttt{cal\_max=None}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC44 & FR8, FR27 & During calibration, update with angles [30, 45, 60, 50, 70, 20]. & \texttt{cal\_min} updates to min value (20), \texttt{cal\_max} updates to max value (70). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC45 & FR8, FR27 & During calibration with duration 0.1s, update with angle 50 at t=100.05s (within duration), then angle 60 at t=100.16s (past duration). & First update: \texttt{is\_calibrating} remains True. Second update: \texttt{is\_calibrating} becomes False, \texttt{started} becomes True, \texttt{min\_angle=50}, \texttt{max\_angle=60}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC46 & FR8, FR26 & During calibration, call \texttt{\_calibrate\_with\_angle(None)}. & Calibration ignores None values. \texttt{cal\_min} and \texttt{cal\_max} remain None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  
+  TC47 & FR8, FR16 & Set \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, \texttt{started=True} & \texttt{rep\_state} is either "Extension" or empty. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC48 & FR8, FR14 & With rep state "Extension", update with angle 35. & Rep state transitions to "Flexion". \texttt{current\_rep} timestamp is updated. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC49 & FR8, FR11 & With rep state "Flexion" and \texttt{current\_rep=100.0}, update with angle 68 at t=101.5s (1.5s later). & Rep state transitions to "Extension". Rep count increments to 1. Rep duration of 1.5s is recorded. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC50 & FR8, FR11 & With rep state "Flexion" but \texttt{current\_rep=None}, update with angle 68. & Rep state transitions to "Extension" but no rep is counted. Rep count remains 0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC51 & FR8, FR12 & Call \texttt{update(25)} and \texttt{update(75)} and verify min/max expansion via \texttt{\_rep\_update}. & \texttt{min\_angle} updates to 25, \texttt{max\_angle} updates to 75. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC52 & FR8, FR27 & During calibration mode, call \texttt{update(45.0)}. & \texttt{\_calibrate\_with\_angle} is called with 45.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC53 & FR8, FR12 & Before \texttt{started} is set, call \texttt{update(45.0)}. & \texttt{min\_angle} and \texttt{max\_angle} are both set to 45.0. \texttt{started} becomes True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC54 & FR8, FR27 & With \texttt{started=True}, \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, call \texttt{update(20.0)}. & \texttt{min\_angle} updates to 20.0. \texttt{max\_angle} remains 70.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC55 & FR8, FR27 & With \texttt{started=True}, \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, call \texttt{update(80.0)}. & \texttt{max\_angle} updates to 80.0. \texttt{min\_angle} remains 30.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC56 & FR8, FR26 & With \texttt{started=True}, call \texttt{update(None)}. & Values remain unchanged: \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC57 & FR11, FR17 & With \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, \texttt{rep\_count=5}, \texttt{rep\_state="Extension"}, \texttt{rep\_durations=[1.2, 1.3, 1.1, 1.4, 1.2]}, call \texttt{summary()}. & Summary contains all expected keys: \texttt{min\_degree}, \texttt{max\_degree}, \texttt{rom\_degree}, \texttt{calibrating}, \texttt{cal\_time\_left}, \texttt{rep\_count}, \texttt{current\_rep\_duration}, \texttt{avg\_rep\_duration}, \texttt{rep\_state}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC58 & FR11, FR17 & With \texttt{min\_angle=30.123}, \texttt{max\_angle=70.456}, \texttt{rep\_count=5}, \texttt{rep\_state="Extension"}, \texttt{rep\_durations=[1.2, 1.3, 1.1, 1.4, 1.2]}, call \texttt{summary()}. & \texttt{min\_degree} rounds to 30.1, \texttt{max\_degree} rounds to 70.5, \texttt{rom\_degree} calculates to 40.3. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC59 & FR8, FR27 & During calibration with \texttt{cal\_start\_ts=100.0}, \texttt{cal\_duration\_s=10.0}, at current time 105.0, call \texttt{summary()}. & \texttt{calibrating=True}, \texttt{cal\_time\_left=5.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC60 & FR11, FR17 & When not calibrating, call \texttt{summary()}. & \texttt{calibrating=False}, \texttt{cal\_time\_left=0.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC61 & FR11, FR17 & With \texttt{rep\_durations=[]} (no reps completed), call \texttt{summary()}. & \texttt{avg\_rep\_duration=0}, \texttt{current\_rep\_duration=0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC62 & FR11, FR8 & With \texttt{current\_rep=100.0} and \texttt{rep\_durations=[1.2, 1.3]}, at current time 101.5, call \texttt{summary()}. & \texttt{current\_rep\_duration=1.5}, \texttt{avg\_rep\_duration=1.25}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC63 & FR8, FR12 & With \texttt{min\_angle=50.0}, \texttt{max\_angle=50.0}, \texttt{started=True}, call \texttt{\_rep\_update(50.0)}. & Function handles gracefully without division by zero errors. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC64 & FR12, FR26 & With \texttt{started=True}, \texttt{min\_angle=-10.0}, \texttt{max\_angle=30.0}, update with angle -20.0 then 40.0. & \texttt{min\_angle} expands to -20.0, \texttt{max\_angle} expands to 40.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC65 & FR12, FR26 & With \texttt{started=True}, \texttt{min\_angle=0.0}, \texttt{max\_angle=180.0}, update with angle 200.0. & \texttt{max\_angle} expands to 200.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC66 & FR8 & With \texttt{min\_angle=50.0}, \texttt{max\_angle=50.0}, \texttt{started=True}, \texttt{rep\_state="Extension"}, call \texttt{\_rep\_update(50.0)}. & No state change occurs. Rep state remains "Extension". Rep count remains 0. & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
+
+\subsection{Performance and Latency Module}
+The following tests in Table \ref{table:performance_latency_tests} verify the functionality of the performance and latency module by ensuring that the backend services initialize correctly, API endpoints respond appropriately to valid and invalid requests, frame processing handles mirroring and landmark detection correctly, frontend services communicate with the backend, and exercise metrics are saved to Firestore with proper error handling.
+
+\begin{longtable}{c
+    >{\raggedright\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}p{4cm}
+    >{\raggedright\arraybackslash}p{3.5cm}
+    >{\raggedright\arraybackslash}p{2.5cm} c}
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+  \toprule
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \midrule
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \bottomrule
+  \caption{Performance and Latency Module Test Cases}
+  \label{table:performance_latency_tests}
+  \endlastfoot
+
+  TC67 & FR12 & Start the PoseBackend with mocked values. & PoseBackend init values work as intended successfully and \texttt{is\_calibrating} is set to True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC68 & FR8 & Call \texttt{reset()} method on PoseBackend. & Previous analyzer is replaced with a newer analyzer object. New one has \texttt{is\_calibrating} set to True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC69 & FR8 & Send POST request to \texttt{/reset} endpoint. & Response status 200 with JSON \texttt{\{"ok": true\}}. Backend reset method is called. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC70 & FR7, FR26 & Send POST request to \texttt{/process\_frame} with empty image data. & Response status 400 with error message \texttt{"Missing imageBase64"}. Landmarks is null. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC71 & FR7, FR26 & Send POST request to \texttt{/process\_frame} with invalid base64 image string. & Response status 400 with error message. No frame processing occurs. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC72 & FR7, FR12 & Send POST request to \texttt{/process\_frame} with valid base64 image, \texttt{side="RIGHT"}, \texttt{mirrored=true}, \texttt{legsOnly=true}. Landmarks detected. & Response status 200. Contains all landmarks (33). Metrics contain correct values (angle=45.6, rep\_count=5, rep\_state="Extension"). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC73 & FR7, FR26 & Send POST request to \texttt{/process\_frame} with valid image but no pose landmarks detected. & Response status 200. Landmarks is null. Default metrics returned with \texttt{calibrating=True}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC74 & FR7 & Send POST request to \texttt{/process\_frame} with \texttt{mirrored=True} and verify frame flipping. & Frame is flipped horizontally before processing. \texttt{cv2.flip} is called once with the frame. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC75 & FR7 & Send POST request to \texttt{/process\_frame} with \texttt{mirrored=False} and verify no frame flipping. & Frame is not flipped. \texttt{cv2.flip} is not called. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC76 & FR7 & Test \texttt{b64\_to\_bgr\_image} helper function with a valid test image. & Function correctly decodes base64 string back to a numpy array with expected dimensions (100, 100, 3). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC77 & FR12 & Send POST requests with \texttt{side="RIGHT"} and \texttt{side="LEFT"} parameters. & \texttt{knee\_angle\_from\_result} is called twice with correct side parameters: first with 'RIGHT', then with 'LEFT'. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC78 & FR7, FR26 & Send POST request with valid image but simulate decoding error by returning None. & Response status 400 with error message in JSON. & All assertions pass. & \cellcolor{green} Pass \\
+
+  TC79 & FR7 & Call \texttt{processFrame()} with front camera facing, RIGHT side, and a valid base64 image. Mock successful API response. & Function calls axios.post with correct URL, payload includes \texttt{mirrored: true}, \texttt{side: "RIGHT"}, \texttt{legsOnly: true}. Returns the mocked response data with landmarks, connections, and metrics. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC80 & FR7 & Call \texttt{processFrame()} with back camera facing, LEFT side. & Function calls axios.post with \texttt{mirrored: false} in the payload. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC81 & FR7 & Call \texttt{processFrame()} and simulate a network error. & Function throws an error with message "Network error". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC82 & FR8 & Call \texttt{resetBackend()} and mock successful response. & Function calls axios.post to \texttt{/reset} endpoint with timeout 8000ms. Returns successfully. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC83 & FR8 & Call \texttt{resetBackend()} and simulate a failure. & Function throws an error with message "Reset failed". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC84 & FR1, FR1.1 & Call \texttt{saveMetrics()} when no user is logged in (getAuth returns null). & Function throws error "User must be logged in to save metrics". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC85 & FR1.1, FR21 & Call \texttt{saveMetrics()} when user is logged in but user document does not exist in Firestore. & Function throws error "User data not found in Firestore". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC86 & FR21, FR11 & Call \texttt{saveMetrics()} with valid metrics data and mocked Firebase responses. & Returns document ID "mock-doc-id". Verifies Firestore calls: doc, getDoc, collection, addDoc. Saved data contains correct fields including actid with timestamp, analysis="pending", exercise="Knee Extension", completed\_reps=8, max\_height=70.5, min\_height=30.1, duration=1, user info, current\_angle=45.6, rom\_degree=40.4, rep\_state="Extension", avg\_rep\_duration=1.2, current\_rep\_duration=0.5. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC87 & FR11, FR21 & Call \texttt{saveMetrics()} with minimal metrics data (missing optional avg\_rep\_duration and current\_rep\_duration). & Saved data has avg\_rep\_duration=0, current\_rep\_duration=0, duration=0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC88 & FR1.1, FR21 & Call \texttt{saveMetrics()} when user document exists but has no name field. & Saved data uses "Unknown User" for the name field. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC89 & FR1 & Call \texttt{saveSessionData()} when no user is logged in. & Function throws error "User must be logged in". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC90 & FR21, FR17, FR11 & Call \texttt{saveSessionData()} with valid session data. & Returns document ID "mock-doc-id". Saved data contains actid with "session\_" prefix, analysis="completed", completed\_reps=8, duration=1, exercise="Knee Extension Session", max\_height=70.5, min\_height=30.1, average\_rom=40.4, total\_reps=8, avg\_rep\_duration=1.2. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC91 & FR11, FR21 & Call \texttt{saveSessionData()} without avgRepDuration (uses session duration instead). & Saved data has duration calculated from startTime and endTime (0 seconds), and avg\_rep\_duration is undefined. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC92 & FR1.1, FR21 & Call \texttt{saveSessionData()} when user document does not exist. & Saved data uses "Unknown User" for the name field. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC93 & FR1.1, FR21 & Call \texttt{getUserDisplayName()} with logged in user and existing user document with name field. & Returns "Test User". Verifies doc and getDoc calls with correct parameters. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC94 & FR1.1, FR21 & Call \texttt{getUserDisplayName()} when user document exists but has no name field. & Returns user email "test@example.com". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC95 & FR1 & Call \texttt{getUserDisplayName()} when no user is logged in. & Returns "Unknown User". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+
+  TC96 & FR1.1 & Call \texttt{getUserDisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & All assertions pass. & \cellcolor{green} Pass \\
+\end{longtable}
+
 \section{Changes Due to Testing}
 
 There were a few changes that were implemented as a result of testing. Note that some of these changes are in progress. 
@@ -974,6 +1214,23 @@ This section maps test cases to the specific modules they validated, organized b
 Table \ref{tab:core_modules_tests} shows the mapping between test cases and the core modules they verify.	
 
 \section{Code Coverage Metrics}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{python_code_coverage.png}
+    \caption{Python code coverage overview showing 97\% total coverage across all modules.}
+    \label{fig:python_coverage}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{python_code_coverage_close.png}
+    \caption{Detailed Python code coverage by module showing analyze.py (100\%), draw.py (93\%), metrics.py (96\%), and server.py (96\%).}
+    \label{fig:python_coverage_close}
+\end{figure}
+
+The backend code has a total coverage of 97\%, with all modules having coverage above 90\%. The analyze.py module has 100\% coverage, while draw.py, metrics.py, and server.py have 93\%, 96\%, and 96\% coverage respectively. This indicates that the majority of the backend code is well-tested, with only a small portion of code not covered by tests.
+
+Some areas of improvement would be to fully test each backend module to reach 100\% coverage. This would be included in future testing plans but the current coverage points to the reliability of the backend code.
 
 \section{Extras}
 
@@ -1057,6 +1314,18 @@ graduate attribute of Reflection.
     definitely a learning curve, but after looking through examples and testing different approaches, I was able to 
     get the mocks working properly. In the end, it helped me better understand how to test code that depends on 
     external services.
+
+\end{itemize}
+
+\subsubsection*{Matthew:}
+\begin{itemize}
+  \item \textit{What went well while writing this deliverable?} \\
+
+    One thing that went well while working on this deliverable was our ability to communicate with each other and work together. We were able to make each meeting meaningful by updating the group on what we were working on, if we were stuck and also future deadlines. This allowed us to stay on track and stay on top of the deadlines. We also divided things based on our module implementation and that helped us clearly define the test case implementation and workload for the other documents.
+
+  \item \textit{What pain points did you experience during this deliverable, and how did you resolve them?}\\
+
+    A big pain point was working on the units test. I have not had much experience with testing and it has been a while since I wrote test cases for school. On top of that the difference in technology that we used academically to now was vastly different so I had to learn how to Mock certain objects and functionalities instead of using an actual database or object. I resolved them by just trying different things and looking at examples online. For example, I had to do a lot of reading on Mock and Patches for testing and the role that they play in testing. In the end I was able to create the unit test and learn a bit on how to test code.
 
 \end{itemize}
 
