@@ -77,31 +77,35 @@ This document ...
 
 \begin{enumerate}
 
-\item \textbf{test-UT-1 : Navigation Clarity}
+\item \textbf{UT-1 : Navigation Clarity}
 
 \textbf{Initial State:} App installed on a mobile device; user logged in.
 
-\textbf{Input:} User was asked to find and open the exercise screen, start a recording session, and return to the dashboard without assistance.
+\textbf{Input:} User was asked to find and open the exercise screen, start a recording session, 
+and return to the dashboard without assistance.
 
-\textbf{Output:} User successfully navigated through the required screens without confusion. Feedback indicated labels and buttons were clear.
+\textbf{Output:} User successfully navigated through the required screens without confusion. Feedback 
+indicated labels and buttons were clear.
 
 \textbf{Result:} Pass
 
 \vspace{0.5em}
 
-\item \textbf{test-UT-2 : Instruction Clarity During Exercise}
+\item \textbf{UT-2 : Instruction Clarity During Exercise}
 
 \textbf{Initial State:} User is on the record exercise screen with camera access enabled.
 
-\textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback instructing the user to remain within the camera frame. Once proper positioning was detected, the user was able to start and stop recording and save the session.
+\textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback 
+instructing the user of any adjustments.
 
-\textbf{Output:} User reported that instructions were clear and prompts matched the required actions. Minor wording improvements were noted and updated.
+\textbf{Output:} User reported that instructions were clear and prompts matched the required actions. 
+Minor wording improvements were noted and updated.
 
 \textbf{Result:} Pass
 
 \vspace{0.5em}
 
-\item \textbf{test-UT-3 : Survey Questionnaire -- ui\_testing}
+\item \textbf{UT-3 : Survey Questionnaire -- ui\_testing}
 
 \textbf{Initial State:} App accessible to testers on mobile devices.
 
@@ -117,25 +121,28 @@ This document ...
 
 \begin{enumerate}
 
-\item \textbf{test-PR-1 : Exercise Interface Response Time -- ex\_int\_speed}
+\item \textbf{PR-1 : Exercise Interface Response Time -- ex\_int\_speed}
 
 \textbf{Initial State:} User logged in on a mobile device; backend server running.
 
-\textbf{Input:} User started pose analysis from the exercise screen. Screen recording timestamps were used to measure the time from tapping ``Start'' to the first visible feedback/result. Five trials were conducted.
+\textbf{Input:} User started recording from the record screen. Screen recording timestamps were 
+used to measure the time from tapping ``Start'' to the first visible feedback/result. There were five trials conducted.
 
-\textbf{Output:} Measured response times were 1.87s, 1.92s, 1.79s, 1.95s, and 1.84s. The average end-to-end response time was 1.87 seconds ($\leq$ 2 seconds).
+\textbf{Output:} Measured response times were 1.87s, 1.92s, 1.79s, 1.95s, and 1.84s. The average end-to-end 
+response time was 1.87 seconds ($\leq$ 2 seconds).
 
 \textbf{Result:} Pass
 
 \vspace{0.5em}
 
-\item \textbf{test-PR-2 : Repeated Use Performance}
+\item \textbf{PR-2 : Repeated Use Performance}
 
 \textbf{Initial State:} Application running normally on mobile device.
 
-\textbf{Input:} User completed 10 consecutive ``Start $\rightarrow$ Analyze $\rightarrow$ Stop'' cycles.
+\textbf{Input:} User completed 10 consecutive ``Start $\rightarrow$ Record Exercise $\rightarrow$ Stop'' cycles.
 
-\textbf{Output:} No significant slowdown was observed across trials. Response times remained within acceptable range and no crashes occurred.
+\textbf{Output:} There was no significant slowdown observed across the 10 trials. Additionally, the response times were all within acceptable 
+range and no crashes took place.
 
 \textbf{Result:} Pass
 
@@ -145,25 +152,27 @@ This document ...
 
 \begin{enumerate}
 
-\item \textbf{test-RFT-1 : Backend Failure Handling -- fail\_recovery}
+\item \textbf{RFT-1 : Backend Failure Handling -- fail\_recovery}
 
 \textbf{Initial State:} User actively using the application while connected to backend.
 
 \textbf{Input:} Backend server was manually terminated during active analysis.
 
-\textbf{Output:} Application displayed a network error message and remained responsive (no crash). After backend restart, the user was able to retry and continue normal operation.
+\textbf{Output:} Application displayed a network error message and remained responsive (no crash). After backend 
+restart, the user was able to retry and continue normal operation.
 
 \textbf{Result:} Pass
 
 \vspace{0.5em}
 
-\item \textbf{test-RFT-2 : Network Interruption During Upload -- Interrupted\_vid}
+\item \textbf{RFT-2 : Network Interruption During Upload -- Interrupted\_vid}
 
 \textbf{Initial State:} User uploading recorded exercise video.
 
 \textbf{Input:} WiFi connection was disabled mid-upload and restored after approximately 10 seconds.
 
-\textbf{Output:} Application detected upload failure and displayed a retry option. User retried successfully and uploaded video was verified to be intact.
+\textbf{Output:} Application detected upload failure and displayed a retry option. User retried successfully and 
+uploaded video was verified to be intact.
 
 \textbf{Result:} Pass
 
@@ -173,25 +182,26 @@ This document ...
 
 \begin{enumerate}
 
-\item \textbf{test-SR-1 : Unauthorized Access to Protected Endpoint}
+\item \textbf{SR-1 : Unauthorized Access to Protected Endpoint}
 
 \textbf{Initial State:} Backend server running with authentication enabled.
 
-\textbf{Input:} A request was sent to a protected endpoint without authentication credentials or token.
+\textbf{Input:} A request was sent to a protected endpoint without authentication credentials.
 
-\textbf{Output:} Server returned HTTP 401 Unauthorized. No protected data was returned.
+\textbf{Output:} Server returned HTTP 401 Unauthorized. Additionally, no protected data was returned.
 
 \textbf{Result:} Pass
 
 \vspace{0.5em}
 
-\item \textbf{test-SR-2 : Invalid Credentials Login}
+\item \textbf{SR-2 : Invalid Credentials Login}
 
 \textbf{Initial State:} Application login screen available.
 
 \textbf{Input:} Login attempted using an email not registered in the database or incorrect password.
 
-\textbf{Output:} System denied login and displayed an appropriate error message without exposing internal system details.
+\textbf{Output:} System denied login and displayed an appropriate error message without exposing any 
+system details.
 
 \textbf{Result:} Pass
 
@@ -204,25 +214,32 @@ This document ...
 
 \begin{enumerate}
 
-\item \textbf{test-MS-1 : Reproducible Setup}
+\item \textbf{MS-1 : Reproducible Setup}
 
 \textbf{Initial State:} Fresh machine with no prior installation.
 
-\textbf{Input:} Project repository was cloned and installed using instructions provided in README (frontend and backend setup).
+\textbf{Input:} Project repository was cloned and installed using instructions provided in README 
+(the frontend and backend setup).
 
-\textbf{Output:} Application ran successfully without missing dependencies. All documented setup steps were sufficient to reproduce the system.
+\textbf{Output:} Application ran successfully without missing dependencies. All documented setup steps were 
+sufficient to successfully reproduce the system.
 
 \textbf{Result:} Pass
 
 \vspace{0.5em}
 
-\item \textbf{test-MS-2 : Code Review and Quality Assurance}
+\item \textbf{MS-2 : Code Review and Quality Assurance}
 
 \textbf{Initial State:} Revision 0 completed.
 
-\textbf{Input:} Multiple peer code reviews were conducted through pull requests and issue tracking. Unit tests were executed to validate core functionality, including pose angle calculations and analysis logic. UI components were reviewed for usability, clarity of instructions, and error handling. Identified issues were documented and resolved using version control workflows.
+\textbf{Input:} Numerous peer code reviews were conducted through pull requests and issue tracking. 
+The unit tests were executed to validate core functionality, including the metric calculations and functional logic. 
+The UI components were reviewed for usability, clarity of instructions, and error handling. Moreover, the identified 
+issues were documented and resolved.
 
-\textbf{Output:} Core analysis functions passed unit testing. UI refinements were implemented based on peer feedback. Code structure maintained clear separation between modules and frontend components. No major functional issues were identified during review.
+\textbf{Output:} The core functions passed unit testing. The UI refinements were implemented based on peer 
+feedback. The code structure maintained clear separation between modules and frontend components. Overall, there 
+were no major functional issues identified during review.
 
 \textbf{Result:} Pass
 
@@ -243,7 +260,7 @@ modules.
 \newcommand{\testcount}{\stepcounter{testcase}\thetestcase}
 \renewcommand{\arraystretch}{1.2} % Adjust row height for readability
 
-\subsection{Authentication Services}
+\subsection{Authentication}
 
 \subsubsection{Account Creation Module}
 The following tests in Table \ref{table:account_creation_tests} verify the functionality of the account 
@@ -464,7 +481,7 @@ TypeScript tests can be run similarly, though they run with \texttt{Jest} and th
  management, user activity tracking, exercise data handling, performance statistics generation, and the feedback 
  module that displays live feedback to users and allows both the physiotherapistss and patients the opopruntity 
  to leave comments regarding the user's respective session. It is important to note that the Firebase services and 
- camera components are mocked during testing so that we are able to seperately test the logic functionality. 
+ camera components are mocked during testing so that we are able to separately test the logic functionality. 
  Also, the results for both the backend and frontend automated test suites are printed to the console, ultimately 
  allowing us to be able to quickly identify both the passing and failing tests immediately.
 		
@@ -499,7 +516,7 @@ Table \ref{tab:sections_requirements} shows the functional requirements and thei
   \caption{Look \& Feel Tests and Corresponding Requirements}
   \label{tab:nfr-trace-lf}
   \begin{tabular}{cc}
-    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
     \midrule
     UT-1 & LFR-AP1 \\
     \bottomrule
@@ -513,7 +530,7 @@ Table \ref{tab:nfr-trace-lf} maps the Look \& Feel test cases to their correspon
   \caption{Usability \& Humanity Tests and Corresponding Requirements}
   \label{tab:nfr-trace-uh}
   \begin{tabular}{cc}
-    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
     \midrule
     UT-2 & UHR-EOU2, UHR-LRN1 \\
     UT-3 & UHR-EOU1, LFR-ST1 \\
@@ -527,7 +544,7 @@ The usability and humanity requirements and their corresponding test cases are s
   \centering
   \caption{Performance Tests and Corresponding Requirements}
   \begin{tabular}{cc}
-    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
     \midrule
     PR-1 & PR-SL1, PR-SL2 \\
     PR-2 & PR-SL1 \\
@@ -542,7 +559,7 @@ Performance requirements and their test cases are outlined in Table \ref{tab:nfr
   \centering
   \caption{Robustness \& Fault-Tolerance Tests and Corresponding Requirements}
   \begin{tabular}{cc}
-    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
     \midrule
     RFT-1 & PR-RFT1 \\
     RFT-2 & PR-RFT2 \\
@@ -557,7 +574,7 @@ Table \ref{tab:nfr-trace-rft} shows the robustness and fault-tolerance requireme
   \centering
   \caption{Operational \& Environmental Tests and Corresponding Requirements}
   \begin{tabular}{cc}
-    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
     \midrule
     MS-1 & OER-WE1, OER-PR1 \\
     \bottomrule
@@ -569,23 +586,9 @@ Table \ref{tab:nfr-trace-ope} shows the operational and environmental requiremen
 
 \begin{table}[H]
   \centering
-  \caption{Maintenance \& Support Tests and Corresponding Requirements}
-  \begin{tabular}{cc}
-    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
-    \midrule
-    MS-2 & PR-SER1 \\
-    \bottomrule
-  \end{tabular}
-  \label{tab:nfr-trace-ms}
-\end{table}
-
-The maintenance and support requirements and their corresponding test cases are shown in Table \ref{tab:nfr-trace-ms}.
-
-\begin{table}[H]
-  \centering
   \caption{Security Tests and Corresponding Requirements}
   \begin{tabular}{cc}
-    \toprule \textbf{Test ID (test-)} & \textbf{Non-Functional Requirement} \\
+    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
     \midrule
     SR-1 & SR-AR1 \\
     SR-2 & SR-AR1 \\
@@ -610,9 +613,9 @@ This section maps test cases to the specific modules they validated, organized b
     TC9--TC12 & M6 (Valid User Module) \\
     TC13--TC19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account Module), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
     TC20--TC22 & M1 (User Interface), M7 (User Account Module) \\
-    test-UT-1, test-UT-2, test-UT-3, test-PR-1, test-PR-2, test-RFT-1, test-RFT-2 & M1 (User Interface Module) \\
-    test-SR-1, test-SR-2 & M5 (Account Creation Module), M6 (Valid User Module) \\
-    test-MS-1, test-MS-2 & M1 (User Interface Module), M5 (Account Creation Module), M6 (Valid User Module) \\
+    UT-1, UT-2, UT-3, PR-1, PR-2, RFT-1, RFT-2 & M1 (User Interface Module) \\
+    SR-1, SR-2 & M5 (Account Creation Module), M6 (Valid User Module) \\
+    MS-1, MS-2 & M1 (User Interface Module), M5 (Account Creation Module), M6 (Valid User Module) \\
     \bottomrule
   \end{tabular}
   \label{tab:core_modules_tests}
@@ -683,5 +686,82 @@ graduate attribute of Reflection.
 \end{enumerate}
 
 
+
+\subsubsection*{Vaisnavi:}
+\begin{itemize}
+  \item \textit{What went well while writing this deliverable?} \\
+
+    One thing that went well while writing this deliverable was our ability to collaborate 
+    and efficiently split up the tasks and sections of this report. Specifically, in the case of 
+    the unit tests and traceability, we decided as a group for each member to derive the unit tests and 
+    traceability based on the sections of the app that they had worked on. This aided efficiency and productivity 
+    overall, and allowed the report to come together easily.
+
+  \item \textit{What pain points did you experience during this
+    deliverable, and how did you resolve them?}\\
+
+    One of the biggest pain points I experienced during this deliverable was actually writing the unit tests. 
+    Writing the tests was actually harder than I expected because mocking the Firebase database was something I had 
+    never done before. Since our authentication and valid user logic uses the Firebase database, we had to mock those 
+    database calls instead of using the real database, which took some time to learn and figure out. There was 
+    definitely a learning curve, but after looking through examples and testing different approaches, I was able to 
+    get the mocks working properly. In the end, it helped me better understand how to test code that depends on 
+    external services.
+
+\end{itemize}
+
+\subsubsection*{Group}
+\begin{itemize}
+  \item \textit{Which parts of this document stemmed from speaking to
+      your client(s) or
+    a proxy (e.g. your peers)? Which ones were not, and why?} \\
+
+    Parts of this document stemmed from speaking to our clients, specifically by receiving feedback 
+    from our peers who acted as proxies for physiotherapy patients. When demonstrating our application, 
+    they interacted with the system and gave relevant, useful feedback on the usability of the interface 
+    as well as how clear and easy to grasp the real-time exercise feedback was. This mainly had an impact 
+    on the sections related to usability testing, interface design, and how feedback is presented to users, 
+    especially the requirement for clear instructions and visible/audio cues during exercises. Moreover, the 
+    other parts of the document, such as functional requirement evaluation and technical implementation, did 
+    not come directly from speaking to our clients. These were based on the requirements defined in our SRS and 
+    the testing done by our core team, since these parts relate more to the development logic and system reliability 
+    rather than user interaction.
+
+
+  \item \textit{In what ways was the Verification and Validation
+        (VnV) Plan different
+        from the activities that were actually conducted for VnV?  If there were
+        differences, what changes required the modification in the plan?  Why did
+        these changes occur?  Would you be able to anticipate these
+        changes in future
+        projects?  If there weren't any differences, how was your team
+        able to clearly
+        predict a feasible amount of effort and the right tasks needed
+        to build the
+        evidence that demonstrates the required quality?  (It is
+          expected that most
+      teams will have had to deviate from their original VnV Plan.)}\\
+
+
+  \item \textit{Reflect on your use of CI for continuous integration testing (regression
+  testing). Did your CI work to gatekeep your PRs?  Would it have been helpful
+  if you got your CI working earlier in the project?  What are your plans to use
+  CI for testing in future projects?} \\
+
+    Our project currently uses GitHub Actions for CI, but as of right now, the workflow is limited and 
+    mainly displays the pull request activity and build checks. With our implemented unit tests for both 
+    the frontend and backend, we want to integrate these directly into the CI pipeline. Specifically, the 
+    GitHub Actions workflow could be configured to automatically run the Jest test suite for the TypeScript 
+    frontend and the Pytest test suite for the Python backend whenever a pull request is opened or updated. 
+    In this case, if any test fails, the workflow would essentially fail, which would ultimately prevent changes 
+    from being merged until the issue is resolved. With this proposed change, this would make the CI pipeline much 
+    more effective for regression testing, as it would automatically verify that new code trying to be merged in 
+    does not break existing functionality. It is important to note that it would have been helpful to set this up 
+    earlier in the project, and as a result, for future projects, we would aim to do so. Thus, overall for future 
+    projects, we would plan to set up CI earlier and integrate our automated test suites (such as Jest and Pytest) 
+    so that the tests run automatically on every pull request and prevent merges if any tests fail.
+
+
+\end{itemize}
 
 \end{document}
