@@ -1,4 +1,4 @@
-// IMPORTANT: mock local firebase.ts FIRST so initializeApp/env never runs
+// mocked local firebase.ts so initializeApp/env never runs
 jest.mock("../firebase", () => ({
   auth: {},
   db: {},
