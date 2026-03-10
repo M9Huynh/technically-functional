@@ -795,6 +795,67 @@ and the User Account module test cases extend that to testing for invalid and no
   TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 \end{longtable}
 
+<<<<<<< HEAD
+\subsection{Live Feedback Module}
+The following tests in Table \ref{table:live_feedback_tests} verify the functionality of the live 
+feedback module, including real-time corrective message generation, safety warning triggers, rep 
+counting, and physiotherapist comment submission and retrieval.
+
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+	\toprule
+	\textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+	\textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+	\midrule
+	\endfirsthead
+	
+	\multicolumn{6}{l}{\textit{(Continued from previous page)}} \\
+	\toprule
+	\textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+	\textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+	\midrule
+	\endhead
+	
+	\multicolumn{6}{r}{\textit{Continued on next page}} \\
+	\endfoot
+	
+	\bottomrule
+	\caption{Live Feedback Module Test Cases}
+	\label{table:live_feedback_tests}
+	\endlastfoot
+	
+	TC23 & FR13, FR14 & Submit joint angle measurements within the acceptable range for a knee extension rep. &
+	No corrective feedback message is generated. Rep count increments by one. Positive reinforcement message returned. &
+	All assertions pass. & \cellcolor{green} Pass \\ \midrule
+	
+	TC24 & FR13, FR14 & Submit joint angle measurements below the minimum threshold for knee extension (insufficient range of motion). &
+	Corrective feedback message is generated (e.g., \texttt{"Extend your knee further to complete the rep."}). Rep is not counted. &
+	All assertions pass. & \cellcolor{green} Pass \\ \midrule
+	
+	TC25 & FR13, FR14 & Submit joint angle measurements above the maximum safe threshold, simulating an overextension. &
+	Corrective feedback message is generated (e.g., \texttt{"Reduce the range of your movement."}). Rep is not counted. &
+	All assertions pass. & \cellcolor{green} Pass \\ \midrule
+	
+	TC26 & FR16, PR-SCR1 & Submit joint angle measurements that exceed the defined dangerous movement threshold. &
+	Safety warning is triggered (e.g., \texttt{"Stop immediately — dangerous movement detected."}). Exercise session is halted. &
+	All assertions pass. & \cellcolor{green} Pass \\ \midrule
+	
+	TC27 & FR14, PR-SL2 & Submit a sequence of 5 consecutive valid reps and verify feedback generation latency for each. &
+	Feedback is returned for each rep within 2 seconds. Rep count reflects 5 completed reps. No degradation in response time across reps. &
+	All assertions pass. & \cellcolor{green} Pass \\ \midrule
+	
+	TC28 & FR14 & Invoke the feedback generator with no pose landmarks detected (user out of frame). &
+	Feedback message returned is \texttt{"Please step into the camera frame."} No rep is counted. No safety warning triggered. &
+	All assertions pass. & \cellcolor{green} Pass \\ \midrule
+	
+	TC29 & FR20, FR25 & Physiotherapist submits a written comment on a completed patient session. &
+	Comment is saved to Firestore and associated with the correct session document. No errors thrown. &
+	All assertions pass. & \cellcolor{green} Pass \\ \midrule
+	
+	TC30 & FR19, FR25 & Patient retrieves physiotherapist feedback for a session that has an associated PT comment. &
+	Correct comment text is returned and associated with the matching session. Non-existent session returns null. &
+	All assertions pass. & \cellcolor{green} Pass \\
+	
+=======
 \subsection{Video Capture and Review module}
 The tests below outline the Video Capture and Review functionality. Some of the interactions with following tests as well as other modules may touch on the video capture and review module, but the tests below are focused on the core functionalities of the module itself.
 
@@ -1032,6 +1093,7 @@ The following tests in Table \ref{table:performance_latency_tests} verify the fu
   TC95 & FR1 & Call \texttt{getUserDisplayName()} when no user is logged in. & Returns "Unknown User". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
   TC96 & FR1.1 & Call \texttt{getUserDisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & All assertions pass. & \cellcolor{green} Pass \\
+>>>>>>> origin/main
 \end{longtable}
 
 \section{Changes Due to Testing}
@@ -1203,6 +1265,10 @@ This section maps test cases to the specific modules they validated, organized b
     TC9--TC12 & M6 (Valid User Module) \\
     TC13--TC19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account Module), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
     TC20--TC22 & M1 (User Interface), M7 (User Account Module) \\
+<<<<<<< HEAD
+    TC23--TC30 & M10 (Angle Analysis), M11 (Feedback Generation), M12 (Reporting), M13 (Dashboard) \\
+=======
+>>>>>>> origin/main
     UT-1, UT-2, UT-3, PR-1, PR-2, RFT-1, RFT-2 & M1 (User Interface Module) \\
     SR-1, SR-2 & M5 (Account Creation Module), M6 (Valid User Module) \\
     MS-1, MS-2 & M1 (User Interface Module), M5 (Account Creation Module), M6 (Valid User Module) \\
@@ -1280,6 +1346,8 @@ graduate attribute of Reflection.
   corresponding module tests. Note to self: please double check your dates.
   \item The usability testing results were from our peers and our supervisors. They provided some very useful suggestions and 
   some of those ideas are fairly straightforward to implement. 
+  \item CI proved to be very helpful throughout. Because of continuous regression tests being performed, it was ensured that
+
   \item Our VnV report deviated a fair bit from the orginal plan. Writing the code resulted in a more detailed plan being required.
   In addition, our team further divided some of the modules, which also resulted in more detailed tests as well. I think I would 
   be able to anticipate them after I have gained sufficient experience and done it a few times. Some of the basic components 
@@ -1317,6 +1385,23 @@ graduate attribute of Reflection.
 
 \end{itemize}
 
+<<<<<<< HEAD
+\textbf{Eman}
+\begin{enumerate}
+	\item One thing that went well while writing this deliverable was the team's ability to divide the work 
+	clearly based on ownership. Since each member had worked on specific parts of the application, it was 
+	natural to have each person derive the tests and evaluations for their respective sections. This made the 
+	process more efficient and ensured that the tests were written with a solid understanding of the underlying 
+	implementation. Communication within the team was consistent throughout, which helped us stay on track and 
+	address any blockers quickly.
+	
+	\item One of the main pain points I experienced was setting up and debugging the network connection between 
+	the mobile device and the Flask backend during testing. The pose detection and recording functionality 
+	depended on the phone being able to reach the server, and resolving the IP configuration and network 
+	routing issues took considerable time. Once the connection was established, the full recording flow was 
+	tested with the real camera and backend, and the system performed as expected.
+\end{enumerate}
+=======
 \subsubsection*{Matthew:}
 \begin{itemize}
   \item \textit{What went well while writing this deliverable?} \\
@@ -1328,6 +1413,7 @@ graduate attribute of Reflection.
     A big pain point was working on the units test. I have not had much experience with testing and it has been a while since I wrote test cases for school. On top of that the difference in technology that we used academically to now was vastly different so I had to learn how to Mock certain objects and functionalities instead of using an actual database or object. I resolved them by just trying different things and looking at examples online. For example, I had to do a lot of reading on Mock and Patches for testing and the role that they play in testing. In the end I was able to create the unit test and learn a bit on how to test code.
 
 \end{itemize}
+>>>>>>> origin/main
 
 \subsubsection*{Group}
 \begin{itemize}
@@ -1360,6 +1446,21 @@ graduate attribute of Reflection.
         evidence that demonstrates the required quality?  (It is
           expected that most
       teams will have had to deviate from their original VnV Plan.)}\\
+<<<<<<< HEAD
+      
+          Our VnV Plan deviated from the activities that were actually conducted in a few notable ways. The original 
+      plan outlined testing at a higher level of abstraction, targeting broader system functionalities rather than 
+      individual module functions. As development progressed and the codebase became more detailed, it became clear 
+      that more granular unit tests were necessary. This also coincided with our team further subdividing some of 
+      the modules during implementation, which resulted in more detailed tests being required. This led to the 
+      addition of the User Account module test suite, which did not exist in the original plan at all. As this 
+      module grew in scope and became central to both patient and PT workflows, dedicated testing for functions 
+      such as \texttt{getUserData()}, \texttt{updateUser()}, and \texttt{deletePTAccount()} became essential.
+      The usability testing itself proceeded largely as planned, though the participant pool was smaller than 
+      initially intended due to scheduling constraints. The structured questionnaire format, pre-session, session, 
+      and post-session, was maintained as designed and provided consistent data across all five participants.
+=======
+>>>>>>> origin/main
 
 
   \item \textit{Reflect on your use of CI for continuous integration testing (regression
