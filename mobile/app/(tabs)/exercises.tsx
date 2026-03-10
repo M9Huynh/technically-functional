@@ -12,8 +12,6 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import {
-  RECOMMENDED_EXERCISES,
-  SIMILAR_EXERCISES,
   Exercise,
   getExercisesById,
   getGeneralExercises,
