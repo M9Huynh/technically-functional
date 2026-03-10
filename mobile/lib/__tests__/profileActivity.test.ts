@@ -42,7 +42,7 @@ describe("getCurrentUser", () => {
     (auth.currentUser as any) = null;
   });
 
-  it("TC-PA1: Should return the current user", async () => {
+  it("TC105: Should return the current user", async () => {
     const user = { uid: "user123" };
     (auth.currentUser as any) = user;
     (getDoc as jest.Mock).mockResolvedValueOnce(snap(true, user));
@@ -52,12 +52,12 @@ describe("getCurrentUser", () => {
     expect(result).toEqual(user);
   });
 
-  it("TC-PA2: Should return null if no current user is found", async () => {
+  it("TC106: Should return null if no current user is found", async () => {
     const result = await getCurrentUser();
     expect(result).toBeNull();
   });
 
-  it("TC-PA3: Should return null if user document does not exist", async () => {
+  it("TC107: Should return null if user document does not exist", async () => {
     const user = { uid: "user123" };
     (auth.currentUser as any) = user;
     (getDoc as jest.Mock).mockResolvedValueOnce(snap(false, user));
@@ -67,7 +67,7 @@ describe("getCurrentUser", () => {
     expect(result).toBeNull();
   });
 
-  it("TC-PA4: Should return null on Firestore error", async () => {
+  it("TC108: Should return null on Firestore error", async () => {
     const user = { uid: "user123" };
     (auth.currentUser as any) = user;
     (getDoc as jest.Mock).mockRejectedValueOnce(new Error("Firestore error"));
@@ -84,7 +84,7 @@ describe("getCurrentUserID", () => {
     (auth.currentUser as any) = null;
   });
 
-  it("TC-PA5: Should return the current user's UID", async () => {
+  it("TC109: Should return the current user's UID", async () => {
     const user = { uid: "user123" };
     (auth.currentUser as any) = user;
 
@@ -93,7 +93,7 @@ describe("getCurrentUserID", () => {
     expect(result).toBe("user123");
   });
 
-  it("TC-PA6: Should return null if no current user is found", async () => {
+  it("TC110: Should return null if no current user is found", async () => {
     const result = await getCurrentUserID();
     expect(result).toBeNull();
   });
@@ -104,7 +104,7 @@ describe("getUserActivities", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA7: Empty Array with No Activities (calls getDocs)", async () => {
+  it("TC111: Empty Array with No Activities (calls getDocs)", async () => {
     (getDocs as jest.Mock).mockResolvedValueOnce({
       forEach: jest.fn(),
     });
@@ -115,7 +115,7 @@ describe("getUserActivities", () => {
     expect(getDocs).toHaveBeenCalled();
   });
 
-  it("TC-PA8: Should return activities sorted by date in descending order", async () => {
+  it("TC112: Should return activities sorted by date in descending order", async () => {
     const mockActivities = [
       { id: "1", uid: "user123", date_performed: "2024-01-01" },
       { id: "2", uid: "user123", date_performed: "2024-01-03" },
@@ -138,7 +138,7 @@ describe("getUserActivities", () => {
     expect(result[2].date_performed).toBe("2024-01-01");
   });
 
-  it("TC-PA9: Should return empty array on error", async () => {
+  it("TC113: Should return empty array on error", async () => {
     (getDocs as jest.Mock).mockRejectedValueOnce(new Error("Firestore error"));
 
     const result = await getUserActivities("user123");
@@ -146,7 +146,7 @@ describe("getUserActivities", () => {
     expect(result).toEqual([]);
   });
 
-  it("TC-PA10: Should query activities for the correct uid", async () => {
+  it("TC114: Should query activities for the correct uid", async () => {
     (getDocs as jest.Mock).mockResolvedValueOnce({
       forEach: jest.fn(),
     });
@@ -162,7 +162,7 @@ describe("getUserSummary", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA11: Should return correct summary data", async () => {
+  it("TC115: Should return correct summary data", async () => {
     const mockActivities = [
       {
         id: "1",
@@ -203,7 +203,7 @@ describe("getUserSummary", () => {
     expect(result.today).toBe(1);
   });
 
-  it("TC-PA12: Should return zero summary for user with no activities or comments", async () => {
+  it("TC116: Should return zero summary for user with no activities or comments", async () => {
     (getDocs as jest.Mock)
       .mockResolvedValueOnce({
         // First call: activities
@@ -222,7 +222,7 @@ describe("getUserSummary", () => {
     expect(result.today).toBe(0);
   });
 
-  it("TC-PA13: Should handle errors gracefully", async () => {
+  it("TC117: Should handle errors gracefully", async () => {
     (getDocs as jest.Mock).mockRejectedValueOnce(new Error("Firestore error"));
 
     const result = await getUserSummary("user123");
@@ -239,7 +239,7 @@ describe("repsChartData", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA14: Should return correct reps chart data", async () => {
+  it("TC118: Should return correct reps chart data", async () => {
     const mockActivities = [
       {
         id: "1",
@@ -284,7 +284,7 @@ describe("repsChartData", () => {
     ]);
   });
 
-  it("TC-PA15: Should return correct reps chart data with duplicate dates", async () => {
+  it("TC119: Should return correct reps chart data with duplicate dates", async () => {
     const mockActivities = [
       {
         id: "1",
@@ -328,7 +328,7 @@ describe("repsChartData", () => {
     ]);
   });
 
-  it("TC-PA16: Should return empty reps chart data when 0 reps", async () => {
+  it("TC120: Should return empty reps chart data when 0 reps", async () => {
     const mockActivities = [
       {
         id: "1",
@@ -375,7 +375,7 @@ describe("repsChartData", () => {
     ]);
   });
 
-  it("TC-PA17: Should return empty reps chart data with no activities", async () => {
+  it("TC121: Should return empty reps chart data with no activities", async () => {
     (getDocs as jest.Mock).mockResolvedValueOnce({
       forEach: jest.fn(),
     });
@@ -393,7 +393,7 @@ describe("repsChartData", () => {
     ]);
   });
 
-  it("TC-PA18: Should handle errors gracefully", async () => {
+  it("TC122: Should handle errors gracefully", async () => {
     (getDocs as jest.Mock).mockRejectedValueOnce(
       new Error("Failed to fetch activities"),
     );
@@ -417,7 +417,7 @@ describe("exerciseChartData", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA19: Should return correct exercise chart data", async () => {
+  it("TC123: Should return correct exercise chart data", async () => {
     const mockActivities = [
       {
         id: "1",
@@ -462,7 +462,7 @@ describe("exerciseChartData", () => {
     ]);
   });
 
-  it("TC-PA20: Should return empty exercise chart data with duplicate dates", async () => {
+  it("TC124: Should return empty exercise chart data with duplicate dates", async () => {
     const mockActivities = [
       {
         id: "1",
@@ -507,7 +507,7 @@ describe("exerciseChartData", () => {
     ]);
   });
 
-  it("TC-PA21: Should return empty exercise chart data with no activities", async () => {
+  it("TC125: Should return empty exercise chart data with no activities", async () => {
     (getDocs as jest.Mock).mockResolvedValueOnce({
       forEach: jest.fn(),
     });
@@ -525,7 +525,7 @@ describe("exerciseChartData", () => {
     ]);
   });
 
-  it("TC-PA22: Should handle errors gracefully", async () => {
+  it("TC126: Should handle errors gracefully", async () => {
     (getDocs as jest.Mock).mockRejectedValueOnce(
       new Error("Failed to fetch activities"),
     );
@@ -549,7 +549,7 @@ describe("getComments", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA23: Should return comments for a given activity ID", async () => {
+  it("TC127: Should return comments for a given activity ID", async () => {
     const mockComments = [
       { id: "c1", actid: "a1", text: "Great job!" },
       { id: "c2", actid: "a1", text: "Keep it up!" },
@@ -566,7 +566,7 @@ describe("getComments", () => {
     expect(result).toEqual(mockComments);
   });
 
-  it("TC-PA24: Should return an empty array if no comments are found", async () => {
+  it("TC128: Should return an empty array if no comments are found", async () => {
     (getDocs as jest.Mock).mockResolvedValueOnce({
       docs: [],
     });
@@ -576,7 +576,7 @@ describe("getComments", () => {
     expect(result).toEqual([]);
   });
 
-  it("TC-PA25: Should handle errors gracefully", async () => {
+  it("TC129: Should handle errors gracefully", async () => {
     (getDocs as jest.Mock).mockRejectedValueOnce(
       new Error("Failed to fetch comments"),
     );
@@ -592,7 +592,7 @@ describe("postComment", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA26: Should post a comment with correct data", async () => {
+  it("TC130: Should post a comment with correct data", async () => {
     const mockDocRef = { id: "c1" };
     const mockUserDoc = {
       exists: () => true,
@@ -624,14 +624,14 @@ describe("postComment", () => {
     );
   });
 
-  it("TC-PA27: Should not post an empty comment", async () => {
+  it("TC131: Should not post an empty comment", async () => {
     await postComment("a1", "user123", "");
     expect(collection).not.toHaveBeenCalled();
     expect(addDoc).not.toHaveBeenCalled();
     expect(setDoc).not.toHaveBeenCalled();
   });
 
-  it("TC-PA28: Should handle errors gracefully", async () => {
+  it("TC132: Should handle errors gracefully", async () => {
     (getDoc as jest.Mock).mockResolvedValueOnce({
       exists: () => true,
       data: () => ({ name: "Test User" }),
@@ -659,7 +659,7 @@ describe("getName", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA29: Should return the user's name", async () => {
+  it("TC133: Should return the user's name", async () => {
     const mockUserDoc = {
       exists: () => true,
       data: () => ({ name: "Test User" }),
@@ -672,7 +672,7 @@ describe("getName", () => {
     expect(result).toEqual("Test User");
   });
 
-  it("TC-PA30: Should return 'Unknown User' if user document does not exist", async () => {
+  it("TC134: Should return 'Unknown User' if user document does not exist", async () => {
     (getDoc as jest.Mock).mockResolvedValueOnce({
       exists: () => false,
     });
@@ -682,7 +682,7 @@ describe("getName", () => {
     expect(result).toEqual("Unknown User");
   });
 
-  it("TC-PA31: Should return 'Unnamed User' if name field is missing", async () => {
+  it("TC135: Should return 'Unnamed User' if name field is missing", async () => {
     const mockUserDoc = {
       exists: () => true,
       data: () => ({}),
@@ -695,7 +695,7 @@ describe("getName", () => {
     expect(result).toEqual("Unnamed User");
   });
 
-  it("TC-PA32: Should handle errors gracefully", async () => {
+  it("TC136: Should handle errors gracefully", async () => {
     (getDoc as jest.Mock).mockRejectedValueOnce(
       new Error("Failed to fetch user"),
     );
@@ -711,7 +711,7 @@ describe("setSelectedUserID", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA33: Should set the selected user ID in AsyncStorage", async () => {
+  it("TC137: Should set the selected user ID in AsyncStorage", async () => {
     await setSelectedUserID("user123");
 
     expect(AsyncStorage.setItem).toHaveBeenCalledWith(
@@ -720,7 +720,7 @@ describe("setSelectedUserID", () => {
     );
   });
 
-  it("TC-PA34: Should return if provided no user ID", async () => {
+  it("TC138: Should return if provided no user ID", async () => {
     await setSelectedUserID("");
     expect(AsyncStorage.setItem).not.toHaveBeenCalled();
   });
@@ -731,7 +731,7 @@ describe("getSelectedUserID", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA35: Should get the selected user ID from AsyncStorage", async () => {
+  it("TC139: Should get the selected user ID from AsyncStorage", async () => {
     (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce("user123");
 
     const result = await getSelectedUserID();
@@ -740,7 +740,7 @@ describe("getSelectedUserID", () => {
     expect(result).toBe("user123");
   });
 
-  it("TC-PA36: Should return null if no selected user ID is set", async () => {
+  it("TC140: Should return null if no selected user ID is set", async () => {
     (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
 
     const result = await getSelectedUserID();
@@ -755,7 +755,7 @@ describe("getSelectedUser", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA37: Should call for the selected user's data", async () => {
+  it("TC141: Should call for the selected user's data", async () => {
     (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce("user123");
 
     const mockUserData = { uid: "user123", name: "Test User" };
@@ -770,7 +770,7 @@ describe("getSelectedUser", () => {
     );
   });
 
-  it("TC-PA38: Should return null if no selected user ID is set", async () => {
+  it("TC142: Should return null if no selected user ID is set", async () => {
     (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
 
     const result = await getSelectedUser();
@@ -785,7 +785,7 @@ describe("clearSelectedUserID", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA39: Should clear the selected user ID from AsyncStorage", async () => {
+  it("TC143: Should clear the selected user ID from AsyncStorage", async () => {
     await clearSelectedUserID();
 
     expect(AsyncStorage.removeItem).toHaveBeenCalledWith("selectedUserID");
@@ -797,7 +797,7 @@ describe("getPhysioInviteCode", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-PA40: Should return invite code ID when one exists", async () => {
+  it("TC144: Should return invite code ID when one exists", async () => {
     const mockSnapshot = {
       empty: false,
       docs: [{ id: "INV123" }],
@@ -815,7 +815,7 @@ describe("getPhysioInviteCode", () => {
     expect(result).toEqual("INV123");
   });
 
-  it("TC-PA41: Should return null when no invite code exists", async () => {
+  it("TC145: Should return null when no invite code exists", async () => {
     const mockSnapshot = {
       empty: true,
       docs: [],
@@ -831,7 +831,7 @@ describe("getPhysioInviteCode", () => {
     expect(result).toBeNull();
   });
 
-  it("TC-PA42: Should return null when id doesn't exist", async () => {
+  it("TC146: Should return null when id doesn't exist", async () => {
     const mockSnapshot = {
       empty: false,
       docs: [{ no_id: "INV123" }],

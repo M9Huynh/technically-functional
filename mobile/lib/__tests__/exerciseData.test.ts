@@ -22,7 +22,7 @@ describe("getExercisesById", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-ED1: should return exercises for a valid user ID", async () => {
+  it("TC147: should return exercises for a valid user ID", async () => {
     const mockExercises: Exercise[] = [
       {
         id: "exercise1",
@@ -44,7 +44,7 @@ describe("getExercisesById", () => {
     expect(result).toEqual(mockExercises);
   });
 
-  it("TC-ED2: should return undefined for a user ID with no exercises", async () => {
+  it("TC148: should return undefined for a user ID with no exercises", async () => {
     (getDocs as jest.Mock).mockResolvedValue({
       empty: true,
       docs: [],
@@ -55,7 +55,7 @@ describe("getExercisesById", () => {
     expect(result).toBeUndefined();
   });
 
-  it("TC-ED3: should return undefined if there is an error fetching exercises", async () => {
+  it("TC149: should return undefined if there is an error fetching exercises", async () => {
     (getDocs as jest.Mock).mockRejectedValue(new Error("Firestore error"));
 
     const result = await getExercisesById("userIdWithError");
@@ -69,7 +69,7 @@ describe("getExercise", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-ED4: should return exercise data for a valid exercise ID", async () => {
+  it("TC150: should return exercise data for a valid exercise ID", async () => {
     const mockExercise: Exercise = {
       id: "exercise1",
       title: "Exercise 1",
@@ -86,7 +86,7 @@ describe("getExercise", () => {
     expect(result).toEqual(mockExercise);
   });
 
-  it("TC-ED5: should return undefined for an invalid exercise ID", async () => {
+  it("TC151: should return undefined for an invalid exercise ID", async () => {
     (getDoc as jest.Mock).mockResolvedValue({
       data: () => undefined,
     });
@@ -96,7 +96,7 @@ describe("getExercise", () => {
     expect(result).toBeUndefined();
   });
 
-  it("TC-ED6: should return undefined if there is an error fetching exercise", async () => {
+  it("TC152: should return undefined if there is an error fetching exercise", async () => {
     (getDoc as jest.Mock).mockRejectedValue(new Error("Firestore error"));
 
     const result = await getExercise("exerciseIdWithError");
@@ -110,7 +110,7 @@ describe("getGeneralExercises", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-ED7: should return a list of general exercises", async () => {
+  it("TC153: should return a list of general exercises", async () => {
     const mockExercises: Exercise[] = [
       {
         id: "exercise1",
@@ -138,7 +138,7 @@ describe("getGeneralExercises", () => {
     expect(result).toEqual(mockExercises);
   });
 
-  it("TC-ED8: should return undefined if there are no general exercises", async () => {
+  it("TC154: should return undefined if there are no general exercises", async () => {
     (getDocs as jest.Mock).mockResolvedValue({
       empty: true,
       docs: [],
@@ -149,7 +149,7 @@ describe("getGeneralExercises", () => {
     expect(result).toBeUndefined();
   });
 
-  it("TC-ED9: should return undefined if there is an error fetching general exercises", async () => {
+  it("TC155: should return undefined if there is an error fetching general exercises", async () => {
     (getDocs as jest.Mock).mockRejectedValue(new Error("Firestore error"));
 
     const result = await getGeneralExercises();
@@ -163,7 +163,7 @@ describe("removeUserExercise", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-ED10: should remove an exercise for a valid exercise ID", async () => {
+  it("TC156: should remove an exercise for a valid exercise ID", async () => {
     const mockDocRef = "exampleRef";
 
     const mockSnapshot = {
@@ -188,7 +188,7 @@ describe("removeUserExercise", () => {
     expect(deleteDoc).toHaveBeenCalledWith(mockDocRef);
   });
 
-  it("TC-ED11: should not attempt to remove an exercise if it does not exist", async () => {
+  it("TC157: should not attempt to remove an exercise if it does not exist", async () => {
     const mockSnapshot = {
       empty: true,
       docs: [],
@@ -201,7 +201,7 @@ describe("removeUserExercise", () => {
     expect(deleteDoc).not.toHaveBeenCalled();
   });
 
-  it("TC-ED12: should handle errors gracefully", async () => {
+  it("TC158: should handle errors gracefully", async () => {
     (getDocs as jest.Mock).mockRejectedValue(new Error("Firestore error"));
 
     await expect(
@@ -217,7 +217,7 @@ describe("addUserExercise", () => {
     jest.resetAllMocks();
   });
 
-  it("TC-ED13: should add a new exercise for a user", async () => {
+  it("TC159: should add a new exercise for a user", async () => {
     const mockDocRef = { id: "newExerciseId" };
 
     (addDoc as jest.Mock).mockResolvedValueOnce(mockDocRef);
@@ -237,7 +237,7 @@ describe("addUserExercise", () => {
     });
   });
 
-  it("TC-ED14: should handle errors gracefully", async () => {
+  it("TC160: should handle errors gracefully", async () => {
     (addDoc as jest.Mock).mockRejectedValue(new Error("Firestore error"));
 
     await expect(
@@ -257,7 +257,7 @@ describe("updateUserExercise", () => {
         jest.resetAllMocks();
     });
 
-    it("TC-ED15: should update an existing exercise for a user", async () => {
+    it("TC161: should update an existing exercise for a user", async () => {
         const mockDocRef = { id: "existingExerciseId" };
         (addDoc as jest.Mock).mockResolvedValueOnce(mockDocRef);
         (getDocs as jest.Mock).mockResolvedValueOnce({
@@ -283,7 +283,7 @@ describe("updateUserExercise", () => {
         });
     });
 
-    it("TC-ED16: should not attempt to update if exercise does not exist", async () => {
+    it("TC162: should not attempt to update if exercise does not exist", async () => {
         (getDocs as jest.Mock).mockResolvedValueOnce({
             empty: true,
             docs: [],
@@ -294,7 +294,7 @@ describe("updateUserExercise", () => {
         expect(updateDoc).not.toHaveBeenCalled();
     });
 
-    it("TC-ED17: should handle errors gracefully", async () => {
+    it("TC163: should handle errors gracefully", async () => {
         (getDocs as jest.Mock).mockRejectedValueOnce(new Error("Firestore error"));
 
         await updateUserExercise("userId", "Nonexistent Exercise", "Description");
@@ -308,7 +308,7 @@ describe("getSelectedExercises", () => {
         jest.resetAllMocks();
     });
 
-    it("TC-ED18: should return selected exercises for a valid user ID", async () => {
+    it("TC164: should return selected exercises for a valid user ID", async () => {
         const mockExercises: Exercise[] = [
             {
                 id: "exercise1",
@@ -330,7 +330,7 @@ describe("getSelectedExercises", () => {
         expect(result).toEqual(mockExercises);
     });
 
-    it("TC-ED19: should return undefined for a user ID with no selected exercises", async () => {
+    it("TC165: should return undefined for a user ID with no selected exercises", async () => {
         (getDocs as jest.Mock).mockResolvedValue({
             empty: true,
             docs: [],
@@ -341,7 +341,7 @@ describe("getSelectedExercises", () => {
         expect(result).toBeUndefined();
     });
 
-    it("TC-ED20: should handle errors gracefully", async () => {
+    it("TC166: should handle errors gracefully", async () => {
         (getDocs as jest.Mock).mockRejectedValue(new Error("Firestore error"));
 
         const result = await getSelectedExercises("invalidUserId");
