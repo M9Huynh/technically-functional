@@ -52,7 +52,7 @@ Date 2 & 1.1 & Notes\\
   TC & Test Case\\
   UT & Usability Test\\
   PR & Performance Test\\
-  RFT & Reliability/Fault Tolerance Test\\
+  RFT & Reliability and Fault Tolerance Test\\
   SR & Security Test\\
   MS & Maintainability and Support Test\\
   FR & Functional Requirement\\
@@ -78,6 +78,356 @@ This document ...
 
 \section{Functional Requirements Evaluation}
 
+\begin{enumerate}
+	
+	\item \textbf{test-TC1 : Physiotherapist Registration (Valid License)}
+	
+	\textbf{Initial State:} App launched; registration screen accessible; Firebase Auth and Firestore active.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with a valid license format and an active license in \texttt{validLicenses}.
+	
+	\textbf{Output:} Auth user created. Firestore \texttt{users/\{uid\}} written with \texttt{role="physio"}, \texttt{verified=true}, and \texttt{createdAt}. All assertions passed.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC2 : Physiotherapist Registration (Invalid License Format)}
+	
+	\textbf{Initial State:} App launched; registration screen accessible.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with an invalid license format (missing dash or incorrect digits).
+	
+	\textbf{Output:} Error ``Invalid license format'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC3 : Physiotherapist Registration (Unverified License)}
+	
+	\textbf{Initial State:} App launched; registration screen accessible.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with valid format but license not found or \texttt{active=false} in \texttt{validLicenses}.
+	
+	\textbf{Output:} Error ``License not verified'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC4 : Patient Registration (Valid Invite Code)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} collection seeded with an active, unused code containing a \texttt{physioId}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a valid invite code.
+	
+	\textbf{Output:} Auth user created. Firestore \texttt{users/\{uid\}} written with \texttt{role="patient"} and stored \texttt{physioId}. Invite code updated with \texttt{used=true} and \texttt{usedBy=\{uid\}}.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC5 : Patient Registration (Non-Existent Invite Code)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} collection does not contain the submitted code.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a code that does not exist in \texttt{inviteCodes}.
+	
+	\textbf{Output:} Error ``Invalid invite code'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC6 : Patient Registration (Inactive Invite Code)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with \texttt{active=false}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with an inactive invite code.
+	
+	\textbf{Output:} Error ``Invite code inactive'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC7 : Patient Registration (Already Used Invite Code)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with \texttt{used=true}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with an already used invite code.
+	
+	\textbf{Output:} Error ``Invite code already used'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC8 : Patient Registration (Invite Code Missing Physio Link)}
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with no \texttt{physioId} field.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a code missing a \texttt{physioId}.
+	
+	\textbf{Output:} Error ``Invite code missing physio link'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC9 : User Login (Valid Physiotherapist Credentials)}
+	
+	\textbf{Initial State:} Login screen available; Firestore contains a profile with \texttt{role="physio"}.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid PT credentials.
+	
+	\textbf{Output:} Login returns object with \texttt{uid} and profile data including \texttt{role="physio"}. No errors thrown.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC10 : User Login (Valid Patient Credentials)}
+	
+	\textbf{Initial State:} Login screen available; Firestore contains a profile with \texttt{role="patient"}.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid patient credentials.
+	
+	\textbf{Output:} Login returns object with \texttt{uid} and profile data including \texttt{role="patient"}. No errors thrown.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC11 : User Login (Missing Firestore Profile)}
+	
+	\textbf{Initial State:} Login screen available; valid Firebase Auth credentials exist but no Firestore profile.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid credentials.
+	
+	\textbf{Output:} Error ``User profile missing in Firestore'' thrown. Login rejected.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC12 : User Logout}
+	
+	\textbf{Initial State:} User session active.
+	
+	\textbf{Input:} \texttt{logoutUser()} called.
+	
+	\textbf{Output:} Auth sign-out called once and completes without error.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC13 : Get User Data}
+	
+	\textbf{Initial State:} Firestore populated with test user documents.
+	
+	\textbf{Input:} \texttt{getUserData()} called with a valid uid, a non-existent uid, and an empty uid.
+	
+	\textbf{Output:} Valid uid returns \texttt{UserData}. Non-existent uid returns null. Empty uid throws an error.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC14 : User Lookup by Email}
+	
+	\textbf{Initial State:} Firestore populated with test user documents.
+	
+	\textbf{Input:} \texttt{getUserByEmail()} called with a registered email and an unregistered email.
+	
+	\textbf{Output:} Registered email returns user object and true. Unregistered email returns null and false.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC15 : Update User Data}
+	
+	\textbf{Initial State:} Firestore populated with test user documents.
+	
+	\textbf{Input:} \texttt{updateUser()} called with a valid update payload.
+	
+	\textbf{Output:} Update returns true. Changes reflected in Firestore.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC16 : Delete User}
+	
+	\textbf{Initial State:} Firestore populated with test user documents.
+	
+	\textbf{Input:} \texttt{deleteUser()} called with a valid uid, a valid email, and a non-existent case.
+	
+	\textbf{Output:} Valid cases return true. Non-existent case returns false.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC17 : User Queries}
+	
+	\textbf{Initial State:} Firestore populated with linked PT and patient records.
+	
+	\textbf{Input:} \texttt{getPatientsByPhysioId()}, \texttt{searchByName()}, and \texttt{getAllUsers()} called.
+	
+	\textbf{Output:} Each function returns correctly filtered arrays. Errors return empty arrays.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC18 : User Info Lookup}
+	
+	\textbf{Initial State:} Firestore populated with linked PT and patient records.
+	
+	\textbf{Input:} \texttt{getUserdbInfo()} called with name only and with name and birthday filter.
+	
+	\textbf{Output:} Returns categorized patients and physiotherapists correctly. Birthday filter works as expected.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC19 : PT Account Delete}
+	
+	\textbf{Initial State:} Firestore populated with a valid physiotherapist and linked patient.
+	
+	\textbf{Input:} \texttt{deletePTAccount()} called with a valid physio, a non-physio user, and a non-existent patient.
+	
+	\textbf{Output:} Valid case deletes patient successfully. Non-physio and non-existent cases throw appropriate errors.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC20 : User Authentication Validation}
+	
+	\textbf{Initial State:} Firestore populated with test user credentials.
+	
+	\textbf{Input:} \texttt{usernamePwMatch()} and \texttt{authenticateUser()} called with valid credentials, an invalid password, and a non-existent user.
+	
+	\textbf{Output:} Valid credentials return true and user object. Invalid password throws an error. Non-existent user returns null.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC21 : System Initialization}
+	
+	\textbf{Initial State:} System not yet initialized.
+	
+	\textbf{Input:} \texttt{initializeSystem()} called.
+	
+	\textbf{Output:} Success message logged to console. No errors thrown.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC22 : Credential Validation}
+	
+	\textbf{Initial State:} User account exists in Firestore.
+	
+	\textbf{Input:} \texttt{validateCredentials()} called with a correct password and an incorrect password.
+	
+	\textbf{Output:} Correct password returns true. Incorrect password returns false.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-4 : Account Creation (Usability)}
+	
+	\textbf{Initial State:} App installed on participant's device; invite code and PT license number provided.
+	
+	\textbf{Input:} Participant launched the app, selected their role, and completed account creation.
+	
+	\textbf{Output:} All participants created accounts successfully without assistance. PT license and invite code fields completed without difficulty. Minor font size feedback noted and resolved.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-5 : Exercise Recording Initiation}
+	
+	\textbf{Initial State:} Patient logged in on mobile device; camera permission granted; backend server running.
+	
+	\textbf{Input:} Participant navigated to the Record screen and pressed Start Recording.
+	
+	\textbf{Output:} Camera activated and pose detection began. On-screen prompts instructed participant to enter the detectable frame area. Navigation and button labels reported as clear.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-6 : Real-Time Pose Detection and Form Feedback}
+	
+	\textbf{Initial State:} Patient positioned within camera frame; pose detection active; backend returning joint angle and ROM metrics.
+	
+	\textbf{Input:} Participant performed knee extension repetitions.
+	
+	\textbf{Output:} App detected relevant body landmarks and displayed appropriate form feedback overlays. Rep count incremented correctly. Detection accuracy was reported as satisfactory.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-7 : Exercise Page (Instructions)}
+	
+	\textbf{Initial State:} Patient logged in; Exercises tab accessible.
+	
+	\textbf{Input:} Participant navigated to the Exercises page and reviewed listed exercises.
+	
+	\textbf{Output:} Exercises displayed with names, target muscle groups, set/rep counts, and step-by-step instructions. Instructions reported as clear and easy to follow.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-8 : Progress Screen (Session History)}
+	
+	\textbf{Initial State:} Patient logged in with at least one completed session stored in Firestore.
+	
+	\textbf{Input:} Participant navigated to the Progress tab.
+	
+	\textbf{Output:} Session history displayed with ROM and rep count data. Layout was readable and logically arranged. Participants suggested adding sets and pain level as future enhancements.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-9 : PT Dashboard (Patient List and Activity)}
+	
+	\textbf{Initial State:} Physiotherapist logged in; at least one linked patient with recorded sessions.
+	
+	\textbf{Input:} PT participant reviewed the home dashboard and selected a patient to view their activity history.
+	
+	\textbf{Output:} Dashboard displayed linked patients and activity history. Patient detail view showed session history and ROM chart. Layout reported as clear and sufficient for clinical use.
+	
+	\textbf{Result:} Pass
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-UT-10 : PT Feedback Submission}
+	
+	\textbf{Initial State:} Physiotherapist logged in; patient session detail page accessible.
+	
+	\textbf{Input:} PT participant selected a session entry and submitted a written comment.
+	
+	\textbf{Output:} Feedback saved to Firestore and associated with the session. Comment visible from the patient's session view. PT participants rated the feature as clinically useful.
+	
+	\textbf{Result:} Pass
+	
+\end{enumerate}
+
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}
@@ -100,7 +450,7 @@ indicated labels and buttons were clear.
 
 \item \textbf{UT-2 : Instruction Clarity During Exercise}
 
-\textbf{Initial State:} User on the record exercise screen with camera access enabled.
+\textbf{Initial State:} User is on the record exercise screen with camera access enabled.
 
 \textbf{Input:} User initiated an exercise session. The application displayed live on-screen feedback 
 instructing the user of any adjustments.
@@ -116,7 +466,7 @@ Minor wording improvements were noted and updated.
 
 \textbf{Initial State:} App accessible to testers on mobile devices.
 
-\textbf{Input:} Five users completed a short usability questionnaire rating navigation (1--5), clarity (1--5), and overall ease of use (1--5).
+\textbf{Input:} Five users completed a short usability questionnaire addressing ease of use, clarity and navigation.
 
 \textbf{Output:} Average rating across categories was $\geq$ 4/5. Minor UI refinements (font size and button spacing) were applied based on feedback.
 
@@ -155,7 +505,7 @@ range and no crashes took place.
 
 \end{enumerate}
 
-\subsection{Reliability / Fault Tolerance}
+\subsection{Reliability and Fault Tolerance}
 
 \begin{enumerate}
 
@@ -274,11 +624,11 @@ The following tests in Table \ref{table:account_creation_tests} verify the funct
 creation module for both physiotherapists and patients, including validation checks and successful user 
 creation workflows.
 
-\begin{longtable}{c
-    >{\raggedright\arraybackslash}p{1.5cm}
-    >{\raggedright\arraybackslash}p{4.5cm}
-    >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{3cm} c}
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+   % >{\raggedright\arraybackslash}p{1.5cm}
+    %>{\raggedright\arraybackslash}p{4.5cm}
+    %>{\raggedright\arraybackslash}p{4cm}
+    %>{\raggedright\arraybackslash}p{3cm} c}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -342,11 +692,11 @@ The following tests in Table \ref{table:valid_user_tests} verify the functionali
 ensuring that successful authentication requires an existing Firestore user profile for both physiotherapist and 
 patient roles.
 
-\begin{longtable}{c
-    >{\raggedright\arraybackslash}p{1.5cm}
-    >{\raggedright\arraybackslash}p{4.5cm}
-    >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{3cm} c}
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+   % >{\raggedright\arraybackslash}p{1.5cm}
+    %>{\raggedright\arraybackslash}p{4.5cm}
+    %>{\raggedright\arraybackslash}p{4cm}
+    %>{\raggedright\arraybackslash}p{3cm} c}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -389,7 +739,7 @@ patient roles.
 
 \subsection{User Account module}
 The tests below outline the User Account module functionality. Note that many new functions were added for this
-iteration. In the original VnV plan, this module is non-existent. Currently, it serves as an interface between the 
+iteration. Currently, it serves as an interface between the 
 database and the various other components. Additionally, there may be some overlap between the Account Creation module
 and Valid User module. While the modules themselves perform a few different functions, they are inextricably linked 
 due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
@@ -434,10 +784,11 @@ and the User Account module test cases extend that to testing for invalid and no
   TC17 & FR18 & User Queries: Test get patients by physioId, search by name, and get all users. & Returns correctly filtered arrays; errors return empty arrays. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 
   % SPECIALIZED FUNCTIONS
-  \multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
+  %\multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
   
   TC18 & FR21, FR25 & User Info Lookup: Test getUserdbInfo with name only and with name+birthday filter. & Returns categorized patients/physios correctly; filtering works as expected. & All assertions pass. & \cellcolor{green} Pass \\ \hline
-  
+  %SPECIALIZED FUNCTIONS
+  \multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline  
   TC19 & FR2, FR4, FR22 & PT\_Account\_Delete: Test with valid physio, non-physio user, and non-existent patient. & Valid case deletes patient; non-physio throws error; non-existent throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
   
   TC20 & SR-AR1, SR-PR1 & Test usernamePwMatch and authenticateUser with valid credentials, invalid password, and non-existent user. & Valid returns true/user; invalid throws appropriate errors; non-existent returns null. & All assertions pass. & \cellcolor{green} Pass \\ \hline
@@ -471,10 +822,10 @@ See \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{Usability Report} for 
 \textit{Note: The usability testing has been completed, but the document's Results and Discussion still remain.}\\
 
 
-\wss{This section should highlight how feedback from the users and from 
-the supervisor (when one exists) shaped the final product.  In particular 
-the feedback from the Rev 0 demo to the supervisor (or to potential users) 
-should be highlighted.}
+% \wss{This section should highlight how feedback from the users and from 
+% the supervisor (when one exists) shaped the final product.  In particular 
+% the feedback from the Rev 0 demo to the supervisor (or to potential users) 
+% should be highlighted.}
 
 \section{Automated Testing}
 
@@ -497,48 +848,43 @@ they validate, ultimately displaying the traceability to requirements.
 
 \begin{table}[H]
   \centering
-  \caption{Functional Requirements and Corresponding Test Sections}
+  \caption{Functional Requirements and Corresponding Test Cases}
   \begin{tabular}{p{0.42\textwidth}p{0.42\textwidth}}
-    \toprule \textbf{Test Section} & \textbf{Functional Requirement(s)} \\
+    \toprule \textbf{Test Cases} & \textbf{Functional Requirement(s)} \\
     \midrule
     Account Creation Module Tests (TC1--TC3) & FR1.1, FR1.2 \\
     Patient Registration Tests (TC4--TC8) & FR1.1, FR1.3, FR2, FR3 \\
     User Authentication Tests (TC9--TC11) & FR1, FR1.1 \\
-    \bottomrule
+    \midrule
+    \textit{User Account Tests} \\
+    \midrule
+    User Management Functions (TC13--TC16) & FR2, FR4, FR6, FR21, FR22, FR23 \\
+    User Query Function (TC17--TC18) & FR18, FR21, FR25 \\
+    Specialized functions (TC19--TC21) & FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1\\
+    Validation helpers (TC22) & FR1, SR-AR1 \\
   \end{tabular}
   \label{tab:sections_requirements}
 \end{table}
 
-Table \ref{tab:sections_requirements} shows the functional requirements and their corresponding test sections, ensuring all relevant requirements have been properly tested.
+Table \ref{tab:sections_requirements} showcases both the functional requirements and their respective test cases.
 
 \begin{table}[H]
   \centering
-  \caption{Look \& Feel Tests and Corresponding Requirements}
-  \label{tab:nfr-trace-lf}
+  \caption{Usability Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-us}
   \begin{tabular}{cc}
     \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
     \midrule
     UT-1 & LFR-AP1 \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-Table \ref{tab:nfr-trace-lf} maps the Look \& Feel test cases to their corresponding non-functional requirements.
-
-\begin{table}[H]
-  \centering
-  \caption{Usability \& Humanity Tests and Corresponding Requirements}
-  \label{tab:nfr-trace-uh}
-  \begin{tabular}{cc}
-    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
-    \midrule
     UT-2 & UHR-EOU2, UHR-LRN1 \\
     UT-3 & UHR-EOU1, LFR-ST1 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-The usability and humanity requirements and their corresponding test cases are shown in Table \ref{tab:nfr-trace-uh}.
+Table \ref{tab:nfr-trace-us} maps each of the Usability tests to their respective 
+non-functional requirements.
+
 
 \begin{table}[H]
   \centering
@@ -553,11 +899,12 @@ The usability and humanity requirements and their corresponding test cases are s
   \label{tab:nfr-trace-perf}
 \end{table}
 
-Performance requirements and their test cases are outlined in Table \ref{tab:nfr-trace-perf}.
+Table \ref{tab:nfr-trace-perf} maps each of the Performance tests to their 
+respective non-functional requirements.
 
 \begin{table}[H]
   \centering
-  \caption{Robustness \& Fault-Tolerance Tests and Corresponding Requirements}
+  \caption{Reliability \& Fault-Tolerance Tests and Corresponding Requirements}
   \begin{tabular}{cc}
     \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
     \midrule
@@ -568,21 +915,8 @@ Performance requirements and their test cases are outlined in Table \ref{tab:nfr
   \label{tab:nfr-trace-rft}
 \end{table}
 
-Table \ref{tab:nfr-trace-rft} shows the robustness and fault-tolerance requirements along with their test cases.
-
-\begin{table}[H]
-  \centering
-  \caption{Operational \& Environmental Tests and Corresponding Requirements}
-  \begin{tabular}{cc}
-    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
-    \midrule
-    MS-1 & OER-WE1, OER-PR1 \\
-    \bottomrule
-  \end{tabular}
-  \label{tab:nfr-trace-ope}
-\end{table}
-
-Table \ref{tab:nfr-trace-ope} shows the operational and environmental requirements along with their corresponding test cases.
+Table \ref{tab:nfr-trace-rft} maps each of the Reliability and Fault-Tolerance tests to their 
+respective non-functional requirements.
 
 \begin{table}[H]
   \centering
@@ -597,11 +931,28 @@ Table \ref{tab:nfr-trace-ope} shows the operational and environmental requiremen
   \label{tab:nfr-trace-sec}
 \end{table}
 
-Table \ref{tab:nfr-trace-sec} outlines the security requirements and their corresponding test cases.
+Table \ref{tab:nfr-trace-sec} maps each of the Security tests to their 
+respective non-functional requirements.
+
+\begin{table}[H]
+  \centering
+  \caption{Maintainability \& Support Tests and Corresponding Requirements}
+  \begin{tabular}{cc}
+    \toprule \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    MS-1 & OER-WE1, OER-PR1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:nfr-trace-ms}
+\end{table}
+
+Table \ref{tab:nfr-trace-ms} maps each of the Maintainability and Support tests to their 
+respective non-functional requirements.
 
 \section{Trace to Modules}	
 
-This section maps test cases to the specific modules they validated, organized by architectural levels to ensure comprehensive verification of our system.
+The following section displays the traceability of each of the test cases to the specific modules they validated, 
+which ultimately showcases the overall verification of our system.
 
 \begin{table}[H]
   \centering
@@ -609,17 +960,20 @@ This section maps test cases to the specific modules they validated, organized b
   \begin{tabular}{p{0.38\textwidth}p{0.42\textwidth}}
     \toprule \textbf{Test ID} & \textbf{Module} \\
     \midrule
-    TC1--TC8 & M5 (Account Creation Module) \\
-    TC9--TC12 & M6 (Valid User Module) \\
-    UT-1, UT-2, UT-3, PR-1, PR-2, RFT-1, RFT-2 & M1 (User Interface Module) \\
-    SR-1, SR-2 & M5 (Account Creation Module), M6 (Valid User Module) \\
-    MS-1, MS-2 & M1 (User Interface Module), M5 (Account Creation Module), M6 (Valid User Module) \\
+    TC1--TC8 & M5 (Account Creation) \\
+    TC9--TC12 & M6 (Valid User) \\
+    TC13--TC19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
+    TC20--TC22 & M1 (User Interface), M7 (User Account) \\
+    UT-1, UT-2, UT-3, PR-1, PR-2, RFT-1, RFT-2 & M1 (User Interface) \\
+    SR-1, SR-2 & M5 (Account Creation), M6 (Valid User) \\
+    MS-1, MS-2 & M1 (User Interface), M5 (Account Creation), M6 (Valid User) \\
     \bottomrule
   \end{tabular}
   \label{tab:core_modules_tests}
 \end{table}
 
-Table \ref{tab:core_modules_tests} shows the mapping between test cases and the core modules they verify.	
+Table \ref{tab:core_modules_tests} maps each of the test cases to their 
+respective modules.
 
 \section{Code Coverage Metrics}
 
@@ -659,6 +1013,31 @@ graduate attribute of Reflection.
   if you got your CI working earlier in the project?  What are your plans to use
   CI for testing in future projects?
 \end{enumerate}
+
+\textbf{Maham}
+\begin{enumerate}
+  \item Our team worked really well together. Everyone completed their assigned tasks on time and were available to assist 
+  others if needed. We were all communicative, cordial and on schedule. 
+  \item At the start, we split off into completing our 'Extras'. I was responsible for the Usability 
+  Testing and I had to ensure that there were results to work with. The team members conducted the tests on participants, while I 
+  worked on analysis as the results came in. Nearer to the deadline, we realized that the due date for Extras was moved to much later,
+  (I don't think it was in the calendar until very recently), after which all the members hopped on deck to complete their
+  corresponding module tests. Note to self: please double check your dates.
+  \item The usability testing results were from our peers and our supervisors. They provided some very useful suggestions and 
+  some of those ideas are fairly straightforward to implement. 
+  \item Our VnV report deviated a fair bit from the orginal plan. Writing the code resulted in a more detailed plan being required.
+  In addition, our team further divided some of the modules, which also resulted in more detailed tests as well. I think I would 
+  be able to anticipate them after I have gained sufficient experience and done it a few times. Some of the basic components 
+  (eg. Account creation) will have similar implementations everywhere, and those will be easy to anticipate. 
+  \item CI proved to be very helpful throughout. Because of continuos regression tests being performed, it was ensured that
+  any new changes will not break the code. We did use the CI element somewhat earlier, ended up realizing that there were
+  frequent conflicts after which it was decided that we will make more PRs regularly to minimize conflicts. I really like 
+  CI, and I see myself using it in the future a fair bit. I will have to concurrently work with others on the same project and
+  it will not become too daunting if and when changes are needed to be made/resolve issues
+
+\end{enumerate}
+
+
 
 \subsubsection*{Vaisnavi:}
 \begin{itemize}
@@ -714,6 +1093,8 @@ graduate attribute of Reflection.
         evidence that demonstrates the required quality?  (It is
           expected that most
       teams will have had to deviate from their original VnV Plan.)}\\
+
+      
 
 
   \item \textit{Reflect on your use of CI for continuous integration testing (regression
