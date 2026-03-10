@@ -52,7 +52,7 @@ Date 2 & 1.1 & Notes\\
   TC & Test Case\\
   UT & Usability Test\\
   PR & Performance Test\\
-  RFT & Reliability and Fault Tolerance Test\\
+  RFT & Reliability and Fault-Tolerance Test\\
   SR & Security Test\\
   MS & Maintainability and Support Test\\
   FR & Functional Requirement\\
@@ -505,7 +505,7 @@ range and no crashes took place.
 
 \end{enumerate}
 
-\subsection{Reliability and Fault Tolerance}
+\subsection{Reliability and Fault-Tolerance}
 
 \begin{enumerate}
 
@@ -656,7 +656,7 @@ creation workflows.
   \texttt{verified=true}, and \texttt{createdAt}. &
   All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
-  TC\testcount & FR1.1, FR1.2 & Register physiotherapist with an invalid license format (e.g., missing dash or incorrect digits). 
+  TC\testcount & FR1.1, FR1.2 & Register physiotherapist with an invalid license format (e.g., a missing dash or incorrect digits). 
   & Error \texttt{"Invalid license format (example: ON-123456)."} is thrown. No Auth user is created. No Firestore 
   writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
 
@@ -688,9 +688,7 @@ creation workflows.
 \end{longtable}
 
 \subsubsection{Valid User Module}
-The following tests in Table \ref{table:valid_user_tests} verify the functionality of the valid user module by 
-ensuring that successful authentication requires an existing Firestore user profile for both physiotherapist and 
-patient roles.
+The following tests in Table \ref{table:valid_user_tests} verify the functionality of the valid user module.
 
 \begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
    % >{\raggedright\arraybackslash}p{1.5cm}
@@ -956,7 +954,7 @@ which ultimately showcases the overall verification of our system.
 
 \begin{table}[H]
   \centering
-  \caption{Tests for Core Modules}
+  \caption{Tests for all of the Modules}
   \begin{tabular}{p{0.38\textwidth}p{0.42\textwidth}}
     \toprule \textbf{Test ID} & \textbf{Module} \\
     \midrule
