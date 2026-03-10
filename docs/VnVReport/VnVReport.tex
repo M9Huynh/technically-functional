@@ -16,6 +16,7 @@
 \usepackage[table]{xcolor}
 \usepackage{array}
 \usepackage{float}
+\usepackage{graphicx}
 
 \input{../Comments.tex}
 \input{../Common.tex}
@@ -1213,6 +1214,23 @@ This section maps test cases to the specific modules they validated, organized b
 Table \ref{tab:core_modules_tests} shows the mapping between test cases and the core modules they verify.	
 
 \section{Code Coverage Metrics}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{python_code_coverage.png}
+    \caption{Python code coverage overview showing 97\% total coverage across all modules.}
+    \label{fig:python_coverage}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{python_code_coverage_close.png}
+    \caption{Detailed Python code coverage by module showing analyze.py (100\%), draw.py (93\%), metrics.py (96\%), and server.py (96\%).}
+    \label{fig:python_coverage_close}
+\end{figure}
+
+The backend code has a total coverage of 97\%, with all modules having coverage above 90\%. The analyze.py module has 100\% coverage, while draw.py, metrics.py, and server.py have 93\%, 96\%, and 96\% coverage respectively. This indicates that the majority of the backend code is well-tested, with only a small portion of code not covered by tests.
+
+Some areas of improvement would be to fully test each backend module to reach 100\% coverage. This would be included in future testing plans but the current coverage points to the reliability of the backend code.
 
 \section{Extras}
 
