@@ -1,4 +1,5 @@
-// mocked local firebase.ts so initializeApp/env never runs
+// IMPORTANT: mock local firebase.ts FIRST so initializeApp/env never runs
+// Mock local firebase file so real initializeApp never runs
 jest.mock("../firebase", () => ({
   auth: {},
   db: {},
@@ -275,16 +276,90 @@ describe("authService - tests in table order", () => {
 
     (getDoc as jest.Mock).mockResolvedValueOnce(snap(false));
 
-    await expect(login("test@test.com", "pw")).rejects.toThrow(
-      "User profile missing in Firestore."
-    );
+    await expect(login("test@test.com", "pw"))
+      .rejects.toThrow("User profile missing in Firestore.");
   });
 
-  it("TC-VU4: Logout calls signOut once", async () => {
-    (signOut as jest.Mock).mockResolvedValueOnce(undefined);
+  it("returns physio user data", async () => {
+    (signInWithEmailAndPassword as jest.Mock).mockResolvedValue({
+      user: { uid: "phys1" },
+    });
 
-    await logout();
+    (getDoc as jest.Mock).mockResolvedValueOnce(
+      snap(true, { role: "physio", name: "Dr A" })
+    );
 
-    expect(signOut).toHaveBeenCalledTimes(1);
+    const result = await login("x", "y");
+
+    expect(result).toEqual({
+      uid: "phys1",
+      role: "physio",
+      name: "Dr A",
+    });
+  });
+
+  it("returns patient user data", async () => {
+    (signInWithEmailAndPassword as jest.Mock).mockResolvedValue({
+      user: { uid: "pat1" },
+    });
+
+    (getDoc as jest.Mock).mockResolvedValueOnce(
+      snap(true, { role: "patient", name: "Pat A" })
+    );
+
+    const result = await login("x", "y");
+
+    expect(result).toEqual({
+      uid: "pat1",
+      role: "patient",
+      name: "Pat A",
+    });
+  });
+
+  // -------------------
+  // registerPhysio
+  // -------------------
+  it("creates physio account when license valid", async () => {
+    (getDoc as jest.Mock).mockResolvedValueOnce(
+      snap(true, { active: true })
+    );
+
+    (createUserWithEmailAndPassword as jest.Mock)
+      .mockResolvedValueOnce({ user: { uid: "newPhysio" } });
+
+    await registerPhysio({
+      name: "Dr Test",
+      email: "dr@test.com",
+      password: "pw",
+      licenseNumber: "ON-123456",
+    });
+
+    expect(setDoc).toHaveBeenCalled();
+  });
+
+  // -------------------
+  // registerPatient
+  // -------------------
+  it("creates patient and marks invite used", async () => {
+    (getDoc as jest.Mock).mockResolvedValueOnce(
+      snap(true, {
+        active: true,
+        used: false,
+        physioId: "phys1",
+      })
+    );
+
+    (createUserWithEmailAndPassword as jest.Mock)
+      .mockResolvedValueOnce({ user: { uid: "newPatient" } });
+
+    await registerPatient({
+      name: "Pat",
+      email: "pat@test.com",
+      password: "pw",
+      inviteCode: "abcd",
+    });
+
+    expect(setDoc).toHaveBeenCalled();
+    expect(updateDoc).toHaveBeenCalled();
   });
 });

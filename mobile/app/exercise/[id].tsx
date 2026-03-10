@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRef } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { getExercise, RECOMMENDED_EXERCISES, SIMILAR_EXERCISES } from "../../lib/exerciseData";
+import { getExercise } from "../../lib/exerciseData";
 import { Exercise } from "../../lib/exerciseData";
 import { VideoView, useVideoPlayer } from "expo-video";
 
@@ -10,11 +10,6 @@ export default function ExerciseDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [currentExercise, setCurrentExercise] = useState<Exercise | null>(null);
-
-  const exercise = useMemo(() => {
-    const all = [...RECOMMENDED_EXERCISES, ...SIMILAR_EXERCISES];
-    return all.find((x) => x.id === id);
-  }, [id]);
 
   // Only load a real video for exercise_demo_vid for now
   const videoSource =
