@@ -794,6 +794,11 @@ and the User Account module test cases extend that to testing for invalid and no
   TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 \end{longtable}
 
+\subsection{Profile Activity Module}
+The following tests in Table \ref{table:profile_activity_tests} verify the functionality of the profile activity module. 
+This module is responsible for storing, retrieving, and handling user activity data, stored user data, summary data, and chart data.
+The tests ensure this functionality works as expected under various conditions, including valid inputs, edge cases, and error scenarios.
+
 \begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
   \hline
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
@@ -858,6 +863,48 @@ and the User Account module test cases extend that to testing for invalid and no
   TC-PA40 & FR2, FR3 & Test getPhysioInviteCode when an invite code exists. & Returns the corresponding physio invite code. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
   TC-PA41 & FR2, FR3 & Test getPhysioInviteCode when no invite code exists. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
   TC-PA42 & FR2, FR3 & Test getPhysioInviteCode when userID is invalid. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+\end{longtable}
+
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+  \hline
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+
+  \multicolumn{6}{r}{\textit{Continued from previous page}} \\
+  \hline
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \hline
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \hline
+  \caption{Exercise Data Module Test Cases}
+  \label{table:exercise_data_tests}
+  \endlastfoot
+
+  TC-ED1 & FR5, FR18, FR21, FR27 & Tests getExercisesById with valid userID and exercise data & Returns the corresponding user's exercises. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED2 & FR5, FR18, FR21, FR27 & Tests getExercisesById with valid userID but no exercise data & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED3 & FR5, FR18, FR21, FR27 & Tests getExercisesById with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED4 & FR5, FR18, FR21, FR27 & Tests getExercise with valid exerciseID & Returns the corresponding exercise. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED5 & FR5, FR18, FR21, FR27 & Tests getExercise with an invalid exerciseID & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED6 & FR5, FR18, FR21, FR27 & Tests getExercise with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED7 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises when general exercises exist & Returns a list of all exercises. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED8 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises when no general exercises exist & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED9 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED10 & FR6, FR18, FR21 & Tests removeUserExercise with valid userID and exercise data & Calls deleteDoc with the expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED11 & FR6, FR18, FR21 & Tests removeUserExercise with valid userID but invalid exercise data & Does not call deleteDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED12 & FR6, FR18, FR21 & Tests removeUserExercise with firestore error & Does not call deleteDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED13 & FR6, FR18, FR21 & Tests addUserExercise with valid userID and exercise data & Calls addDoc and updateDoc with the expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED14 & FR6, FR18, FR21 & Tests addUserExercise with firestore error & Does not call updateDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED15 & FR6, FR18, FR21 & Tests updateUserExercise with valid userID and exercise data & Calls updateDoc with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED16 & FR6, FR18, FR21 & Tests updateUserExercise with valid userID but invalid exercise data & Does not call updateDoc with bad inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-ED17 & FR6, FR18, FR21 & Tests updateUserExercise with firestore error & Does not call updateDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+
 \end{longtable}
 
 \section{Changes Due to Testing}

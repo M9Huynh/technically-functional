@@ -12,6 +12,7 @@ import {
   getExercise,
   getExercisesById,
   getGeneralExercises,
+  getSelectedExercises,
   removeUserExercise,
   updateUserExercise,
 } from "../exerciseData";
@@ -301,3 +302,50 @@ describe("updateUserExercise", () => {
         expect(updateDoc).not.toHaveBeenCalled();
     });
 });
+
+describe("getSelectedExercises", () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
+
+    it("TC-ED18: should return selected exercises for a valid user ID", async () => {
+        const mockExercises: Exercise[] = [
+            {
+                id: "exercise1",
+                title: "Exercise 1",
+                description: "Description for Exercise 1",
+                enabled: true,
+            },
+        ];
+
+        (getDocs as jest.Mock).mockResolvedValue({
+            empty: false,
+            docs: mockExercises.map((ex) => ({
+                data: () => ex,
+            })),
+        });
+
+        const result = await getSelectedExercises("validUserId");
+
+        expect(result).toEqual(mockExercises);
+    });
+
+    it("TC-ED19: should return undefined for a user ID with no selected exercises", async () => {
+        (getDocs as jest.Mock).mockResolvedValue({
+            empty: true,
+            docs: [],
+        });
+
+        const result = await getSelectedExercises("userIdWithNoSelectedExercises");
+
+        expect(result).toBeUndefined();
+    });
+
+    it("TC-ED20: should handle errors gracefully", async () => {
+        (getDocs as jest.Mock).mockRejectedValue(new Error("Firestore error"));
+
+        const result = await getSelectedExercises("invalidUserId");
+
+        expect(result).toBeUndefined();
+    });
+  });

@@ -120,15 +120,25 @@ export async function getGeneralExercises(): Promise<Exercise[] | undefined> {
 export async function getSelectedExercises(
   uid: string,
 ): Promise<Exercise[] | undefined> {
-  const exerciseCol = collection(db, "userExercises");
-  const q = query(exerciseCol, where("userid", "==", uid));
-  const querySnapshot = await getDocs(q);
-  if (querySnapshot.empty) {
+  try {
+    const exerciseCol = collection(db, "userExercises");
+    const q = query(exerciseCol, where("userid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      return undefined;
+    }
+    const exercises = querySnapshot.docs.map((doc) => doc.data() as Exercise);
+    console.log("Selected exercises for user", uid, ":", exercises);
+    return exercises;
+  } catch (error) {
+    console.error(
+      "Error fetching selected exercises for user",
+      uid,
+      ":",
+      error,
+    );
     return undefined;
   }
-  const exercises = querySnapshot.docs.map((doc) => doc.data() as Exercise);
-  console.log("Selected exercises for user", uid, ":", exercises);
-  return exercises;
 }
 
 export async function removeUserExercise(
@@ -200,23 +210,23 @@ export async function updateUserExercise(
   );
   try {
     const querySnapshot = await getDocs(q);
-  if (querySnapshot.empty) {
-    console.log(
-      "No matching exercise found for user",
-      uid,
-      "and exercise",
-      exerciseTitle,
-    );
-    return;
-  }
-  const docRef = querySnapshot.docs[0].ref;
-  await updateDoc(docRef, {
-    title: exerciseTitle,
-    description: exerciseDescription,
-    //enabled: exercise.enabled,
-    //tags: exercise.tags || [],
-  });
-} catch (error) {
+    if (querySnapshot.empty) {
+      console.log(
+        "No matching exercise found for user",
+        uid,
+        "and exercise",
+        exerciseTitle,
+      );
+      return;
+    }
+    const docRef = querySnapshot.docs[0].ref;
+    await updateDoc(docRef, {
+      title: exerciseTitle,
+      description: exerciseDescription,
+      //enabled: exercise.enabled,
+      //tags: exercise.tags || [],
+    });
+  } catch (error) {
     console.error(
       "Error updating exercise",
       exerciseTitle,

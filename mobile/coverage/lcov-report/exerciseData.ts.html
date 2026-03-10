@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>66/75</span>
+                <span class='fraction'>78/78</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>64/72</span>
+                <span class='fraction'>75/75</span>
             </div>
         
             
@@ -292,7 +292,17 @@
 <a name='L227'></a><a href='#L227'>227</a>
 <a name='L228'></a><a href='#L228'>228</a>
 <a name='L229'></a><a href='#L229'>229</a>
-<a name='L230'></a><a href='#L230'>230</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -414,15 +424,25 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -640,18 +660,28 @@ export async function getGeneralExercises(): Promise&lt;Exercise[] | undefined&g
   }
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >getSelectedExercises(</span>
+export async function getSelectedExercises(
   uid: string,
 ): Promise&lt;Exercise[] | undefined&gt; {
-  const exerciseCol = <span class="cstat-no" title="statement not covered" >collection(db, "userExercises");</span>
-  const q = <span class="cstat-no" title="statement not covered" >query(exerciseCol, where("userid", "==", uid));</span>
-  const querySnapshot = <span class="cstat-no" title="statement not covered" >await getDocs(q);</span>
-<span class="cstat-no" title="statement not covered" >  if (querySnapshot.empty) {</span>
-<span class="cstat-no" title="statement not covered" >    return undefined;</span>
+  try {
+    const exerciseCol = collection(db, "userExercises");
+    const q = query(exerciseCol, where("userid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      return undefined;
+    }
+    const exercises = querySnapshot.docs.map((doc) =&gt; doc.data() as Exercise);
+    console.log("Selected exercises for user", uid, ":", exercises);
+    return exercises;
+  } catch (error) {
+    console.error(
+      "Error fetching selected exercises for user",
+      uid,
+      ":",
+      error,
+    );
+    return undefined;
   }
-  const exercises = <span class="cstat-no" title="statement not covered" >querySnapshot.docs.map(<span class="fstat-no" title="function not covered" >(d</span>oc) =&gt; <span class="cstat-no" title="statement not covered" >doc.data() as Exercise)</span>;</span>
-<span class="cstat-no" title="statement not covered" >  console.log("Selected exercises for user", uid, ":", exercises);</span>
-<span class="cstat-no" title="statement not covered" >  return exercises;</span>
 }
 &nbsp;
 export async function removeUserExercise(
@@ -723,23 +753,23 @@ export async function updateUserExercise(
   );
   try {
     const querySnapshot = await getDocs(q);
-  if (querySnapshot.empty) {
-    console.log(
-      "No matching exercise found for user",
-      uid,
-      "and exercise",
-      exerciseTitle,
-    );
-    return;
-  }
-  const docRef = querySnapshot.docs[0].ref;
-  await updateDoc(docRef, {
-    title: exerciseTitle,
-    description: exerciseDescription,
-    //enabled: exercise.enabled,
-    //tags: exercise.tags || [],
-  });
-} catch (error) {
+    if (querySnapshot.empty) {
+      console.log(
+        "No matching exercise found for user",
+        uid,
+        "and exercise",
+        exerciseTitle,
+      );
+      return;
+    }
+    const docRef = querySnapshot.docs[0].ref;
+    await updateDoc(docRef, {
+      title: exerciseTitle,
+      description: exerciseDescription,
+      //enabled: exercise.enabled,
+      //tags: exercise.tags || [],
+    });
+  } catch (error) {
     console.error(
       "Error updating exercise",
       exerciseTitle,
@@ -757,7 +787,7 @@ export async function updateUserExercise(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-10T00:01:16.644Z
+                at 2026-03-10T03:21:20.077Z
             </div>
         <script src="prettify.js"></script>
         <script>
