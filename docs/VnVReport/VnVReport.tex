@@ -794,6 +794,72 @@ and the User Account module test cases extend that to testing for invalid and no
   TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 \end{longtable}
 
+\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+  \hline
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \hline
+  \endfirsthead
+
+  \multicolumn{6}{r}{\textit{Continued from previous page}} \\
+  \hline
+  \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
+  \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
+  \hline
+  \endhead
+
+  \multicolumn{6}{r}{\textit{Continued on next page}} \\
+  \endfoot
+
+  \hline
+  \caption{Profile Activity Module Test Cases}
+  \label{table:profile_activity_tests}
+  \endlastfoot
+
+  TC-PA1 & FR21, FR23 & Test getCurrentUser with correct inputs. & Returns the correct user object. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA2 & FR21, FR23 & Test getCurrentUser with no current user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA3 & FR21, FR23 & Test getCurrentUser with non-existent user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA4 & FR21, FR23 & Test getCurrentUser with Firestore error. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA5 & FR21, FR23 & Test getCurrentUserID with correct inputs. & Returns the correct user ID. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA6 & FR21, FR23 & Test getCurrentUserID with no current user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA7 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with correct inputs. & Returns the correct array of activities. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA8 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with no activities. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA9 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with Firestore error. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA10 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with incorrect uid. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA11 & FR10, FR11, FR17 & Test getUserSummary with correct inputs. & Returns the correct summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA12 & FR10, FR11, FR17 & Test getUserSummary with correct inputs but duplicate dates. & Returns the correct summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA13 & FR10, FR11, FR17 & Test getUserSummary with Firestore error. & Returns zero summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA14 & FR10, FR18 & Test repsChartData with correct inputs. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA15 & FR10, FR18 & Test repsChartData with correct inputs and duplicate dates. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA16 & FR10, FR18 & Test repsChartData with activities but no reps. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA17 & FR10, FR18 & Test repsChartData with no activites. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA18 & FR10, FR18 & Test repsChartData with firestore error. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA19 & FR10, FR18 & Test exerciseChartData with correct data. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA20 & FR10, FR18 & Test exerciseChartData with correct data and duplicate dates. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA21 & FR10, FR18 & Test exerciseChartData with no activities. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA22 & FR10, FR18 & Test exerciseChartData with firestore error. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA23 & FR10, FR11, FR18, FR19, FR22 & Test getComments with correct inputs and data. & Returns the correct comment data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA24 & FR10, FR11, FR18, FR19, FR22 & Test getComments with no existing comments. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA25 & FR10, FR11, FR18, FR19, FR22 & Test getComments with firestore error. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA26 & FR10, FR11, FR18, FR19, FR22 & Test postComment with correct inputs and data. & Calls collection and update functions with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA27 & FR10, FR11, FR18, FR19, FR22 & Test postComment with an empty comment. & Should not call collection, addDoc, or setDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA28 & FR10, FR11, FR18, FR19, FR22 & Test postComment with firestore error. & Should not call setDoc, but should proceed until addDoc errors. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA29 & FR18, FR21 & Test getName with correct inputs and data. & Returns the corresponding user's name. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA30 & FR18, FR21 & Test getName with an unknown user. & Returns 'Unknown User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA31 & FR18, FR21 & Test getName with a user with no name. & Returns 'Unnamed User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA32 & FR18, FR21 & Test getName with firestore error. & Returns 'Unknown User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA33 & FR17, FR18, FR19, FR22 & Test setSelectedUserID with a valid userID. & Calls AsyncStorage with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA34 & FR17, FR18, FR19, FR22 & Test setSelectedUserID with an empty userID. & Does not call AsyncStorage. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA35 & FR17, FR18, FR19, FR22 & Test getSelectedUserID when a userID is stored. & Returns the correct stored userID. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA36 & FR17, FR18, FR19, FR22 & Test getSelectedUserID when no userID is stored. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA37 & FR17, FR18, FR19, FR22 & Test getSelectedUser when a user is stored. & Returns the stored UserData structure. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA38 & FR17, FR18, FR19, FR22 & Test getSelectedUser when no user is stored. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA39 & FR17, FR18, FR19, FR22 & Test clearSelectedUserID on AsyncStorage. & Calls AsyncStorage.removeItem with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA40 & FR2, FR3 & Test getPhysioInviteCode when an invite code exists. & Returns the corresponding physio invite code. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA41 & FR2, FR3 & Test getPhysioInviteCode when no invite code exists. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC-PA42 & FR2, FR3 & Test getPhysioInviteCode when userID is invalid. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+\end{longtable}
+
 \section{Changes Due to Testing}
 
 There were a few changes that were implemented as a result of testing. Note that some of these changes are in progress. 
