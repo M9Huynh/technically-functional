@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { UserActivity } from "./temp";
-import { format, isSameDay, subDays } from "date-fns";
+import { addDays, format, isSameDay, subDays } from "date-fns";
 import { UserData } from "./useraccount";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserAccountService } from "./useraccount";
@@ -91,7 +91,7 @@ export async function getUserSummary(uid: string): Promise<ActivitySummary> {
     };
   }
   const dates = activities.map(
-    (a) => new Date(a.date_performed).toISOString().split("T")[0],
+    (a) => new Date(a.date_performed).toLocaleDateString("en-CA"),
   );
   let streakCount = 0;
   const today = new Date();
@@ -101,20 +101,28 @@ export async function getUserSummary(uid: string): Promise<ActivitySummary> {
   const commentsSnapshot = await getDocs(q);
   const totalComments = commentsSnapshot.size;
 
+  console.log("User activities:", activities);
+  console.log("Activity dates:", dates);
   while (true) {
-    const checkDate = new Date(today);
-    checkDate.setDate(today.getDate() - streakCount);
-    const dateStr = checkDate.toISOString().split("T")[0];
-    if (!dates.includes(dateStr)) break;
-    streakCount += 1;
-  }
+  const checkDate = new Date(today);
+  checkDate.setDate(today.getDate() - streakCount);
 
+  const dateStr = checkDate.toLocaleDateString("en-CA");
+
+  console.log("Checking streak for date:", dateStr);
+
+  if (!dates.includes(dateStr)) break;
+
+  streakCount += 1;
+}
+
+  console.log("Today's date: ", new Date().toLocaleDateString("en-CA"));
   return {
     totalActivities: activities.length,
     totalComments: totalComments,
     streak: streakCount,
     today: activities.filter(
-      (a) => a.date_performed === new Date().toISOString().split("T")[0],
+      (a) => isSameDay(new Date(a.date_performed), new Date())
     ).length,
   };
 }
@@ -126,12 +134,13 @@ export async function repsChartData(
   console.log("Activities for reps chart:", activities);
   const last7Days = Array.from({ length: 7 }).map((_, i) => {
     const date = subDays(new Date(), i);
+    console.log("Checking activities for date:", date);
     const dateStr = format(date, "yyyy-MM-dd");
     const reps = activities
       .filter((a) => a.date_performed === dateStr)
       .reduce((sum, current) => sum + (current.completed_reps || 0), 0);
     return {
-      label: new Date(dateStr).toLocaleDateString(undefined, {
+      label: date.toLocaleDateString("en-CA", {
         weekday: "short",
       }),
       value: reps,

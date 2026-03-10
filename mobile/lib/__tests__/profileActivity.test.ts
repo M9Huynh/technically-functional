@@ -167,21 +167,17 @@ describe("getUserSummary", () => {
       {
         id: "1",
         uid: "user123",
-        date_performed: new Date().toISOString().split("T")[0],
+        date_performed: new Date(),
       },
       {
         id: "2",
         uid: "user123",
-        date_performed: new Date(Date.now() - 86400000)
-          .toISOString()
-          .split("T")[0],
+        date_performed: new Date(Date.now() - 86400000),
       },
       {
         id: "3",
         uid: "user123",
-        date_performed: new Date(Date.now() - 2 * 86400000)
-          .toISOString()
-          .split("T")[0],
+        date_performed: new Date(Date.now() - 2 * 86400000),
       },
     ];
 
@@ -249,23 +245,21 @@ describe("repsChartData", () => {
         id: "1",
         uid: "user123",
         completed_reps: 10,
-        date_performed: new Date().toISOString().split("T")[0],
+        date_performed: new Date().toLocaleDateString("en-CA"),
       },
       {
         id: "2",
         uid: "user123",
         completed_reps: 12,
         date_performed: new Date(Date.now() - 86400000)
-          .toISOString()
-          .split("T")[0],
+          .toLocaleDateString("en-CA"),
       },
       {
         id: "3",
         uid: "user123",
         completed_reps: 8,
         date_performed: new Date(Date.now() - 2 * 86400000)
-          .toISOString()
-          .split("T")[0],
+          .toLocaleDateString("en-CA"),
       },
     ];
 
@@ -296,21 +290,20 @@ describe("repsChartData", () => {
         id: "1",
         uid: "user123",
         completed_reps: 10,
-        date_performed: new Date().toISOString().split("T")[0],
+        date_performed: new Date().toLocaleDateString("en-CA"),
       },
       {
         id: "2",
         uid: "user123",
         completed_reps: 12,
-        date_performed: new Date(Date.now()).toISOString().split("T")[0],
+        date_performed: new Date(Date.now()).toLocaleDateString("en-CA"),
       },
       {
         id: "3",
         uid: "user123",
         completed_reps: 8,
         date_performed: new Date(Date.now() - 2 * 86400000)
-          .toISOString()
-          .split("T")[0],
+          .toLocaleDateString("en-CA"),
       },
     ];
 
@@ -430,23 +423,21 @@ describe("exerciseChartData", () => {
         id: "1",
         uid: "user123",
         completed_reps: 10,
-        date_performed: new Date().toISOString().split("T")[0],
+        date_performed: new Date().toLocaleDateString("en-CA"),
       },
       {
         id: "2",
         uid: "user123",
         completed_reps: 12,
         date_performed: new Date(Date.now() - 86400000)
-          .toISOString()
-          .split("T")[0],
+          .toLocaleDateString("en-CA"),
       },
       {
         id: "3",
         uid: "user123",
         completed_reps: 8,
         date_performed: new Date(Date.now() - 2 * 86400000)
-          .toISOString()
-          .split("T")[0],
+          .toLocaleDateString("en-CA"),
       },
     ];
 
@@ -477,23 +468,21 @@ describe("exerciseChartData", () => {
         id: "1",
         uid: "user123",
         completed_reps: 10,
-        date_performed: new Date().toISOString().split("T")[0],
+        date_performed: new Date().toLocaleDateString("en-CA"),
       },
       {
         id: "2",
         uid: "user123",
         completed_reps: 12,
         date_performed: new Date(Date.now() - 2 * 86400000)
-          .toISOString()
-          .split("T")[0],
+          .toLocaleDateString("en-CA"),
       },
       {
         id: "3",
         uid: "user123",
         completed_reps: 8,
         date_performed: new Date(Date.now() - 2 * 86400000)
-          .toISOString()
-          .split("T")[0],
+          .toLocaleDateString("en-CA"),
       },
     ];
 
