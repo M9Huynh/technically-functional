@@ -257,11 +257,6 @@ export default function Record() {
         <View style={styles.cameraBox}>
           <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
 
-          {/* Debug label: safe to remove later */}
-          <Text style={{ position: "absolute", top: 5, left: 5, color: "white" }}>
-            LM: {landmarks ? landmarks.length : 0}
-          </Text>
-
           {landmarks && landmarks.length > 0 && (
             <Svg
               style={StyleSheet.absoluteFill}
