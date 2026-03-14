@@ -1,11 +1,31 @@
-\documentclass{article}
+\documentclass[12pt, titlepage]{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
+\usepackage{amsmath, mathtools}
+
+\usepackage[round]{natbib}
+\usepackage{amsfonts}
+\usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{pdfpages}
-\usepackage{xcolor}
-\usepackage[colorlinks=true]{hyperref}
+\usepackage{colortbl}
+\usepackage{xr}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{xfrac}
+\usepackage{tabularx}
+\usepackage{float}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[section]{placeins}
+\usepackage{caption}
+\usepackage{fullpage}
+\usepackage[table]{xcolor}
+\usepackage{array} 
+\usepackage{colortbl}
+\usepackage{makecell}
+\usepackage{longtable}
+
+
 
 \definecolor{linkblue}{RGB}{0, 102, 204}
 \hypersetup{
@@ -17,7 +37,7 @@
 }
 
 
-\title{Usability survey questions}
+\title{Usability Report}
 \author{Maham S}
 \date{\today}
 
@@ -81,35 +101,32 @@ a broad target user base. The coverage details are outlined below:
 
 \textit{Participant 1}
 \begin{itemize}
-    \item Name
-    \item Age
-    \item Gender
-    \item Person with disability
-    \item Occupation
-    \item Level of digital literacy
-    \item Familiarity with injury to the knee
+    \item Age: Late 20s
+    \item Gender: Male
+    \item Person with disability: No
+    \item Occupation: Physiotherapist
+    \item Level of digital literacy: High
+    \item Familiarity with injury to the knee: Very familiar
 \end{itemize}
 
 \textit{Participant 2}
 \begin{itemize}
-    \item Name 
-    \item Age
-    \item Gender
-    \item Person with disability 
-    \item Occupation
-    \item Level of digital literacy
-    \item Familiarity with injury to the knee
+    \item Age: Late 20s
+    \item Gender: Male
+    \item Person with disability: No 
+    \item Occupation: Physiotherapist
+    \item Level of digital literacy: High
+    \item Familiarity with injury to the knee: Very familiar
 \end{itemize}
 
 \textit{Participant 3}
 \begin{itemize}
-    \item Name 
-    \item Age
-    \item Gender
-    \item Person with disability
-    \item Occupation
-    \item Level of digital literacy
-    \item Familiarity with injury to the knee
+    \item Age: early 60s
+    \item Gender: Male
+    \item Person with disability: No
+    \item Occupation: Technician
+    \item Level of digital literacy: High
+    \item Familiarity with injury to the knee: Familiar
 \end{itemize}
 
 \textit{Participant 4}
@@ -133,6 +150,12 @@ a broad target user base. The coverage details are outlined below:
     \item Level of digital literacy
     \item Familiarity with injury to the knee
 \end{itemize}
+Due to project timeline constraints, the participant pool was limited in size, and posed challenges in recruiting 
+individuals who satisfied the criteria mentioned above. Furthermore, it was not possible to recruit a participant 
+with a knee injury. However, there were some that had undergone physiotherapy treatment for other health reasons. \\
+Two of the participants were physiotherapists. They were recruited to assess the PT flow of the application and 
+provide their perspective.The remaining participants varied in age and fulfilled different combinations 
+of the criteria above. 
 
 \section{Testing}
 All questionnaires' accompanying logic is explained \href{QuestionsExplanations.pdf}{here}.
@@ -144,9 +167,35 @@ See \href{SessionQuestionnaire.pdf}{session questionnaire}.
 See \href{Post-sessionQ.pdf}{post-session questionnaire}.
 
 
-\section{Discussion}
+\section{Results}
  %https://aging.jmir.org/2023/1/e43197/ 
  % Use this to talk about aging and tech 
+%There were 5 participants of the study: 2 PTs and 3 others that fulfilled the criteria mentioned above. \\
+
+\noindent \textbf{Physiotherapists} \\
+The version of the test used referred to the PT flow of the application. \\
+These were the main points in the tests that both of these participants mentioned.
+\begin{itemize}
+    \item Both participants emphasized the inclusion of an RPE (Rate of Perceived Exertion) from the patient
+    as an additional measure.
+    \item They also suggested incorporated the number of sets performed in each exercise session on the 
+    Feedback tab.
+\end{itemize}
+
+\section{Discussion}
+Usability testing proved to be an invaluable asset in evaluating the application. The results were 
+enlightening and were immensely beneficial to the development team in refining the final product. \\
+The physiotherapists tested the PT flow of the application and highlighted some improvements (see above). 
+They noted that the patient's subjective experience was an indespensable measurement, which is particularly 
+valuable when determining exercise modifications. They provided examples of how this may indicate how difficult
+or easy the exercise is for the patient and whether their performance is impacted by other limitations (eg. pain).
+Including the number of sets is useful for the same reason. Both participants found the navigation and
+its use within the application to be straightforward. Their positive response to the application
+suggests that it has strong potential and can be advantageous to patient recovery. 
+
+
+
+
 
 
 \section{Conclusion}
