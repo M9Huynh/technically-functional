@@ -257,7 +257,7 @@ export default function Record() {
         <View style={styles.cameraBox}>
           <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
 
-          {landmarks && landmarks.length > 0 && (
+          {streaming && landmarks && landmarks.length > 0 && (
             <Svg
               style={StyleSheet.absoluteFill}
               width="100%"
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   text: { color: "#666", textAlign: "center" },
 
   cameraBox: {
-    height: 260,
+    height: 360,
     borderRadius: 18,
     overflow: "hidden",
     marginBottom: 14,
