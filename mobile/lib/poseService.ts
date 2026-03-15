@@ -15,6 +15,16 @@ export type ProcessFrameResponse = {
   error?: string;
 };
 
+export type PrecheckFrameResponse = {
+  ok: boolean;
+  tooDark: boolean;
+  inFrame: boolean;
+  kneeVisible: boolean;
+  message: string;
+  error?: string;
+};
+
+
 export async function processFrame(
   imageBase64: string,
   side: Side,
