@@ -178,6 +178,40 @@ export default function Record() {
   if (role === "physio") {
     return <Redirect href="/" />;
   }
+  const validateEnvironmentBeforeStart = async () => {
+    if (!cameraRef.current) {
+      return { ok: false, message: "Camera is not ready yet." };
+    }
+
+    if (!side) {
+      return { ok: false, message: "Please select a knee before recording." };
+    }
+
+    try {
+      const photo = await cameraRef.current.takePictureAsync({
+        base64: true,
+        quality: 0.08,
+        skipProcessing: true,
+        exif: false,
+      });
+
+      if (!photo?.base64) {
+        return { ok: false, message: "Could not capture preview frame." };
+      }
+
+      const result = await precheckFrame(photo.base64, side, facing);
+
+      return {
+        ok: result.ok,
+        message: result.message,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        message: "Unable to check setup. Please try again.",
+      };
+    }
+  };
 
   const handleToggleRecording = async () => {
     if (!side) {
