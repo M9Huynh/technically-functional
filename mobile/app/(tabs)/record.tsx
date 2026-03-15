@@ -303,6 +303,7 @@ export default function Record() {
       return;
     }
 
+    setRecordedVideoUri(null);
     setIsPreparing(true);
     setSetupCountdown(5);
     setSessionState("setupCountdown");
@@ -490,6 +491,28 @@ export default function Record() {
             • {facing === "front" ? "Front camera" : "Back camera"}
           </Text>
         </View>
+
+        {sessionState === "preview" && recordedVideoUri && (
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Recording Preview</Text>
+            <PreviewVideo uri={recordedVideoUri} />
+
+            <PrimaryButton
+              label="Retake Recording"
+              onPress={() => {
+                setRecordedVideoUri(null);
+                setMetrics(null);
+                setFinalMetrics(null);
+                setLandmarks(null);
+                setConnections([]);
+                setInsufficientData(false);
+                setSessionState("idle");
+                setStatusMessage(null);
+              }}
+              style={{ marginTop: 10 }}
+            />
+          </View>
+        )}
 
         <PrimaryButton
           label={`Switch to ${facing === "front" ? "back" : "front"} camera`}
