@@ -30,6 +30,21 @@ type SessionState =
   | "recording"
   | "preview";
 
+function PreviewVideo({ uri }: { uri: string }) {
+  const player = useVideoPlayer(uri, (player) => {
+    player.pause();
+  });
+
+  return (
+    <VideoView
+      player={player}
+      style={{ width: "100%", height: 220, borderRadius: 12, marginTop: 10 }}
+      nativeControls
+      allowsFullscreen
+    />
+  );
+}
+
 export default function Record() {
   const router = useRouter();
 
