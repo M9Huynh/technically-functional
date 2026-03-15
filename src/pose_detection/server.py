@@ -23,6 +23,7 @@ def b64_to_bgr_image(b64_str: str):
     np_arr = np.frombuffer(img_bytes, np.uint8)
     frame = cv.imdecode(np_arr, cv.IMREAD_COLOR)
     return frame
+
 def mean_brightness(frame):
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     return float(np.mean(gray))
@@ -49,9 +50,10 @@ def check_side_visibility(landmarks, side: str):
     knee = landmarks[knee_idx] if knee_idx < len(landmarks) else None
     ankle = landmarks[ankle_idx] if ankle_idx < len(landmarks) else None
 
-    side_in_frame = all(point_in_frame(p) for p in [hip, knee, ankle])
     knee_visible = point_in_frame(knee)
+    nearby_visible = point_in_frame(hip) or point_in_frame(ankle)
 
+    side_in_frame = knee_visible and nearby_visible
     return side_in_frame, knee_visible
 
 
