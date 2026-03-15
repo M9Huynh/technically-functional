@@ -36,6 +36,7 @@ export default function Record() {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [insufficientData, setInsufficientData] = useState(false);
   const [isPreparing, setIsPreparing] = useState(false);
+  const [setupCountdown, setSetupCountdown] = useState(5);
 
   const [role, setRole] = useState<UserRole | null>(null);
   const [loadingRole, setLoadingRole] = useState(true);
@@ -172,6 +173,57 @@ export default function Record() {
     }
   }, [metrics, streaming, sessionState]);
 
+  useEffect(() => {
+    if (sessionState !== "setupCountdown") return;
+
+    if (setupCountdown <= 0) {
+      const runPrecheck = async () => {
+        setSessionState("precheck");
+        setStatusMessage("Checking lighting and camera position...");
+
+        const envCheck = await validateEnvironmentBeforeStart();
+
+        if (!envCheck.ok) {
+          setSessionState("idle");
+          setStatusMessage(null);
+          setIsPreparing(false);
+          Alert.alert("Adjust Setup", envCheck.message);
+          return;
+        }
+
+        try {
+          await resetBackend();
+
+          setMetrics(null);
+          setFinalMetrics(null);
+          setLandmarks(null);
+          setConnections([]);
+          setInsufficientData(false);
+
+          setSessionState("calibrating");
+          setStatusMessage("Calibration in progress...");
+          setStreaming(true);
+        } catch (e) {
+          setSessionState("idle");
+          setStatusMessage(null);
+          Alert.alert("Error", "Failed to start recording.");
+        } finally {
+          setIsPreparing(false);
+        }
+      };
+
+      runPrecheck();
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setSetupCountdown((prev) => prev - 1);
+      setStatusMessage(`Get into position... ${setupCountdown}`);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [sessionState, setupCountdown]);
+
   const validateEnvironmentBeforeStart = async () => {
     if (!cameraRef.current) {
       return { ok: false, message: "Camera is not ready yet." };
@@ -214,39 +266,18 @@ export default function Record() {
   const handleStartRecording = async () => {
     if (isPreparing || streaming) return;
 
-    setIsPreparing(true);
-    setSessionState("precheck");
-    setStatusMessage("Checking lighting and camera position...");
-
-    const envCheck = await validateEnvironmentBeforeStart();
-
-    if (!envCheck.ok) {
-      setSessionState("idle");
-      setStatusMessage(null);
-      setIsPreparing(false);
-      Alert.alert("Adjust Setup", envCheck.message);
+    if (!side) {
+      Alert.alert(
+        "Choose a knee first",
+        "Select Right or Left knee before recording."
+      );
       return;
     }
 
-    try {
-      await resetBackend();
-
-      setMetrics(null);
-      setFinalMetrics(null);
-      setLandmarks(null);
-      setConnections([]);
-      setInsufficientData(false);
-
-      setSessionState("calibrating");
-      setStatusMessage("Calibration in progress...");
-      setStreaming(true);
-    } catch (e) {
-      setSessionState("idle");
-      setStatusMessage(null);
-      Alert.alert("Error", "Failed to start recording.");
-    } finally {
-      setIsPreparing(false);
-    }
+    setIsPreparing(true);
+    setSetupCountdown(5);
+    setSessionState("setupCountdown");
+    setStatusMessage("Get into position... 5");
   };
 
   const handleStopRecording = async () => {
@@ -325,6 +356,7 @@ export default function Record() {
           <View style={styles.statusChip}>
             <Text style={styles.statusChipText}>
               {sessionState === "idle" && "Ready"}
+              {sessionState === "setupCountdown" && "Get Ready"}
               {sessionState === "precheck" && "Pre-Check"}
               {sessionState === "calibrating" && "Calibrating"}
               {sessionState === "recording" && "Live Analysis"}
@@ -422,7 +454,9 @@ export default function Record() {
 
         <PrimaryButton
           label={
-            isPreparing
+            sessionState === "setupCountdown"
+              ? `Get Ready (${setupCountdown})`
+              : sessionState === "precheck"
               ? "Checking Setup..."
               : sessionState === "calibrating"
               ? "Calibrating..."
@@ -573,11 +607,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 18 },
-//   title: { fontSize: 22, fontWeight: "800", marginBottom: 8 },
-//   subheading: { fontSize: 18, fontWeight: "200", marginBottom: 8 },
-//   text: { color: "#666", textAlign: "center" },
-// });
