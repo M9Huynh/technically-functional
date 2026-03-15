@@ -3,6 +3,15 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+
+\hypersetup{
+    colorlinks=true,   
+    linkcolor=blue,     
+    citecolor=blue,     
+    urlcolor=blue       
+}
 
 \title{Pre-session questionnaire}
 \author{Maham S}
@@ -59,11 +68,14 @@ should be confirmed with participants to ensure that a well-informed decision to
 \begin{enumerate}
     \item Participant identification information will be stored on a database. 
     \item Information extracted from the recording used in the application will also be stored on a database.
-    \item The database used in the application adheres to data privacy standards and regulations. %TODO add firestore privacy ref
+    \item The database used in the application adheres to data privacy standards and regulations \cite{firebase_privacy}. %TODO add firestore privacy ref
     \item All participant data will be manually deleted by April 8th, 2026. 
     \item Information access is restricted to any external parties (except the application developers for the duration mentioned above).
     \item All participant data will be manually deleted by April 8th, 2026. 
 \end{enumerate}
+
+\bibliographystyle {ieeetr}
+\bibliography{../../../refs/References}
 
 
 \end{document}
