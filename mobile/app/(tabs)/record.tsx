@@ -23,6 +23,7 @@ import { getUserRole, UserRole } from "../../lib/roleStore";
 
 type SessionState =
   | "idle"
+  | "setupCountdown"
   | "precheck"
   | "calibrating"
   | "recording"
