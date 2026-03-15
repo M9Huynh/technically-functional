@@ -103,6 +103,92 @@ def reset_backend():
         pose_app.reset()
     return jsonify({"ok": True})
 
+@app.route("/precheck_frame", methods=["POST"])
+def precheck_frame():
+    data = request.get_json(silent=True) or {}
+    b64 = data.get("imageBase64")
+    side = data.get("side", "RIGHT")
+    mirrored = bool(data.get("mirrored", True))
+    legs_only = bool(data.get("legsOnly", True))
+
+    if not b64:
+        return jsonify({
+            "ok": False,
+            "tooDark": False,
+            "inFrame": False,
+            "kneeVisible": False,
+            "message": "Missing image frame."
+        }), 400
+
+    frame = b64_to_bgr_image(b64)
+    if frame is None:
+        return jsonify({
+            "ok": False,
+            "tooDark": False,
+            "inFrame": False,
+            "kneeVisible": False,
+            "message": "Could not decode image."
+        }), 400
+
+    frame = cv.resize(frame, (640, 480))
+
+    if mirrored:
+        frame = cv.flip(frame, 1)
+
+    brightness = mean_brightness(frame)
+    too_dark = brightness < 55.0
+
+    with pose_app.lock:
+        res = pose_app.cam.process_pose(frame)
+        landmarks = extract_landmarks(res)
+
+    in_frame, knee_visible = check_side_visibility(landmarks, side)
+
+    if too_dark:
+        return jsonify({
+            "ok": False,
+            "tooDark": True,
+            "inFrame": in_frame,
+            "kneeVisible": knee_visible,
+            "message": "Environment is too dark. Please move to a brighter area."
+        })
+
+    if not landmarks or len(landmarks) != 33:
+        return jsonify({
+            "ok": False,
+            "tooDark": False,
+            "inFrame": False,
+            "kneeVisible": False,
+            "message": "Please move fully into frame before starting."
+        })
+
+    if not in_frame:
+        return jsonify({
+            "ok": False,
+            "tooDark": False,
+            "inFrame": False,
+            "kneeVisible": knee_visible,
+            "message": f"Please keep your {side.lower()} leg fully visible in the camera view."
+        })
+
+    if not knee_visible:
+        return jsonify({
+            "ok": False,
+            "tooDark": False,
+            "inFrame": in_frame,
+            "kneeVisible": False,
+            "message": f"Please make sure your {side.lower()} knee is clearly visible."
+        })
+
+    return jsonify({
+        "ok": True,
+        "tooDark": False,
+        "inFrame": True,
+        "kneeVisible": True,
+        "message": "Setup looks good. Ready to start."
+    })
+
+
 @app.route("/process_frame", methods=["POST"])
 def process_frame():
     data = request.get_json(silent=True) or {}
