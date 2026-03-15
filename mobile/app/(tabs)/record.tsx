@@ -21,8 +21,17 @@ import {
 import { saveMetrics } from "../../lib/metricsService";
 import { getUserRole, UserRole } from "../../lib/roleStore";
 
+type SessionState = "idle" | "precheck" | "calibrating" | "recording" | "preview";
+
+
 export default function Record() {
   const router = useRouter();
+
+  const [sessionState, setSessionState] = useState<SessionState>("idle");
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [insufficientData, setInsufficientData] = useState(false);
+  const [isPreparing, setIsPreparing] = useState(false);
+
 
   // Role guard hooks
   const [role, setRole] = useState<UserRole | null>(null);
