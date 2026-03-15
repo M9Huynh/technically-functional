@@ -72,6 +72,9 @@ export default function Record() {
   const [landmarks, setLandmarks] = useState<Landmark[] | null>(null);
   const [connections, setConnections] = useState<Connection[]>([]);
 
+  const [recordedVideoUri, setRecordedVideoUri] = useState<string | null>(null);
+  const recordingPromiseRef = useRef<Promise<any> | null>(null);
+
   const busyRef = useRef(false);
 
   useEffect(() => {
