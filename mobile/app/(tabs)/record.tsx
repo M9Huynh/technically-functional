@@ -165,7 +165,7 @@ export default function Record() {
       busyRef.current = false;
     };
   }, [streaming, side, facing]);
-
+//  add calibration/recording transition effect
   useEffect(() => {
     if (!streaming || !metrics) return;
 
