@@ -11,6 +11,7 @@ import Svg, { Circle, Line } from "react-native-svg";
 
 import {
   processFrame,
+  precheckFrame,
   resetBackend,
   Landmark,
   Connection,
