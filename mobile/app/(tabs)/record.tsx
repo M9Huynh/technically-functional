@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import { useRouter, Redirect } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { VideoView, useVideoPlayer } from "expo-video";
 
 import ScreenContainer from "@/components/screenContainer";
 import PrimaryButton from "../../components/primaryButton";
@@ -27,23 +26,7 @@ type SessionState =
   | "setupCountdown"
   | "precheck"
   | "calibrating"
-  | "recording"
-  | "preview";
-
-function PreviewVideo({ uri }: { uri: string }) {
-  const player = useVideoPlayer(uri, (player) => {
-    player.pause();
-  });
-
-  return (
-    <VideoView
-      player={player}
-      style={{ width: "100%", height: 220, borderRadius: 12, marginTop: 10 }}
-      nativeControls
-      allowsFullscreen
-    />
-  );
-}
+  | "recording";
 
 export default function Record() {
   const router = useRouter();
@@ -53,6 +36,7 @@ export default function Record() {
   const [insufficientData, setInsufficientData] = useState(false);
   const [isPreparing, setIsPreparing] = useState(false);
   const [setupCountdown, setSetupCountdown] = useState(5);
+  const [cameraReady, setCameraReady] = useState(false);
 
   const [role, setRole] = useState<UserRole | null>(null);
   const [loadingRole, setLoadingRole] = useState(true);
@@ -62,6 +46,7 @@ export default function Record() {
 
   const [streaming, setStreaming] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showPostRecordingActions, setShowPostRecordingActions] = useState(false);
 
   const [metrics, setMetrics] = useState<any>(null);
   const [finalMetrics, setFinalMetrics] = useState<any>(null);
@@ -71,9 +56,6 @@ export default function Record() {
 
   const [landmarks, setLandmarks] = useState<Landmark[] | null>(null);
   const [connections, setConnections] = useState<Connection[]>([]);
-
-  const [recordedVideoUri, setRecordedVideoUri] = useState<string | null>(null);
-  const recordingPromiseRef = useRef<Promise<any> | null>(null);
 
   const busyRef = useRef(false);
 
@@ -188,16 +170,6 @@ export default function Record() {
       } else {
         setSessionState("recording");
         setStatusMessage("Exercise in progress...");
-
-        try {
-          if (cameraRef.current?.recordAsync) {
-            recordingPromiseRef.current = cameraRef.current.recordAsync({
-              maxDuration: 60,
-            });
-          }
-        } catch (e) {
-          console.log("Video recording start error:", e);
-        }
       }
     }
   }, [metrics, streaming, sessionState]);
@@ -228,6 +200,7 @@ export default function Record() {
           setLandmarks(null);
           setConnections([]);
           setInsufficientData(false);
+          setShowPostRecordingActions(false);
 
           setSessionState("calibrating");
           setStatusMessage("Calibration in progress...");
@@ -254,8 +227,11 @@ export default function Record() {
   }, [sessionState, setupCountdown]);
 
   const validateEnvironmentBeforeStart = async () => {
-    if (!cameraRef.current) {
-      return { ok: false, message: "Camera is not ready yet." };
+    if (!cameraRef.current || !cameraReady) {
+      return {
+        ok: false,
+        message: "Camera is not ready yet. Please wait a moment and try again.",
+      };
     }
 
     if (!side) {
@@ -295,6 +271,14 @@ export default function Record() {
   const handleStartRecording = async () => {
     if (isPreparing || streaming) return;
 
+    if (!cameraReady) {
+      Alert.alert(
+        "Camera Not Ready",
+        "Please wait a moment for the camera to finish loading."
+      );
+      return;
+    }
+
     if (!side) {
       Alert.alert(
         "Choose a knee first",
@@ -303,39 +287,35 @@ export default function Record() {
       return;
     }
 
-    setRecordedVideoUri(null);
     setIsPreparing(true);
     setSetupCountdown(5);
     setSessionState("setupCountdown");
     setStatusMessage("Get into position... 5");
+    setShowPostRecordingActions(false);
   };
 
   const handleStopRecording = async () => {
     if (!streaming) return;
 
     setStreaming(false);
-
-    try {
-      await cameraRef.current?.stopRecording?.();
-
-      if (recordingPromiseRef.current) {
-        const result = await recordingPromiseRef.current;
-        if (result?.uri) {
-          setRecordedVideoUri(result.uri);
-        }
-      }
-    } catch (e) {
-      console.log("Video recording stop error:", e);
-    } finally {
-      recordingPromiseRef.current = null;
-    }
-
-    setSessionState("preview");
+    setSessionState("idle");
     setStatusMessage("Recording complete.");
+    setShowPostRecordingActions(true);
+  };
+
+  const handleRetake = () => {
+    setMetrics(null);
+    setFinalMetrics(null);
+    setLandmarks(null);
+    setConnections([]);
+    setInsufficientData(false);
+    setStatusMessage(null);
+    setShowPostRecordingActions(false);
+    setSessionState("idle");
   };
 
   const handleSaveMetrics = async () => {
-    const m = streaming ? metrics : finalMetrics;
+    const m = finalMetrics;
     if (!m || isSaving) return;
 
     try {
@@ -397,7 +377,12 @@ export default function Record() {
     <ScreenContainer>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.cameraBox}>
-          <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
+          <CameraView
+            ref={cameraRef}
+            style={styles.camera}
+            facing={facing}
+            onCameraReady={() => setCameraReady(true)}
+          />
 
           <View style={styles.statusChip}>
             <Text style={styles.statusChipText}>
@@ -406,7 +391,6 @@ export default function Record() {
               {sessionState === "precheck" && "Pre-Check"}
               {sessionState === "calibrating" && "Calibrating"}
               {sessionState === "recording" && "Live Analysis"}
-              {sessionState === "preview" && "Preview Ready"}
             </Text>
           </View>
 
@@ -492,56 +476,46 @@ export default function Record() {
           </Text>
         </View>
 
-        {sessionState === "preview" && recordedVideoUri && (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Recording Preview</Text>
-            <PreviewVideo uri={recordedVideoUri} />
-
-            <PrimaryButton
-              label="Retake Recording"
-              onPress={() => {
-                setRecordedVideoUri(null);
-                setMetrics(null);
-                setFinalMetrics(null);
-                setLandmarks(null);
-                setConnections([]);
-                setInsufficientData(false);
-                setSessionState("idle");
-                setStatusMessage(null);
-              }}
-              style={{ marginTop: 10 }}
-            />
-          </View>
-        )}
-
         <PrimaryButton
           label={`Switch to ${facing === "front" ? "back" : "front"} camera`}
-          onPress={() => setFacing((f) => (f === "front" ? "back" : "front"))}
+          onPress={() => {
+            setCameraReady(false);
+            setFacing((f) => (f === "front" ? "back" : "front"));
+          }}
           style={{ marginTop: 8 }}
         />
 
-        <PrimaryButton
-          label={
-            sessionState === "setupCountdown"
-              ? `Get Ready (${setupCountdown})`
-              : sessionState === "precheck"
-              ? "Checking Setup..."
-              : sessionState === "calibrating"
-              ? "Calibrating..."
-              : streaming
-              ? "Stop Recording"
-              : "Start Recording"
-          }
-          onPress={streaming ? handleStopRecording : handleStartRecording}
-          style={{ marginTop: 10 }}
-        />
-
-        {sessionState === "preview" && (
+        {!showPostRecordingActions && (
           <PrimaryButton
-            label={isSaving ? "Saving..." : "Save Metrics & View Progress"}
-            onPress={handleSaveMetrics}
+            label={
+              sessionState === "setupCountdown"
+                ? `Get Ready (${setupCountdown})`
+                : sessionState === "precheck"
+                ? "Checking Setup..."
+                : sessionState === "calibrating"
+                ? "Calibrating..."
+                : streaming
+                ? "Stop Recording"
+                : "Start Recording"
+            }
+            onPress={streaming ? handleStopRecording : handleStartRecording}
             style={{ marginTop: 10 }}
           />
+        )}
+
+        {showPostRecordingActions && (
+          <>
+            <PrimaryButton
+              label="Retake"
+              onPress={handleRetake}
+              style={{ marginTop: 10 }}
+            />
+            <PrimaryButton
+              label={isSaving ? "Saving..." : "Save Metrics & View Progress"}
+              onPress={handleSaveMetrics}
+              style={{ marginTop: 10 }}
+            />
+          </>
         )}
 
         <View style={styles.card}>
