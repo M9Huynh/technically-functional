@@ -213,38 +213,52 @@ export default function Record() {
     }
   };
 
-  const handleToggleRecording = async () => {
-    if (!side) {
-      Alert.alert(
-        "Choose a knee first",
-        "Select Right or Left knee before recording."
-      );
+  const handleStartRecording = async () => {
+    if (isPreparing || streaming) return;
+
+    setIsPreparing(true);
+    setSessionState("precheck");
+    setStatusMessage("Checking lighting and camera position...");
+
+    const envCheck = await validateEnvironmentBeforeStart();
+
+    if (!envCheck.ok) {
+      setSessionState("idle");
+      setStatusMessage(null);
+      setIsPreparing(false);
+      Alert.alert("Adjust Setup", envCheck.message);
       return;
     }
 
-    if (!streaming) {
-      // START recording
-      try {
-        await resetBackend();
-      } catch (e) {
-        console.log("Reset failed:", e);
-      }
+    try {
+      await resetBackend();
 
       setMetrics(null);
-
-      // NEW: clear finalMetrics for a fresh session
       setFinalMetrics(null);
-
       setLandmarks(null);
       setConnections([]);
-    } else {
-      // STOP recording
-      // keep finalMetrics and show it in UI (displayMetrics below handles this)
-      setMetrics((prev: any) => prev); // no-op, but keeps intent clear
-    }
+      setInsufficientData(false);
 
-    setStreaming((s) => !s);
+      setSessionState("calibrating");
+      setStatusMessage("Calibration in progress...");
+      setStreaming(true); // IMPORTANT: backend needs frames during calibration
+    } catch (e) {
+      setSessionState("idle");
+      setStatusMessage(null);
+      Alert.alert("Error", "Failed to start recording.");
+    } finally {
+      setIsPreparing(false);
+    }
   };
+
+  const handleStopRecording = async () => {
+    if (!streaming) return;
+
+    setStreaming(false);
+    setSessionState("preview");
+    setStatusMessage("Recording complete.");
+  };
+
 
   // CHANGED: Save uses finalMetrics when stopped, metrics when streaming
   const handleSaveMetrics = async () => {
