@@ -23,6 +23,37 @@ def b64_to_bgr_image(b64_str: str):
     np_arr = np.frombuffer(img_bytes, np.uint8)
     frame = cv.imdecode(np_arr, cv.IMREAD_COLOR)
     return frame
+def mean_brightness(frame):
+    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    return float(np.mean(gray))
+
+def point_in_frame(pt):
+    if pt is None:
+        return False
+
+    x = pt.get("x", -1)
+    y = pt.get("y", -1)
+
+    return 0 <= x <= 1 and 0 <= y <= 1
+
+def check_side_visibility(landmarks, side: str):
+    if not landmarks or len(landmarks) < 29:
+        return False, False
+
+    if side == "RIGHT":
+        hip_idx, knee_idx, ankle_idx = 24, 26, 28
+    else:
+        hip_idx, knee_idx, ankle_idx = 23, 25, 27
+
+    hip = landmarks[hip_idx] if hip_idx < len(landmarks) else None
+    knee = landmarks[knee_idx] if knee_idx < len(landmarks) else None
+    ankle = landmarks[ankle_idx] if ankle_idx < len(landmarks) else None
+
+    side_in_frame = all(point_in_frame(p) for p in [hip, knee, ankle])
+    knee_visible = point_in_frame(knee)
+
+    return side_in_frame, knee_visible
+
 
 class PoseBackend:
     def __init__(self):
