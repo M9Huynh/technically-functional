@@ -166,6 +166,21 @@ export default function Record() {
     };
   }, [streaming, side, facing]);
 
+  useEffect(() => {
+    if (!streaming || !metrics) return;
+
+    if (sessionState === "calibrating") {
+      if (metrics.calibrating) {
+        const secondsLeft = Math.ceil(metrics.cal_time_left ?? 0);
+        setStatusMessage(`Calibration in progress... ${secondsLeft}s remaining`);
+      } else {
+        setSessionState("recording");
+        setStatusMessage("Exercise in progress...");
+      }
+    }
+  }, [metrics, streaming, sessionState]);
+
+
   // Now safe to return
   if (loadingRole) {
     return (
