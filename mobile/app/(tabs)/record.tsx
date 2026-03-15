@@ -188,6 +188,16 @@ export default function Record() {
       } else {
         setSessionState("recording");
         setStatusMessage("Exercise in progress...");
+
+        try {
+          if (cameraRef.current?.recordAsync) {
+            recordingPromiseRef.current = cameraRef.current.recordAsync({
+              maxDuration: 60,
+            });
+          }
+        } catch (e) {
+          console.log("Video recording start error:", e);
+        }
       }
     }
   }, [metrics, streaming, sessionState]);
