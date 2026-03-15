@@ -28,6 +28,23 @@ def mean_brightness(frame):
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     return float(np.mean(gray))
 
+def darkness_score(frame):
+    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    dark_pixels = np.sum(gray < 35)
+    total_pixels = gray.size
+    return dark_pixels / total_pixels
+
+def is_too_dark(frame):
+    brightness = mean_brightness(frame)
+    dark_ratio = darkness_score(frame)
+
+    # Stronger dark detection:
+    # either average brightness is low,
+    # or most of the frame is very dark
+    too_dark = brightness < 55.0 or dark_ratio > 0.75
+
+    return too_dark, brightness, dark_ratio
+
 def point_in_frame(pt):
     if pt is None:
         return False
@@ -55,7 +72,6 @@ def check_side_visibility(landmarks, side: str):
 
     side_in_frame = knee_visible and nearby_visible
     return side_in_frame, knee_visible
-
 
 class PoseBackend:
     def __init__(self):
@@ -140,20 +156,33 @@ def precheck_frame():
         if mirrored:
             frame = cv.flip(frame, 1)
 
-        brightness = mean_brightness(frame)
-        too_dark = brightness < 40.0
+        # STEP 1: darkness check first
+        too_dark, brightness, dark_ratio = is_too_dark(frame)
 
+        print("brightness:", brightness)
+        print("dark_ratio:", dark_ratio)
+        print("too_dark:", too_dark)
+
+        if too_dark:
+            return jsonify({
+                "ok": False,
+                "tooDark": True,
+                "inFrame": False,
+                "kneeVisible": False,
+                "message": "Environment is too dark. Please move to a brighter area."
+            })
+
+        # STEP 2: pose detection only if lighting is okay
         with pose_app.lock:
             res = pose_app.cam.process_pose(frame)
             landmarks = extract_landmarks(res)
 
-        print("brightness:", brightness)
         print("landmarks count:", 0 if landmarks is None else len(landmarks))
 
         if not landmarks or len(landmarks) < 29:
             return jsonify({
                 "ok": False,
-                "tooDark": too_dark,
+                "tooDark": False,
                 "inFrame": False,
                 "kneeVisible": False,
                 "message": "Please move fully into frame before starting."
@@ -161,15 +190,6 @@ def precheck_frame():
 
         in_frame, knee_visible = check_side_visibility(landmarks, side)
         print("in_frame:", in_frame, "knee_visible:", knee_visible)
-
-        if too_dark:
-            return jsonify({
-                "ok": False,
-                "tooDark": True,
-                "inFrame": in_frame,
-                "kneeVisible": knee_visible,
-                "message": "Environment is too dark. Please move to a brighter area."
-            })
 
         if not knee_visible:
             return jsonify({
@@ -187,6 +207,7 @@ def precheck_frame():
             "kneeVisible": True,
             "message": "Setup looks good. Ready to start."
         })
+
     except Exception as e:
         print("PRECHECK ERROR:", str(e))
         return jsonify({
@@ -196,7 +217,6 @@ def precheck_frame():
             "kneeVisible": False,
             "message": f"Precheck failed: {str(e)}"
         }), 500
-
 
 @app.route("/process_frame", methods=["POST"])
 def process_frame():
