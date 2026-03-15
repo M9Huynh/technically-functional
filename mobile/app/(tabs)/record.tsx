@@ -313,6 +313,22 @@ export default function Record() {
     if (!streaming) return;
 
     setStreaming(false);
+
+    try {
+      await cameraRef.current?.stopRecording?.();
+
+      if (recordingPromiseRef.current) {
+        const result = await recordingPromiseRef.current;
+        if (result?.uri) {
+          setRecordedVideoUri(result.uri);
+        }
+      }
+    } catch (e) {
+      console.log("Video recording stop error:", e);
+    } finally {
+      recordingPromiseRef.current = null;
+    }
+
     setSessionState("preview");
     setStatusMessage("Recording complete.");
   };
