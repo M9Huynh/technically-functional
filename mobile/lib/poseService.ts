@@ -41,6 +41,22 @@ export async function processFrame(
   return res.data as ProcessFrameResponse;
 }
 
+export async function precheckFrame(
+  imageBase64: string,
+  side: Side,
+  facing: Facing
+): Promise<PrecheckFrameResponse> {
+  const mirrored = facing === "front";
+
+  const res = await axios.post(
+    `${SERVER_URL}/precheck_frame`,
+    { imageBase64, side, mirrored, legsOnly: true },
+    { headers: { "Content-Type": "application/json" }, timeout: 10000 }
+  );
+
+  return res.data as PrecheckFrameResponse;
+}
+
 export async function resetBackend(): Promise<void> {
   await axios.post(`${SERVER_URL}/reset`, {}, { timeout: 8000 });
 }
