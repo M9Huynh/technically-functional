@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import { useRouter, Redirect } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import { VideoView, useVideoPlayer } from "expo-video";
 
 import ScreenContainer from "@/components/screenContainer";
 import PrimaryButton from "../../components/primaryButton";
