@@ -198,10 +198,14 @@ export default function Record() {
         ok: result.ok,
         message: result.message,
       };
-    } catch (e) {
+    } catch (e: any) {
+      console.log("Precheck error:", e?.response?.data || e?.message || e);
       return {
         ok: false,
-        message: "Unable to check setup. Please try again.",
+        message:
+          e?.response?.data?.message ||
+          e?.message ||
+          "Unable to check setup. Please try again.",
       };
     }
   };
