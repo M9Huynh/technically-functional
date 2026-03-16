@@ -98,6 +98,7 @@ export default function Record() {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
           quality: 0.12,
+          shutterSound: false, 
           skipProcessing: true,
           exif: false,
         });
@@ -179,6 +180,7 @@ export default function Record() {
 
     if (setupCountdown <= 0) {
       const runPrecheck = async () => {
+        await resetBackend();
         setSessionState("precheck");
         setStatusMessage("Checking lighting and camera position...");
 
@@ -242,6 +244,7 @@ export default function Record() {
       const photo = await cameraRef.current.takePictureAsync({
         base64: true,
         quality: 0.08,
+        shutterSound: false,
         skipProcessing: true,
         exif: false,
       });
@@ -287,11 +290,17 @@ export default function Record() {
       return;
     }
 
+    setMetrics(null);
+    setFinalMetrics(null);
+    setLandmarks(null);
+    setConnections([]);
+    setInsufficientData(false);
+    setShowPostRecordingActions(false);
+
     setIsPreparing(true);
     setSetupCountdown(5);
     setSessionState("setupCountdown");
     setStatusMessage("Get into position... 5");
-    setShowPostRecordingActions(false);
   };
 
   const handleStopRecording = async () => {
@@ -303,7 +312,8 @@ export default function Record() {
     setShowPostRecordingActions(true);
   };
 
-  const handleRetake = () => {
+  const handleRetake = async () => {
+    setStreaming(false);
     setMetrics(null);
     setFinalMetrics(null);
     setLandmarks(null);
@@ -312,6 +322,14 @@ export default function Record() {
     setStatusMessage(null);
     setShowPostRecordingActions(false);
     setSessionState("idle");
+    setSetupCountdown(5);
+    setIsPreparing(false);
+
+    try {
+      await resetBackend();
+    } catch (e) {
+      console.log("Retake reset failed:", e);
+    }
   };
 
   const handleSaveMetrics = async () => {
