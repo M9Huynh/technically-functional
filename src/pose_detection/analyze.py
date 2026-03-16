@@ -1,5 +1,3 @@
-import cv2 as cv
-import mediapipe as mp
 import os
 import time
 
@@ -24,19 +22,31 @@ class Analyzer:
         self.current_rep = None
         self.rep_durations = []
 
-        self.flexion_threshold = 0.60
-        self.extension_threshold = 0.60
-
+        # State / feedback
         self.rep_state = "Ready"
+        self.cue_state = "GETTING_READY"
 
-        # Smoothing + validation
+        # Smoothing
         self.smoothed_angle = None
-        self.smoothing_alpha = 0.4
-        self.min_rep_gap_s = 0.4
-        self.min_valid_rom = 10.0
-        self.last_rep_end = None
+        self.smoothing_alpha = 0.5
 
-    def start_calibration(self, duration_s: float = 3.0):
+        # Easier zone-based thresholds
+        self.bend_zone_ratio = 0.45
+        self.extend_zone_ratio = 0.55
+
+        # Minimum ROM and minimum rep size
+        self.min_valid_rom = 12.0
+        self.min_cycle_span_deg = 15.0
+
+        # Track one rep cycle
+        self.cycle_min_angle = None
+        self.cycle_max_angle = None
+
+        # Rep cooldown to prevent double counts from jitter
+        self.last_rep_time = None
+        self.rep_cooldown_s = 0.4
+
+    def start_calibration(self, duration_s: float = 10.0):
         self.is_calibrating = True
         self.cal_duration_s = float(duration_s)
         self.cal_start_ts = time.time()
@@ -46,14 +56,18 @@ class Analyzer:
         self.rep_count = 0
         self.rep_durations = []
         self.rep_state = "Ready"
+        self.cue_state = "CALIBRATING"
 
         self.smoothed_angle = None
         self.current_rep = None
-        self.last_rep_end = None
 
         self.started = False
         self.min_angle = 0.0
         self.max_angle = 0.0
+
+        self.cycle_min_angle = None
+        self.cycle_max_angle = None
+        self.last_rep_time = None
 
     def _smooth_angle(self, angle: float) -> float:
         if self.smoothed_angle is None:
@@ -75,102 +89,132 @@ class Analyzer:
             self.cal_max = angle
 
         if (time.time() - self.cal_start_ts) >= self.cal_duration_s:
-            # If user moved during calibration, use that
+            self.is_calibrating = False
+
             if self.cal_min is not None and self.cal_max is not None:
                 self.min_angle = self.cal_min
                 self.max_angle = self.cal_max
-                self.started = True
-                self.rep_state = "Ready"
 
-            self.is_calibrating = False
+            self.started = True
+            self.rep_state = "Ready"
+            self.cue_state = "GETTING_READY"
 
     def _rep_update(self, angle: float):
-        if self.min_angle == self.max_angle:
-            return
-
         rom = self.max_angle - self.min_angle
         if rom < self.min_valid_rom:
+            self.cue_state = "GETTING_READY"
             return
 
-        normalized_angle = (angle - self.min_angle) / rom
+        bend_zone_max = self.min_angle + rom * self.bend_zone_ratio
+        extend_zone_min = self.min_angle + rom * self.extend_zone_ratio
+        midpoint = (self.min_angle + self.max_angle) / 2.0
         now = time.time()
 
-        if normalized_angle < 0:
-            normalized_angle = 0
-        if normalized_angle > 1:
-            normalized_angle = 1
-
-        flexion_trigger = 1 - self.flexion_threshold
-        extension_trigger = self.extension_threshold
-
-        # Uncomment for debugging if needed
-        # print("angle:", round(angle, 1), "norm:", round(normalized_angle, 3),
-        #       "state:", self.rep_state, "reps:", self.rep_count,
-        #       "min:", round(self.min_angle, 1), "max:", round(self.max_angle, 1))
+        # Uncomment if you want to debug
+        # print(
+        #     "angle:", round(angle, 1),
+        #     "bend_zone:", round(bend_zone_max, 1),
+        #     "extend_zone:", round(extend_zone_min, 1),
+        #     "state:", self.rep_state,
+        #     "reps:", self.rep_count
+        # )
 
         if self.rep_state == "Ready":
-            if normalized_angle >= extension_trigger:
+            if angle >= extend_zone_min:
                 self.rep_state = "Extension"
-            elif normalized_angle <= flexion_trigger:
+                self.cue_state = "GOOD_EXTENSION"
+            elif angle <= bend_zone_max:
                 self.rep_state = "Flexion"
                 self.current_rep = now
+                self.cycle_min_angle = angle
+                self.cycle_max_angle = angle
+                self.cue_state = "GOOD_FLEXION"
+            else:
+                if angle >= midpoint:
+                    self.rep_state = "Extension"
+                    self.cue_state = "GOOD_EXTENSION"
+                else:
+                    self.rep_state = "Flexion"
+                    self.current_rep = now
+                    self.cycle_min_angle = angle
+                    self.cycle_max_angle = angle
+                    self.cue_state = "GOOD_FLEXION"
             return
 
         if self.rep_state == "Extension":
-            if normalized_angle <= flexion_trigger:
+            self.cue_state = "GOOD_EXTENSION"
+
+            if angle <= bend_zone_max:
                 self.rep_state = "Flexion"
-                if self.current_rep is None:
-                    self.current_rep = now
+                self.current_rep = now
+                self.cycle_min_angle = angle
+                self.cycle_max_angle = angle
+                self.cue_state = "GOOD_FLEXION"
 
         elif self.rep_state == "Flexion":
-            if normalized_angle >= extension_trigger:
-                if (
-                    self.last_rep_end is not None
-                    and (now - self.last_rep_end) < self.min_rep_gap_s
-                ):
-                    return
+            self.cue_state = "GOOD_FLEXION"
 
-                if self.current_rep is not None:
-                    rep_duration = now - self.current_rep
-                    self.rep_durations.append(rep_duration)
-                    self.rep_count += 1
-                    self.last_rep_end = now
+            if self.cycle_min_angle is None or angle < self.cycle_min_angle:
+                self.cycle_min_angle = angle
+            if self.cycle_max_angle is None or angle > self.cycle_max_angle:
+                self.cycle_max_angle = angle
+
+            if angle >= extend_zone_min:
+                cycle_min = self.cycle_min_angle if self.cycle_min_angle is not None else angle
+                cycle_max = self.cycle_max_angle if self.cycle_max_angle is not None else angle
+                cycle_span = cycle_max - cycle_min
+
+                if cycle_span >= self.min_cycle_span_deg:
+                    cooldown_ok = (
+                        self.last_rep_time is None or
+                        (now - self.last_rep_time) >= self.rep_cooldown_s
+                    )
+
+                    if cooldown_ok:
+                        if self.current_rep is not None:
+                            rep_duration = now - self.current_rep
+                            self.rep_durations.append(rep_duration)
+                            self.rep_count += 1
+                            self.last_rep_time = now
 
                 self.rep_state = "Extension"
                 self.current_rep = None
+                self.cycle_min_angle = None
+                self.cycle_max_angle = None
+                self.cue_state = "GOOD_EXTENSION"
 
     def update(self, angle: float):
-        # If tracking is lost, stop current rep and reset state safely
         if angle is None:
             self.current_rep = None
             self.rep_state = "Ready"
+            self.cue_state = "OUT_OF_FRAME"
+            self.smoothed_angle = None
+            self.cycle_min_angle = None
+            self.cycle_max_angle = None
             return
 
         angle = self._smooth_angle(angle)
 
         if self.is_calibrating:
+            self.cue_state = "CALIBRATING"
             self._calibrate_with_angle(angle)
             return
 
-        # Initialize once after calibration / startup
         if not self.started:
             self.min_angle = angle
             self.max_angle = angle
             self.started = True
             self.rep_state = "Ready"
+            self.cue_state = "GETTING_READY"
             return
 
-        # IMPORTANT:
-        # Keep updating min/max during live exercise so it still works
-        # even if calibration was done while holding still.
+        # allow ROM to adapt during session
         if angle < self.min_angle:
             self.min_angle = angle
-
         if angle > self.max_angle:
             self.max_angle = angle
 
-        if self.started and not self.is_calibrating:
-            self._rep_update(angle)
+        self._rep_update(angle)
 
     def calc_rom(self) -> float:
         return self.max_angle - self.min_angle
@@ -184,12 +228,9 @@ class Analyzer:
         else:
             cal_time_left = 0.0
 
-        current_duration = 0
-
         if self.rep_durations:
             avg_duration = sum(self.rep_durations) / len(self.rep_durations)
-            if self.current_rep:
-                current_duration = time.time() - self.current_rep
+            current_duration = time.time() - self.current_rep if self.current_rep else 0
         else:
             avg_duration = 0
             current_duration = 0
@@ -203,5 +244,6 @@ class Analyzer:
             "rep_count": self.rep_count,
             "current_rep_duration": current_duration,
             "avg_rep_duration": avg_duration,
-            "rep_state": self.rep_state
+            "rep_state": self.rep_state,
+            "cue_state": self.cue_state,
         }
