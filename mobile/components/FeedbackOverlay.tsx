@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
 import * as Speech from "expo-speech";
 
@@ -8,7 +8,8 @@ interface Metrics {
   max_degree: number;
   rom_degree: number;
   rep_count: number;
-  rep_state: "Extension" | "Flexion" | "None" | string;
+  rep_state: "Extension" | "Flexion" | "Ready" | "None" | string;
+  cue_state?: string;
   calibrating: boolean;
   cal_time_left: number;
   current_rep_duration: number;
@@ -24,8 +25,6 @@ interface FeedbackInfo {
     | "OUT_OF_FRAME"
     | "CALIBRATING"
     | "GETTING_READY"
-    | "EXTEND_MORE"
-    | "BEND_MORE"
     | "GOOD_FLEXION"
     | "GOOD_EXTENSION";
   type: "error" | "warning" | "info" | "success";
@@ -35,15 +34,7 @@ interface FeedbackInfo {
   color: string;
 }
 
-const FLEXION_THRESHOLD = 0.7;
-const EXTENSION_THRESHOLD = 0.7;
 const CAL_DURATION_S = 10.0;
-
-function getNormalizedAngle(metrics: Metrics): number | null {
-  const { angle, min_degree, max_degree } = metrics;
-  if (max_degree === min_degree) return null;
-  return (angle - min_degree) / (max_degree - min_degree);
-}
 
 function getFeedback(metrics: Metrics | null): FeedbackInfo {
   if (!metrics) {
@@ -57,87 +48,78 @@ function getFeedback(metrics: Metrics | null): FeedbackInfo {
     };
   }
 
-  if (metrics.calibrating) {
-    const timeLeft = Math.ceil(metrics.cal_time_left);
-    return {
-      key: "CALIBRATING",
-      type: "info",
-      icon: "⏱",
-      title: "Calibrating…",
-      subtitle: `Hold still — ${timeLeft}s remaining`,
-      color: "#FFB800",
-    };
+  const cue = metrics.cue_state ?? "GETTING_READY";
+
+  switch (cue) {
+    case "OUT_OF_FRAME":
+      return {
+        key: "OUT_OF_FRAME",
+        type: "error",
+        icon: "👤",
+        title: "Move into frame",
+        subtitle: "Make sure your full leg is visible",
+        color: "#FF4444",
+      };
+
+    case "CALIBRATING":
+      return {
+        key: "CALIBRATING",
+        type: "info",
+        icon: "⏱",
+        title: "Calibrating…",
+        subtitle: `Preparing exercise tracking — ${Math.ceil(
+          metrics.cal_time_left
+        )}s remaining`,
+        color: "#FFB800",
+      };
+
+    case "GOOD_FLEXION":
+      return {
+        key: "GOOD_FLEXION",
+        type: "success",
+        icon: "✓",
+        title: "Good bend! Now extend",
+        subtitle: "Keep going",
+        color: "#00C853",
+      };
+
+    case "GOOD_EXTENSION":
+      return {
+        key: "GOOD_EXTENSION",
+        type: "success",
+        icon: "✓",
+        title: "Good extension! Now bend",
+        subtitle: "Keep going",
+        color: "#00C853",
+      };
+
+    default:
+      return {
+        key: "GETTING_READY",
+        type: "info",
+        icon: "🦵",
+        title: "Getting ready…",
+        subtitle: "Move into your starting position",
+        color: "#2196F3",
+      };
   }
-
-  const normalized = getNormalizedAngle(metrics);
-
-  if (normalized === null) {
-    return {
-      key: "GETTING_READY",
-      type: "info",
-      icon: "🦵",
-      title: "Getting ready…",
-      subtitle: "Start moving your leg",
-      color: "#2196F3",
-    };
-  }
-
-  if (metrics.rep_state === "Extension" && normalized < EXTENSION_THRESHOLD) {
-    const pct = Math.round((1 - normalized / EXTENSION_THRESHOLD) * 100);
-    return {
-      key: "EXTEND_MORE",
-      type: "warning",
-      icon: "↑",
-      title: "Extend your leg more",
-      subtitle: `${pct}% more to complete the rep`,
-      color: "#FF8C00",
-    };
-  }
-
-  if (
-    metrics.rep_state === "Flexion" &&
-    normalized > 1 - FLEXION_THRESHOLD
-  ) {
-    const target = 1 - FLEXION_THRESHOLD;
-    const pct = Math.round(((normalized - target) / (1 - target)) * 100);
-    return {
-      key: "BEND_MORE",
-      type: "warning",
-      icon: "↓",
-      title: "Bend your knee more",
-      subtitle: `${pct}% more to complete the rep`,
-      color: "#FF8C00",
-    };
-  }
-
-  const isFlexion = metrics.rep_state === "Flexion";
-
-  return {
-    key: isFlexion ? "GOOD_FLEXION" : "GOOD_EXTENSION",
-    type: "success",
-    icon: "✓",
-    title: isFlexion
-      ? "Good bend! Now extend"
-      : "Good extension! Now bend",
-    subtitle: `${metrics.rep_count} rep${
-      metrics.rep_count !== 1 ? "s" : ""
-    } completed`,
-    color: "#00C853",
-  };
 }
 
 export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
   const feedback = getFeedback(metrics);
+
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const loopRef = useRef<Animated.CompositeAnimation | null>(null);
 
-  const lastSpokenAtRef = useRef<number>(0);
   const lastRepCountRef = useRef<number>(0);
   const lastOutOfFrameAtRef = useRef<number>(0);
 
   const sawCalibrationRef = useRef(false);
   const calibratingSpokenRef = useRef(false);
   const startExerciseAnnouncedRef = useRef(false);
+
+  const [recentRepText, setRecentRepText] = useState<string | null>(null);
+  const repToastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (loopRef.current) {
@@ -170,83 +152,78 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
     }
   }, [feedback.type, pulseAnim]);
 
-  // Say "Calibrating" once only at the start
   useEffect(() => {
     if (metrics?.calibrating) {
       sawCalibrationRef.current = true;
 
       if (!calibratingSpokenRef.current) {
         Speech.stop();
-        Speech.speak("Calibrating", {
-          rate: 0.95,
-          pitch: 1.0,
-        });
-
+        Speech.speak("Calibrating", { rate: 0.95, pitch: 1.0 });
         calibratingSpokenRef.current = true;
-        lastSpokenAtRef.current = Date.now();
       }
     }
   }, [metrics?.calibrating]);
 
-  // Say "Please start your exercise now" once when calibration first finishes
   useEffect(() => {
-    const now = Date.now();
-
     const shouldAnnounceStart =
       !!metrics &&
       !metrics.calibrating &&
       sawCalibrationRef.current &&
       !startExerciseAnnouncedRef.current;
 
-    if (shouldAnnounceStart && now - lastSpokenAtRef.current > 1000) {
+    if (shouldAnnounceStart) {
       Speech.stop();
       Speech.speak("Please start your exercise now", {
         rate: 0.95,
         pitch: 1.0,
       });
-
       startExerciseAnnouncedRef.current = true;
-      lastSpokenAtRef.current = now;
     }
   }, [metrics]);
 
-  // Say "Move into frame" whenever the FEEDBACK says out of frame
   useEffect(() => {
     const now = Date.now();
 
     if (feedback.key === "OUT_OF_FRAME") {
-      if (now - lastOutOfFrameAtRef.current > 3000) {
+      if (now - lastOutOfFrameAtRef.current > 2500) {
         Speech.stop();
-        Speech.speak("Move into frame", {
-          rate: 0.95,
-          pitch: 1.0,
-        });
-
+        Speech.speak("Move into frame", { rate: 0.95, pitch: 1.0 });
         lastOutOfFrameAtRef.current = now;
-        lastSpokenAtRef.current = now;
       }
+    } else {
+      lastOutOfFrameAtRef.current = 0;
     }
   }, [feedback.key]);
 
-  // Speak rep count when it increases
   useEffect(() => {
     if (!metrics || metrics.calibrating) return;
     if (!startExerciseAnnouncedRef.current) return;
 
     if (metrics.rep_count > lastRepCountRef.current) {
-      Speech.speak(`Rep ${metrics.rep_count}`, {
-        rate: 0.95,
-        pitch: 1.0,
-      });
+      Speech.stop();
+      Speech.speak(`Rep ${metrics.rep_count}`, { rate: 0.95, pitch: 1.0 });
 
-      lastSpokenAtRef.current = Date.now();
+      setRecentRepText(`Rep ${metrics.rep_count} completed`);
+
+      if (repToastTimerRef.current) {
+        clearTimeout(repToastTimerRef.current);
+      }
+
+      repToastTimerRef.current = setTimeout(() => {
+        setRecentRepText(null);
+      }, 1200);
     }
 
     lastRepCountRef.current = metrics.rep_count;
   }, [metrics?.rep_count, metrics?.calibrating, metrics]);
 
-  const normalized =
-    metrics && !metrics.calibrating ? getNormalizedAngle(metrics) : null;
+  useEffect(() => {
+    return () => {
+      if (repToastTimerRef.current) {
+        clearTimeout(repToastTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <View style={styles.container} pointerEvents="none">
@@ -261,12 +238,16 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
       >
         <Text style={styles.bannerIcon}>{feedback.icon}</Text>
         <View style={styles.bannerText}>
-          <Text style={styles.bannerTitle}>{feedback.title}</Text>
-          <Text style={styles.bannerSubtitle}>{feedback.subtitle}</Text>
+          <Text style={styles.bannerTitle}>
+            {recentRepText ?? feedback.title}
+          </Text>
+          <Text style={styles.bannerSubtitle}>
+            {recentRepText ? "Nice work" : feedback.subtitle}
+          </Text>
         </View>
       </Animated.View>
 
-      {!metrics && (
+      {feedback.key === "OUT_OF_FRAME" && (
         <View style={styles.fullOverlay}>
           <View style={styles.silhouetteBox}>
             <Text style={styles.silhouetteIcon}>🧍</Text>
@@ -301,35 +282,8 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
         </View>
       )}
 
-      {metrics && !metrics.calibrating && normalized !== null && (
+      {!metrics?.calibrating && metrics && (
         <View style={styles.barContainer}>
-          <View style={styles.angleRow}>
-            <Text style={styles.angleEndLabel}>Bend</Text>
-            <View style={styles.barTrack}>
-              <View
-                style={[
-                  styles.thresholdMarker,
-                  { left: `${(1 - FLEXION_THRESHOLD) * 100}%` },
-                ]}
-              />
-              <View
-                style={[
-                  styles.thresholdMarker,
-                  { left: `${EXTENSION_THRESHOLD * 100}%` },
-                ]}
-              />
-              <View
-                style={[
-                  styles.barFill,
-                  {
-                    width: `${Math.min(100, Math.max(0, normalized * 100))}%`,
-                    backgroundColor: feedback.color,
-                  },
-                ]}
-              />
-            </View>
-            <Text style={styles.angleEndLabel}>Extend</Text>
-          </View>
           <Text style={styles.angleValue}>{Math.round(metrics.angle)}°</Text>
         </View>
       )}
@@ -427,29 +381,10 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 5,
   },
-  thresholdMarker: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    width: 2,
-    backgroundColor: "rgba(255,255,255,0.5)",
-    zIndex: 1,
-  },
-  angleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 4,
-  },
-  angleEndLabel: {
-    color: "rgba(255,255,255,0.7)",
-    fontSize: 11,
-    width: 40,
-  },
   angleValue: {
     color: "#fff",
     fontWeight: "700",
-    fontSize: 13,
+    fontSize: 18,
     textAlign: "center",
-    marginTop: 4,
   },
 });
