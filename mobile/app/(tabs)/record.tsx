@@ -98,6 +98,7 @@ export default function Record() {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
           quality: 0.12,
+          shutterSound: false, 
           skipProcessing: true,
           exif: false,
         });
@@ -242,6 +243,7 @@ export default function Record() {
       const photo = await cameraRef.current.takePictureAsync({
         base64: true,
         quality: 0.08,
+        shutterSound: false,
         skipProcessing: true,
         exif: false,
       });
