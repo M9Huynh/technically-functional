@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
-
-//  Types 
+import * as Speech from "expo-speech";
 
 interface Metrics {
   angle: number;
@@ -21,6 +20,14 @@ interface FeedbackOverlayProps {
 }
 
 interface FeedbackInfo {
+  key:
+    | "OUT_OF_FRAME"
+    | "CALIBRATING"
+    | "GETTING_READY"
+    | "EXTEND_MORE"
+    | "BEND_MORE"
+    | "GOOD_FLEXION"
+    | "GOOD_EXTENSION";
   type: "error" | "warning" | "info" | "success";
   icon: string;
   title: string;
@@ -28,13 +35,9 @@ interface FeedbackInfo {
   color: string;
 }
 
-//  Constants 
-
 const FLEXION_THRESHOLD = 0.7;
 const EXTENSION_THRESHOLD = 0.7;
 const CAL_DURATION_S = 10.0;
-
-//  Helpers 
 
 function getNormalizedAngle(metrics: Metrics): number | null {
   const { angle, min_degree, max_degree } = metrics;
@@ -43,9 +46,9 @@ function getNormalizedAngle(metrics: Metrics): number | null {
 }
 
 function getFeedback(metrics: Metrics | null): FeedbackInfo {
-  // User not detected in frame
   if (!metrics) {
     return {
+      key: "OUT_OF_FRAME",
       type: "error",
       icon: "👤",
       title: "Move into frame",
@@ -54,10 +57,10 @@ function getFeedback(metrics: Metrics | null): FeedbackInfo {
     };
   }
 
-  // Calibration phase
   if (metrics.calibrating) {
     const timeLeft = Math.ceil(metrics.cal_time_left);
     return {
+      key: "CALIBRATING",
       type: "info",
       icon: "⏱",
       title: "Calibrating…",
@@ -68,9 +71,9 @@ function getFeedback(metrics: Metrics | null): FeedbackInfo {
 
   const normalized = getNormalizedAngle(metrics);
 
-  // Not enough ROM data yet
   if (normalized === null) {
     return {
+      key: "GETTING_READY",
       type: "info",
       icon: "🦵",
       title: "Getting ready…",
@@ -79,11 +82,10 @@ function getFeedback(metrics: Metrics | null): FeedbackInfo {
     };
   }
 
-  // In Extension state — needs to extend further to complete rep
-  // Rep counts when normalized > EXTENSION_THRESHOLD (0.7)
   if (metrics.rep_state === "Extension" && normalized < EXTENSION_THRESHOLD) {
     const pct = Math.round((1 - normalized / EXTENSION_THRESHOLD) * 100);
     return {
+      key: "EXTEND_MORE",
       type: "warning",
       icon: "↑",
       title: "Extend your leg more",
@@ -92,8 +94,6 @@ function getFeedback(metrics: Metrics | null): FeedbackInfo {
     };
   }
 
-  // In Flexion state — needs to bend further to trigger rep
-  // Rep counts when normalized < 1 - FLEXION_THRESHOLD (0.3)
   if (
     metrics.rep_state === "Flexion" &&
     normalized > 1 - FLEXION_THRESHOLD
@@ -101,6 +101,7 @@ function getFeedback(metrics: Metrics | null): FeedbackInfo {
     const target = 1 - FLEXION_THRESHOLD;
     const pct = Math.round(((normalized - target) / (1 - target)) * 100);
     return {
+      key: "BEND_MORE",
       type: "warning",
       icon: "↓",
       title: "Bend your knee more",
@@ -109,29 +110,35 @@ function getFeedback(metrics: Metrics | null): FeedbackInfo {
     };
   }
 
-  // Good position — within target range
-  const stateLabel =
-    metrics.rep_state === "Flexion"
-      ? "Good bend! Now extend"
-      : "Good extension! Now bend";
+  const isFlexion = metrics.rep_state === "Flexion";
 
   return {
+    key: isFlexion ? "GOOD_FLEXION" : "GOOD_EXTENSION",
     type: "success",
     icon: "✓",
-    title: stateLabel,
-    subtitle: `${metrics.rep_count} rep${metrics.rep_count !== 1 ? "s" : ""} completed`,
+    title: isFlexion
+      ? "Good bend! Now extend"
+      : "Good extension! Now bend",
+    subtitle: `${metrics.rep_count} rep${
+      metrics.rep_count !== 1 ? "s" : ""
+    } completed`,
     color: "#00C853",
   };
 }
-
-//  Component 
 
 export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
   const feedback = getFeedback(metrics);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const loopRef = useRef<Animated.CompositeAnimation | null>(null);
 
-  // Pulse the banner when user needs to correct their position
+  const lastSpokenAtRef = useRef<number>(0);
+  const lastRepCountRef = useRef<number>(0);
+  const lastOutOfFrameAtRef = useRef<number>(0);
+
+  const sawCalibrationRef = useRef(false);
+  const calibratingSpokenRef = useRef(false);
+  const startExerciseAnnouncedRef = useRef(false);
+
   useEffect(() => {
     if (loopRef.current) {
       loopRef.current.stop();
@@ -161,19 +168,95 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
         useNativeDriver: true,
       }).start();
     }
-  }, [feedback.type]);
+  }, [feedback.type, pulseAnim]);
+
+  // Say "Calibrating" once only at the start
+  useEffect(() => {
+    if (metrics?.calibrating) {
+      sawCalibrationRef.current = true;
+
+      if (!calibratingSpokenRef.current) {
+        Speech.stop();
+        Speech.speak("Calibrating", {
+          rate: 0.95,
+          pitch: 1.0,
+        });
+
+        calibratingSpokenRef.current = true;
+        lastSpokenAtRef.current = Date.now();
+      }
+    }
+  }, [metrics?.calibrating]);
+
+  // Say "Please start your exercise now" once when calibration first finishes
+  useEffect(() => {
+    const now = Date.now();
+
+    const shouldAnnounceStart =
+      !!metrics &&
+      !metrics.calibrating &&
+      sawCalibrationRef.current &&
+      !startExerciseAnnouncedRef.current;
+
+    if (shouldAnnounceStart && now - lastSpokenAtRef.current > 1000) {
+      Speech.stop();
+      Speech.speak("Please start your exercise now", {
+        rate: 0.95,
+        pitch: 1.0,
+      });
+
+      startExerciseAnnouncedRef.current = true;
+      lastSpokenAtRef.current = now;
+    }
+  }, [metrics]);
+
+  // Say "Move into frame" whenever the FEEDBACK says out of frame
+  useEffect(() => {
+    const now = Date.now();
+
+    if (feedback.key === "OUT_OF_FRAME") {
+      if (now - lastOutOfFrameAtRef.current > 3000) {
+        Speech.stop();
+        Speech.speak("Move into frame", {
+          rate: 0.95,
+          pitch: 1.0,
+        });
+
+        lastOutOfFrameAtRef.current = now;
+        lastSpokenAtRef.current = now;
+      }
+    }
+  }, [feedback.key]);
+
+  // Speak rep count when it increases
+  useEffect(() => {
+    if (!metrics || metrics.calibrating) return;
+    if (!startExerciseAnnouncedRef.current) return;
+
+    if (metrics.rep_count > lastRepCountRef.current) {
+      Speech.speak(`Rep ${metrics.rep_count}`, {
+        rate: 0.95,
+        pitch: 1.0,
+      });
+
+      lastSpokenAtRef.current = Date.now();
+    }
+
+    lastRepCountRef.current = metrics.rep_count;
+  }, [metrics?.rep_count, metrics?.calibrating, metrics]);
 
   const normalized =
     metrics && !metrics.calibrating ? getNormalizedAngle(metrics) : null;
 
   return (
     <View style={styles.container} pointerEvents="none">
-
-      {/* ── Top feedback banner ── */}
       <Animated.View
         style={[
           styles.banner,
-          { backgroundColor: feedback.color + "EE", transform: [{ scale: pulseAnim }] },
+          {
+            backgroundColor: feedback.color + "EE",
+            transform: [{ scale: pulseAnim }],
+          },
         ]}
       >
         <Text style={styles.bannerIcon}>{feedback.icon}</Text>
@@ -183,7 +266,6 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
         </View>
       </Animated.View>
 
-      {/* ── Full-screen overlay when user not detected ── */}
       {!metrics && (
         <View style={styles.fullOverlay}>
           <View style={styles.silhouetteBox}>
@@ -195,10 +277,11 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
         </View>
       )}
 
-      {/* Calibration progress bar  */}
       {metrics?.calibrating && (
         <View style={styles.barContainer}>
-          <Text style={styles.barLabel}>Calibrating your range of motion…</Text>
+          <Text style={styles.barLabel}>
+            Calibrating your range of motion…
+          </Text>
           <View style={styles.barTrack}>
             <View
               style={[
@@ -218,13 +301,11 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
         </View>
       )}
 
-      {/* ── Angle progress bar (active exercise) ── */}
       {metrics && !metrics.calibrating && normalized !== null && (
         <View style={styles.barContainer}>
           <View style={styles.angleRow}>
             <Text style={styles.angleEndLabel}>Bend</Text>
             <View style={styles.barTrack}>
-              {/* Threshold markers */}
               <View
                 style={[
                   styles.thresholdMarker,
@@ -237,7 +318,6 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
                   { left: `${EXTENSION_THRESHOLD * 100}%` },
                 ]}
               />
-              {/* Fill */}
               <View
                 style={[
                   styles.barFill,
@@ -253,19 +333,14 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
           <Text style={styles.angleValue}>{Math.round(metrics.angle)}°</Text>
         </View>
       )}
-
     </View>
   );
 }
-
-// ─── Styles 
 
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
   },
-
-  // Banner
   banner: {
     position: "absolute",
     top: 12,
@@ -298,8 +373,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-
-  // Not-in-frame overlay
   fullOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0,0,0,0.58)",
@@ -328,8 +401,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 36,
   },
-
-  // Progress bars (calibration + angle)
   barContainer: {
     position: "absolute",
     bottom: 100,
@@ -364,8 +435,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.5)",
     zIndex: 1,
   },
-
-  // Angle bar row
   angleRow: {
     flexDirection: "row",
     alignItems: "center",
