@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import { useRouter, Redirect } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import * as Speech from "expo-speech";
 
 import ScreenContainer from "@/components/screenContainer";
 import PrimaryButton from "../../components/primaryButton";
@@ -218,6 +219,16 @@ export default function Record() {
 
       runPrecheck();
       return;
+    }
+    //here
+    if (setupCountdown === 5) {
+      Speech.stop(); 
+      Speech.speak("Get ready", { rate: 1.0, pitch: 1.0 });
+    }
+  
+    if (setupCountdown <= 4 && setupCountdown > 0) {
+      Speech.stop(); 
+      Speech.speak(setupCountdown.toString(), { rate: 1.0, pitch: 1.0 });
     }
 
     const timer = setTimeout(() => {
