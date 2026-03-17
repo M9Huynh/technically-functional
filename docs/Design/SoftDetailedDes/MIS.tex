@@ -197,8 +197,9 @@ comprehensive, multi-functional nature.
   \item Valid licenses (\texttt{validLicenses}): This is used for verification and validation purposes for a physiotherapist
   account creation.
 \end{enumerate}  
-\section*{State Variables}
-\textbf{\textit{create-patient.tsx}}
+\subsubsection{Uses}
+All the variables used in each class are listed below:\\
+\underline{\textbf{\textit{create-patient.tsx}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const router = useRouter();}] 
     Next.js router instance for programmatic navigation after form submission.
@@ -219,9 +220,8 @@ comprehensive, multi-functional nature.
     Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
 \end{description}
 
-Account creation generates a single instance of one of the following objects using variables in the table below:
-\section*{UserData Interface}
-
+Account creation generates a single instance of one of the following objects using variables in the table below:\\
+\underline{\textbf{\textit{useraccount.ts}}}
 \begin{description}
 \item[\texttt{uid: string;}] 
     Unique identifier for the user.
@@ -277,15 +277,6 @@ Account creation generates a single instance of one of the following objects usi
     \item \textbf{Note:} \texttt{physioId} and \texttt{inviteCode} are exclusive to patients; \texttt{licenseNumber} is exclusive to PTs.
 \end{itemize}
 
-\subsubsection{Uses}
-\begin{itemize}
-\item name
-\item role
-\item email
-\item password 
-\item birthday
-\item acc\_id 
-\end{itemize}
 
 \subsubsection{Syntax}
 
