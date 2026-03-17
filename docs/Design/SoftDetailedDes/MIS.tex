@@ -174,124 +174,18 @@ The following table is taken directly from the Module Guide document for this pr
 \label{TblMH}
 \end{table}
 
-\section{Variables}
-For clarity and readability, the variables used throughout the document are provided below.
-
-\begin{longtable}{|>{\raggedright\arraybackslash}p{0.22\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}p{0.38\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|}
-\caption{Variable used throughout MIS}\\
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
-\hline
-\endfirsthead
-
-\caption[]{Variable used throughout MIS (continued)} \\
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{2pt}
-\setlength{\arrayrulewidth}{1pt}
-
-name & String & Name of the user & 7.1 \\
-\hline
-role & String & Values can be PT or patient & 7.1 \\
-\hline
-email & String & Used as login ID & 7.1 \\
-\hline
-password & String & Set by user for login purposes & 7.1 \\
-\hline
-birthday & String & User's birthday for verification & 7.1 \\
-\hline
-license\_no & Int & Verification of PT & 7.1 \\
-\hline
-invite\_code & String & Given by PT to patient for registration & 7.1 \\
-\hline
-is\_valid & Boolean & Used to check validity of user (invite\_code, license\_no) & ? \\
-\hline
-acc\_id & Int & Identifier assigned to app users & ? \\
-\hline
-acc\_double & Boolean & Indicates whether an account already exists in the system & ? \\
-\hline
-date & String & Date (YYYYMMDD) & 7.1 \\
-\hline
-time & String & Time (s) & 7.2 \\
-\hline
-recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
-\hline
-recent\_report & Record & Generated report of recent\_video & TBD \\
-\hline
-recent\_video & String (JSON) & Last video recorded by patient & TBD \\
-\hline
-video & String (JSON) & A video in the user database & TBD \\
-\hline
-report & Record & Report(s) sent to Generator module for analysis OR requested by patient & TBD \\
-\hline
-ex\_instruct & String & Performance instructions of requested exercise & TBD \\
-\hline
-sets & String & Number of sets given by PT & 7.1 \\
-\hline
-repetitions & String & Repetitions of exercise per set & 7.1 \\
-\hline
-rest\_time & String & Rest time between sets & 7.1 \\
-\hline
-leg\_landmarks & Array & MediaPipe output of leg & 7.4 \\
-\hline
-processed\_frame & Image & Video frame with overlaid markers & 7.4 \\
-\hline
-PT\_comment & String & PT's comment on patient activity & 7.3 \\
-\hline
-overall\_analysis & Abstract object & the overall analysis of all patient activity & 7.4 \\ %check
-\hline
-processed\_frames\_list & List(Image object) & list of processed\_frames & 7.3 \\
-\hline
-feedback\_instructions & Abstract Object & instructions given from analysis to feedback module & 7.3 \\
-\hline
-fixed\_metrics & float & corrected metrics & 7.3 \\
-\hline
-initial/final\_\newline plane/time/height & float & initial and final measurements & 7.3 \\
-\hline
-%TODO
-ins\_ui & String & PT's comment on patient activity & TBD \\
-\hline
-unprocessed\_frames & List(Image objects) & Unprocessed frames list & TBD \\
-\hline
-rt\_metrics & List(of float) & Real-time metrics & TBD \\
-\hline
-input\_frame & Image & Input frame & TBD \\
-\hline
-exercise & String & Selected exercise & TBD \\
-\hline
-insights & String & Generated insights & TBD \\
-\hline
-all\_reports & List[report] & All reports are stored in a list & TBD \\
-\hline
-starting\_frame & Image & The last frame before recording & TBD \\
-\hline
-good\_to\_record & String & A message informing user that the system is ready to record & TBD \\
-\hline
-\end{longtable}
-
 
 \section{MIS}
 This section describes individual module specifications.\\
-\textit{Note: Some of the mathematics used are preliminary and not all-encompassing. They are defined below for feedback purposes.}
-
-
+\textit{See Appendix A for information about the variables used throughout this document.}
 \subsection{Module - Account Creation}
+This module enables the creation of an account for users. It uses a database to store any information that 
+is essential for other modules to perform their actions. A database was used for its ease of manipulation and its 
+comprehensive, multi-functional nature. 
 
-This module enables the creation of an account in the user database. 
-It uses a database to store any information that is essential for other modules to perform their
-actions. A database was used for its ease of manipulation and its comprehensive, multi-functional nature. \\
-It consists of the following tables:\\
+\noindent The database tables related to this module are:
 \begin{enumerate}
-  \item User data: this consists of information such as name, role, email, password, birthday, and license\_no/invite\_code.
+  \item User data (\texttt{users}): this consists of information such as name, role, email, password, birthday, and license\_no/invite\_code.
   \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
   \item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
 \end{enumerate}  
