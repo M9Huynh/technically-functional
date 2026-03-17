@@ -202,7 +202,7 @@ All the variables used in each class are listed below:\\
 \underline{\textbf{\textit{create-patient.tsx}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const router = useRouter();}] 
-    Next.js router instance for programmatic navigation after form submission.
+    Expo Router instance for programmatic navigation after form submission. Imported from \texttt{expo-router}.
 
 \item[\texttt{const [name, setName] = useState("");}] 
     Manages the full name input field; initializes as empty string.
@@ -220,62 +220,30 @@ All the variables used in each class are listed below:\\
     Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
 \end{description}
 
-Account creation generates a single instance of one of the following objects using variables in the table below:\\
-\underline{\textbf{\textit{useraccount.ts}}}
-\begin{description}
-\item[\texttt{uid: string;}] 
-    Unique identifier for the user.
 
-\item[\texttt{email: string;}] 
-    User's email address for authentication and communication.
+\noindent \underline{\textbf{\textit{create-physio.tsx}}}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{const router = useRouter();}] 
+    Expo Router instance for programmatic navigation after form submission. Imported from \texttt{expo-router}.
 
-\item[\texttt{name: string;}] 
-    User's full name.
+\item[\texttt{const [name, setName] = useState("");}] 
+    Manages the full name input field; initializes as empty string.
 
-\item[\texttt{role: "patient" | "physio";}] 
-    User role designation. Determines which fields are applicable:
-    \begin{itemize}
-        \item \texttt{"patient"} - Receives care from a physiotherapist
-        \item \texttt{"physio"} - Provides care as a physiotherapist
-    \end{itemize}
+\item[\texttt{const [email, setEmail] = useState("");}] 
+    Manages the email address input field; initializes as empty string.
 
-\item[\texttt{birthday?: string;}] 
-    User's date of birth. Optional field common to both roles.
+\item[\texttt{const [password, setPassword] = useState("");}] 
+    Manages the password input field; initializes as empty string.
 
-\item[\texttt{licenseNumber?: string;}] 
-    Professional license number. \textbf{Physio only:} Required for physiotherapists during verification.
+\item[\texttt{const [licenseNumber, setLicenseNumber] = useState("");}] 
+    Manages the professional license number input field; initializes as empty string. Required for physiotherapist verification.
 
-\item[\texttt{verified?: boolean;}] 
-    Account verification status. Optional flag common to both roles.
-
-\item[\texttt{physioId?: string;}] 
-    Assigned physiotherapist identifier. \textbf{Patient only:} References the physio they are seeing.
-
-\item[\texttt{inviteCode?: string;}] 
-    Registration invitation code. \textbf{Patient only:} Used during account creation.
-
-\item[\texttt{createdAt?: any;}] 
-    Account creation timestamp. Optional field for auditing.
-
-\item[\texttt{updatedAt?: any;}] 
-    Last update timestamp. Optional field for tracking modifications.
-
-\item[\texttt{deleted?: boolean;}] 
-    Soft delete flag. Optional field indicating if the account is marked for deletion.
-
-\item[\texttt{deletedAt?: any;}] 
-    Deletion timestamp. Optional field recording when soft delete occurred.
+\item[\texttt{const [loading, setLoading] = useState(false);}] 
+    Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
 \end{description}
 
-\begin{itemize}
-    \item \textbf{Patient object (\texttt{user\_acc\_patient}):} 
-        \texttt{\{uid, email, name, role: "patient", birthday?, verified?, physioId?, inviteCode?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
-    
-    \item \textbf{Physio object (\texttt{user\_acc\_physio}):}
-        \texttt{\{uid, email, name, role: "physio", birthday?, licenseNumber?, verified?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
-    
-    \item \textbf{Note:} \texttt{physioId} and \texttt{inviteCode} are exclusive to patients; \texttt{licenseNumber} is exclusive to PTs.
-\end{itemize}
+Account creation generates one object of the type described in \ref{section:user account}
+
 
 
 \subsubsection{Syntax}
@@ -563,10 +531,70 @@ NA
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - User Account}
+\subsection{Module - User Account} \label{section:user account}
 
 This module's purpose is facilitate data manipulation within the user database tables. It was created as a separate component
 to simplify implementation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%\\\\\\\\\
+Account creation generates a single instance of one of the following objects using variables in the table below.\\
+\underline{\textbf{\textit{useraccount.ts}}}
+\begin{description}
+\item[\texttt{uid: string;}] 
+    Unique identifier for the user.
+
+\item[\texttt{email: string;}] 
+    User's email address for authentication and communication.
+
+\item[\texttt{name: string;}] 
+    User's full name.
+
+\item[\texttt{role: "patient" | "physio";}] 
+    User role designation. Determines which fields are applicable:
+    \begin{itemize}
+        \item \texttt{"patient"} - Receives care from a physiotherapist
+        \item \texttt{"physio"} - Provides care as a physiotherapist
+    \end{itemize}
+
+\item[\texttt{birthday?: string;}] 
+    User's date of birth. Optional field common to both roles.
+
+\item[\texttt{licenseNumber?: string;}] 
+    Professional license number. \textbf{Physio only:} Required for physiotherapists during verification.
+
+\item[\texttt{verified?: boolean;}] 
+    Account verification status. Optional flag common to both roles.
+
+\item[\texttt{physioId?: string;}] 
+    Assigned physiotherapist identifier. \textbf{Patient only:} References the physio they are seeing.
+
+\item[\texttt{inviteCode?: string;}] 
+    Registration invitation code. \textbf{Patient only:} Used during account creation.
+
+\item[\texttt{createdAt?: any;}] 
+    Account creation timestamp. Optional field for auditing.
+
+\item[\texttt{updatedAt?: any;}] 
+    Last update timestamp. Optional field for tracking modifications.
+
+\item[\texttt{deleted?: boolean;}] 
+    Soft delete flag. Optional field indicating if the account is marked for deletion.
+
+\item[\texttt{deletedAt?: any;}] 
+    Deletion timestamp. Optional field recording when soft delete occurred.
+\end{description}
+
+\begin{itemize}
+    \item \textbf{Patient object (\texttt{user\_acc\_patient}):} 
+        \texttt{\{uid, email, name, role: "patient", birthday?, verified?, physioId?, inviteCode?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
+    
+    \item \textbf{Physio object (\texttt{user\_acc\_physio}):}
+        \texttt{\{uid, email, name, role: "physio", birthday?, licenseNumber?, verified?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
+    
+    \item \textbf{Note:} \texttt{physioId} and \texttt{inviteCode} are exclusive to patients; \texttt{licenseNumber} is exclusive to PTs.
+\end{itemize}
+%%%%%%%%%%%%\\\\\\\\\\\\\\\\
+
 
 \subsubsection{Uses}
 \begin{itemize}
