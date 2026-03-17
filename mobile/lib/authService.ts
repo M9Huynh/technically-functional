@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  fetchSignInMethodsForEmail
 } from "firebase/auth";
 import {
   doc,
@@ -11,6 +12,17 @@ import {
   updateDoc,
   serverTimestamp,
 } from "firebase/firestore";
+
+export const checkEmailExists = async (email: string): Promise<boolean> => {
+  try {
+    // Using Firebase Auth to check if email is already registered
+    const methods = await fetchSignInMethodsForEmail(auth, email.trim());
+    return methods.length > 0;
+  } catch (error) {
+    console.error("Error checking email:", error);
+    return false; // Assume email doesn't exist on error to allow registration attempt
+  }
+}
 
 // Change this if your PT license format is different.
 // Example: ON-123456
