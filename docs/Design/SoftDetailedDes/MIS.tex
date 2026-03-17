@@ -13,6 +13,7 @@
 \usepackage{xfrac}
 \usepackage{tabularx}
 \usepackage{float}
+\usepackage{enumitem}
 
 \usepackage{booktabs}
 \usepackage{multirow}
@@ -43,6 +44,10 @@ urlcolor=cyan          % color of external links
 \definecolor{lightlavender}{RGB}{245,245,255} % Light lavender
 \definecolor{green}{RGB}{0,80,50}
 \definecolor{lightgreen}{RGB}{0,200,120}
+
+
+  %\item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
+  %\item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
 
 
 \newcolumntype{L}{>{\raggedright\arraybackslash}p{0.2\textwidth}}
@@ -185,14 +190,91 @@ comprehensive, multi-functional nature.
 
 \noindent The database tables related to this module are:
 \begin{enumerate}
-  \item User data (\texttt{users}): this consists of information such as name, role, email, password, birthday, and license\_no/invite\_code.
-  \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
-  \item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
+  \item User data (\texttt{users}): This table consists of information such as name,
+  role, email, birthday, license\_no/invite\_code, createdAt and physioID.
+  \item Invite\_codes (\texttt{inviteCodes}): This table contains all valid invite codes that will be used to validate 
+  patient account creation on the application.
+  \item Valid licenses (\texttt{validLicenses}): This is used for verification and validation purposes for a physiotherapist
+  account creation.
 \end{enumerate}  
-The module results in the creation of a single instance of one of the objects listed below:\\
+\section*{State Variables}
+\textbf{\textit{create-patient.tsx}}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{const router = useRouter();}] 
+    Next.js router instance for programmatic navigation after form submission.
+
+\item[\texttt{const [name, setName] = useState("");}] 
+    Manages the full name input field; initializes as empty string.
+
+\item[\texttt{const [email, setEmail] = useState("");}] 
+    Manages the email address input field; initializes as empty string.
+
+\item[\texttt{const [password, setPassword] = useState("");}] 
+    Manages the password input field; initializes as empty string.
+
+\item[\texttt{const [inviteCode, setInviteCode] = useState("");}] 
+    Manages the invitation code input field; initializes as empty string.
+
+\item[\texttt{const [loading, setLoading] = useState(false);}] 
+    Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
+\end{description}
+
+Account creation generates a single instance of one of the following objects using variables in the table below:
+\section*{UserData Interface}
+
+\begin{description}
+\item[\texttt{uid: string;}] 
+    Unique identifier for the user.
+
+\item[\texttt{email: string;}] 
+    User's email address for authentication and communication.
+
+\item[\texttt{name: string;}] 
+    User's full name.
+
+\item[\texttt{role: "patient" | "physio";}] 
+    User role designation. Determines which fields are applicable:
+    \begin{itemize}
+        \item \texttt{"patient"} - Receives care from a physiotherapist
+        \item \texttt{"physio"} - Provides care as a physiotherapist
+    \end{itemize}
+
+\item[\texttt{birthday?: string;}] 
+    User's date of birth. Optional field common to both roles.
+
+\item[\texttt{licenseNumber?: string;}] 
+    Professional license number. \textbf{Physio only:} Required for physiotherapists during verification.
+
+\item[\texttt{verified?: boolean;}] 
+    Account verification status. Optional flag common to both roles.
+
+\item[\texttt{physioId?: string;}] 
+    Assigned physiotherapist identifier. \textbf{Patient only:} References the physio they are seeing.
+
+\item[\texttt{inviteCode?: string;}] 
+    Registration invitation code. \textbf{Patient only:} Used during account creation.
+
+\item[\texttt{createdAt?: any;}] 
+    Account creation timestamp. Optional field for auditing.
+
+\item[\texttt{updatedAt?: any;}] 
+    Last update timestamp. Optional field for tracking modifications.
+
+\item[\texttt{deleted?: boolean;}] 
+    Soft delete flag. Optional field indicating if the account is marked for deletion.
+
+\item[\texttt{deletedAt?: any;}] 
+    Deletion timestamp. Optional field recording when soft delete occurred.
+\end{description}
+
 \begin{itemize}
-  \item user\_acc\_p: [\\acc\_id: int,\\ name: String,\\ role: P,\\ birthday: int,\\ email: String,\\ password: String\\]
-  \item user\_acc\_pt: [\\acc\_id: int,\\ name: String,\\ role: PT,\\ birthday: int,\\ email: String,\\ password: String\\]
+    \item \textbf{Patient object (\texttt{user\_acc\_patient}):} 
+        \texttt{\{uid, email, name, role: "patient", birthday?, verified?, physioId?, inviteCode?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
+    
+    \item \textbf{Physio object (\texttt{user\_acc\_physio}):}
+        \texttt{\{uid, email, name, role: "physio", birthday?, licenseNumber?, verified?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
+    
+    \item \textbf{Note:} \texttt{physioId} and \texttt{inviteCode} are exclusive to patients; \texttt{licenseNumber} is exclusive to PTs.
 \end{itemize}
 
 \subsubsection{Uses}
