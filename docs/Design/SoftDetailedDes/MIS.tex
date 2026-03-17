@@ -74,6 +74,7 @@ urlcolor=cyan          % color of external links
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Nov 6 - Nov 14 & 1.0 & Preliminary Draft\\
+March 17 - ? & 2.0 & Starting final draft\\
 \bottomrule
 \end{tabularx}
 \\
@@ -93,14 +94,14 @@ See SRS Documentation at \href{https://github.com/M9Huynh/technically-functional
 
 \section{Introduction}
 
-The following document details the Module Interface Specifications for
-a Physiotherapy Companion app. The application is designed to identify users using computer vision for their prescribed physiotherapy exercise. In addition, an analysis will be performed on the user's movement and, after completion, the app will provide metrics to the user on their performance. 
-
-This tool utilizes OpenCV and MediaPipe for image recognition and then performs measurements on the number of repetitions, range of motion and perceived exertion. 
+%new
+The following document details the Module Interface Specifications for the PhysioCompanion app. The application is 
+designed to identify users performing prescribed exercises and provide feedback on their form. This tool uses computer
+vision, specifically OpenCV and MediaPipe, to analyze user video recording and perform analysis. 
 
 Complementary documents include the \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}{System Requirement Specifications}
 and \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide}.  The full documentation and implementation can be
-found at \url{https://github.com/M9Huynh/technically-functional}.  
+found at \href{https://github.com/M9Huynh/technically-functional}{here}.  
 
 \section{Notation}
 
@@ -133,15 +134,16 @@ list & $L$ & an array of non-fixed length \\
 \end{center}
 
 \noindent
-The specification of \progname \ uses some derived data types: sequences, strings, and
+This specification of PhysioCompanion uses some derived data types: sequences, strings, and
 tuples. Sequences are lists filled with elements of the same data type. Strings
 are sequences of characters. Tuples contain a list of values, potentially of
-different types. In addition, \progname \ uses functions, which
+different types. In addition, PhysioCompanion uses functions, which
 are defined by the data types of their inputs and outputs. Local functions are
 described by giving their type signature followed by their specification.
 
 \section{Module Decomposition}
 
+%Cieran check plssss
 The following table is taken directly from the Module Guide document for this project.
 
 \begin{table}[h!]
@@ -1781,8 +1783,109 @@ TODO \\
 
 \newpage
 
-\section{Appendix} \label{Appendix}
-NA \\
+\section{Appendix A}
+For clarity and readability, the variables used throughout the document are provided below.
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{0.22\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}p{0.38\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|}
+\caption{Variable used throughout MIS}\\
+\hline
+\rowcolor{headerblue}
+\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
+\hline
+\endfirsthead
+
+\caption[]{Variable used throughout MIS (continued)} \\
+\hline
+\rowcolor{headerblue}
+\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
+\hline
+\endhead
+
+\hline
+\endfoot
+
+\rowcolors{2}{tableblue}{white}
+\setlength{\extrarowheight}{2pt}
+\setlength{\arrayrulewidth}{1pt}
+
+name & String & Name of the user & 7.1 \\
+\hline
+role & String & Values can be PT or patient & 7.1 \\
+\hline
+email & String & Used as login ID & 7.1 \\
+\hline
+password & String & Set by user for login purposes & 7.1 \\
+\hline
+birthday & String & User's birthday for verification & 7.1 \\
+\hline
+license\_no & Int & Verification of PT & 7.1 \\
+\hline
+invite\_code & String & Given by PT to patient for registration & 7.1 \\
+\hline
+is\_valid & Boolean & Used to check validity of user (invite\_code, license\_no) & ? \\
+\hline
+acc\_id & Int & Identifier assigned to app users & ? \\
+\hline
+acc\_double & Boolean & Indicates whether an account already exists in the system & ? \\
+\hline
+date & String & Date (YYYYMMDD) & 7.1 \\
+\hline
+time & String & Time (s) & 7.2 \\
+\hline
+recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
+\hline
+recent\_report & Record & Generated report of recent\_video & TBD \\
+\hline
+recent\_video & String (JSON) & Last video recorded by patient & TBD \\
+\hline
+video & String (JSON) & A video in the user database & TBD \\
+\hline
+report & Record & Report(s) sent to Generator module for analysis OR requested by patient & TBD \\
+\hline
+ex\_instruct & String & Performance instructions of requested exercise & TBD \\
+\hline
+sets & String & Number of sets given by PT & 7.1 \\
+\hline
+repetitions & String & Repetitions of exercise per set & 7.1 \\
+\hline
+rest\_time & String & Rest time between sets & 7.1 \\
+\hline
+leg\_landmarks & Array & MediaPipe output of leg & 7.4 \\
+\hline
+processed\_frame & Image & Video frame with overlaid markers & 7.4 \\
+\hline
+PT\_comment & String & PT's comment on patient activity & 7.3 \\
+\hline
+overall\_analysis & Abstract object & the overall analysis of all patient activity & 7.4 \\ %check
+\hline
+processed\_frames\_list & List(Image object) & list of processed\_frames & 7.3 \\
+\hline
+feedback\_instructions & Abstract Object & instructions given from analysis to feedback module & 7.3 \\
+\hline
+fixed\_metrics & float & corrected metrics & 7.3 \\
+\hline
+initial/final\_\newline plane/time/height & float & initial and final measurements & 7.3 \\
+\hline
+%TODO
+ins\_ui & String & PT's comment on patient activity & TBD \\
+\hline
+unprocessed\_frames & List(Image objects) & Unprocessed frames list & TBD \\
+\hline
+rt\_metrics & List(of float) & Real-time metrics & TBD \\
+\hline
+input\_frame & Image & Input frame & TBD \\
+\hline
+exercise & String & Selected exercise & TBD \\
+\hline
+insights & String & Generated insights & TBD \\
+\hline
+all\_reports & List[report] & All reports are stored in a list & TBD \\
+\hline
+starting\_frame & Image & The last frame before recording & TBD \\
+\hline
+good\_to\_record & String & A message informing user that the system is ready to record & TBD \\
+\hline
+\end{longtable}
 
 \section*{Appendix --- Reflection}
 
