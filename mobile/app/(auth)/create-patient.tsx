@@ -13,6 +13,16 @@ export default function CreatePatient() {
   const [password, setPassword] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [loading, setLoading] = useState(false);
+  ////// new
+  const validatePassword = (password: string) => {
+    if (password.length < 6) {
+      return "Password must be at least 6 characters long";
+    }
+    if (!/\d/.test(password)) {
+      return "Password must contain at least one number";
+    }
+    return null;
+  };
 
   return (
     <ScreenContainer>
@@ -40,6 +50,7 @@ export default function CreatePatient() {
         placeholder="********"
         secureTextEntry
       />
+      <Text style={styles.passwordHint}>Password must be at least 6 characters and contain at least one number</Text>
 
       <Text style={styles.label}>Invite Code (required)</Text>
       <TextInput
@@ -55,6 +66,12 @@ export default function CreatePatient() {
        onPress={async () => {
         try {
           setLoading(true);
+          const passwordError = validatePassword(password);
+          if (passwordError) {
+            Alert.alert("Invalid Password", passwordError);
+            setLoading(false);
+            return;
+          }
           // email exists check
           const emailExists = await checkEmailExists(email);
           
@@ -95,4 +112,5 @@ const styles = StyleSheet.create({
   title: { fontSize: 20, fontWeight: "800", textAlign: "center", marginBottom: 8 },
   label: { fontSize: 14, color: "#333", marginTop: 12, marginBottom: 6 },
   input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 12, padding: 12 },
+  passwordHint: { fontSize: 12, color: "#666", marginTop: 4, marginBottom: 8, fontStyle: "italic" }
 });
