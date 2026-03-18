@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, TextInput, Alert } from "react-native";
-import { registerPatient } from "../../lib/authService";
+import { registerPatient, checkEmailExists } from "../../lib/authService";
 import { useRouter } from "expo-router";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
@@ -55,6 +55,17 @@ export default function CreatePatient() {
        onPress={async () => {
         try {
           setLoading(true);
+          // email exists check
+          const emailExists = await checkEmailExists(email);
+          
+          if (emailExists) {
+            Alert.alert(
+              "Account Already Exists", 
+              "An account with this email already exists. Please use a different email or try logging in."
+            );
+            setLoading(false);
+            return;
+          }
           await registerPatient({
             name,
             email,
