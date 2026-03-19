@@ -13,6 +13,7 @@ export default function CreatePatient() {
   const [password, setPassword] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const [birthday, setBirthday] = useState(""); ///added new - Maham
   ////// new
   const validatePassword = (password: string) => {
     if (password.length < 6) {
@@ -20,6 +21,15 @@ export default function CreatePatient() {
     }
     if (!/\d/.test(password)) {
       return "Password must contain at least one number";
+    }
+    return null;
+  };
+
+  const validateBirthday = (birthday: string) => {
+    //YYYY-MM-DD format 
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(birthday)) {
+      return "Please enter birthday in YYYY-MM-DD format";
     }
     return null;
   };
@@ -51,6 +61,15 @@ export default function CreatePatient() {
         secureTextEntry
       />
       <Text style={styles.passwordHint}>Password must be at least 6 characters and contain at least one number</Text>
+      
+      <Text style={styles.label}>Birthday (YYYY-MM-DD)</Text>
+      <TextInput
+        style={styles.input}
+        value={birthday}
+        onChangeText={setBirthday}
+        placeholder="2020-01-01"
+        autoCapitalize="none"
+      />
 
       <Text style={styles.label}>Invite Code (required)</Text>
       <TextInput
@@ -72,6 +91,13 @@ export default function CreatePatient() {
             setLoading(false);
             return;
           }
+          // Validate birthday
+          const birthdayError = validateBirthday(birthday);
+          if (birthdayError) {
+            Alert.alert("Invalid Birthday", birthdayError);
+            setLoading(false);
+            return;
+          }
           // email exists check
           const emailExists = await checkEmailExists(email);
           
@@ -88,6 +114,7 @@ export default function CreatePatient() {
             email,
             password,
             inviteCode,
+            birthday, // Add birthday to the registration call
           });
           router.replace("/(tabs)");
         } catch (e: any) {

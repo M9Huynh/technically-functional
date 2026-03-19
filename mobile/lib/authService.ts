@@ -89,6 +89,7 @@ export async function registerPatient(params: {
   email: string;
   password: string;
   inviteCode: string;
+  birthday: string;
 }) {
   const code = params.inviteCode.trim().toUpperCase();
 
