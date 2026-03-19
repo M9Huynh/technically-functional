@@ -221,23 +221,69 @@ export default function Record() {
       return;
     }
     //here
-    if (setupCountdown === 5) {
-      Speech.stop(); 
-      Speech.speak("Get ready", { rate: 1.0, pitch: 1.0 });
+if (setupCountdown === 6) {
+  Speech.stop();
+  Speech.speak("Get ready", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(5);
+      }, 500);
     }
-  
-    if (setupCountdown <= 4 && setupCountdown > 0) {
-      Speech.stop(); 
-      Speech.speak(setupCountdown.toString(), { rate: 1.0, pitch: 1.0 });
+  });
+} else if (setupCountdown === 5) {
+  Speech.speak("5", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(4);
+      }, 500);
     }
-
-    const timer = setTimeout(() => {
-      setSetupCountdown((prev) => prev - 1);
-      setStatusMessage(`Get into position... ${setupCountdown}`);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [sessionState, setupCountdown]);
+  });
+} else if (setupCountdown === 4) {
+  Speech.speak("4", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(3);
+      }, 500);
+    }
+  });
+} else if (setupCountdown === 3) {
+  Speech.speak("3", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(2);
+      }, 500);
+    }
+  });
+} else if (setupCountdown === 2) {
+  Speech.speak("2", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(1);
+      }, 500);
+    }
+  });
+} else if (setupCountdown === 1) {
+  Speech.speak("1", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(0);
+      }, 500);
+    }
+  });
+}
+}, [sessionState, setupCountdown]);
 
   const validateEnvironmentBeforeStart = async () => {
     if (!cameraRef.current || !cameraReady) {
@@ -309,7 +355,7 @@ export default function Record() {
     setShowPostRecordingActions(false);
 
     setIsPreparing(true);
-    setSetupCountdown(5);
+    setSetupCountdown(6);
     setSessionState("setupCountdown");
     setStatusMessage("Get into position... 5");
   };

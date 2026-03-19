@@ -49,6 +49,7 @@ export async function registerPhysio(params: {
   email: string;
   password: string;
   licenseNumber: string;
+  birthday: string;
 }) {
   const lic = params.licenseNumber.trim().toUpperCase();
 
@@ -89,6 +90,7 @@ export async function registerPatient(params: {
   email: string;
   password: string;
   inviteCode: string;
+  birthday: string;
 }) {
   const code = params.inviteCode.trim().toUpperCase();
 
