@@ -293,3 +293,6 @@ serviceAccountKey.json
 firebase.enc
 src/sample/left.mp4
 src/sample/right.mp4
+
+# Node.js dependencies
+node_modules/
