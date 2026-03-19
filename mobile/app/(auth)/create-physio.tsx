@@ -109,3 +109,6 @@ const styles = StyleSheet.create({
   input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 12, padding: 12 },
   passwordHint: { fontSize: 12, color: "#666", marginTop: 4, marginBottom: 8, fontStyle: "italic" }
 });
+
+
+//password hint is the text displayed below 'must be six chars long'
