@@ -5,6 +5,9 @@ import { registerPhysio, checkEmailExists } from "../../lib/authService";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
+import React from "react";
+import { styles } from "./create-patient";
+import React from "react";
 
 export default function CreatePhysio() {
   const router = useRouter();
@@ -13,6 +16,7 @@ export default function CreatePhysio() {
   const [password, setPassword] = useState("");
   const [licenseNumber, setLicenseNumber] = useState("");
   const [loading, setLoading] = useState(false);
+  const [birthday, setBirthday] = useState(""); ///added new - Maham
   ////// new
   const validatePassword = (password: string) => {
     if (password.length < 6) {
@@ -24,6 +28,14 @@ export default function CreatePhysio() {
     return null;
   };
 
+    const validateBirthday = (birthday: string) => {
+    //YYYY-MM-DD format 
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(birthday)) {
+      return "Please enter birthday in YYYY-MM-DD format";
+    }
+    return null;
+  };
 
   return (
     <ScreenContainer>
@@ -52,6 +64,16 @@ export default function CreatePhysio() {
         secureTextEntry
       />
       <Text style={styles.passwordHint}>Password must be at least 6 characters and contain at least one number</Text>
+      <Text style={styles.label}>Birthday (YYYY-MM-DD)</Text>
+      <TextInput
+        style={styles.input}
+        value={birthday}
+        onChangeText={setBirthday}
+        placeholder="2020-01-01"
+        autoCapitalize="none"
+      />
+
+      
 
       <Text style={styles.label}>License Number (required)</Text>
       <TextInput
@@ -67,6 +89,21 @@ export default function CreatePhysio() {
         onPress={async () => {
           try {
             setLoading(true);
+            const passwordError = validatePassword(password);
+            if (passwordError) {
+              Alert.alert("Invalid Password", passwordError);
+              setLoading(false);
+              return;
+          }
+          // Validate birthday
+            const birthdayError = validateBirthday(birthday);
+            if (birthdayError) {
+              Alert.alert("Invalid Birthday", birthdayError);
+              setLoading(false);
+              return;
+          }
+
+
             // email exists check
             const emailExists = await checkEmailExists(email);
             
@@ -83,6 +120,7 @@ export default function CreatePhysio() {
               email,
               password,
               licenseNumber,
+              birthday,
             });
             router.replace("/(tabs)");
           } catch (e: any) {
