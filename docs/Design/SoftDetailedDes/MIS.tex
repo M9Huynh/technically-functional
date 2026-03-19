@@ -333,22 +333,22 @@ None \\
 \multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onPress:} Async handler for account creation form submission. Performs validation, checks email existence, and registers patient.} \\
 \hline
 \rowcolor{white}
-\begin{tabular}{@{}p{3.8cm}@{}}
-- Validates password via \texttt{validatePassword}, 
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.8cm}@{}}
+- Validates password via \texttt{validatePassword} \\
 - Validates birthday via \texttt{validateBirthday} \\
 - Checks email via \texttt{checkEmailExists} \\
 - Calls \texttt{registerPatient} with: \\
   \quad \texttt{name, email, password,} \\
   \quad \texttt{inviteCode, birthday}
 \end{tabular} &
-\begin{tabular}{@{}p{3.8cm}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.8cm}@{}}
 - Returns error message if invalid \\
 - Returns null if valid \\
 - \texttt{Promise<void>} on success \\
 - Navigates to \texttt{"/(tabs)"} using \\
   \texttt{router.replace()}
 \end{tabular} &
-\begin{tabular}{@{}p{3.8cm}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.8cm}@{}}
 \texttt{Error} - Catches errors and \\
 displays Alert with: \\
 • Password validation errors \\
