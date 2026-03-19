@@ -45,6 +45,13 @@ urlcolor=cyan          % color of external links
 \definecolor{green}{RGB}{0,80,50}
 \definecolor{lightgreen}{RGB}{0,200,120}
 
+%new colours for final draft
+\definecolor{headerblue}{RGB}{41, 128, 185}
+\definecolor{lightblue}{RGB}{232, 244, 250}
+\definecolor{softgray}{RGB}{245, 245, 245}
+\definecolor{rowstripe}{RGB}{249, 249, 249}
+
+
 
   %\item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
   %\item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
@@ -269,37 +276,156 @@ Account creation generates one object of the type described in \ref{section:user
     \end{itemize}
 \end{description}
 
-\textbf{\textit{\underline{authService.ts}:}} \\
-NA
+\noindent \textbf{\textit{\underline{authService.ts}:}} \\
+NA \\
 
 
-\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
+\noindent \textbf{Exported Access Programs} 
 
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\noindent \underline{\textbf{\textit{create-patient.tsx}}}
+
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
 \hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
 \hline
+\endfirsthead
 
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
 
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if an account already exists in the user database.} \\
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+% validatePassword
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{validatePassword:} Validates password meets security requirements (minimum 6 characters, at least one number).} \\
 \hline
 \rowcolor{white}
-acc\_exists & \makecell[lt]{\textit{name}\\\textit{birthday}} & \textit{acc\_double} & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
+\texttt{password: string} - User's password input &
+\texttt{string | null} - Returns error message if invalid, null if valid &
+None \\
 \hline
 
-\end{tabularx}
-\caption{Exported Access Routines}
-\label{tab:user_routines_1}
-\end{table}
+% validateBirthday
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{validateBirthday:} Validates birthday matches required YYYY-MM-DD format.} \\
+\hline
+\rowcolor{white}
+\texttt{birthday: string} - User's birthday input &
+\texttt{string | null} - Returns error message if invalid, null if valid &
+None \\
+\hline
 
-\newpage
+% onPress handler
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onPress:} Async handler for account creation form submission. Performs validation, checks email existence, and registers patient.} \\
+\hline
+\rowcolor{white}
+\begin{tabular}{@{}p{3.8cm}@{}}
+- Validates password via \texttt{validatePassword}, 
+- Validates birthday via \texttt{validateBirthday} \\
+- Checks email via \texttt{checkEmailExists} \\
+- Calls \texttt{registerPatient} with: \\
+  \quad \texttt{name, email, password,} \\
+  \quad \texttt{inviteCode, birthday}
+\end{tabular} &
+\begin{tabular}{@{}p{3.8cm}@{}}
+- Returns error message if invalid \\
+- Returns null if valid \\
+- \texttt{Promise<void>} on success \\
+- Navigates to \texttt{"/(tabs)"} using \\
+  \texttt{router.replace()}
+\end{tabular} &
+\begin{tabular}{@{}p{3.8cm}@{}}
+\texttt{Error} - Catches errors and \\
+displays Alert with: \\
+• Password validation errors \\
+• Birthday validation errors \\
+• Email already exists \\
+• Registration failures
+\end{tabular} \\
+\hline
+
+\end{longtable}
+
+\underline{\textbf{\textit{authService.ts}}} \\
+
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+% checkEmailExists
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{checkEmailExists:} Checks if an email is already registered in Firebase Authentication.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string} - User's email address &
+\texttt{Promise<boolean>} - Returns true if email already exists, false otherwise &
+\texttt{Error} - Throws error if there is an error checking email. \\
+\hline
+
+% licenseFormatValid
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{licenseFormatValid:} Validates physiotherapist license number format (XX-123456).} \\
+\hline
+\rowcolor{white}
+\texttt{licenseNumber: string} - PT license number &
+\texttt{boolean} - Returns true if format is valid, false otherwise &
+None \\
+\hline
+
+% registerPhysio
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPhysio:} Registers a new physiotherapist account after license validation.} \\
+\hline
+\rowcolor{white}
+\texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
+\texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
+\texttt{Error} - Invalid license format, license not verified, Firebase Auth error \\
+\hline
+
+% registerPatient
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPatient:} Registers a new patient account using an invite code.} \\
+\hline
+\rowcolor{white}
+\texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
+\texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
+\texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
+\hline
+
+\end{longtable}
 
 \noindent \textbf{Exported Access Programs (definitions)} \\
 \textit{E(x)}: 'acc\_exists(x)' \\
