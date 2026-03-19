@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import { useRouter, Redirect } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import * as Speech from "expo-speech";
 
 import ScreenContainer from "@/components/screenContainer";
 import PrimaryButton from "../../components/primaryButton";
@@ -98,6 +99,7 @@ export default function Record() {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
           quality: 0.12,
+          shutterSound: false, 
           skipProcessing: true,
           exif: false,
         });
@@ -179,6 +181,7 @@ export default function Record() {
 
     if (setupCountdown <= 0) {
       const runPrecheck = async () => {
+        await resetBackend();
         setSessionState("precheck");
         setStatusMessage("Checking lighting and camera position...");
 
@@ -217,14 +220,70 @@ export default function Record() {
       runPrecheck();
       return;
     }
-
-    const timer = setTimeout(() => {
-      setSetupCountdown((prev) => prev - 1);
-      setStatusMessage(`Get into position... ${setupCountdown}`);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [sessionState, setupCountdown]);
+    //here
+if (setupCountdown === 6) {
+  Speech.stop();
+  Speech.speak("Get ready", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(5);
+      }, 500);
+    }
+  });
+} else if (setupCountdown === 5) {
+  Speech.speak("5", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(4);
+      }, 500);
+    }
+  });
+} else if (setupCountdown === 4) {
+  Speech.speak("4", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(3);
+      }, 500);
+    }
+  });
+} else if (setupCountdown === 3) {
+  Speech.speak("3", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(2);
+      }, 500);
+    }
+  });
+} else if (setupCountdown === 2) {
+  Speech.speak("2", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(1);
+      }, 500);
+    }
+  });
+} else if (setupCountdown === 1) {
+  Speech.speak("1", { 
+    rate: 1.0, 
+    pitch: 1.0,
+    onDone: () => {
+      setTimeout(() => {
+        setSetupCountdown(0);
+      }, 500);
+    }
+  });
+}
+}, [sessionState, setupCountdown]);
 
   const validateEnvironmentBeforeStart = async () => {
     if (!cameraRef.current || !cameraReady) {
@@ -242,6 +301,7 @@ export default function Record() {
       const photo = await cameraRef.current.takePictureAsync({
         base64: true,
         quality: 0.08,
+        shutterSound: false,
         skipProcessing: true,
         exif: false,
       });
@@ -287,11 +347,17 @@ export default function Record() {
       return;
     }
 
+    setMetrics(null);
+    setFinalMetrics(null);
+    setLandmarks(null);
+    setConnections([]);
+    setInsufficientData(false);
+    setShowPostRecordingActions(false);
+
     setIsPreparing(true);
-    setSetupCountdown(5);
+    setSetupCountdown(6);
     setSessionState("setupCountdown");
     setStatusMessage("Get into position... 5");
-    setShowPostRecordingActions(false);
   };
 
   const handleStopRecording = async () => {
@@ -303,7 +369,8 @@ export default function Record() {
     setShowPostRecordingActions(true);
   };
 
-  const handleRetake = () => {
+  const handleRetake = async () => {
+    setStreaming(false);
     setMetrics(null);
     setFinalMetrics(null);
     setLandmarks(null);
@@ -312,6 +379,14 @@ export default function Record() {
     setStatusMessage(null);
     setShowPostRecordingActions(false);
     setSessionState("idle");
+    setSetupCountdown(5);
+    setIsPreparing(false);
+
+    try {
+      await resetBackend();
+    } catch (e) {
+      console.log("Retake reset failed:", e);
+    }
   };
 
   const handleSaveMetrics = async () => {

@@ -18,15 +18,18 @@ os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 app = Flask(__name__)
 CORS(app)
 
+
 def b64_to_bgr_image(b64_str: str):
     img_bytes = base64.b64decode(b64_str)
     np_arr = np.frombuffer(img_bytes, np.uint8)
     frame = cv.imdecode(np_arr, cv.IMREAD_COLOR)
     return frame
 
+
 def mean_brightness(frame):
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     return float(np.mean(gray))
+
 
 def darkness_score(frame):
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -34,16 +37,13 @@ def darkness_score(frame):
     total_pixels = gray.size
     return dark_pixels / total_pixels
 
+
 def is_too_dark(frame):
     brightness = mean_brightness(frame)
     dark_ratio = darkness_score(frame)
-
-    # Stronger dark detection:
-    # either average brightness is low,
-    # or most of the frame is very dark
     too_dark = brightness < 55.0 or dark_ratio > 0.75
-
     return too_dark, brightness, dark_ratio
+
 
 def point_in_frame(pt):
     if pt is None:
@@ -53,6 +53,7 @@ def point_in_frame(pt):
     y = pt.get("y", -1)
 
     return 0 <= x <= 1 and 0 <= y <= 1
+
 
 def check_side_visibility(landmarks, side: str):
     if not landmarks or len(landmarks) < 29:
@@ -72,6 +73,7 @@ def check_side_visibility(landmarks, side: str):
 
     side_in_frame = knee_visible and nearby_visible
     return side_in_frame, knee_visible
+
 
 class PoseBackend:
     def __init__(self):
@@ -109,17 +111,21 @@ class PoseBackend:
             "current_rep_duration": 0,
             "avg_rep_duration": 0,
             "rep_state": "None",
-            "calibrating": True,
-            "cal_time_left": 10.0,
+            "cue_state": "CALIBRATING" if self.analyzer.is_calibrating else "GETTING_READY",
+            "calibrating": self.analyzer.is_calibrating,
+            "cal_time_left": 10.0 if self.analyzer.is_calibrating else 0.0,
         }
 
+
 pose_app = PoseBackend()
+
 
 @app.route("/reset", methods=["POST"])
 def reset_backend():
     with pose_app.lock:
         pose_app.reset()
     return jsonify({"ok": True})
+
 
 @app.route("/precheck_frame", methods=["POST"])
 def precheck_frame():
@@ -128,9 +134,6 @@ def precheck_frame():
         b64 = data.get("imageBase64")
         side = data.get("side", "RIGHT")
         mirrored = bool(data.get("mirrored", True))
-
-        print("PRECHECK HIT")
-        print("side:", side, "mirrored:", mirrored)
 
         if not b64:
             return jsonify({
@@ -156,12 +159,7 @@ def precheck_frame():
         if mirrored:
             frame = cv.flip(frame, 1)
 
-        # STEP 1: darkness check first
         too_dark, brightness, dark_ratio = is_too_dark(frame)
-
-        print("brightness:", brightness)
-        print("dark_ratio:", dark_ratio)
-        print("too_dark:", too_dark)
 
         if too_dark:
             return jsonify({
@@ -172,12 +170,9 @@ def precheck_frame():
                 "message": "Environment is too dark. Please move to a brighter area."
             })
 
-        # STEP 2: pose detection only if lighting is okay
         with pose_app.lock:
             res = pose_app.cam.process_pose(frame)
             landmarks = extract_landmarks(res)
-
-        print("landmarks count:", 0 if landmarks is None else len(landmarks))
 
         if not landmarks or len(landmarks) < 29:
             return jsonify({
@@ -189,7 +184,6 @@ def precheck_frame():
             })
 
         in_frame, knee_visible = check_side_visibility(landmarks, side)
-        print("in_frame:", in_frame, "knee_visible:", knee_visible)
 
         if not knee_visible:
             return jsonify({
@@ -209,7 +203,6 @@ def precheck_frame():
         })
 
     except Exception as e:
-        print("PRECHECK ERROR:", str(e))
         return jsonify({
             "ok": False,
             "tooDark": False,
@@ -218,6 +211,7 @@ def precheck_frame():
             "message": f"Precheck failed: {str(e)}"
         }), 500
 
+
 @app.route("/process_frame", methods=["POST"])
 def process_frame():
     data = request.get_json(silent=True) or {}
@@ -225,6 +219,8 @@ def process_frame():
     side = data.get("side", "RIGHT")
     mirrored = bool(data.get("mirrored", True))
     legs_only = bool(data.get("legsOnly", True))
+
+    print("PROCESS_FRAME side:", side, "mirrored:", mirrored)
 
     if not b64:
         return jsonify({
@@ -245,22 +241,58 @@ def process_frame():
 
     frame = cv.resize(frame, (640, 480))
 
-    # flip for front camera BEFORE mediapipe
     if mirrored:
         frame = cv.flip(frame, 1)
 
     with pose_app.lock:
         res = pose_app.cam.process_pose(frame)
-
         landmarks = extract_landmarks(res)
         metrics = pose_app.default_metrics()
 
-        if landmarks is not None:
-            knee_angle = knee_angle_from_result(res, side=side)
-            if knee_angle is not None:
-                pose_app.analyzer.update(knee_angle)
-                metrics = pose_app.analyzer.summary()
-                metrics["angle"] = round(float(knee_angle), 1)
+        # No landmarks at all -> tracking lost
+        if not landmarks or len(landmarks) < 29:
+            pose_app.analyzer.update(None)
+            metrics = pose_app.analyzer.summary()
+            return jsonify({
+                "landmarks": None,
+                "connections": get_pose_connections(legs_only),
+                "metrics": metrics
+            })
+
+        # Selected side must be clearly visible
+        side_in_frame, knee_visible = check_side_visibility(landmarks, side)
+        if not side_in_frame or not knee_visible:
+            pose_app.analyzer.update(None)
+            metrics = pose_app.analyzer.summary()
+            return jsonify({
+                "landmarks": landmarks,
+                "connections": get_pose_connections(legs_only),
+                "metrics": metrics
+            })
+
+        knee_angle = knee_angle_from_result(res, side=side)
+
+        if knee_angle is None or not np.isfinite(knee_angle):
+            pose_app.analyzer.update(None)
+            metrics = pose_app.analyzer.summary()
+            return jsonify({
+                "landmarks": landmarks,
+                "connections": get_pose_connections(legs_only),
+                "metrics": metrics
+            })
+
+        if knee_angle < 0 or knee_angle > 180:
+            pose_app.analyzer.update(None)
+            metrics = pose_app.analyzer.summary()
+            return jsonify({
+                "landmarks": landmarks,
+                "connections": get_pose_connections(legs_only),
+                "metrics": metrics
+            })
+
+        pose_app.analyzer.update(float(knee_angle))
+        metrics = pose_app.analyzer.summary()
+        metrics["angle"] = round(float(knee_angle), 1)
 
         return jsonify({
             "landmarks": landmarks,

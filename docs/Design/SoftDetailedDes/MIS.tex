@@ -13,6 +13,7 @@
 \usepackage{xfrac}
 \usepackage{tabularx}
 \usepackage{float}
+\usepackage{enumitem}
 
 \usepackage{booktabs}
 \usepackage{multirow}
@@ -45,6 +46,10 @@ urlcolor=cyan          % color of external links
 \definecolor{lightgreen}{RGB}{0,200,120}
 
 
+  %\item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
+  %\item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
+
+
 \newcolumntype{L}{>{\raggedright\arraybackslash}p{0.2\textwidth}}
 \newcolumntype{M}{>{\raggedright\arraybackslash}p{0.15\textwidth}}
 \newcolumntype{R}{>{\raggedright\arraybackslash}p{0.55\textwidth}}
@@ -74,6 +79,7 @@ urlcolor=cyan          % color of external links
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Nov 6 - Nov 14 & 1.0 & Preliminary Draft\\
+March 17 - ? & 2.0 & Starting final draft\\
 \bottomrule
 \end{tabularx}
 \\
@@ -93,14 +99,14 @@ See SRS Documentation at \href{https://github.com/M9Huynh/technically-functional
 
 \section{Introduction}
 
-The following document details the Module Interface Specifications for
-a Physiotherapy Companion app. The application is designed to identify users using computer vision for their prescribed physiotherapy exercise. In addition, an analysis will be performed on the user's movement and, after completion, the app will provide metrics to the user on their performance. 
-
-This tool utilizes OpenCV and MediaPipe for image recognition and then performs measurements on the number of repetitions, range of motion and perceived exertion. 
+%new
+The following document details the Module Interface Specifications for the PhysioCompanion app. The application is 
+designed to identify users performing prescribed exercises and provide feedback on their form. This tool uses computer
+vision, specifically OpenCV and MediaPipe, to analyze user video recording and perform analysis. 
 
 Complementary documents include the \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}{System Requirement Specifications}
 and \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide}.  The full documentation and implementation can be
-found at \url{https://github.com/M9Huynh/technically-functional}.  
+found at \href{https://github.com/M9Huynh/technically-functional}{here}.  
 
 \section{Notation}
 
@@ -133,15 +139,16 @@ list & $L$ & an array of non-fixed length \\
 \end{center}
 
 \noindent
-The specification of \progname \ uses some derived data types: sequences, strings, and
+This specification of PhysioCompanion uses some derived data types: sequences, strings, and
 tuples. Sequences are lists filled with elements of the same data type. Strings
 are sequences of characters. Tuples contain a list of values, potentially of
-different types. In addition, \progname \ uses functions, which
+different types. In addition, PhysioCompanion uses functions, which
 are defined by the data types of their inputs and outputs. Local functions are
 described by giving their type signature followed by their specification.
 
 \section{Module Decomposition}
 
+%Cieran check plssss
 The following table is taken directly from the Module Guide document for this project.
 
 \begin{table}[h!]
@@ -172,142 +179,62 @@ The following table is taken directly from the Module Guide document for this pr
 \label{TblMH}
 \end{table}
 
-\section{Variables}
-For clarity and readability, the variables used throughout the document are provided below.
-
-\begin{longtable}{|>{\raggedright\arraybackslash}p{0.22\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}p{0.38\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|}
-\caption{Variable used throughout MIS}\\
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
-\hline
-\endfirsthead
-
-\caption[]{Variable used throughout MIS (continued)} \\
-\hline
-\rowcolor{headerblue}
-\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
-\hline
-\endhead
-
-\hline
-\endfoot
-
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{2pt}
-\setlength{\arrayrulewidth}{1pt}
-
-name & String & Name of the user & 7.1 \\
-\hline
-role & String & Values can be PT or patient & 7.1 \\
-\hline
-email & String & Used as login ID & 7.1 \\
-\hline
-password & String & Set by user for login purposes & 7.1 \\
-\hline
-birthday & String & User's birthday for verification & 7.1 \\
-\hline
-license\_no & Int & Verification of PT & 7.1 \\
-\hline
-invite\_code & String & Given by PT to patient for registration & 7.1 \\
-\hline
-is\_valid & Boolean & Used to check validity of user (invite\_code, license\_no) & ? \\
-\hline
-acc\_id & Int & Identifier assigned to app users & ? \\
-\hline
-acc\_double & Boolean & Indicates whether an account already exists in the system & ? \\
-\hline
-date & String & Date (YYYYMMDD) & 7.1 \\
-\hline
-time & String & Time (s) & 7.2 \\
-\hline
-recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
-\hline
-recent\_report & Record & Generated report of recent\_video & TBD \\
-\hline
-recent\_video & String (JSON) & Last video recorded by patient & TBD \\
-\hline
-video & String (JSON) & A video in the user database & TBD \\
-\hline
-report & Record & Report(s) sent to Generator module for analysis OR requested by patient & TBD \\
-\hline
-ex\_instruct & String & Performance instructions of requested exercise & TBD \\
-\hline
-sets & String & Number of sets given by PT & 7.1 \\
-\hline
-repetitions & String & Repetitions of exercise per set & 7.1 \\
-\hline
-rest\_time & String & Rest time between sets & 7.1 \\
-\hline
-leg\_landmarks & Array & MediaPipe output of leg & 7.4 \\
-\hline
-processed\_frame & Image & Video frame with overlaid markers & 7.4 \\
-\hline
-PT\_comment & String & PT's comment on patient activity & 7.3 \\
-\hline
-overall\_analysis & Abstract object & the overall analysis of all patient activity & 7.4 \\ %check
-\hline
-processed\_frames\_list & List(Image object) & list of processed\_frames & 7.3 \\
-\hline
-feedback\_instructions & Abstract Object & instructions given from analysis to feedback module & 7.3 \\
-\hline
-fixed\_metrics & float & corrected metrics & 7.3 \\
-\hline
-initial/final\_\newline plane/time/height & float & initial and final measurements & 7.3 \\
-\hline
-%TODO
-ins\_ui & String & PT's comment on patient activity & TBD \\
-\hline
-unprocessed\_frames & List(Image objects) & Unprocessed frames list & TBD \\
-\hline
-rt\_metrics & List(of float) & Real-time metrics & TBD \\
-\hline
-input\_frame & Image & Input frame & TBD \\
-\hline
-exercise & String & Selected exercise & TBD \\
-\hline
-insights & String & Generated insights & TBD \\
-\hline
-all\_reports & List[report] & All reports are stored in a list & TBD \\
-\hline
-starting\_frame & Image & The last frame before recording & TBD \\
-\hline
-good\_to\_record & String & A message informing user that the system is ready to record & TBD \\
-\hline
-\end{longtable}
-
 
 \section{MIS}
 This section describes individual module specifications.\\
-\textit{Note: Some of the mathematics used are preliminary and not all-encompassing. They are defined below for feedback purposes.}
-
-
+\textit{See Appendix A for information about the variables used throughout this document.}
 \subsection{Module - Account Creation}
+This module enables the creation of an account for users. It uses a database to store any information that 
+is essential for other modules to perform their actions. A database was used for its ease of manipulation and its 
+comprehensive, multi-functional nature. 
 
-This module enables the creation of an account in the user database. 
-It uses a database to store any information that is essential for other modules to perform their
-actions. A database was used for its ease of manipulation and its comprehensive, multi-functional nature. \\
-It consists of the following tables:\\
+\noindent The database tables related to this module are:
 \begin{enumerate}
-  \item User data: this consists of information such as name, role, email, password, birthday, and license\_no/invite\_code.
-  \item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
-  \item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
+  \item User data (\texttt{users}): This table consists of information such as name,
+  role, email, birthday, license\_no/invite\_code, createdAt and physioID.
+  \item Invite\_codes (\texttt{inviteCodes}): This table contains all valid invite codes that will be used to validate 
+  patient account creation on the application.
+  \item Valid licenses (\texttt{validLicenses}): This is used for verification and validation purposes for a physiotherapist
+  account creation.
 \end{enumerate}  
-The module results in the creation of a single instance of one of the objects listed below:\\
-\begin{itemize}
-  \item user\_acc\_p: [\\acc\_id: int,\\ name: String,\\ role: P,\\ birthday: int,\\ email: String,\\ password: String\\]
-  \item user\_acc\_pt: [\\acc\_id: int,\\ name: String,\\ role: PT,\\ birthday: int,\\ email: String,\\ password: String\\]
-\end{itemize}
-
 \subsubsection{Uses}
-\begin{itemize}
-\item name
-\item role
-\item email
-\item password 
-\item birthday
-\item acc\_id 
-\end{itemize}
+All the variables used in each class are listed below:\\
+\textbf{\textit{create-patient.tsx, create-physio.tsx}}\\
+\textit{Variables used in both files are listed below.}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{const router = useRouter();}] 
+    Expo Router instance for navigation after form submission. Imported from \texttt{expo-router}.
+
+\item[\texttt{const [name, setName] = useState("");}] 
+    Manages the full name input field; initializes as empty string.
+
+\item[\texttt{const [email, setEmail] = useState("");}] 
+    Manages the email address input field; initializes as empty string.
+
+\item[\texttt{const [password, setPassword] = useState("");}] 
+    Manages the password input field; initializes as empty string.
+
+\item[\texttt{const [loading, setLoading] = useState(false);}] 
+    Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
+
+\item[\texttt{const [birthday, setBirthday] = useState("");}] 
+    Manages the birthday input field; initializes as empty string.
+
+  \end{description}
+\textbf{Unique variable in \textit{\underline{create-patient.tsx}}:}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{const [inviteCode, setInviteCode] = useState("");}] 
+    Manages the invitation code input field; initializes as empty string.
+\end{description}
+\textbf{Unique variable in \textit{\underline{create-physio.tsx}}:}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{const [licenseNumber, setLicenseNumber] = useState("");}] 
+    Manages the physiotherapist license number input field; initializes as empty string. Required for physiotherapist verification.
+\end{description}
+
+Account creation generates one object of the type described in \ref{section:user account}
+
+
 
 \subsubsection{Syntax}
 
@@ -594,10 +521,70 @@ NA
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - User Account}
+\subsection{Module - User Account} \label{section:user account}
 
 This module's purpose is facilitate data manipulation within the user database tables. It was created as a separate component
 to simplify implementation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%\\\\\\\\\
+Account creation generates a single instance of one of the following objects using variables in the table below.\\
+\underline{\textbf{\textit{useraccount.ts}}}
+\begin{description}
+\item[\texttt{uid: string;}] 
+    Unique identifier for the user.
+
+\item[\texttt{email: string;}] 
+    User's email address for authentication and communication.
+
+\item[\texttt{name: string;}] 
+    User's full name.
+
+\item[\texttt{role: "patient" | "physio";}] 
+    User role designation. Determines which fields are applicable:
+    \begin{itemize}
+        \item \texttt{"patient"} - Receives care from a physiotherapist
+        \item \texttt{"physio"} - Provides care as a physiotherapist
+    \end{itemize}
+
+\item[\texttt{birthday?: string;}] 
+    User's date of birth. Optional field common to both roles.
+
+\item[\texttt{licenseNumber?: string;}] 
+    Professional license number. \textbf{Physio only:} Required for physiotherapists during verification.
+
+\item[\texttt{verified?: boolean;}] 
+    Account verification status. Optional flag common to both roles.
+
+\item[\texttt{physioId?: string;}] 
+    Assigned physiotherapist identifier. \textbf{Patient only:} References the physio they are seeing.
+
+\item[\texttt{inviteCode?: string;}] 
+    Registration invitation code. \textbf{Patient only:} Used during account creation.
+
+\item[\texttt{createdAt?: any;}] 
+    Account creation timestamp. Optional field for auditing.
+
+\item[\texttt{updatedAt?: any;}] 
+    Last update timestamp. Optional field for tracking modifications.
+
+\item[\texttt{deleted?: boolean;}] 
+    Soft delete flag. Optional field indicating if the account is marked for deletion.
+
+\item[\texttt{deletedAt?: any;}] 
+    Deletion timestamp. Optional field recording when soft delete occurred.
+\end{description}
+
+\begin{itemize}
+    \item \textbf{Patient object (\texttt{user\_acc\_patient}):} 
+        \texttt{\{uid, email, name, role: "patient", birthday?, verified?, physioId?, inviteCode?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
+    
+    \item \textbf{Physio object (\texttt{user\_acc\_physio}):}
+        \texttt{\{uid, email, name, role: "physio", birthday?, licenseNumber?, verified?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
+    
+    \item \textbf{Note:} \texttt{physioId} and \texttt{inviteCode} are exclusive to patients; \texttt{licenseNumber} is exclusive to PTs.
+\end{itemize}
+%%%%%%%%%%%%\\\\\\\\\\\\\\\\
+
 
 \subsubsection{Uses}
 \begin{itemize}
@@ -1781,8 +1768,109 @@ TODO \\
 
 \newpage
 
-\section{Appendix} \label{Appendix}
-NA \\
+\section{Appendix A}
+For clarity and readability, the variables used throughout the document are provided below.
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{0.22\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}p{0.38\textwidth}|>{\raggedright\arraybackslash}p{0.20\textwidth}|}
+\caption{Variable used throughout MIS}\\
+\hline
+\rowcolor{headerblue}
+\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
+\hline
+\endfirsthead
+
+\caption[]{Variable used throughout MIS (continued)} \\
+\hline
+\rowcolor{headerblue}
+\color{white}\textbf{Name} & \color{white}\textbf{Type} & \color{white}\textbf{Description} & \color{white}\textbf{Used in sections} \\
+\hline
+\endhead
+
+\hline
+\endfoot
+
+\rowcolors{2}{tableblue}{white}
+\setlength{\extrarowheight}{2pt}
+\setlength{\arrayrulewidth}{1pt}
+
+name & String & Name of the user & 7.1 \\
+\hline
+role & String & Values can be PT or patient & 7.1 \\
+\hline
+email & String & Used as login ID & 7.1 \\
+\hline
+password & String & Set by user for login purposes & 7.1 \\
+\hline
+birthday & String & User's birthday for verification & 7.1 \\
+\hline
+license\_no & Int & Verification of PT & 7.1 \\
+\hline
+invite\_code & String & Given by PT to patient for registration & 7.1 \\
+\hline
+is\_valid & Boolean & Used to check validity of user (invite\_code, license\_no) & ? \\
+\hline
+acc\_id & Int & Identifier assigned to app users & ? \\
+\hline
+acc\_double & Boolean & Indicates whether an account already exists in the system & ? \\
+\hline
+date & String & Date (YYYYMMDD) & 7.1 \\
+\hline
+time & String & Time (s) & 7.2 \\
+\hline
+recent\_analysis & ADT & Most recently generated analysis & 7.1 \\
+\hline
+recent\_report & Record & Generated report of recent\_video & TBD \\
+\hline
+recent\_video & String (JSON) & Last video recorded by patient & TBD \\
+\hline
+video & String (JSON) & A video in the user database & TBD \\
+\hline
+report & Record & Report(s) sent to Generator module for analysis OR requested by patient & TBD \\
+\hline
+ex\_instruct & String & Performance instructions of requested exercise & TBD \\
+\hline
+sets & String & Number of sets given by PT & 7.1 \\
+\hline
+repetitions & String & Repetitions of exercise per set & 7.1 \\
+\hline
+rest\_time & String & Rest time between sets & 7.1 \\
+\hline
+leg\_landmarks & Array & MediaPipe output of leg & 7.4 \\
+\hline
+processed\_frame & Image & Video frame with overlaid markers & 7.4 \\
+\hline
+PT\_comment & String & PT's comment on patient activity & 7.3 \\
+\hline
+overall\_analysis & Abstract object & the overall analysis of all patient activity & 7.4 \\ %check
+\hline
+processed\_frames\_list & List(Image object) & list of processed\_frames & 7.3 \\
+\hline
+feedback\_instructions & Abstract Object & instructions given from analysis to feedback module & 7.3 \\
+\hline
+fixed\_metrics & float & corrected metrics & 7.3 \\
+\hline
+initial/final\_\newline plane/time/height & float & initial and final measurements & 7.3 \\
+\hline
+%TODO
+ins\_ui & String & PT's comment on patient activity & TBD \\
+\hline
+unprocessed\_frames & List(Image objects) & Unprocessed frames list & TBD \\
+\hline
+rt\_metrics & List(of float) & Real-time metrics & TBD \\
+\hline
+input\_frame & Image & Input frame & TBD \\
+\hline
+exercise & String & Selected exercise & TBD \\
+\hline
+insights & String & Generated insights & TBD \\
+\hline
+all\_reports & List[report] & All reports are stored in a list & TBD \\
+\hline
+starting\_frame & Image & The last frame before recording & TBD \\
+\hline
+good\_to\_record & String & A message informing user that the system is ready to record & TBD \\
+\hline
+\end{longtable}
 
 \section*{Appendix --- Reflection}
 

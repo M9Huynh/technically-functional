@@ -180,12 +180,12 @@ export default function Home() {
       <Pressable
         style={styles.bigBtn}
         onPress={() => {
-          if (role === "patient") router.push("/(tabs)/record");
+          if (role === "patient") router.push("/(tabs)/exercises");
           else router.push("/(tabs)/profile");
         }}
       >
         <Text style={styles.bigBtnText}>
-          {role === "patient" ? "Record Exercise" : "Edit Patient"}
+          {role === "patient" ? "View Assigned Exercises" : "Edit Patient"}
         </Text>
       </Pressable>
       {role === "physio" && invite && (
