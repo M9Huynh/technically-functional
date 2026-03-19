@@ -199,7 +199,8 @@ comprehensive, multi-functional nature.
 \end{enumerate}  
 \subsubsection{Uses}
 All the variables used in each class are listed below:\\
-\underline{\textbf{\textit{create-patient.tsx}}}
+\textbf{\textit{create-patient.tsx, create-physio.tsx}}\\
+\textit{Variables used in both files are listed below.}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const router = useRouter();}] 
     Expo Router instance for navigation after form submission. Imported from \texttt{expo-router}.
@@ -213,33 +214,22 @@ All the variables used in each class are listed below:\\
 \item[\texttt{const [password, setPassword] = useState("");}] 
     Manages the password input field; initializes as empty string.
 
+\item[\texttt{const [loading, setLoading] = useState(false);}] 
+    Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
+
+\item[\texttt{const [birthday, setBirthday] = useState("");}] 
+    Manages the birthday input field; initializes as empty string.
+
+  \end{description}
+\textbf{Unique variable in \textit{\underline{create-patient.tsx}}:}
+\begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const [inviteCode, setInviteCode] = useState("");}] 
     Manages the invitation code input field; initializes as empty string.
-
-\item[\texttt{const [loading, setLoading] = useState(false);}] 
-    Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
 \end{description}
-
-
-\noindent \underline{\textbf{\textit{create-physio.tsx}}}
+\textbf{Unique variable in \textit{\underline{create-physio.tsx}}:}
 \begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const router = useRouter();}] 
-    Expo Router instance for navigation after form submission. Imported from \texttt{expo-router}.
-
-\item[\texttt{const [name, setName] = useState("");}] 
-    Manages the full name input field; initializes as empty string.
-
-\item[\texttt{const [email, setEmail] = useState("");}] 
-    Manages the email address input field; initializes as empty string.
-
-\item[\texttt{const [password, setPassword] = useState("");}] 
-    Manages the password input field; initializes as empty string.
-
 \item[\texttt{const [licenseNumber, setLicenseNumber] = useState("");}] 
-    Manages the professional license number input field; initializes as empty string. Required for physiotherapist verification.
-
-\item[\texttt{const [loading, setLoading] = useState(false);}] 
-    Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
+    Manages the physiotherapist license number input field; initializes as empty string. Required for physiotherapist verification.
 \end{description}
 
 Account creation generates one object of the type described in \ref{section:user account}

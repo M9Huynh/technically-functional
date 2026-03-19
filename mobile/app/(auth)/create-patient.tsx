@@ -114,7 +114,7 @@ export default function CreatePatient() {
             email,
             password,
             inviteCode,
-            birthday, // Add birthday to the registration call
+            birthday, 
           });
           router.replace("/(tabs)");
         } catch (e: any) {
@@ -135,7 +135,7 @@ export default function CreatePatient() {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   title: { fontSize: 20, fontWeight: "800", textAlign: "center", marginBottom: 8 },
   label: { fontSize: 14, color: "#333", marginTop: 12, marginBottom: 6 },
   input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 12, padding: 12 },
