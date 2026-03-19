@@ -198,9 +198,10 @@ comprehensive, multi-functional nature.
   account creation.
 \end{enumerate}  
 \subsubsection{Uses}
-All the variables used in each class are listed below:\\
-\textbf{\textit{create-patient.tsx, create-physio.tsx}}\\
-\textit{Variables used in both files are listed below.}
+All the variables used in each class related to account creation are described below.\\
+\textbf{\textit{/technically-functional/mobile/app/(auth)/\underline{create-physio.tsx}, \\
+/technically-functional/mobile/app/(auth)/\underline{create-patient.tsx}}}\\
+\textit{Variables used in both of the above files are listed below.}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const router = useRouter();}] 
     Expo Router instance for navigation after form submission. Imported from \texttt{expo-router}.
@@ -218,19 +219,36 @@ All the variables used in each class are listed below:\\
     Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
 
 \item[\texttt{const [birthday, setBirthday] = useState("");}] 
-    Manages the birthday input field; initializes as empty string.
+    Manages the birthday input field; initializes as empty string; valid format is YYYY-MM-DD.
 
   \end{description}
 \textbf{Unique variable in \textit{\underline{create-patient.tsx}}:}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const [inviteCode, setInviteCode] = useState("");}] 
-    Manages the invitation code input field; initializes as empty string.
+    Manages the invitation code input field; initializes as empty string; valid format is 6 capital alphanumeric characters.
 \end{description}
 \textbf{Unique variable in \textit{\underline{create-physio.tsx}}:}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const [licenseNumber, setLicenseNumber] = useState("");}] 
-    Manages the physiotherapist license number input field; initializes as empty string. Required for physiotherapist verification.
+    Manages the physiotherapist license number input field; initializes as empty string; Required for physiotherapist verification;
+    valid format is XX-123456.
 \end{description}
+
+\noindent \textbf{\textit{/technically-functional/mobile/lib/\underline{authService.ts}}}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{export const checkEmailExists}] 
+    Async function constant that checks if an email is already registered in Firebase Authentication.
+
+\item[\texttt{export const licenseFormatValid}] 
+    Function constant that validates physiotherapist license number format (XX-123456).
+
+\item[\texttt{export const registerPhysio}] 
+    Async function constant that registers a new physiotherapist account.
+
+\item[\texttt{export const registerPatient}] 
+    Async function constant that registers a new patient account.
+\end{description}
+
 
 Account creation generates one object of the type described in \ref{section:user account}
 
@@ -239,17 +257,21 @@ Account creation generates one object of the type described in \ref{section:user
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}\\
-\begin{itemize}
-\item email
-\item password
-\item name
-\item birthday \textsuperscript{2}
-\item acc\_double
-\item acc\_id
-\end{itemize}
+\textbf{\textit{\underline{create-physio.tsx}, \underline{create-patient.tsx}:}}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{export const styles = StyleSheet.create(\{ ... \});}] 
+    Style object containing component styling:
+    \begin{itemize}
+        \item \texttt{title}: Main heading style (fontSize 20, fontWeight 800, textAlign center, marginBottom 8)
+        \item \texttt{label}: Input label style (fontSize 14, color \#333, marginTop 12, marginBottom 6)
+        \item \texttt{input}: Text input field style (borderWidth 1, borderColor \#ddd, borderRadius 12, padding 12)
+        \item \texttt{passwordHint}: Helper text style (fontSize 12, color \#666, marginTop 4, marginBottom 8, fontStyle italic)
+    \end{itemize}
+\end{description}
 
-\noindent\textsuperscript{2} \textit{'Birthday' is an exported constant for distinguishing two users that may have the same name. This will be integral
-in a 'get\_userdb\_info' function.} \\
+\textbf{\textit{\underline{authService.ts}:}} \\
+NA
+
 
 \noindent \textbf{Exported Access Programs}
 \begin{table}[h]
