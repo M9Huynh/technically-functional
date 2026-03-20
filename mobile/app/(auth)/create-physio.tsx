@@ -5,9 +5,6 @@ import { registerPhysio, checkEmailExists } from "../../lib/authService";
 import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
-import React from "react";
-import { styles } from "./create-patient";
-import React from "react";
 
 export default function CreatePhysio() {
   const router = useRouter();
@@ -25,7 +22,7 @@ export default function CreatePhysio() {
     if (!/\d/.test(password)) {
       return "Password must contain at least one number";
     }
-    return null;
+    return null;  
   };
 
     const validateBirthday = (birthday: string) => {
