@@ -31,13 +31,35 @@ export function licenseFormatValid(licenseNumber: string) {
 }
 
 export async function login(email: string, password: string) {
-  const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
-  const uid = cred.user.uid;
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
+    const uid = cred.user.uid;
 
-  const userSnap = await getDoc(doc(db, "users", uid));
-  if (!userSnap.exists()) throw new Error("User profile missing in Firestore.");
+    const userSnap = await getDoc(doc(db, "users", uid));
+    if (!userSnap.exists()) throw new Error("User profile missing in Firestore.");
 
-  return { uid, ...(userSnap.data() as any) };
+    return { uid, ...(userSnap.data() as any) };
+  } catch (error: any) {
+    // Handle specific Firebase auth errors
+    if (error.code === 'auth/invalid-credential' || 
+        error.code === 'auth/wrong-password' || 
+        error.code === 'auth/user-not-found') {
+      throw new Error('Invalid email or password. Please try again.');
+    }
+    if (error.code === 'auth/too-many-requests') {
+      throw new Error('Too many failed login attempts. Please try again later.');
+    }
+    if (error.code === 'auth/user-disabled') {
+      throw new Error('This account has been disabled. Please contact support.');
+    }
+    if (error.code === 'auth/network-request-failed') {
+      throw new Error('Network error. Please check your internet connection.');
+    }
+    
+    // For any other errors, throw a generic message
+    console.error('Login error:', error);
+    throw new Error('Login failed. Please try again.');
+  }
 }
 
 export async function logout() {
