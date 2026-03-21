@@ -6,6 +6,7 @@ import ScreenContainer from "../../components/screenContainer";
 import AppLogo from "../../components/appLogo";
 import PrimaryButton from "../../components/primaryButton";
 import { setUserRole } from "../../lib/roleStore";
+import { useLoginAttempts } from "../../hooks/use-login-attempts"; // Add this import
 
 type Role = "patient" | "physio";
 
@@ -16,6 +17,8 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  const { isLocked, registerFailedAttempt, resetAttempts, remainingAttempts } = useLoginAttempts();
 
   const helperText = role === "physio" ? "Physiotherapist login" : "Patient login";
   const createRoute = role === "physio" ? "/(auth)/create-physio" : "/(auth)/create-patient";
@@ -26,6 +29,12 @@ export default function Login() {
 
       <Text style={styles.sub}>{helperText}</Text>
 
+      {isLocked && (
+        <Text>
+          Too many failed attempts. Please wait 10 seconds.
+        </Text>
+      )}
+
       <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
@@ -34,6 +43,7 @@ export default function Login() {
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
+        editable={!isLocked}
       />
 
       <Text style={styles.label}>Password</Text>
@@ -43,18 +53,26 @@ export default function Login() {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        editable={!isLocked}
       />
 
       <PrimaryButton
-        label="Login"
+        label={isLocked ? "Locked" : "Login"}
         onPress={async () => {
+          if (isLocked) {
+            Alert.alert("Too Many Attempts", "Please wait 10 seconds before trying again.");
+            return;
+          }
+
           try {
             // persist role so tabs/home can use it
             await setUserRole(role);
 
             await login(email, password);
+            resetAttempts();
             router.replace("/(tabs)");
           } catch (e: any) {
+            registerFailedAttempt();
             Alert.alert("Login Failed", e?.message ?? "Unknown error");
           }
         }}
@@ -89,7 +107,7 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   sub: { textAlign: "center", color: "#666", marginBottom: 10, fontSize: 16 },
-  label: { fontSize: 14, color: "#333", marginTop: 12, marginBottom: 6 },
+  label: { fontSize: 14, color: "#333", marginTop: 12, marginBottom: 6 }, // Keep only ONE label
   input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 12, padding: 12 },
   divider: { height: 1, backgroundColor: "#eee", marginVertical: 20 },
   sectionTitle: { fontSize: 18, fontWeight: "800", marginBottom: 6 },
