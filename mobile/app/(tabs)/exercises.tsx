@@ -205,9 +205,9 @@ export default function ExercisesTab() {
     } else {
       return (
         <ScrollView contentContainerStyle={styles.container}>
-          <Text style={styles.pageTitle}>Exercises (physio view)</Text>
+          <Text style={styles.pageTitle}>Exercises</Text>
           <Text style={styles.pageSub}>
-            Select which exercises are available and modify instructions as
+            Select which exercises are available for the selected patient and modify instructions as
             needed.
           </Text>
           <View style={styles.sectionBox}>
@@ -282,7 +282,8 @@ export default function ExercisesTab() {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.pageTitle}>Exercises</Text>
         <Text style={styles.pageSub}>
-          Your available exercises are shown below.
+          Your available exercises are shown below. {"\n"}
+          Select an exercise to view more details.
         </Text>
         <View style={styles.sectionBox}>
           {userExercises.map((ex) => (
@@ -309,7 +310,7 @@ export default function ExercisesTab() {
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#fff", padding: 18, paddingTop: 60 },
+  container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
   pageTitle: {
     fontSize: 28,
     fontWeight: "800",
@@ -322,7 +323,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 18,
   },
-
   sectionTitle: {
     fontSize: 18,
     fontWeight: "800",
@@ -330,9 +330,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sectionBox: { gap: 10 },
-
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#dddddd",
     borderWidth: 1,
     borderColor: "#eee",
     borderRadius: 16,
@@ -355,8 +354,10 @@ const styles = StyleSheet.create({
   physioRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 8,
+    padding: 8,
     gap: 8,
+    backgroundColor: "#dddddd",
+    borderRadius: 10,
   },
   checkbox: {
     fontSize: 18,

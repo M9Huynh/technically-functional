@@ -20,6 +20,8 @@ export type Exercise = {
   demoText?: string; // for now we’ll show demo as text
   enabled: boolean; // only single leg raises should be enabled for now
   tags?: string[];
+  sets?: number;
+  reps?: number;
 };
 
 /* export const RECOMMENDED_EXERCISES: Exercise[] = [

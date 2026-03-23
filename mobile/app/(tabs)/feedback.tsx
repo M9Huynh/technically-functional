@@ -70,13 +70,14 @@ export default function Feedback() {
     );
   } else {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+        <Text style={styles.pageSub}>Please select an Activity to view more details and leave/view feedback.</Text>
 
         {activities.map((activity, index) => (
           <Pressable
             key={index}
-            style={styles.card}
+            style={[styles.card]}
             onPress={() => {
               setSelectedActivity(activity);
               setVisible(true);
@@ -196,6 +197,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
   },
+  pageSub: {
+    marginTop: 6,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 18,
+  },
   chart: { borderRadius: 20, marginBottom: 20, overflow: "hidden" },
   text: { color: "#666", fontSize: 16, marginBottom: 10, textAlign: "center" },
   leftText: {
@@ -217,7 +224,7 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 14,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#dddddd",
     padding: 5,
     marginBottom: 15,
   },

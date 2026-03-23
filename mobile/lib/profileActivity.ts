@@ -146,8 +146,8 @@ export async function repsChartData(
       value: reps,
     };
   });
-  console.log("Reps chart data:", last7Days.reverse());
-  return last7Days.reverse();
+  //console.log("Reps chart data:", last7Days.reverse());
+  return last7Days;
 }
 
 export async function exerciseChartData(
@@ -159,14 +159,14 @@ export async function exerciseChartData(
     const dateStr = format(date, "yyyy-MM-dd");
     const acts = activities.filter((a) => a.date_performed === dateStr).length;
     return {
-      label: new Date(dateStr).toLocaleDateString(undefined, {
+      label: new Date(dateStr).toLocaleDateString("en-CA", {
         weekday: "short",
       }),
       value: acts,
     };
   });
-  console.log("Exercise chart data:", last7Days.reverse());
-  return last7Days.reverse();
+  //console.log("Exercise chart data:", last7Days.reverse());
+  return last7Days;
 }
 
 export async function getComments(actid: string): Promise<CommentData[]> {
