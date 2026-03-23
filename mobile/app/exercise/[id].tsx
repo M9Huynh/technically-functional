@@ -56,7 +56,7 @@ export default function ExerciseDetail() {
       {!!currentExercise?.subtitle && <Text style={styles.subtitle}>{currentExercise.subtitle}</Text>}
 
       {/* VIDEO (only for exercise_demo_vid for now) */}
-      {id === "BiwnYLGyBbsctvDr3BaL" && (
+      {videoSource !== null && (
         <View style={styles.videoWrap}>
           <VideoView
             style={styles.video}
@@ -81,6 +81,11 @@ export default function ExerciseDetail() {
         <Text style={styles.descText}>{currentExercise?.description}</Text>
       </View>
 
+      {/* Sets and Reps Text */}
+      <View style={styles.setRepContainer}>
+        <View style={styles.setRepBox}><Text>Sets: {currentExercise?.sets}</Text></View>
+        <View style={styles.setRepBox}><Text>Reps: {currentExercise?.reps}</Text></View>
+      </View>
       {/* Record button */}
       <Pressable style={styles.primaryBtn} onPress={goToRecord}>
         <Text style={styles.primaryBtnText}>Record</Text>
@@ -127,6 +132,17 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
     padding: 14,
     marginTop: 14,
+  },
+  setRepContainer: {
+    marginVertical: 14,
+    flexDirection: "row",
+    gap: 14,
+  },
+  setRepBox: {
+    borderRadius: 16,
+    width: "48%",
+    backgroundColor: "#fff",
+    padding: 14,
   },
   sectionTitle: { fontWeight: "900", marginBottom: 8 },
   descText: { color: "#444", lineHeight: 20 },

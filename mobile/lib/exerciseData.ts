@@ -20,8 +20,8 @@ export type Exercise = {
   demoText?: string; // for now we’ll show demo as text
   enabled: boolean; // only single leg raises should be enabled for now
   tags?: string[];
-  sets?: number;
-  reps?: number;
+  sets: string;
+  reps: string;
 };
 
 /* export const RECOMMENDED_EXERCISES: Exercise[] = [
@@ -203,6 +203,8 @@ export async function updateUserExercise(
   uid: string,
   exerciseTitle: string,
   exerciseDescription: string,
+  exerciseSets: string = "",
+  exerciseReps: string = "",
 ): Promise<void> {
   const exerciseCol = collection(db, "userExercises");
   const q = query(
@@ -222,12 +224,31 @@ export async function updateUserExercise(
       return;
     }
     const docRef = querySnapshot.docs[0].ref;
-    await updateDoc(docRef, {
-      title: exerciseTitle,
-      description: exerciseDescription,
-      //enabled: exercise.enabled,
-      //tags: exercise.tags || [],
-    });
+    if (exerciseSets === "" && exerciseReps === "") {
+      await updateDoc(docRef, {
+        title: exerciseTitle,
+        description: exerciseDescription,
+      });
+    } else if (exerciseSets === "") {
+      await updateDoc(docRef, {
+        title: exerciseTitle,
+        description: exerciseDescription,
+        reps: exerciseReps,
+      });
+    } else if (exerciseReps === "") {
+      await updateDoc(docRef, {
+        title: exerciseTitle,
+        description: exerciseDescription,
+        sets: exerciseSets,
+      });
+    } else {
+      await updateDoc(docRef, {
+        title: exerciseTitle,
+        description: exerciseDescription,
+        sets: exerciseSets,
+        reps: exerciseReps,
+      });
+    }
   } catch (error) {
     console.error(
       "Error updating exercise",

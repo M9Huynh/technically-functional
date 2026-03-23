@@ -183,7 +183,7 @@ function ActivityModalContent({
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#fff", padding: 18, paddingTop: 60 },
+  container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",

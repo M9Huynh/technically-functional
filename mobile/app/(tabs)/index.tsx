@@ -170,7 +170,7 @@ export default function Home() {
               : "Patient Activity History"}
           </Text>
           {role === "physio" && selectedPatient === null ? <Text style={styles.pageSub}>Please select a patient to view their Activity history.</Text> : ""}
-          {activities.length === 0 ? role === "patient" ? <Text style={styles.pageSub}>No Activities found, please record an Activity to see it listed here.</Text> : <Text style={styles.pageSub}>No Activities found for selected patient.</Text> : ""}
+          {activities.length === 0 ? role === "patient" ? <Text style={styles.pageSub}>No Activities found, please record an Activity to see it listed here.</Text> : selectedPatient !== null ? <Text style={styles.pageSub}>No Activities found for selected patient.</Text> : "" : ""}
           {activities.map((activity, index) => (
             <View key={index} style={styles.historyItem}>
               <Text>📅 {activity.date_performed || "N/A"}</Text>
