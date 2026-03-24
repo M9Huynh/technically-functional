@@ -162,12 +162,15 @@ export default function Home() {
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={true}
           contentContainerStyle={{ paddingBottom: 8 }}
+          persistentScrollbar={true}
         >
           <Text style={styles.cardTitle}>
             {role === "patient"
-              ? "Activity History"
+              ? "Your Activity History"
               : "Patient Activity History"}
           </Text>
+          {role === "physio" && selectedPatient === null ? <Text style={styles.pageSub}>Please select a patient to view their Activity history.</Text> : ""}
+          {activities.length === 0 ? role === "patient" ? <Text style={styles.pageSub}>No Activities found, please record an Activity to see it listed here.</Text> : selectedPatient !== null ? <Text style={styles.pageSub}>No Activities found for selected patient.</Text> : "" : ""}
           {activities.map((activity, index) => (
             <View key={index} style={styles.historyItem}>
               <Text>📅 {activity.date_performed || "N/A"}</Text>
@@ -188,6 +191,8 @@ export default function Home() {
           {role === "patient" ? "View Assigned Exercises" : "Edit Patient"}
         </Text>
       </Pressable>
+      {role === "patient" ? 
+      <Text style={styles.pageSub}>Find more information on your past Activities in the Feedback tab.</Text> : ""}
       {role === "physio" && invite && (
         <View style={styles.inviteContainer}>
           <Text style={styles.invite}>Invite Code: {invite}</Text>
@@ -224,8 +229,8 @@ const styles = StyleSheet.create({
   },
   logoutText: { fontSize: 12, fontWeight: "700", color: "#333" },
   row: { flexDirection: "row", gap: 12, marginTop: 18 },
-  stat_card: { width: "30%", borderRadius: 14, backgroundColor: "#f4f4f4", padding: 5 },
-  ex_card: { flex: 1, borderRadius: 14, backgroundColor: "#f4f4f4", padding: 5, maxHeight: 325 },
+  stat_card: { width: "30%", borderRadius: 14, backgroundColor: "#dddddd", padding: 5, maxHeight: 325 },
+  ex_card: { flex: 1, borderRadius: 14, backgroundColor: "#dddddd", padding: 5, maxHeight: 500 },
   cardTitle: { fontWeight: "800", marginBottom: 10 },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   statBox: {
@@ -310,5 +315,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
     fontSize: 14,
+  },
+  pageSub: {
+    marginTop: 6,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 18,
   },
 });

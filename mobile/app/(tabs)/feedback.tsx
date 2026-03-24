@@ -70,13 +70,14 @@ export default function Feedback() {
     );
   } else {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+        <Text style={styles.pageSub}>Please select an Activity to view more details and leave/view feedback.</Text>
 
         {activities.map((activity, index) => (
           <Pressable
             key={index}
-            style={styles.card}
+            style={[styles.card]}
             onPress={() => {
               setSelectedActivity(activity);
               setVisible(true);
@@ -182,7 +183,7 @@ function ActivityModalContent({
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#fff", padding: 18, paddingTop: 60 },
+  container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -195,6 +196,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     textAlign: "center",
+  },
+  pageSub: {
+    marginTop: 6,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 18,
   },
   chart: { borderRadius: 20, marginBottom: 20, overflow: "hidden" },
   text: { color: "#666", fontSize: 16, marginBottom: 10, textAlign: "center" },
@@ -217,7 +224,7 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 14,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#dddddd",
     padding: 5,
     marginBottom: 15,
   },
