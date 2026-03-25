@@ -203,7 +203,7 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
       Speech.stop();
       Speech.speak(`Rep ${metrics.rep_count}`, { rate: 0.95, pitch: 1.0 });
 
-      setRecentRepText(`Rep ${metrics.rep_count} completed`);
+      setRecentRepText(`Rep ${metrics.rep_count}`);
 
       if (repToastTimerRef.current) {
         clearTimeout(repToastTimerRef.current);
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   },
   banner: {
     position: "absolute",
-    top: 12,
+    top: 4,
     left: 12,
     right: 12,
     flexDirection: "row",
