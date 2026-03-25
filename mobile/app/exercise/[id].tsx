@@ -27,7 +27,10 @@ export default function ExerciseDetail() {
   const goToRecord = () => {
     router.push({
       pathname: "/(tabs)/record",
-      params: { exerciseId: currentExercise?.id, exerciseName: currentExercise?.title },
+      params: {
+        exerciseId: currentExercise?.id,
+        exerciseName: currentExercise?.title,
+      },
     });
   };
 
@@ -37,7 +40,6 @@ export default function ExerciseDetail() {
       if (ex) setCurrentExercise(ex);
     })();
   }, [id]);
-
 
   if (!currentExercise) {
     return (
@@ -53,7 +55,9 @@ export default function ExerciseDetail() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{currentExercise?.title}</Text>
-      {!!currentExercise?.subtitle && <Text style={styles.subtitle}>{currentExercise.subtitle}</Text>}
+      {!!currentExercise?.subtitle && (
+        <Text style={styles.subtitle}>{currentExercise.subtitle}</Text>
+      )}
 
       {/* VIDEO (only for exercise_demo_vid for now) */}
       {videoSource !== null && (
@@ -83,8 +87,13 @@ export default function ExerciseDetail() {
 
       {/* Sets and Reps Text */}
       <View style={styles.setRepContainer}>
-        <View style={styles.setRepBox}><Text>Sets: {currentExercise?.sets}</Text></View>
-        <View style={styles.setRepBox}><Text>Reps: {currentExercise?.reps}</Text></View>
+        <View style={styles.setRepBox}>
+          <Text style={styles.patientSRText}>Sets:</Text>
+          <Text style={styles.patientSROut}>{currentExercise?.sets}</Text>
+        </View>
+        <View style={styles.setRepBox}>
+          <Text>Reps: {currentExercise?.reps}</Text>
+        </View>
       </View>
       {/* Record button */}
       <Pressable style={styles.primaryBtn} onPress={goToRecord}>
@@ -101,8 +110,18 @@ export default function ExerciseDetail() {
 
 const styles = StyleSheet.create({
   container: { padding: 18, paddingTop: 24 },
-  title: { fontSize: 26, fontWeight: "900", textAlign: "center", marginTop: 24 },
-  subtitle: { textAlign: "center", color: "#666", marginTop: 6, marginBottom: 14 },
+  title: {
+    fontSize: 26,
+    fontWeight: "900",
+    textAlign: "center",
+    marginTop: 24,
+  },
+  subtitle: {
+    textAlign: "center",
+    color: "#666",
+    marginTop: 6,
+    marginBottom: 14,
+  },
 
   videoWrap: {
     marginTop: 14,
@@ -143,6 +162,7 @@ const styles = StyleSheet.create({
     width: "48%",
     backgroundColor: "#fff",
     padding: 14,
+    flexDirection: "row",
   },
   sectionTitle: { fontWeight: "900", marginBottom: 8 },
   descText: { color: "#444", lineHeight: 20 },
@@ -166,4 +186,17 @@ const styles = StyleSheet.create({
   secondaryBtnText: { color: "#222", fontWeight: "800" },
 
   note: { marginTop: 16, textAlign: "center", color: "#999" },
+  patientSRText: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 12,
+    marginTop: "auto",
+  },
+  patientSROut: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 11,
+    marginTop: "auto",
+    alignContent: "center",
+  },
 });

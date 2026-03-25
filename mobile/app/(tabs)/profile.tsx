@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import { UserAccountService, UserData } from "../../lib/useraccount";
-import { getCurrentUser, getSelectedUser, clearSelectedUserID } from "../../lib/profileActivity";
-import { getUserRole, UserRole } from "@/lib/roleStore";
+import {
+  getCurrentUser,
+  getSelectedUser,
+  clearSelectedUserID,
+} from "../../lib/profileActivity";
+import { clearUserRole, getUserRole, UserRole } from "@/lib/roleStore";
 import { useFocusEffect } from "@react-navigation/native";
+import { logout } from "@/lib/authService";
+import { useRouter } from "expo-router";
 
 export default function Profile() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [role, setRole] = useState<UserRole>("patient");
   const [roleReady, setRoleReady] = useState<boolean>(false);
   const uas = new UserAccountService();
+  const router = useRouter();
+
   useEffect(() => {
     (async () => {
       const r = await getUserRole();
@@ -33,6 +41,18 @@ export default function Profile() {
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+
+          <Pressable
+            style={styles.logoutBtn}
+            onPress={async () => {
+              await logout();
+              await clearUserRole();
+              await clearSelectedUserID();
+              router.replace("/(auth)/role-select");
+            }}
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </Pressable>
         </View>
         <Text style={styles.text}>
           Please select a patient on the Home page to begin.
@@ -44,6 +64,18 @@ export default function Profile() {
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+
+          <Pressable
+            style={styles.logoutBtn}
+            onPress={async () => {
+              await logout();
+              await clearUserRole();
+              await clearSelectedUserID();
+              router.replace("/(auth)/role-select");
+            }}
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </Pressable>
         </View>
         <Text style={styles.title}>{userData?.name || ""}'s Profile</Text>
         <Text style={styles.subtitle}>E-Mail</Text>
@@ -131,4 +163,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
+  logoutBtn: {
+    backgroundColor: "#eee",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+  },
+  logoutText: { fontSize: 12, fontWeight: "700", color: "#333" },
 });
