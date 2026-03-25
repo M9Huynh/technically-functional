@@ -211,6 +211,9 @@ export default function ExercisesTab() {
     } else {
       return (
         <ScrollView contentContainerStyle={styles.container}>
+          <View style={styles.headerRow}>
+            <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+          </View>
           <Text style={styles.pageTitle}>Exercises</Text>
           <Text style={styles.pageSub}>
             Select which exercises are available for the selected patient and modify instructions as
@@ -306,6 +309,9 @@ export default function ExercisesTab() {
   if (userExercises.length !== 0) {
     return (
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.headerRow}>
+            <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+          </View>
         <Text style={styles.pageTitle}>Exercises</Text>
         <Text style={styles.pageSub}>
           Your available exercises are shown below. {"\n"}
@@ -325,6 +331,9 @@ export default function ExercisesTab() {
   } else {
     return (
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.headerRow}>
+            <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+          </View>
         <Text style={styles.pageTitle}>Exercises</Text>
         <Text style={styles.pageSub}>
           Your physiotherapist hasn't assigned any exercises yet. {"\n\n"}

@@ -228,9 +228,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   logoutText: { fontSize: 12, fontWeight: "700", color: "#333" },
-  row: { flexDirection: "row", gap: 12, marginTop: 18 },
+  row: { flexDirection: "row", gap: 12, marginTop: 18, maxHeight: "60%" },
   stat_card: { width: "30%", borderRadius: 14, backgroundColor: "#dddddd", padding: 5, maxHeight: 325 },
-  ex_card: { flex: 1, borderRadius: 14, backgroundColor: "#dddddd", padding: 5, maxHeight: 500 },
+  ex_card: { flex: 1, borderRadius: 14, backgroundColor: "#dddddd", padding: 5, maxHeight: "100%" },
   cardTitle: { fontWeight: "800", marginBottom: 10 },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   statBox: {

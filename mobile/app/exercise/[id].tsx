@@ -88,11 +88,12 @@ export default function ExerciseDetail() {
       {/* Sets and Reps Text */}
       <View style={styles.setRepContainer}>
         <View style={styles.setRepBox}>
-          <Text style={styles.patientSRText}>Sets:</Text>
+          <Text style={styles.patientSRText}>Sets:  </Text>
           <Text style={styles.patientSROut}>{currentExercise?.sets}</Text>
         </View>
         <View style={styles.setRepBox}>
-          <Text>Reps: {currentExercise?.reps}</Text>
+          <Text style={styles.patientSRText}>Reps:  </Text>
+          <Text style={styles.patientSROut}>{currentExercise?.reps}</Text>
         </View>
       </View>
       {/* Record button */}
@@ -163,6 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 14,
     flexDirection: "row",
+    justifyContent: "center",
   },
   sectionTitle: { fontWeight: "900", marginBottom: 8 },
   descText: { color: "#444", lineHeight: 20 },
@@ -189,13 +191,13 @@ const styles = StyleSheet.create({
   patientSRText: {
     fontSize: 16,
     fontWeight: "500",
-    marginBottom: 12,
+    marginBottom: 6,
     marginTop: "auto",
   },
   patientSROut: {
     fontSize: 18,
     fontWeight: "700",
-    marginBottom: 11,
+    marginBottom: 5,
     marginTop: "auto",
     alignContent: "center",
   },

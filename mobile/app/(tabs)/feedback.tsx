@@ -160,7 +160,7 @@ function ActivityModalContent({
         )}
       />
 
-      <View style={styles.inputBar}>
+      <KeyboardAvoidingView style={styles.inputBar}>
         <TextInput
           value={newComment}
           onChangeText={setNewComment}
@@ -177,7 +177,7 @@ function ActivityModalContent({
         >
           <Text>Send</Text>
         </Pressable>
-      </View>
+      </KeyboardAvoidingView>
     </KeyboardAvoidingView>
   );
 }
