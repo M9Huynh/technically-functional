@@ -146,8 +146,8 @@ export async function repsChartData(
       value: reps,
     };
   });
-  //console.log("Reps chart data:", last7Days.reverse());
-  return last7Days;
+  //console.log("Reps chart data:", last7Days);
+  return last7Days.reverse();
 }
 
 export async function exerciseChartData(
@@ -165,8 +165,8 @@ export async function exerciseChartData(
       value: acts,
     };
   });
-  //console.log("Exercise chart data:", last7Days.reverse());
-  return last7Days;
+  //console.log("Exercise chart data:", last7Days);
+  return last7Days.reverse();
 }
 
 export async function getComments(actid: string): Promise<CommentData[]> {
