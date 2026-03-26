@@ -161,7 +161,7 @@ export async function exerciseChartData(
     const dateStr = format(date, "yyyy-MM-dd");
     const acts = activities.filter((a) => a.date_performed === dateStr).length;
     return {
-      label: new Date(dateStr).toLocaleDateString("en-CA", {
+      label: date.toLocaleDateString("en-CA", {
         weekday: "short",
       }),
       value: acts,
