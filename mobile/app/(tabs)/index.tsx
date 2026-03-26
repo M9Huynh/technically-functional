@@ -13,6 +13,7 @@ import {
 import userAccount, { UserData } from "@/lib/useraccount";
 import { getUserActivities, getUserSummary } from "../../lib/profileActivity";
 import { UserAccountService } from "@/lib/useraccount";
+import { format } from "date-fns";
 // (removed reanimated ScrollView import)
 
 export default function Home() {
@@ -173,8 +174,10 @@ export default function Home() {
           {activities.length === 0 ? role === "patient" ? <Text style={styles.pageSub}>No Activities found, please record an Activity to see it listed here.</Text> : selectedPatient !== null ? <Text style={styles.pageSub}>No Activities found for selected patient.</Text> : "" : ""}
           {activities.map((activity, index) => (
             <View key={index} style={styles.historyItem}>
-              <Text>📅 {activity.date_performed || "N/A"}</Text>
-              <Text>{activity.exercise || "Exercise"}</Text>
+              <Text style={styles.dateText}>📅 {format(new Date(activity.date_performed), "MMM. do")}</Text>
+              <Text style={styles.dateText} numberOfLines={2} ellipsizeMode="tail">
+                {activity.exercise || "Exercise"}
+              </Text>
             </View>
           ))}
         </ScrollView>
@@ -245,11 +248,22 @@ const styles = StyleSheet.create({
   statLbl: { fontSize: 12, color: "#666" },
   historyItem: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "flex-start",
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
     marginBottom: 8,
+  },
+  dateText: {
+    flex: 1,
+    width: 80,
+    color: "#222",
+  },
+  exerciseText: {
+    flex: 1,
+    flexWrap: "wrap",
+    marginLeft: 8,
+    color: "#222",
   },
   bigBtn: {
     alignSelf: "center",

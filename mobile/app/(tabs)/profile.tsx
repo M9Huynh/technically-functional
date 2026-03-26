@@ -5,11 +5,14 @@ import {
   getCurrentUser,
   getSelectedUser,
   clearSelectedUserID,
+  getName,
+  getEmail,
 } from "../../lib/profileActivity";
 import { clearUserRole, getUserRole, UserRole } from "@/lib/roleStore";
 import { useFocusEffect } from "@react-navigation/native";
 import { logout } from "@/lib/authService";
 import { useRouter } from "expo-router";
+import { format } from "date-fns";
 
 export default function Profile() {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -17,6 +20,8 @@ export default function Profile() {
   const [roleReady, setRoleReady] = useState<boolean>(false);
   const uas = new UserAccountService();
   const router = useRouter();
+  const [physioName, setPhysioName] = useState("");
+  const [physioEmail, setPhysioEmail] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -30,10 +35,15 @@ export default function Profile() {
     React.useCallback(() => {
       if (!roleReady) return;
       (async () => {
-        if (role === "patient") setUserData(await getCurrentUser());
-        else setUserData(await getSelectedUser());
+        if (role === "patient") {
+          setUserData(await getCurrentUser());
+          if (userData?.physioId) {
+            setPhysioName(await getName(userData?.physioId));
+            setPhysioEmail(await getEmail(userData?.physioId));
+          }
+        } else setUserData(await getSelectedUser());
       })();
-    }, [role, roleReady]),
+    }, [role, roleReady, userData]),
   );
 
   if (role === "physio" && !userData) {
@@ -88,6 +98,25 @@ export default function Profile() {
             undefined,
             { weekday: "long", year: "numeric", month: "long", day: "numeric" },
           ) || "No birthday available"}
+        </Text>
+        {role === "patient" ? (
+          <View>
+            <Text style={styles.subtitle}>Linked Physiotherapist</Text>
+            <Text style={styles.text}>{physioName || "Unavailable"}</Text>
+            <Text style={styles.subtitle}>Linked Physiotherapist Email</Text>
+            <Text style={styles.text}>
+              {physioEmail || "No email available"}
+            </Text>
+          </View>
+        ) : (
+          ""
+        )}
+
+        <Text style={styles.subtitle}>Account Creation Date</Text>
+        <Text style={styles.text}>
+          {userData?.createdAt
+            ? format(userData.createdAt.toDate(), "MMMM do, yyyy")
+            : "No date available"}
         </Text>
         {role === "physio" && userData?.uid && (
           <Pressable

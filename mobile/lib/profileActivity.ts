@@ -292,6 +292,18 @@ export async function getName(uid: string): Promise<string> {
   }
 }
 
+export async function getEmail(uid: string): Promise<string> {
+  try {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    if (!userDoc.exists()) return "Unknown User";
+    const userData = userDoc.data();
+    return userData.email || "Unknown Email";
+  } catch (error) {
+    console.error("Error getting user email:", error);
+    return "Unknown Email";
+  }
+}
+
 export async function setSelectedUserID(uid: string): Promise<void> {
   if (uid.length === 0) {
     console.warn("Attempted to set an empty user ID.");
@@ -339,4 +351,20 @@ export async function updateActivityWithUserEntry( id: string, pain: number, eff
     console.error("Error updating activity with user entered fields.");
     return;
   }
+}
+
+export async function getCommentCounts(actids: string[]): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  await Promise.all(
+    actids.map(async (actid) => {
+      try {
+        const comments = await getComments(actid);
+        counts.set(actid, comments.length);
+      } catch (error) {
+        console.error("Error getting comment count for activity:", actid, error);
+        counts.set(actid, 0);
+      }
+    })
+  );
+  return counts;
 }
