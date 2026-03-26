@@ -171,6 +171,72 @@ export async function exerciseChartData(
   return last7Days.reverse();
 }
 
+export async function painChartData(
+  uid: string,
+): Promise<{ label: string; value: number }[]> {
+  const activities = await getUserActivities(uid);
+  const last7Days = Array.from({ length: 7 }).map((_, i) => {
+    const date = subDays(new Date(), i);
+    const dateStr = format(date, "yyyy-MM-dd");
+    const dayActivities = activities.filter((a) => a.date_performed === dateStr && a.pain !== undefined);
+    const avgPain = dayActivities.length > 0
+      ? dayActivities.reduce((sum, current) => sum + (current.pain || 0), 0) / dayActivities.length
+      : 0;
+    return {
+      label: date.toLocaleDateString("en-CA", {
+        weekday: "short",
+      }),
+      value: Math.round(avgPain * 10) / 10, // Round to 1 decimal place
+    };
+  });
+  //console.log("Pain chart data:", last7Days);
+  return last7Days.reverse();
+}
+
+export async function effortChartData(
+  uid: string,
+): Promise<{ label: string; value: number }[]> {
+  const activities = await getUserActivities(uid);
+  const last7Days = Array.from({ length: 7 }).map((_, i) => {
+    const date = subDays(new Date(), i);
+    const dateStr = format(date, "yyyy-MM-dd");
+    const dayActivities = activities.filter((a) => a.date_performed === dateStr && a.effort !== undefined);
+    const avgEffort = dayActivities.length > 0
+      ? dayActivities.reduce((sum, current) => sum + (current.effort || 0), 0) / dayActivities.length
+      : 0;
+    return {
+      label: date.toLocaleDateString("en-CA", {
+        weekday: "short",
+      }),
+      value: Math.round(avgEffort * 10) / 10, // Round to 1 decimal place
+    };
+  });
+  //console.log("Effort chart data:", last7Days);
+  return last7Days.reverse();
+}
+
+export async function satisfactionChartData(
+  uid: string,
+): Promise<{ label: string; value: number }[]> {
+  const activities = await getUserActivities(uid);
+  const last7Days = Array.from({ length: 7 }).map((_, i) => {
+    const date = subDays(new Date(), i);
+    const dateStr = format(date, "yyyy-MM-dd");
+    const dayActivities = activities.filter((a) => a.date_performed === dateStr && a.satisfaction !== undefined);
+    const avgSatisfaction = dayActivities.length > 0
+      ? dayActivities.reduce((sum, current) => sum + (current.satisfaction || 0), 0) / dayActivities.length
+      : 0;
+    return {
+      label: date.toLocaleDateString("en-CA", {
+        weekday: "short",
+      }),
+      value: Math.round(avgSatisfaction * 10) / 10, // Round to 1 decimal place
+    };
+  });
+  //console.log("Satisfaction chart data:", last7Days);
+  return last7Days.reverse();
+}
+
 export async function getComments(actid: string): Promise<CommentData[]> {
   const commentsRef = collection(db, "comments");
   const q = query(commentsRef, where("actid", "==", actid));

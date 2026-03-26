@@ -183,8 +183,8 @@ export default function Home() {
       <Pressable
         style={styles.bigBtn}
         onPress={() => {
-          //if (role === "patient") router.push("/(tabs)/exercises");
-          if (role === "patient") router.push({pathname:"/(tabs)/progress", params: {exerciseId: "0jjNkh5a2yQV1Fu2DAUm", showSurvey: "true"},});
+          if (role === "patient") router.push("/(tabs)/exercises");
+          //if (role === "patient") router.push({pathname:"/(tabs)/progress", params: {exerciseId: "0jjNkh5a2yQV1Fu2DAUm", showSurvey: "true"},});
           else router.push("/(tabs)/profile");
         }}
       >
