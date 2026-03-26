@@ -47,7 +47,8 @@ export default function Record() {
 
   const [streaming, setStreaming] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [showPostRecordingActions, setShowPostRecordingActions] = useState(false);
+  const [showPostRecordingActions, setShowPostRecordingActions] =
+    useState(false);
 
   const [metrics, setMetrics] = useState<any>(null);
   const [finalMetrics, setFinalMetrics] = useState<any>(null);
@@ -57,6 +58,8 @@ export default function Record() {
 
   const [landmarks, setLandmarks] = useState<Landmark[] | null>(null);
   const [connections, setConnections] = useState<Connection[]>([]);
+
+  const [savedExercise, setSavedExercise] = useState<string | null>(null);
 
   const busyRef = useRef(false);
 
@@ -81,7 +84,7 @@ export default function Record() {
       Promise.race([
         p,
         new Promise<T>((_, reject) =>
-          setTimeout(() => reject(new Error("timeout")), ms)
+          setTimeout(() => reject(new Error("timeout")), ms),
         ),
       ]);
 
@@ -99,7 +102,7 @@ export default function Record() {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
           quality: 0.12,
-          shutterSound: false, 
+          shutterSound: false,
           skipProcessing: true,
           exif: false,
         });
@@ -108,7 +111,7 @@ export default function Record() {
 
         const data: any = await withTimeout(
           processFrame(photo.base64, side, facing),
-          2000
+          2000,
         );
 
         const hasValidLandmarks =
@@ -168,7 +171,9 @@ export default function Record() {
     if (sessionState === "calibrating") {
       if (metrics.calibrating) {
         const secondsLeft = Math.ceil(metrics.cal_time_left ?? 0);
-        setStatusMessage(`Calibration in progress... ${secondsLeft}s remaining`);
+        setStatusMessage(
+          `Calibration in progress... ${secondsLeft}s remaining`,
+        );
       } else {
         setSessionState("recording");
         setStatusMessage("Exercise in progress...");
@@ -221,69 +226,69 @@ export default function Record() {
       return;
     }
     //here
-if (setupCountdown === 6) {
-  Speech.stop();
-  Speech.speak("Get ready", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(5);
-      }, 500);
+    if (setupCountdown === 6) {
+      Speech.stop();
+      Speech.speak("Get ready", {
+        rate: 1.0,
+        pitch: 1.0,
+        onDone: () => {
+          setTimeout(() => {
+            setSetupCountdown(5);
+          }, 500);
+        },
+      });
+    } else if (setupCountdown === 5) {
+      Speech.speak("5", {
+        rate: 1.0,
+        pitch: 1.0,
+        onDone: () => {
+          setTimeout(() => {
+            setSetupCountdown(4);
+          }, 500);
+        },
+      });
+    } else if (setupCountdown === 4) {
+      Speech.speak("4", {
+        rate: 1.0,
+        pitch: 1.0,
+        onDone: () => {
+          setTimeout(() => {
+            setSetupCountdown(3);
+          }, 500);
+        },
+      });
+    } else if (setupCountdown === 3) {
+      Speech.speak("3", {
+        rate: 1.0,
+        pitch: 1.0,
+        onDone: () => {
+          setTimeout(() => {
+            setSetupCountdown(2);
+          }, 500);
+        },
+      });
+    } else if (setupCountdown === 2) {
+      Speech.speak("2", {
+        rate: 1.0,
+        pitch: 1.0,
+        onDone: () => {
+          setTimeout(() => {
+            setSetupCountdown(1);
+          }, 500);
+        },
+      });
+    } else if (setupCountdown === 1) {
+      Speech.speak("1", {
+        rate: 1.0,
+        pitch: 1.0,
+        onDone: () => {
+          setTimeout(() => {
+            setSetupCountdown(0);
+          }, 500);
+        },
+      });
     }
-  });
-} else if (setupCountdown === 5) {
-  Speech.speak("5", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(4);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 4) {
-  Speech.speak("4", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(3);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 3) {
-  Speech.speak("3", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(2);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 2) {
-  Speech.speak("2", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(1);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 1) {
-  Speech.speak("1", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(0);
-      }, 500);
-    }
-  });
-}
-}, [sessionState, setupCountdown]);
+  }, [sessionState, setupCountdown]);
 
   const validateEnvironmentBeforeStart = async () => {
     if (!cameraRef.current || !cameraReady) {
@@ -334,7 +339,7 @@ if (setupCountdown === 6) {
     if (!cameraReady) {
       Alert.alert(
         "Camera Not Ready",
-        "Please wait a moment for the camera to finish loading."
+        "Please wait a moment for the camera to finish loading.",
       );
       return;
     }
@@ -342,7 +347,7 @@ if (setupCountdown === 6) {
     if (!side) {
       Alert.alert(
         "Choose a knee first",
-        "Select Right or Left knee before recording."
+        "Select Right or Left knee before recording.",
       );
       return;
     }
@@ -396,7 +401,7 @@ if (setupCountdown === 6) {
     try {
       setIsSaving(true);
 
-      await saveMetrics({
+      setSavedExercise(await saveMetrics({
         angle: m.angle || 0,
         rom_degree: m.rom_degree || 0,
         min_degree: m.min_degree || 0,
@@ -406,10 +411,16 @@ if (setupCountdown === 6) {
         avg_rep_duration: m.avg_rep_duration || 0,
         current_rep_duration: m.current_rep_duration || 0,
         timestamp: Date.now(),
-      });
+      }));
 
       Alert.alert("Saved", "Metrics saved to Firebase");
-      router.push("/progress");
+      router.push({
+        pathname: "/progress",
+        params: {
+          exerciseId: savedExercise,
+          showSurvey: "true",
+        },
+      });
     } catch (e: any) {
       Alert.alert("Error", e?.message || "Failed to save metrics");
     } finally {
@@ -526,7 +537,9 @@ if (setupCountdown === 6) {
         <View style={styles.kneeRow}>
           <View style={styles.kneeBtn}>
             <PrimaryButton
-              label={side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"}
+              label={
+                side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"
+              }
               onPress={() => setSide("LEFT")}
             />
           </View>
@@ -566,12 +579,12 @@ if (setupCountdown === 6) {
               sessionState === "setupCountdown"
                 ? `Get Ready (${setupCountdown})`
                 : sessionState === "precheck"
-                ? "Checking Setup..."
-                : sessionState === "calibrating"
-                ? "Calibrating..."
-                : streaming
-                ? "Stop Recording"
-                : "Start Recording"
+                  ? "Checking Setup..."
+                  : sessionState === "calibrating"
+                    ? "Calibrating..."
+                    : streaming
+                      ? "Stop Recording"
+                      : "Start Recording"
             }
             onPress={streaming ? handleStopRecording : handleStartRecording}
             style={{ marginTop: 10 }}

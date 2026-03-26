@@ -8,6 +8,8 @@ import {
   doc,
   setDoc,
   addDoc,
+  updateDoc,
+  DocumentReference,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { UserActivity } from "./temp";
@@ -101,8 +103,8 @@ export async function getUserSummary(uid: string): Promise<ActivitySummary> {
   const commentsSnapshot = await getDocs(q);
   const totalComments = commentsSnapshot.size;
 
-  console.log("User activities:", activities);
-  console.log("Activity dates:", dates);
+  // console.log("User activities:", activities);
+  // console.log("Activity dates:", dates);
   while (true) {
   const checkDate = new Date(today);
   checkDate.setDate(today.getDate() - streakCount);
@@ -131,10 +133,10 @@ export async function repsChartData(
   uid: string,
 ): Promise<{ label: string; value: number }[]> {
   const activities = await getUserActivities(uid);
-  console.log("Activities for reps chart:", activities);
+  //console.log("Activities for reps chart:", activities);
   const last7Days = Array.from({ length: 7 }).map((_, i) => {
     const date = subDays(new Date(), i);
-    console.log("Checking activities for date:", date);
+    //console.log("Checking activities for date:", date);
     const dateStr = format(date, "yyyy-MM-dd");
     const reps = activities
       .filter((a) => a.date_performed === dateStr)
@@ -256,4 +258,19 @@ export async function getPhysioInviteCode(
   if (snapshot.empty) return null;
   const userDoc = snapshot.docs[0];
   return userDoc.id || null;
+}
+
+export async function updateActivityWithUserEntry( id: string, pain: number, effort: number, satisfaction: number) {
+  try {
+    const actRef = doc(db, "activities", id);
+
+    await updateDoc(actRef, {
+      pain: pain,
+      effort: effort,
+      satisfaction: satisfaction,
+    });
+  } catch {
+    console.error("Error updating activity with user entered fields.");
+    return;
+  }
 }

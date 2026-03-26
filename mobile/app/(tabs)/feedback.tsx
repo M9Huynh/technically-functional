@@ -30,6 +30,7 @@ export default function Feedback() {
   const [selectedActivity, setSelectedActivity] = useState<any | null>(null);
   const [role, setRole] = useState<UserRole>("patient");
   const [selectedUser, setSelectedUser] = useState<string>("");
+
   useEffect(() => {
     (async () => {
       const r = await getUserRole();

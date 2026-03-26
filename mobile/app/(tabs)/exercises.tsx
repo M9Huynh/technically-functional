@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   modalCancel: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#bbb",
   },
   modalSave: {
     backgroundColor: "#222",
