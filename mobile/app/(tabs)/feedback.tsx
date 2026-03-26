@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
   },
   logo: { fontSize: 34, fontWeight: "800" },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "800",
     marginBottom: 10,
     justifyContent: "center",

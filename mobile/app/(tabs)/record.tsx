@@ -77,6 +77,17 @@ export default function Record() {
   }, []);
 
   useEffect(() => {
+    if (!savedExercise) return;
+    console.log("savedExercise: ", savedExercise);
+    router.push({
+        pathname: "/progress",
+        params: {
+          exerciseId: savedExercise,
+          showSurvey: "true",
+        },});
+  }, [savedExercise]);
+
+  useEffect(() => {
     if (!permission) return;
     if (!permission.granted) requestPermission();
   }, [permission, requestPermission]);
@@ -430,13 +441,14 @@ export default function Record() {
       }));
 
       Alert.alert("Saved", "Metrics saved to Firebase");
-      router.push({
-        pathname: "/progress",
-        params: {
-          exerciseId: savedExercise,
-          showSurvey: "true",
-        },
-      });
+      console.log("savedExercise: ", savedExercise);
+//      router.push({
+//        pathname: "/progress",
+//        params: {
+//          exerciseId: savedExercise,
+//          showSurvey: "true",
+//        },
+//      });
     } catch (e: any) {
       Alert.alert("Error", e?.message || "Failed to save metrics");
     } finally {
