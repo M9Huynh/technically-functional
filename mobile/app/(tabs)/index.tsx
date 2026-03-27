@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Clipboard, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { logout } from "../../lib/authService";
 import { getUserRole, clearUserRole, UserRole } from "../../lib/roleStore";
 import {
@@ -31,6 +31,7 @@ export default function Home() {
   );
   const [invite, setInvite] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const { refreshPatients } = useLocalSearchParams();
 
   useEffect(() => {
     (async () => {
@@ -54,7 +55,7 @@ export default function Home() {
       setPatients(await uas.getPatientsByPhysio(userData.uid));
       setInvite(await getPhysioInviteCode(userData.uid));
     })();
-  }, [roleReady, role, userData?.uid]);
+  }, [roleReady, role, userData?.uid, refreshPatients]);
 
   useEffect(() => {
     if (!userData?.uid) return;

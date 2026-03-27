@@ -123,25 +123,36 @@ export default function Profile() {
             style={styles.deleteBtn}
             onPress={() => {
               Alert.alert(
-                "Confirm Delete",
-                `Delete patient ${userData?.name || "this patient"}? This cannot be undone.`,
+                "Confirm Disable",
+                `Disable patient ${userData?.name || "this patient"}? This cannot be undone.`,
                 [
                   { text: "Cancel", style: "cancel" },
                   {
-                    text: "Delete",
+                    text: "Disable",
                     style: "destructive",
                     onPress: async () => {
                       try {
-                        const ok = await uas.deleteUserById(userData.uid!);
+                        const ok = await uas.deleteUser(userData.uid!);
                         if (ok) {
                           await clearSelectedUserID();
-                          setUserData(null);
-                          Alert.alert("Deleted", "Patient account deleted.");
+                          Alert.alert("Disabled!", "Patient account disabled.");
+                          router.push({
+                            pathname: "/",
+                            params: {
+                              refreshPatients: "true",
+                            },
+                          });
                         } else {
-                          Alert.alert("Error", "Failed to delete patient.");
+                          Alert.alert(
+                            "Error",
+                            "Failed to disable patient account.",
+                          );
                         }
                       } catch (e) {
-                        Alert.alert("Error", "Failed to delete patient.");
+                        Alert.alert(
+                          "Error",
+                          "Failed to disable patient account.",
+                        );
                       }
                     },
                   },
@@ -149,8 +160,56 @@ export default function Profile() {
               );
             }}
           >
-            <Text style={styles.deleteBtnText}>Delete Patient</Text>
+            <Text style={styles.deleteBtnText}>Disable Patient Account</Text>
           </Pressable>
+        )}
+
+        {role === "patient" && userData?.uid ? (
+          <Pressable
+            style={styles.deleteBtn}
+            onPress={() => {
+              Alert.alert(
+                "Confirm Disable",
+                `Disable your account? This cannot be undone.`,
+                [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Disable",
+                    style: "destructive",
+                    onPress: async () => {
+                      try {
+                        const ok = await uas.deleteUser(userData.uid!);
+                        if (ok) {
+                          Alert.alert(
+                            "Disabled!",
+                            "Account successfully disabled.",
+                          );
+                          await logout();
+                          await clearUserRole();
+                          await clearSelectedUserID();
+                          router.replace("/(auth)/role-select");
+                        } else {
+                          Alert.alert(
+                            "Error",
+                            "Failed to disable your account, please try again later.",
+                          );
+                        }
+                      } catch (e) {
+                        Alert.alert(
+                          "Error",
+                          "Failed to disable patient account, please try again later.",
+                        );
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            <Text style={styles.deleteBtnText}>Disable Account</Text>
+          </Pressable>
+        ) : (
+          ""
         )}
       </View>
     );
