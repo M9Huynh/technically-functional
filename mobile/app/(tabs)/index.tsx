@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Clipboard, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { logout } from "../../lib/authService";
 import { getUserRole, clearUserRole, UserRole } from "../../lib/roleStore";
 import {
@@ -13,6 +13,7 @@ import {
 import userAccount, { UserData } from "@/lib/useraccount";
 import { getUserActivities, getUserSummary } from "../../lib/profileActivity";
 import { UserAccountService } from "@/lib/useraccount";
+import { format } from "date-fns";
 // (removed reanimated ScrollView import)
 
 export default function Home() {
@@ -30,6 +31,7 @@ export default function Home() {
   );
   const [invite, setInvite] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const { refreshPatients } = useLocalSearchParams();
 
   useEffect(() => {
     (async () => {
@@ -53,7 +55,7 @@ export default function Home() {
       setPatients(await uas.getPatientsByPhysio(userData.uid));
       setInvite(await getPhysioInviteCode(userData.uid));
     })();
-  }, [roleReady, role, userData?.uid]);
+  }, [roleReady, role, userData?.uid, refreshPatients]);
 
   useEffect(() => {
     if (!userData?.uid) return;
@@ -173,8 +175,10 @@ export default function Home() {
           {activities.length === 0 ? role === "patient" ? <Text style={styles.pageSub}>No Activities found, please record an Activity to see it listed here.</Text> : selectedPatient !== null ? <Text style={styles.pageSub}>No Activities found for selected patient.</Text> : "" : ""}
           {activities.map((activity, index) => (
             <View key={index} style={styles.historyItem}>
-              <Text>📅 {activity.date_performed || "N/A"}</Text>
-              <Text>{activity.exercise || "Exercise"}</Text>
+              <Text style={styles.dateText}>📅 {format(new Date(activity.date_performed), "MMM. do")}</Text>
+              <Text style={styles.dateText} numberOfLines={2} ellipsizeMode="tail">
+                {activity.exercise || "Exercise"}
+              </Text>
             </View>
           ))}
         </ScrollView>
@@ -184,6 +188,7 @@ export default function Home() {
         style={styles.bigBtn}
         onPress={() => {
           if (role === "patient") router.push("/(tabs)/exercises");
+          //if (role === "patient") router.push({pathname:"/(tabs)/progress", params: {exerciseId: "0jjNkh5a2yQV1Fu2DAUm", showSurvey: "true"},});
           else router.push("/(tabs)/profile");
         }}
       >
@@ -228,9 +233,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   logoutText: { fontSize: 12, fontWeight: "700", color: "#333" },
-  row: { flexDirection: "row", gap: 12, marginTop: 18 },
+  row: { flexDirection: "row", gap: 12, marginTop: 18, maxHeight: "60%" },
   stat_card: { width: "30%", borderRadius: 14, backgroundColor: "#dddddd", padding: 5, maxHeight: 325 },
-  ex_card: { flex: 1, borderRadius: 14, backgroundColor: "#dddddd", padding: 5, maxHeight: 500 },
+  ex_card: { flex: 1, borderRadius: 14, backgroundColor: "#dddddd", padding: 5, maxHeight: "100%" },
   cardTitle: { fontWeight: "800", marginBottom: 10 },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   statBox: {
@@ -244,11 +249,22 @@ const styles = StyleSheet.create({
   statLbl: { fontSize: 12, color: "#666" },
   historyItem: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "flex-start",
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
     marginBottom: 8,
+  },
+  dateText: {
+    flex: 1,
+    width: 80,
+    color: "#222",
+  },
+  exerciseText: {
+    flex: 1,
+    flexWrap: "wrap",
+    marginLeft: 8,
+    color: "#222",
   },
   bigBtn: {
     alignSelf: "center",

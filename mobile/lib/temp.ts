@@ -18,6 +18,9 @@ export interface UserActivity {
     real_rest_time: number;
     target_area: string;
     uid: string;
+    pain?: any;
+    effort?: any;
+    satisfaction?: any;
 }
 
 export async function getCurrentUser(): Promise<UserData | null> {

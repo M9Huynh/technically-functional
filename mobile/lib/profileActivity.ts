@@ -8,6 +8,8 @@ import {
   doc,
   setDoc,
   addDoc,
+  updateDoc,
+  DocumentReference,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { UserActivity } from "./temp";
@@ -101,8 +103,8 @@ export async function getUserSummary(uid: string): Promise<ActivitySummary> {
   const commentsSnapshot = await getDocs(q);
   const totalComments = commentsSnapshot.size;
 
-  console.log("User activities:", activities);
-  console.log("Activity dates:", dates);
+  // console.log("User activities:", activities);
+  // console.log("Activity dates:", dates);
   while (true) {
   const checkDate = new Date(today);
   checkDate.setDate(today.getDate() - streakCount);
@@ -131,10 +133,10 @@ export async function repsChartData(
   uid: string,
 ): Promise<{ label: string; value: number }[]> {
   const activities = await getUserActivities(uid);
-  console.log("Activities for reps chart:", activities);
+  //console.log("Activities for reps chart:", activities);
   const last7Days = Array.from({ length: 7 }).map((_, i) => {
     const date = subDays(new Date(), i);
-    console.log("Checking activities for date:", date);
+    //console.log("Checking activities for date:", date);
     const dateStr = format(date, "yyyy-MM-dd");
     const reps = activities
       .filter((a) => a.date_performed === dateStr)
@@ -146,8 +148,8 @@ export async function repsChartData(
       value: reps,
     };
   });
-  //console.log("Reps chart data:", last7Days.reverse());
-  return last7Days;
+  //console.log("Reps chart data:", last7Days);
+  return last7Days.reverse();
 }
 
 export async function exerciseChartData(
@@ -159,14 +161,80 @@ export async function exerciseChartData(
     const dateStr = format(date, "yyyy-MM-dd");
     const acts = activities.filter((a) => a.date_performed === dateStr).length;
     return {
-      label: new Date(dateStr).toLocaleDateString("en-CA", {
+      label: date.toLocaleDateString("en-CA", {
         weekday: "short",
       }),
       value: acts,
     };
   });
-  //console.log("Exercise chart data:", last7Days.reverse());
-  return last7Days;
+  //console.log("Exercise chart data:", last7Days);
+  return last7Days.reverse();
+}
+
+export async function painChartData(
+  uid: string,
+): Promise<{ label: string; value: number }[]> {
+  const activities = await getUserActivities(uid);
+  const last7Days = Array.from({ length: 7 }).map((_, i) => {
+    const date = subDays(new Date(), i);
+    const dateStr = format(date, "yyyy-MM-dd");
+    const dayActivities = activities.filter((a) => a.date_performed === dateStr && a.pain !== undefined);
+    const avgPain = dayActivities.length > 0
+      ? dayActivities.reduce((sum, current) => sum + (current.pain || 0), 0) / dayActivities.length
+      : 0;
+    return {
+      label: date.toLocaleDateString("en-CA", {
+        weekday: "short",
+      }),
+      value: Math.round(avgPain * 10) / 10, // Round to 1 decimal place
+    };
+  });
+  //console.log("Pain chart data:", last7Days);
+  return last7Days.reverse();
+}
+
+export async function effortChartData(
+  uid: string,
+): Promise<{ label: string; value: number }[]> {
+  const activities = await getUserActivities(uid);
+  const last7Days = Array.from({ length: 7 }).map((_, i) => {
+    const date = subDays(new Date(), i);
+    const dateStr = format(date, "yyyy-MM-dd");
+    const dayActivities = activities.filter((a) => a.date_performed === dateStr && a.effort !== undefined);
+    const avgEffort = dayActivities.length > 0
+      ? dayActivities.reduce((sum, current) => sum + (current.effort || 0), 0) / dayActivities.length
+      : 0;
+    return {
+      label: date.toLocaleDateString("en-CA", {
+        weekday: "short",
+      }),
+      value: Math.round(avgEffort * 10) / 10, // Round to 1 decimal place
+    };
+  });
+  //console.log("Effort chart data:", last7Days);
+  return last7Days.reverse();
+}
+
+export async function satisfactionChartData(
+  uid: string,
+): Promise<{ label: string; value: number }[]> {
+  const activities = await getUserActivities(uid);
+  const last7Days = Array.from({ length: 7 }).map((_, i) => {
+    const date = subDays(new Date(), i);
+    const dateStr = format(date, "yyyy-MM-dd");
+    const dayActivities = activities.filter((a) => a.date_performed === dateStr && a.satisfaction !== undefined);
+    const avgSatisfaction = dayActivities.length > 0
+      ? dayActivities.reduce((sum, current) => sum + (current.satisfaction || 0), 0) / dayActivities.length
+      : 0;
+    return {
+      label: date.toLocaleDateString("en-CA", {
+        weekday: "short",
+      }),
+      value: Math.round(avgSatisfaction * 10) / 10, // Round to 1 decimal place
+    };
+  });
+  //console.log("Satisfaction chart data:", last7Days);
+  return last7Days.reverse();
 }
 
 export async function getComments(actid: string): Promise<CommentData[]> {
@@ -224,6 +292,18 @@ export async function getName(uid: string): Promise<string> {
   }
 }
 
+export async function getEmail(uid: string): Promise<string> {
+  try {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    if (!userDoc.exists()) return "Unknown User";
+    const userData = userDoc.data();
+    return userData.email || "Unknown Email";
+  } catch (error) {
+    console.error("Error getting user email:", error);
+    return "Unknown Email";
+  }
+}
+
 export async function setSelectedUserID(uid: string): Promise<void> {
   if (uid.length === 0) {
     console.warn("Attempted to set an empty user ID.");
@@ -256,4 +336,35 @@ export async function getPhysioInviteCode(
   if (snapshot.empty) return null;
   const userDoc = snapshot.docs[0];
   return userDoc.id || null;
+}
+
+export async function updateActivityWithUserEntry( id: string, pain: number, effort: number, satisfaction: number) {
+  try {
+    const actRef = doc(db, "activities", id);
+
+    await updateDoc(actRef, {
+      pain: pain,
+      effort: effort,
+      satisfaction: satisfaction,
+    });
+  } catch {
+    console.error("Error updating activity with user entered fields.");
+    return;
+  }
+}
+
+export async function getCommentCounts(actids: string[]): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  await Promise.all(
+    actids.map(async (actid) => {
+      try {
+        const comments = await getComments(actid);
+        counts.set(actid, comments.length);
+      } catch (error) {
+        console.error("Error getting comment count for activity:", actid, error);
+        counts.set(actid, 0);
+      }
+    })
+  );
+  return counts;
 }

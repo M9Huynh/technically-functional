@@ -47,7 +47,8 @@ export default function Record() {
 
   const [streaming, setStreaming] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [showPostRecordingActions, setShowPostRecordingActions] = useState(false);
+  const [showPostRecordingActions, setShowPostRecordingActions] =
+    useState(false);
 
   const [metrics, setMetrics] = useState<any>(null);
   const [finalMetrics, setFinalMetrics] = useState<any>(null);
@@ -57,6 +58,8 @@ export default function Record() {
 
   const [landmarks, setLandmarks] = useState<Landmark[] | null>(null);
   const [connections, setConnections] = useState<Connection[]>([]);
+
+  const [savedExercise, setSavedExercise] = useState<string | null>(null);
 
   const busyRef = useRef(false);
 
@@ -72,6 +75,17 @@ export default function Record() {
     };
     loadRole();
   }, []);
+
+  useEffect(() => {
+    if (!savedExercise) return;
+    console.log("savedExercise: ", savedExercise);
+    router.push({
+        pathname: "/progress",
+        params: {
+          exerciseId: savedExercise,
+          showSurvey: "true",
+        },});
+  }, [savedExercise]);
 
   useEffect(() => {
     if (!permission) return;
@@ -109,7 +123,7 @@ export default function Record() {
       Promise.race([
         p,
         new Promise<T>((_, reject) =>
-          setTimeout(() => reject(new Error("timeout")), ms)
+          setTimeout(() => reject(new Error("timeout")), ms),
         ),
       ]);
 
@@ -203,7 +217,9 @@ export default function Record() {
     if (sessionState === "calibrating") {
       if (metrics.calibrating) {
         const secondsLeft = Math.ceil(metrics.cal_time_left ?? 0);
-        setStatusMessage(`Calibration in progress... ${secondsLeft}s remaining`);
+        setStatusMessage(
+          `Calibration in progress... ${secondsLeft}s remaining`,
+        );
       } else {
         setSessionState("recording");
         setStatusMessage("Exercise in progress...");
@@ -347,7 +363,7 @@ export default function Record() {
 
       Alert.alert(
         "Camera Not Ready",
-        "Please wait a moment for the camera to finish loading."
+        "Please wait a moment for the camera to finish loading.",
       );
       return;
     }
@@ -355,7 +371,7 @@ export default function Record() {
     if (!side) {
       Alert.alert(
         "Choose a knee first",
-        "Select Right or Left knee before recording."
+        "Select Right or Left knee before recording.",
       );
       return;
     }
@@ -412,7 +428,7 @@ export default function Record() {
     try {
       setIsSaving(true);
 
-      await saveMetrics({
+      setSavedExercise(await saveMetrics({
         angle: m.angle || 0,
         rom_degree: m.rom_degree || 0,
         min_degree: m.min_degree || 0,
@@ -422,10 +438,17 @@ export default function Record() {
         avg_rep_duration: m.avg_rep_duration || 0,
         current_rep_duration: m.current_rep_duration || 0,
         timestamp: Date.now(),
-      });
+      }));
 
       Alert.alert("Saved", "Metrics saved to Firebase");
-      router.push("/progress");
+      console.log("savedExercise: ", savedExercise);
+//      router.push({
+//        pathname: "/progress",
+//        params: {
+//          exerciseId: savedExercise,
+//          showSurvey: "true",
+//        },
+//      });
     } catch (e: any) {
       Alert.alert("Error", e?.message || "Failed to save metrics");
     } finally {
@@ -543,7 +566,9 @@ export default function Record() {
         <View style={styles.kneeRow}>
           <View style={styles.kneeBtn}>
             <PrimaryButton
-              label={side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"}
+              label={
+                side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"
+              }
               onPress={() => setSide("LEFT")}
             />
           </View>
@@ -585,12 +610,12 @@ export default function Record() {
               sessionState === "setupCountdown"
                 ? `Get Ready (${setupCountdown})`
                 : sessionState === "precheck"
-                ? "Checking Setup..."
-                : sessionState === "calibrating"
-                ? "Calibrating..."
-                : streaming
-                ? "Stop Recording"
-                : "Start Recording"
+                  ? "Checking Setup..."
+                  : sessionState === "calibrating"
+                    ? "Calibrating..."
+                    : streaming
+                      ? "Stop Recording"
+                      : "Start Recording"
             }
             onPress={streaming ? handleStopRecording : handleStartRecording}
             style={{ marginTop: 10 }}

@@ -19,6 +19,7 @@ import {
   getName,
   getCurrentUser,
   getSelectedUserID,
+  getCommentCounts,
 } from "../../lib/profileActivity";
 import { getUserRole, UserRole } from "@/lib/roleStore";
 import { useFocusEffect } from "@react-navigation/native";
@@ -30,6 +31,10 @@ export default function Feedback() {
   const [selectedActivity, setSelectedActivity] = useState<any | null>(null);
   const [role, setRole] = useState<UserRole>("patient");
   const [selectedUser, setSelectedUser] = useState<string>("");
+  const [commentCounts, setCommentCounts] = useState<Map<string, number>>(
+    new Map(),
+  );
+
   useEffect(() => {
     (async () => {
       const r = await getUserRole();
@@ -44,14 +49,23 @@ export default function Feedback() {
     React.useCallback(() => {
       if (!userData) return;
       (async () => {
+        let userActivities: any[] = [];
         if (role === "patient") {
-          setActivities(await getUserActivities(userData.uid));
+          userActivities = await getUserActivities(userData.uid);
         } else {
           const s = await getSelectedUserID();
           if (s) {
             setSelectedUser(s);
-            setActivities(await getUserActivities(s));
+            userActivities = await getUserActivities(s);
           }
+        }
+        setActivities(userActivities);
+
+        // Fetch comment counts for all activities
+        if (userActivities.length > 0) {
+          const actids = userActivities.map((activity) => activity.actid);
+          const counts = await getCommentCounts(actids);
+          setCommentCounts(counts);
         }
       })();
     }, [userData, role]),
@@ -72,7 +86,10 @@ export default function Feedback() {
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.logo}>Physio{"\n"}Companion</Text>
-        <Text style={styles.pageSub}>Please select an Activity to view more details and leave/view feedback.</Text>
+        <Text style={styles.pageSub}>
+          Please select an Activity to view more details and leave/view
+          feedback.
+        </Text>
 
         {activities.map((activity, index) => (
           <Pressable
@@ -83,16 +100,36 @@ export default function Feedback() {
               setVisible(true);
             }}
           >
-            <Text style={styles.title}>{activity.exercise}</Text>
-            <Text style={styles.leftText}>
-              Completed On:{" "}
+            <View style={styles.cardHeader}>
+              <Text style={styles.title}>{activity.exercise}</Text>
+              <Text style={styles.commentCount}>
+                💬 {commentCounts.get(activity.actid) || 0}
+              </Text>
+            </View>
+            <Text style={styles.centerText}>
+              Recorded Activity on{" "}
               {new Date(
                 activity.date_performed + "T12:00:00",
-              ).toLocaleDateString()}
+              ).toLocaleDateString("en-CA", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
             </Text>
-            <Text style={styles.leftText}>
-              Reps: {activity.completed_reps || 0}
-            </Text>
+            {/*             <View style={styles.statline}>
+              <Text style={styles.normText}>
+                Reps: {activity.completed_reps || 0}
+              </Text>
+              <Text style={styles.normText}>
+                Pain: {activity.pain || 0}
+              </Text>
+              <Text style={styles.normText}>
+                Effort: {activity.effort || 0}
+              </Text>
+              <Text style={styles.normText}>
+                Satisfaction: {activity.satisfaction || 0}
+              </Text>
+            </View> */}
           </Pressable>
         ))}
 
@@ -138,17 +175,38 @@ function ActivityModalContent({
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <View style={styles.headerBody}>
         <View style={styles.header}>
-          <Text style={[styles.title, { textAlign: "left", flex: 1 }]}>{activity.exercise}</Text>
+          <Text style={[styles.title, { textAlign: "left", flex: 1 }]}>
+            {activity.exercise}
+          </Text>
           <Pressable onPress={onClose} style={styles.closeBtn}>
             <Text>✕</Text>
           </Pressable>
         </View>
-        <Text style={styles.leftText}>Reps: {activity.completed_reps}</Text>
-        <Text style={styles.leftText}>Duration: {activity.duration}s</Text>
-        <Text style={styles.leftText}>Max Angle: {activity.max_height}°</Text>
-        <Text style={styles.leftText}>Min Angle: {activity.min_height}°</Text>
+        <Text style={styles.leftText}>
+          Recorded Activity on{" "}
+          {new Date(activity.date_performed + "T12:00:00").toLocaleDateString(
+            "en-CA",
+            {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            },
+          )}
+        </Text>
+        <View style={styles.doubleColumn}>
+          <View style={ {justifyContent: "space-between", width: "50%"}}>
+            <Text style={styles.leftText}>Reps: {activity.completed_reps}</Text>
+            <Text style={styles.leftText}>Duration: {activity.duration}s</Text>
+            <Text style={styles.leftText}>Max Angle: {activity.max_height}°</Text>
+            <Text style={styles.leftText}>Min Angle: {activity.min_height}°</Text>
+          </View>
+          <View>
+            <Text style={styles.leftText}>Pain: {activity.pain} / 10</Text>
+            <Text style={styles.leftText}>Effort: {activity.effort} / 10</Text>
+            <Text style={styles.leftText}>Satisfaction: {activity.satisfaction} / 10</Text>
+          </View>
+        </View>
       </View>
-
       <FlatList
         data={comments}
         keyExtractor={(item) => item.cid}
@@ -183,7 +241,7 @@ function ActivityModalContent({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60 },
+  container: { backgroundColor: "#fff", padding: 18, paddingTop: 60 },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -191,11 +249,12 @@ const styles = StyleSheet.create({
   },
   logo: { fontSize: 34, fontWeight: "800" },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "800",
     marginBottom: 10,
     justifyContent: "center",
     textAlign: "center",
+    marginLeft: 14,
   },
   pageSub: {
     marginTop: 6,
@@ -205,8 +264,20 @@ const styles = StyleSheet.create({
   },
   chart: { borderRadius: 20, marginBottom: 20, overflow: "hidden" },
   text: { color: "#666", fontSize: 16, marginBottom: 10, textAlign: "center" },
+  normText: {
+    color: "#666",
+    fontSize: 16,
+    marginBottom: 10,
+  },
   leftText: {
     textAlign: "left",
+    color: "#666",
+    fontSize: 16,
+    marginBottom: 10,
+    width: "100%",
+  },
+  centerText: {
+    textAlign: "center",
     color: "#666",
     fontSize: 16,
     marginBottom: 10,
@@ -227,6 +298,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#dddddd",
     padding: 5,
     marginBottom: 15,
+  },
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  commentCount: {
+    fontSize: 14,
+    color: "#666",
+    fontWeight: "600",
   },
   overlay: {
     flex: 1,
@@ -289,5 +371,13 @@ const styles = StyleSheet.create({
   },
   send: {
     padding: 8,
+  },
+  statline: {
+    justifyContent: "space-around",
+    flexDirection: "row",
+    maxWidth: "100%",
+  },
+  doubleColumn: {
+    flexDirection: "row",
   },
 });
