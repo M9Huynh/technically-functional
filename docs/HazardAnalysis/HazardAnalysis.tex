@@ -80,9 +80,10 @@ This document outlines the hazards that may occur while operating the tool. The 
 
 
 \begin{itemize}
-    \item Technical Hazards: Inability to process user footage, incorrect identification of exercise from different planes, or inaccurate data comparisons, which can result in performance issues and impact the functionality of the tool. Furthermore, these hazards can result in misleading feedback, which could contribute to improper and unsafe exercise techniques.
-    \item Usability Hazards: Usability ensures that the tool has the potential for  successfully being adopted. All of the inputs to the system, such as the recording of the exercise, are generated from the user. A user-friendly interface guarantees ease of use, which encourages utilization of this tool. On the other hand, incorrect, on-screen prompts  may cause confusion  while the user performs the exercise. This may reduce usability and lead to ambiguous guidelines.
-    \item Privacy/Security Hazards: Unnecessary data collection and storage increases the potential of unauthorized access and misuse of personal information. Such situations, such as data breaches, may lead to catastrophic outcomes, which will result in lower adoption rate.
+    \item \textbf{Safety-Critical Technical Hazards:} This involves failures in the underlying logic or  analysis that directly impacts patient's safety. This includes incorrect identification of exercise planes, improper landmark detection, or inaccurate joint angle calculations. These failures may result in misleading real-time feedback, potentially causing the user to perform unsafe movements which may lead to re-injury.
+    \item \textbf{Operational Technical Hazards (Application Performance):} Hazards that affect the application's functionality without risk of patient injury. These include system latency, inability to process footage due to hardware constraints, or database synchronization errors. While these impact the user experience and data integrity, they do not cause immediate harm.
+    \item \textbf{Usability Hazards:} Usability ensures that the tool has the potential for  successfully being adopted. All of the inputs to the system, such as the recording of the exercise, are generated from the user. A user-friendly interface guarantees ease of use, which encourages utilization of this tool. On the other hand, incorrect, on-screen prompts  may cause confusion  while the user performs the exercise. This may reduce usability and lead to ambiguous guidelines.
+    \item \textbf{Privacy/Security Hazards:} Unnecessary data collection and storage increases the potential of unauthorized access and misuse of personal information. Such situations, like data breaches, may lead to catastrophic outcomes, which will result in lower adoption rate.
 \end{itemize}
 
 
@@ -91,48 +92,52 @@ The purpose of this document is to identify risks and their associated impact to
 
 \section{System Boundaries and Components}
 
-To divide the system boundaries we outline the key functions of the application.
+To better understand the application, we divided the application into 7 different modules. These modules are not necessarily separate entities but they are different components of the application that work together.
 
 \begin{itemize}
-    \item Authentication module
+    \item Module 1: Authentication and Account Management
     \begin{itemize}
-        \item The user will log in to the application to access prior user data.
+        \item Manages patient and physiotherapist accounts, including registration, authentication through Firebase Authentication. It ensures that only authorized patients can access personal health data and exercises assigned by their physiotherapist.
     \end{itemize}
-    \item Video streaming module
+    \item Module 2: Organization Linking and Access Codes
     \begin{itemize}
-        \item The user will video stream themselves performing a physio exercise pertaining to the knee joint.
+        \item Facilitates connection between a patient and their physiotherapist. This module also handles the validation of unique access codes for the physiotherapist to provide to the patient.
     \end{itemize}
-    \item Analysis module
+    \item Module 3: Exercise Program Management
     \begin{itemize}
-        \item The input of the user performing an exercise will be assessed against the requirements and guidelines defined in the backend.
+        \item Manages a library of exercises assigned by the physiotherapist to the patient. This module handles how and what the patient receives information about the exercises.
+    \end{itemize}
+    \item Module 4: Video Capture and Review
+    \begin{itemize}
+        \item This module is responsible for the real-time video capture of the patient from the device's camera. The video is then shown on the device for live feedback and repetition counting.
+    \end{itemize}
+    \item Module 5: Computer Vision and Form Analysis
+    \begin{itemize}
+        \item Uses computer vision library to analyze the patient's form during exercise. These metrics are then evaluated for landmarks at different joints then evaluates the movement against the ones done prior to ensure that each rep is performed correctly.
+    \end{itemize}
+    \item Module 6: Reporting and Dashboards
+    \begin{itemize}
+        \item Consolidates the weekly data of the patient into digestible reports. This module also surveys the patient for subjective data such as Rate of Percieved Exertion (RPE) and pain levels. This module also provides a dashboard for the physiotherapist to view the patient's progress and make adjustments to the exercise program as needed.
+    \end{itemize}
+    \item Module 7: Data Security and Privacy
+    \begin{itemize}
+        \item Ensures the safety and security of patient data with low coupling between modules.
     \end{itemize}
 \end{itemize}
 
-
-In addition we will consider the following within the hazard analysis: 
-
-\begin{itemize}
-    \item A smart device with a camera
-    \begin{itemize}
-        \item To allow users to record themselves during the motion and to receive feedback on the exercise performed.
-    \end{itemize}
-    \item A database where user data will be stored
-\end{itemize}
-
-
-These system boundaries outline what is covered within this hazard analysis.
+These system boundaries are included within the scope of the hazard analysis since they make up the core functionality of the application.
 
 
 \section{Critical Assumptions}
 
 \begin{itemize}
-    \item Assume that the user only had mobility issues pertaining to the knee area and with single joint activity.
+    \item Assume that the user only has mobility issues pertaining to the knee area and with single joint activity.
     \begin{itemize}
         \item Moreover, it is assumed that the user will perform an exercise that resembles the exercise.
     \end{itemize}
-    \item Assume that only one user is within the frame of the smart device.
+    \item Assume that only one user is within the frame of the mobile device.
     \item Assume that the user is receptive to feedback.
-    \item Assume that the user is familiar with and able to navigate the smart device.
+    \item Assume that the user is honest when providing their subjective data such as RPE and pain levels.
     \item Assume that the user has a stable connection to the internet.
     \item Assume that the user is undergoing physiotherapy and was advised to perform the exercise at home.
     \item Assume that the device being used meets the minimum requirements for our system to function.
@@ -497,14 +502,14 @@ Reference: H2-1, H3-2\\
 
 
 \noindent
-SR6: The system shall monitor the smart device's battery life and prompt the user if it falls below a certain threshold to charge the device.\\
+SR6: The system shall monitor the mobile device's battery life and prompt the user if it falls below a certain threshold to charge the device.\\
 Rationale: The system cannot function without proper access to power.\\
 Risk: Low\\
 Reference: H2-1, H2-3\\
 
 
 \noindent
-SR7: The system shall provide a guideline overlay when setting up the smart device so they are in-frame of the view and correct orientation.\\
+SR7: The system shall provide a guideline overlay when setting up the mobile device so they are in-frame of the view and correct orientation.\\
 Rationale: In order to align the user to the camera and detect the user's posture throughout the exercise.\\
 Risk: High\\
 Reference: H3-1, H3-3\\
