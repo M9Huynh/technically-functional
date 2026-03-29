@@ -134,14 +134,38 @@ These system boundaries are included within the scope of the hazard analysis sin
     \item Assume that the user only has mobility issues pertaining to the knee area and with single joint activity.
     \begin{itemize}
         \item Moreover, it is assumed that the user will perform an exercise that resembles the exercise.
+        \begin{itemize}
+        \item This assumption is made since the application is designed for post-operative knee exercises and the computer vision library is limited to such. If a different movement is performed, the system may not be able to provide meaningful feedback.
+        \end{itemize}
     \end{itemize}
     \item Assume that only one user is within the frame of the mobile device.
+    \begin{itemize}
+        \item This assumption is made since the computer vision library is designed to analyze one person at a time. If multiple people are in the frame, the system may not be able to provide accurate feedback.
+    \end{itemize}
     \item Assume that the user is receptive to feedback.
+    \begin{itemize}
+        \item This assumption is made since the application is designed to provide feedback to the user. If the user is not receptive to feedback then the application will not be able to provide value.
+    \end{itemize}
     \item Assume that the user is honest when providing their subjective data such as RPE and pain levels.
+    \begin{itemize}
+        \item This assumption is made since the application is designed to provide feedback based on the user's subjective data. If the user is not honest then the physiotherapist may not be able to provide accurate changes to rehabilitation.
+    \end{itemize}
     \item Assume that the user has a stable connection to the internet.
+    \begin{itemize}
+        \item This assumption is made since the application requires connection to the internet to access the database and receive analysis. If the user does not have internet connection then they would not be able to use the application.
+    \end{itemize}
     \item Assume that the user is undergoing physiotherapy and was advised to perform the exercise at home.
+    \begin{itemize}
+        \item This assumption is made since the application is designed for patients who are undergoing physiotherapy and were advised to perform the exercise at home. If the user is not undergoing physiotherapy or was not advised to perform the exercise at home then the application should not advise them
+    \end{itemize}
     \item Assume that the device being used meets the minimum requirements for our system to function.
+    \begin{itemize}
+        \item This assumption is made since if the user does not have a device that can support the application then they would not be able to use it.
+    \end{itemize}
     \item Assume that the physiotherapists using the application are licensed.
+    \begin{itemize}
+        \item This assumption is made since if the physiotherapist is not licensed then they should not be advising a patient on their rehabilitation.
+    \end{itemize}
 \end{itemize}
 \begin{landscape}
 
