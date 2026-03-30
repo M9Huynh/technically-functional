@@ -38,7 +38,7 @@ export const saveMetrics = async (metricsData: MetricsData) => {
       analysis: "pending", 
       
       // Exercise information
-      exercise: "Knee Extension",
+      exercise: "Seated Knee Flexion-Extension",
       target_area: "knee",
       
       completed_reps: metricsData.rep_count || 0,
