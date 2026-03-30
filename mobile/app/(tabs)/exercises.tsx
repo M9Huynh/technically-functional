@@ -60,6 +60,8 @@ export default function ExercisesTab() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalText, setModalText] = useState("");
+  const [modalSets, setModalSets] = useState("");
+  const [modalReps, setModalReps] = useState("");
   const [modalExercise, setModalExercise] = useState<Exercise | null>(null);
 
   const openExercise = (ex: Exercise) => {
@@ -171,17 +173,21 @@ export default function ExercisesTab() {
       const assigned = await getSelectedExercises(selectedUser);
       const match = assigned?.find((u) => u.title === ex.title);
       setModalText(match?.description ?? ex.description);
+      setModalSets(match?.sets ?? ex.sets ?? "");
+      setModalReps(match?.reps ?? ex.reps ?? "");
     } else {
       setModalText(ex.description);
+      setModalSets(ex.sets ?? "");
+      setModalReps(ex.reps ?? "");
     }
 
     setModalVisible(true);
   };
 
-  const updateInstructions = (ex: Exercise, newDesc: string) => {
+  const updateInstructions = (ex: Exercise, newDesc: string, newSets: string, newReps: string) => {
     // placeholder for updating instructions in database
     console.log("Updated instructions for exercise", ex.title, ":", newDesc);
-    updateUserExercise(selectedUser || "", ex.title, newDesc);
+    updateUserExercise(selectedUser || "", ex.title, newDesc, newSets, newReps);
   };
 
   // if we haven't determined the role yet, avoid rendering anything
@@ -205,9 +211,12 @@ export default function ExercisesTab() {
     } else {
       return (
         <ScrollView contentContainerStyle={styles.container}>
-          <Text style={styles.pageTitle}>Exercises (physio view)</Text>
+          <View style={styles.headerRow}>
+            <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+          </View>
+          <Text style={styles.pageTitle}>Exercises</Text>
           <Text style={styles.pageSub}>
-            Select which exercises are available and modify instructions as
+            Select which exercises are available for the selected patient and modify instructions as
             needed.
           </Text>
           <View style={styles.sectionBox}>
@@ -249,6 +258,26 @@ export default function ExercisesTab() {
                 onChangeText={setModalText}
                 placeholder="Enter description"
               />
+              <View style={styles.modalRow}>
+                <View style={styles.modalHalfRow}>
+                  <Text style={styles.setRepText}>Sets:</Text>
+                  <TextInput
+                    style={styles.setRepInput}
+                    value={modalSets}
+                    onChangeText={setModalSets}
+                    placeholder="##"
+                  />
+                </View>
+                <View style={styles.modalHalfRow}>
+                  <Text style={styles.setRepText}>Reps:</Text>
+                  <TextInput
+                    style={styles.setRepInput}
+                    value={modalReps}
+                    onChangeText={setModalReps}
+                    placeholder="##"
+                  />
+                </View>
+              </View>
               <View style={styles.modalButtonRow}>
                 <Pressable
                   style={[styles.modalBtn, styles.modalCancel]}
@@ -260,7 +289,7 @@ export default function ExercisesTab() {
                   style={[styles.modalBtn, styles.modalSave]}
                   onPress={() => {
                     if (modalExercise) {
-                      updateInstructions(modalExercise, modalText);
+                      updateInstructions(modalExercise, modalText, modalSets, modalReps);
                     }
                     setModalVisible(false);
                   }}
@@ -280,9 +309,13 @@ export default function ExercisesTab() {
   if (userExercises.length !== 0) {
     return (
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.headerRow}>
+            <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+          </View>
         <Text style={styles.pageTitle}>Exercises</Text>
         <Text style={styles.pageSub}>
-          Your available exercises are shown below.
+          Your available exercises are shown below. {"\n"}
+          Select an exercise to view more details.
         </Text>
         <View style={styles.sectionBox}>
           {userExercises.map((ex) => (
@@ -298,6 +331,9 @@ export default function ExercisesTab() {
   } else {
     return (
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.headerRow}>
+            <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+          </View>
         <Text style={styles.pageTitle}>Exercises</Text>
         <Text style={styles.pageSub}>
           Your physiotherapist hasn't assigned any exercises yet. {"\n\n"}
@@ -309,7 +345,7 @@ export default function ExercisesTab() {
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#fff", padding: 18, paddingTop: 60 },
+  container: { flex: 1, backgroundColor: "#fff", padding: 18, paddingTop: 60, },
   pageTitle: {
     fontSize: 28,
     fontWeight: "800",
@@ -322,7 +358,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 18,
   },
-
   sectionTitle: {
     fontSize: 18,
     fontWeight: "800",
@@ -330,9 +365,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sectionBox: { gap: 10 },
-
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#dddddd",
     borderWidth: 1,
     borderColor: "#eee",
     borderRadius: 16,
@@ -355,8 +389,10 @@ const styles = StyleSheet.create({
   physioRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 8,
+    padding: 8,
     gap: 8,
+    backgroundColor: "#dddddd",
+    borderRadius: 10,
   },
   checkbox: {
     fontSize: 18,
@@ -411,6 +447,7 @@ const styles = StyleSheet.create({
     padding: 10,
     minHeight: 80,
     textAlignVertical: "top",
+    marginBottom: 16,
   },
   modalButtonRow: {
     flexDirection: "row",
@@ -424,7 +461,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   modalCancel: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#bbb",
   },
   modalSave: {
     backgroundColor: "#222",
@@ -432,5 +469,28 @@ const styles = StyleSheet.create({
   modalBtnText: {
     color: "#fff",
     fontWeight: "700",
+  },
+  modalRow: {
+    flexDirection: "row",
+  },
+  modalHalfRow: {
+    flexDirection: "row",
+    width: "47%",
+  },
+  setRepInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    minHeight: 16,
+    textAlignVertical: "top",
+    flex: 1,
+    marginHorizontal: 14
+  },
+  setRepText: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 12,
+    marginTop: "auto",
   },
 });

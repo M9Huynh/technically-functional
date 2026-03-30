@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Alert, AppState } from "react-native"; // added AppState
 import { useRouter, Redirect } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Speech from "expo-speech";
@@ -47,7 +47,8 @@ export default function Record() {
 
   const [streaming, setStreaming] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [showPostRecordingActions, setShowPostRecordingActions] = useState(false);
+  const [showPostRecordingActions, setShowPostRecordingActions] =
+    useState(false);
 
   const [metrics, setMetrics] = useState<any>(null);
   const [finalMetrics, setFinalMetrics] = useState<any>(null);
@@ -58,7 +59,13 @@ export default function Record() {
   const [landmarks, setLandmarks] = useState<Landmark[] | null>(null);
   const [connections, setConnections] = useState<Connection[]>([]);
 
+  const [savedExercise, setSavedExercise] = useState<string | null>(null);
+
   const busyRef = useRef(false);
+
+  const [appIsActive, setAppIsActive] = useState(true); // track app active state for screen sharing / focus changes
+  const [cameraKey, setCameraKey] = useState(0); // force clean CameraView remount when needed
+  const startRetryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null); // retry start once if camera still initializing
 
   useEffect(() => {
     const loadRole = async () => {
@@ -70,9 +77,44 @@ export default function Record() {
   }, []);
 
   useEffect(() => {
+    if (!savedExercise) return;
+    console.log("savedExercise: ", savedExercise);
+    router.push({
+        pathname: "/progress",
+        params: {
+          exerciseId: savedExercise,
+          showSurvey: "true",
+        },});
+  }, [savedExercise]);
+
+  useEffect(() => {
     if (!permission) return;
     if (!permission.granted) requestPermission();
   }, [permission, requestPermission]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextState) => {
+      const active = nextState === "active";
+      setAppIsActive(active);
+
+      if (active) {
+        setCameraReady(false); // force camera to re-initialize after returning from background / share interruption
+        setCameraKey((prev) => prev + 1); // remount camera if Teams/screen share caused it to get stuck
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (startRetryTimeoutRef.current) {
+        clearTimeout(startRetryTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -81,14 +123,21 @@ export default function Record() {
       Promise.race([
         p,
         new Promise<T>((_, reject) =>
-          setTimeout(() => reject(new Error("timeout")), ms)
+          setTimeout(() => reject(new Error("timeout")), ms),
         ),
       ]);
 
     const tick = async () => {
       if (cancelled) return;
 
-      if (!streaming || !cameraRef.current || !side || busyRef.current) {
+      if (
+        !streaming ||
+        !cameraRef.current ||
+        !side ||
+        busyRef.current ||
+        !cameraReady || // wait until camera is actually ready
+        !appIsActive // pause frame processing if app loses focus during screen share
+      ) {
         setTimeout(tick, 300);
         return;
       }
@@ -99,7 +148,7 @@ export default function Record() {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
           quality: 0.12,
-          shutterSound: false, 
+          shutterSound: false,
           skipProcessing: true,
           exif: false,
         });
@@ -108,7 +157,7 @@ export default function Record() {
 
         const data: any = await withTimeout(
           processFrame(photo.base64, side, facing),
-          2000
+          5000
         );
 
         const hasValidLandmarks =
@@ -150,7 +199,7 @@ export default function Record() {
         console.log("Frame error:", e);
       } finally {
         busyRef.current = false;
-        setTimeout(tick, 350);
+        setTimeout(tick, 500);
       }
     };
 
@@ -160,7 +209,7 @@ export default function Record() {
       cancelled = true;
       busyRef.current = false;
     };
-  }, [streaming, side, facing]);
+  }, [streaming, side, facing, cameraReady, appIsActive]); // added cameraReady and appIsActive
 
   useEffect(() => {
     if (!streaming || !metrics) return;
@@ -168,7 +217,9 @@ export default function Record() {
     if (sessionState === "calibrating") {
       if (metrics.calibrating) {
         const secondsLeft = Math.ceil(metrics.cal_time_left ?? 0);
-        setStatusMessage(`Calibration in progress... ${secondsLeft}s remaining`);
+        setStatusMessage(
+          `Calibration in progress... ${secondsLeft}s remaining`,
+        );
       } else {
         setSessionState("recording");
         setStatusMessage("Exercise in progress...");
@@ -179,23 +230,29 @@ export default function Record() {
   useEffect(() => {
     if (sessionState !== "setupCountdown") return;
 
+    setStatusMessage(
+      setupCountdown > 0
+        ? "Get into position..."
+        : "Checking lighting and camera position..."
+    );
+
     if (setupCountdown <= 0) {
       const runPrecheck = async () => {
-        await resetBackend();
-        setSessionState("precheck");
-        setStatusMessage("Checking lighting and camera position...");
-
-        const envCheck = await validateEnvironmentBeforeStart();
-
-        if (!envCheck.ok) {
-          setSessionState("idle");
-          setStatusMessage(null);
-          setIsPreparing(false);
-          Alert.alert("Adjust Setup", envCheck.message);
-          return;
-        }
-
         try {
+          await resetBackend();
+
+          setSessionState("precheck");
+
+          const envCheck = await validateEnvironmentBeforeStart();
+
+          if (!envCheck.ok) {
+            setSessionState("idle");
+            setStatusMessage(null);
+            setIsPreparing(false);
+            Alert.alert("Adjust Setup", envCheck.message);
+            return;
+          }
+
           await resetBackend();
 
           setMetrics(null);
@@ -208,82 +265,30 @@ export default function Record() {
           setSessionState("calibrating");
           setStatusMessage("Calibration in progress...");
           setStreaming(true);
-        } catch (e) {
+        } catch (e: any) {
+          console.log("runPrecheck failed:", e?.message || e);
           setSessionState("idle");
           setStatusMessage(null);
-          Alert.alert("Error", "Failed to start recording.");
-        } finally {
           setIsPreparing(false);
+          Alert.alert("Error", "Backend timed out. Please try again.");
         }
       };
 
       runPrecheck();
       return;
     }
-    //here
-if (setupCountdown === 6) {
-  Speech.stop();
-  Speech.speak("Get ready", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(5);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 5) {
-  Speech.speak("5", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(4);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 4) {
-  Speech.speak("4", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(3);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 3) {
-  Speech.speak("3", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(2);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 2) {
-  Speech.speak("2", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(1);
-      }, 500);
-    }
-  });
-} else if (setupCountdown === 1) {
-  Speech.speak("1", { 
-    rate: 1.0, 
-    pitch: 1.0,
-    onDone: () => {
-      setTimeout(() => {
-        setSetupCountdown(0);
-      }, 500);
-    }
-  });
-}
-}, [sessionState, setupCountdown]);
+
+    const timer = setTimeout(() => {
+      if (setupCountdown === 5) {
+        Speech.stop();
+        Speech.speak("Get ready", { rate: 1.0, pitch: 1.0 });
+      }
+
+      setSetupCountdown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [sessionState, setupCountdown]);
 
   const validateEnvironmentBeforeStart = async () => {
     if (!cameraRef.current || !cameraReady) {
@@ -329,12 +334,36 @@ if (setupCountdown === 6) {
   };
 
   const handleStartRecording = async () => {
-    if (isPreparing || streaming) return;
+    if (
+    isPreparing ||
+    streaming ||
+    sessionState === "setupCountdown" ||
+    sessionState === "precheck" ||
+    sessionState === "calibrating"
+  ) return;
+
+    if (!appIsActive) { // avoid starting while app is not active
+      Alert.alert(
+        "Camera unavailable",
+        "Please return to the app and wait a moment for the camera to reconnect."
+      );
+      return;
+    }
 
     if (!cameraReady) {
+      setStatusMessage("Setting up camera..."); // update status while waiting for camera to initialize
+
+      if (startRetryTimeoutRef.current) {
+        clearTimeout(startRetryTimeoutRef.current);
+      }
+
+      startRetryTimeoutRef.current = setTimeout(() => {
+        handleStartRecording(); // one retry after short delay for slow camera init
+      }, 800);
+
       Alert.alert(
         "Camera Not Ready",
-        "Please wait a moment for the camera to finish loading."
+        "Please wait a moment for the camera to finish loading.",
       );
       return;
     }
@@ -342,7 +371,7 @@ if (setupCountdown === 6) {
     if (!side) {
       Alert.alert(
         "Choose a knee first",
-        "Select Right or Left knee before recording."
+        "Select Right or Left knee before recording.",
       );
       return;
     }
@@ -355,9 +384,12 @@ if (setupCountdown === 6) {
     setShowPostRecordingActions(false);
 
     setIsPreparing(true);
-    setSetupCountdown(6);
+
+    await new Promise((resolve) => setTimeout(resolve, 300)); // small delay to avoid race condition after camera init/switch
+
+    setSetupCountdown(5);
     setSessionState("setupCountdown");
-    setStatusMessage("Get into position... 5");
+    setStatusMessage("Get into position...");
   };
 
   const handleStopRecording = async () => {
@@ -396,7 +428,7 @@ if (setupCountdown === 6) {
     try {
       setIsSaving(true);
 
-      await saveMetrics({
+      setSavedExercise(await saveMetrics({
         angle: m.angle || 0,
         rom_degree: m.rom_degree || 0,
         min_degree: m.min_degree || 0,
@@ -406,10 +438,17 @@ if (setupCountdown === 6) {
         avg_rep_duration: m.avg_rep_duration || 0,
         current_rep_duration: m.current_rep_duration || 0,
         timestamp: Date.now(),
-      });
+      }));
 
       Alert.alert("Saved", "Metrics saved to Firebase");
-      router.push("/progress");
+      console.log("savedExercise: ", savedExercise);
+//      router.push({
+//        pathname: "/progress",
+//        params: {
+//          exerciseId: savedExercise,
+//          showSurvey: "true",
+//        },
+//      });
     } catch (e: any) {
       Alert.alert("Error", e?.message || "Failed to save metrics");
     } finally {
@@ -453,6 +492,7 @@ if (setupCountdown === 6) {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.cameraBox}>
           <CameraView
+            key={`${facing}-${cameraKey}`} // force clean remount on switch / app resume
             ref={cameraRef}
             style={styles.camera}
             facing={facing}
@@ -526,7 +566,9 @@ if (setupCountdown === 6) {
         <View style={styles.kneeRow}>
           <View style={styles.kneeBtn}>
             <PrimaryButton
-              label={side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"}
+              label={
+                side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"
+              }
               onPress={() => setSide("LEFT")}
             />
           </View>
@@ -554,8 +596,10 @@ if (setupCountdown === 6) {
         <PrimaryButton
           label={`Switch to ${facing === "front" ? "back" : "front"} camera`}
           onPress={() => {
-            setCameraReady(false);
+            setCameraReady(false); // reset ready state before switch
             setFacing((f) => (f === "front" ? "back" : "front"));
+            setCameraKey((prev) => prev + 1); // ensure clean remount when switching cameras
+            setStatusMessage("Switching camera..."); // helpful status during camera change
           }}
           style={{ marginTop: 8 }}
         />
@@ -566,12 +610,12 @@ if (setupCountdown === 6) {
               sessionState === "setupCountdown"
                 ? `Get Ready (${setupCountdown})`
                 : sessionState === "precheck"
-                ? "Checking Setup..."
-                : sessionState === "calibrating"
-                ? "Calibrating..."
-                : streaming
-                ? "Stop Recording"
-                : "Start Recording"
+                  ? "Checking Setup..."
+                  : sessionState === "calibrating"
+                    ? "Calibrating..."
+                    : streaming
+                      ? "Stop Recording"
+                      : "Start Recording"
             }
             onPress={streaming ? handleStopRecording : handleStartRecording}
             style={{ marginTop: 10 }}

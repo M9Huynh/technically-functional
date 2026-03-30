@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import { UserAccountService, UserData } from "../../lib/useraccount";
-import { getCurrentUser, getSelectedUser, clearSelectedUserID } from "../../lib/profileActivity";
-import { getUserRole, UserRole } from "@/lib/roleStore";
+import {
+  getCurrentUser,
+  getSelectedUser,
+  clearSelectedUserID,
+  getName,
+  getEmail,
+} from "../../lib/profileActivity";
+import { clearUserRole, getUserRole, UserRole } from "@/lib/roleStore";
 import { useFocusEffect } from "@react-navigation/native";
+import { logout } from "@/lib/authService";
+import { useRouter } from "expo-router";
+import { format } from "date-fns";
 
 export default function Profile() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [role, setRole] = useState<UserRole>("patient");
   const [roleReady, setRoleReady] = useState<boolean>(false);
   const uas = new UserAccountService();
+  const router = useRouter();
+  const [physioName, setPhysioName] = useState("");
+  const [physioEmail, setPhysioEmail] = useState("");
+
   useEffect(() => {
     (async () => {
       const r = await getUserRole();
@@ -22,10 +35,15 @@ export default function Profile() {
     React.useCallback(() => {
       if (!roleReady) return;
       (async () => {
-        if (role === "patient") setUserData(await getCurrentUser());
-        else setUserData(await getSelectedUser());
+        if (role === "patient") {
+          setUserData(await getCurrentUser());
+          if (userData?.physioId) {
+            setPhysioName(await getName(userData?.physioId));
+            setPhysioEmail(await getEmail(userData?.physioId));
+          }
+        } else setUserData(await getSelectedUser());
       })();
-    }, [role, roleReady]),
+    }, [role, roleReady, userData]),
   );
 
   if (role === "physio" && !userData) {
@@ -33,6 +51,18 @@ export default function Profile() {
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+
+          <Pressable
+            style={styles.logoutBtn}
+            onPress={async () => {
+              await logout();
+              await clearUserRole();
+              await clearSelectedUserID();
+              router.replace("/(auth)/role-select");
+            }}
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </Pressable>
         </View>
         <Text style={styles.text}>
           Please select a patient on the Home page to begin.
@@ -44,6 +74,18 @@ export default function Profile() {
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.logo}>Physio{"\n"}Companion</Text>
+
+          <Pressable
+            style={styles.logoutBtn}
+            onPress={async () => {
+              await logout();
+              await clearUserRole();
+              await clearSelectedUserID();
+              router.replace("/(auth)/role-select");
+            }}
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </Pressable>
         </View>
         <Text style={styles.title}>{userData?.name || ""}'s Profile</Text>
         <Text style={styles.subtitle}>E-Mail</Text>
@@ -57,30 +99,60 @@ export default function Profile() {
             { weekday: "long", year: "numeric", month: "long", day: "numeric" },
           ) || "No birthday available"}
         </Text>
+        {role === "patient" ? (
+          <View>
+            <Text style={styles.subtitle}>Linked Physiotherapist</Text>
+            <Text style={styles.text}>{physioName || "Unavailable"}</Text>
+            <Text style={styles.subtitle}>Linked Physiotherapist Email</Text>
+            <Text style={styles.text}>
+              {physioEmail || "No email available"}
+            </Text>
+          </View>
+        ) : (
+          ""
+        )}
+
+        <Text style={styles.subtitle}>Account Creation Date</Text>
+        <Text style={styles.text}>
+          {userData?.createdAt
+            ? format(userData.createdAt.toDate(), "MMMM do, yyyy")
+            : "No date available"}
+        </Text>
         {role === "physio" && userData?.uid && (
           <Pressable
             style={styles.deleteBtn}
             onPress={() => {
               Alert.alert(
-                "Confirm Delete",
-                `Delete patient ${userData?.name || "this patient"}? This cannot be undone.`,
+                "Confirm Disable",
+                `Disable patient ${userData?.name || "this patient"}? This cannot be undone.`,
                 [
                   { text: "Cancel", style: "cancel" },
                   {
-                    text: "Delete",
+                    text: "Disable",
                     style: "destructive",
                     onPress: async () => {
                       try {
-                        const ok = await uas.deleteUserById(userData.uid!);
+                        const ok = await uas.deleteUser(userData.uid!);
                         if (ok) {
                           await clearSelectedUserID();
-                          setUserData(null);
-                          Alert.alert("Deleted", "Patient account deleted.");
+                          Alert.alert("Disabled!", "Patient account disabled.");
+                          router.push({
+                            pathname: "/",
+                            params: {
+                              refreshPatients: "true",
+                            },
+                          });
                         } else {
-                          Alert.alert("Error", "Failed to delete patient.");
+                          Alert.alert(
+                            "Error",
+                            "Failed to disable patient account.",
+                          );
                         }
                       } catch (e) {
-                        Alert.alert("Error", "Failed to delete patient.");
+                        Alert.alert(
+                          "Error",
+                          "Failed to disable patient account.",
+                        );
                       }
                     },
                   },
@@ -88,8 +160,56 @@ export default function Profile() {
               );
             }}
           >
-            <Text style={styles.deleteBtnText}>Delete Patient</Text>
+            <Text style={styles.deleteBtnText}>Disable Patient Account</Text>
           </Pressable>
+        )}
+
+        {role === "patient" && userData?.uid ? (
+          <Pressable
+            style={styles.deleteBtn}
+            onPress={() => {
+              Alert.alert(
+                "Confirm Disable",
+                `Disable your account? This cannot be undone.`,
+                [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Disable",
+                    style: "destructive",
+                    onPress: async () => {
+                      try {
+                        const ok = await uas.deleteUser(userData.uid!);
+                        if (ok) {
+                          Alert.alert(
+                            "Disabled!",
+                            "Account successfully disabled.",
+                          );
+                          await logout();
+                          await clearUserRole();
+                          await clearSelectedUserID();
+                          router.replace("/(auth)/role-select");
+                        } else {
+                          Alert.alert(
+                            "Error",
+                            "Failed to disable your account, please try again later.",
+                          );
+                        }
+                      } catch (e) {
+                        Alert.alert(
+                          "Error",
+                          "Failed to disable patient account, please try again later.",
+                        );
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            <Text style={styles.deleteBtnText}>Disable Account</Text>
+          </Pressable>
+        ) : (
+          ""
         )}
       </View>
     );
@@ -131,4 +251,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
+  logoutBtn: {
+    backgroundColor: "#eee",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+  },
+  logoutText: { fontSize: 12, fontWeight: "700", color: "#333" },
 });
