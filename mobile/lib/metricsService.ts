@@ -76,7 +76,7 @@ export const saveMetrics = async (metricsData: MetricsData) => {
 
     const activitiesRef = collection(db, 'activities');
     const docRef = await addDoc(activitiesRef, firestoreData);
-
+    console.log("docRef.id: ", docRef.id);
     return docRef.id;
 };
 

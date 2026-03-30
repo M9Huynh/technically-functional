@@ -9,6 +9,7 @@ class Analyzer:
         self.started = False
         self.min_angle = 0.0
         self.max_angle = 0.0
+        
 
         # Calibration state
         self.is_calibrating = False
@@ -35,8 +36,8 @@ class Analyzer:
         self.extend_zone_ratio = 0.55
 
         # Minimum ROM and minimum rep size
-        self.min_valid_rom = 12.0
-        self.min_cycle_span_deg = 15.0
+        self.min_valid_rom = 5.0
+        self.min_cycle_span_deg = 6.0
 
         # Track one rep cycle
         self.cycle_min_angle = None
@@ -55,8 +56,8 @@ class Analyzer:
 
         self.rep_count = 0
         self.rep_durations = []
-        self.rep_state = "Ready"
-        self.cue_state = "CALIBRATING"
+        self.rep_state = "Extension"
+        self.cue_state = "GOOD_EXTENSION"
 
         self.smoothed_angle = None
         self.current_rep = None
@@ -96,14 +97,21 @@ class Analyzer:
                 self.max_angle = self.cal_max
 
             self.started = True
-            self.rep_state = "Ready"
-            self.cue_state = "GETTING_READY"
+            self.rep_state = "Extension"
+            self.cue_state = "GOOD_EXTENSION"
+            self.current_rep = None
+            self.cycle_min_angle = None
+            self.cycle_max_angle = None
 
     def _rep_update(self, angle: float):
         rom = self.max_angle - self.min_angle
         if rom < self.min_valid_rom:
             self.cue_state = "GETTING_READY"
             return
+        if self.cycle_min_angle is None:
+            self.cycle_min_angle = angle
+        if self.cycle_max_angle is None:
+            self.cycle_max_angle = angle
 
         bend_zone_max = self.min_angle + rom * self.bend_zone_ratio
         extend_zone_min = self.min_angle + rom * self.extend_zone_ratio
@@ -184,13 +192,9 @@ class Analyzer:
                 self.cue_state = "GOOD_EXTENSION"
 
     def update(self, angle: float):
+
         if angle is None:
-            self.current_rep = None
-            self.rep_state = "Ready"
             self.cue_state = "OUT_OF_FRAME"
-            self.smoothed_angle = None
-            self.cycle_min_angle = None
-            self.cycle_max_angle = None
             return
 
         angle = self._smooth_angle(angle)
@@ -204,15 +208,12 @@ class Analyzer:
             self.min_angle = angle
             self.max_angle = angle
             self.started = True
-            self.rep_state = "Ready"
-            self.cue_state = "GETTING_READY"
+            self.rep_state = "Extension"
+            self.cue_state = "GOOD_EXTENSION"
+            self.current_rep = None
+            self.cycle_min_angle = angle
+            self.cycle_max_angle = angle
             return
-
-        # allow ROM to adapt during session
-        if angle < self.min_angle:
-            self.min_angle = angle
-        if angle > self.max_angle:
-            self.max_angle = angle
 
         self._rep_update(angle)
 
