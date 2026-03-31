@@ -189,7 +189,7 @@ The following table is taken directly from the Module Guide document for this pr
 
 \section{MIS}
 This section describes individual module specifications.\\
-\textit{See Appendix A for information about the variables used throughout this document.}
+
 \subsection{Module - Account Creation}
 This module enables the creation of an account for users. It uses a database to store any information that 
 is essential for other modules to perform their actions. A database was used for its ease of manipulation and its 
@@ -244,16 +244,17 @@ All the variables used in each class related to account creation are described b
 \noindent \textbf{\textit{/technically-functional/mobile/lib/\underline{authService.ts}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{export const checkEmailExists}] 
-    Async function constant that checks if an email is already registered in Firebase Authentication.
+    Async function constant that checks if an email is already registered in Firebase Authentication. Function accepts an email string as a parameter. Returns \texttt{true} if the email exists, \texttt{false} otherwise. Used to prevent duplicate account creation.
 
 \item[\texttt{export const licenseFormatValid}] 
-    Function constant that validates physiotherapist license number format (XX-123456).
+    Function constant that validates physiotherapist license number format (XX-123456). Accepts a license number string as a parameter. Returns an object containing \texttt{isValid} (boolean) and \texttt{errorMessage} (string or null).
+
 
 \item[\texttt{export const registerPhysio}] 
-    Async function constant that registers a new physiotherapist account.
+    Async function constant that registers a new physiotherapist account. Function accepts an object containing \texttt{name}, \texttt{email}, \texttt{password}, \texttt{licenseNumber}, and \texttt{birthday}. Called from \texttt{create-physio.tsx}. Returns the created user data or throws an error on failure.
 
 \item[\texttt{export const registerPatient}] 
-    Async function constant that registers a new patient account.
+    Async function constant that registers a new patient account. Function accepts an object containing \texttt{name}, \texttt{email}, \texttt{password}, \texttt{inviteCode}, and \texttt{birthday}. Called from \texttt{create-patient.tsx}. Returns the created user data or throws an error on failure.
 \end{description}
 
 
@@ -264,20 +265,24 @@ Account creation generates one object of the type described in \ref{section:user
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}\\
-\textbf{\textit{\underline{create-physio.tsx}, \underline{create-patient.tsx}:}}
+\textbf{\textit{\underline{authService.ts}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{export const styles = StyleSheet.create(\{ ... \});}] 
-    Style object containing component styling:
-    \begin{itemize}
-        \item \texttt{title}: Main heading style (fontSize 20, fontWeight 800, textAlign center, marginBottom 8)
-        \item \texttt{label}: Input label style (fontSize 14, color \#333, marginTop 12, marginBottom 6)
-        \item \texttt{input}: Text input field style (borderWidth 1, borderColor \#ddd, borderRadius 12, padding 12)
-        \item \texttt{passwordHint}: Helper text style (fontSize 12, color \#666, marginTop 4, marginBottom 8, fontStyle italic)
-    \end{itemize}
+
+\item[\texttt{export const registerPatient}] 
+    Async function constant that registers a new patient account. 
+
+\item[\texttt{export const registerPhysio}] 
+    Async function constant that registers a new physiotherapist account. 
+
+\item[\texttt{export const checkEmailExists}] 
+    Async function constant that checks if an email address is already registered in the system.
+    
+\item[\texttt{export const licenseFormatValid}] 
+    Async function that validates the format of a physiotherapist license number.
 \end{description}
 
-\noindent \textbf{\textit{\underline{authService.ts}:}} \\
-NA \\
+\noindent \textbf{\textit{\underline{create-patient.tsx}, \underline{create-physio.tsx}}}\\
+NA\\
 
 
 \noindent \textbf{Exported Access Programs} 
@@ -311,52 +316,55 @@ NA \\
 \hline
 \endlastfoot
 
-% validatePassword
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{validatePassword:} Validates password meets security requirements (minimum 6 characters, at least one number).} \\
+% registerPatient
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPatient:} Registers a new patient account using an invite code.} \\
 \hline
 \rowcolor{white}
-\texttt{password: string} - User's password input &
-\texttt{string | null} - Returns error message if invalid, null if valid &
-None \\
+\texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
+\texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
+\texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
 \hline
 
-% validateBirthday
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{validateBirthday:} Validates birthday matches required YYYY-MM-DD format.} \\
+
+\end{longtable}
+\noindent \underline{\textbf{\textit{create-physio.tsx}}}
+
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+% registerPatient
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPhysio:} Registers a new physiotherapist account after license validation.} \\
 \hline
 \rowcolor{white}
-\texttt{birthday: string} - User's birthday input &
-\texttt{string | null} - Returns error message if invalid, null if valid &
-None \\
+\texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
+\texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
+\texttt{Error} - Invalid license number or Firebase Auth error \\
 \hline
 
-% onPress handler
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onPress:} Async handler for account creation form submission. Performs validation, checks email existence, and registers patient.} \\
-\hline
-\rowcolor{white}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.8cm}@{}}
-- Validates password via \texttt{validatePassword} \\
-- Validates birthday via \texttt{validateBirthday} \\
-- Checks email via \texttt{checkEmailExists} \\
-- Calls \texttt{registerPatient} with: \\
-  \quad \texttt{name, email, password,} \\
-  \quad \texttt{inviteCode, birthday}
-\end{tabular} &
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.8cm}@{}}
-- Returns error message if invalid \\
-- Returns null if valid \\
-- \texttt{Promise<void>} on success \\
-- Navigates to \texttt{"/(tabs)"} using \\
-  \texttt{router.replace()}
-\end{tabular} &
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.8cm}@{}}
-\texttt{Error} - Catches errors and \\
-displays Alert with: \\
-• Password validation errors \\
-• Birthday validation errors \\
-• Email already exists \\
-• Registration failures
-\end{tabular} \\
-\hline
 
 \end{longtable}
 
