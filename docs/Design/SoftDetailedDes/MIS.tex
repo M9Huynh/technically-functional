@@ -316,8 +316,8 @@ NA\\
 \hline
 \endlastfoot
 
-% registerPatient
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPatient:} Registers a new patient account using an invite code.} \\
+% CreatePatient
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient():} Creates a new patient account using an invite code.} \\
 \hline
 \rowcolor{white}
 \texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
@@ -325,6 +325,19 @@ NA\\
 \texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
 \hline
 
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Screen component for patient registration.} \\
+\hline
+\rowcolor{white}
+\texttt{props: none} &
+\texttt{JSX.Element} - Renders registration form with validation &
+\begin{tabular}{@{}l@{}}
+\texttt{Internal validations}\\ \texttt{\& services:}\\
+• Password: min 6 \\chars + at least one\\ number\\
+• Birthday: YYYY-MM\\-DD format validation\\
+• Email: existence check \\via checkEmailExists()\\
+• Invite code: validated \\by licenseFormatValid\\
+• Navigation: \\router.replace() on \\success
+\end{tabular} \\
 
 \end{longtable}
 \noindent \underline{\textbf{\textit{create-physio.tsx}}}
@@ -356,8 +369,8 @@ NA\\
 \hline
 \endlastfoot
 
-% registerPatient
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPhysio:} Registers a new physiotherapist account after license validation.} \\
+% CreatePhysio
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio():} Creates a new physiotherapist account after license validation.} \\
 \hline
 \rowcolor{white}
 \texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
@@ -398,7 +411,7 @@ NA\\
 \endlastfoot
 
 % checkEmailExists
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{checkEmailExists:} Checks if an email is already registered in Firebase Authentication.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{checkEmailExists(email):} Checks if an email is already registered in Firebase Authentication.} \\
 \hline
 \rowcolor{white}
 \texttt{email: string} - User's email address &
@@ -407,12 +420,12 @@ NA\\
 \hline
 
 % licenseFormatValid
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{licenseFormatValid:} Validates physiotherapist license number format (XX-123456).} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{licenseFormatValid(licenseNumber):} Validates physiotherapist license number format (XX-123456).} \\
 \hline
 \rowcolor{white}
 \texttt{licenseNumber: string} - PT license number &
 \texttt{boolean} - Returns true if format is valid, false otherwise &
-None \\
+\texttt{Error} - Throws error if there is an error checking licenseNumber. \\
 \hline
 
 % registerPhysio
@@ -436,14 +449,22 @@ None \\
 \end{longtable}
 
 \noindent \textbf{Exported Access Programs (definitions)} \\
-\textit{E(x)}: 'acc\_exists(x)' \\
-\textit{db}: 'User Account database' \\
-$i, j \in \mathbb{Z}^{+}$ \\
+\texttt{e}: email \\
+\texttt{l}: licenseNumber \\
+\textit{E(e)}: 'checkEmailExists(e)' \\
+\textit{L(l)}: 'licenseFormatValid(l)' \\
+\textit{db}: '\texttt{users}:' \\
+$i, j, k, l, m, n \in \{0-9\}$ \\
+$a, b \in \{A-Z\}$ \\
+
+\noindent $E(e) \implies e \in db.email$ \\
+\noindent $L(l):$ 
+$\exists$ $l$ $|$ $l = ((a + b $ $+$ $'-' + $ + 'i' + 'j' + 'k' + 'l' + 'm' + 'n')) $\in users.validLicenses$ \\
 $\neg (E(i)) \implies$ $db(i).name \neq db(j).name \cup (db(i).name = db(j).name \cap db(i).birthday \neq db(j).birthday)$ \\
 %REMOVE%
 If an account does not already exist, that implies that the names are different, or if they are the same, the birthdays are different.\\
 
-
+%\mathbb{Z}^{+}$
 
 \subsubsection{Semantics}
 
