@@ -252,6 +252,7 @@ export class UserAccountService {
         usersRef,
         where("role", "==", "patient"),
         where("physioId", "==", physioId),
+        where("deleted", "!=", true),
       );
       const snapshot = await getDocs(q);
 

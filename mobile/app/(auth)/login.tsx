@@ -1,5 +1,12 @@
 import React, { useId, useState } from "react";
-import { Text, StyleSheet, TextInput, Pressable, View, Alert } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  TextInput,
+  Pressable,
+  View,
+  Alert,
+} from "react-native";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { login } from "../../lib/authService";
 import ScreenContainer from "../../components/screenContainer";
@@ -17,11 +24,14 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
-  const { isLocked, registerFailedAttempt, resetAttempts, remainingAttempts } = useLoginAttempts();
 
-  const helperText = role === "physio" ? "Physiotherapist login" : "Patient login";
-  const createRoute = role === "physio" ? "/(auth)/create-physio" : "/(auth)/create-patient";
+  const { isLocked, registerFailedAttempt, resetAttempts, remainingAttempts } =
+    useLoginAttempts();
+
+  const helperText =
+    role === "physio" ? "Physiotherapist login" : "Patient login";
+  const createRoute =
+    role === "physio" ? "/(auth)/create-physio" : "/(auth)/create-patient";
 
   return (
     <ScreenContainer>
@@ -30,9 +40,7 @@ export default function Login() {
       <Text style={styles.sub}>{helperText}</Text>
 
       {isLocked && (
-        <Text>
-          Too many failed attempts. Please wait 10 seconds.
-        </Text>
+        <Text>Too many failed attempts. Please wait 10 seconds.</Text>
       )}
 
       <Text style={styles.label}>Email</Text>
@@ -42,7 +50,7 @@ export default function Login() {
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
-        keyboardType="email-address"
+        keyboardType="default"
         editable={!isLocked}
       />
 
@@ -60,7 +68,10 @@ export default function Login() {
         label={isLocked ? "Locked" : "Login"}
         onPress={async () => {
           if (isLocked) {
-            Alert.alert("Too Many Attempts", "Please wait 10 seconds before trying again.");
+            Alert.alert(
+              "Too Many Attempts",
+              "Please wait 10 seconds before trying again.",
+            );
             return;
           }
 
@@ -91,7 +102,9 @@ export default function Login() {
       <Link href={createRoute as any} asChild>
         <Pressable style={styles.secondaryBtn}>
           <Text style={styles.secondaryBtnText}>
-            {role === "patient" ? "Create Patient Account" : "Create Physio Account"}
+            {role === "patient"
+              ? "Create Patient Account"
+              : "Create Physio Account"}
           </Text>
         </Pressable>
       </Link>
