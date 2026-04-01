@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const SERVER_URL = 'http://172.20.10.6:5001'; // Replace with your server's IP address and port
+const SERVER_URL = 'http://10.0.0.34:5001'; // Replace with your server's IP address and port
 
 export type Side = "RIGHT" | "LEFT";
 export type Facing = "front" | "back";
@@ -24,7 +24,7 @@ export type PrecheckFrameResponse = {
   error?: string;
 };
 
-
+// Sends frames to the backend for pose detection and the calculation of the metrics
 export async function processFrame(
   imageBase64: string,
   side: Side,
@@ -41,6 +41,7 @@ export async function processFrame(
   return res.data as ProcessFrameResponse;
 }
 
+// Run a precheck before starting recording (lighting of the environment and the visibility of the selected knee)
 export async function precheckFrame(
   imageBase64: string,
   side: Side,
@@ -60,12 +61,3 @@ export async function precheckFrame(
 export async function resetBackend(): Promise<void> {
   await axios.post(`${SERVER_URL}/reset`, {}, { timeout: 15000 });
 }
-// export async function getPoseData() {
-//   try {
-//     const response = await axios.get(`${SERVER_URL}`);
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching pose data:', error);
-//     throw new Error('Failed to fetch pose data from server');
-//   }
-// }

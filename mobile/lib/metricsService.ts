@@ -2,6 +2,7 @@ import { db } from './firebase';
 import { collection, addDoc, Timestamp, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
+// defines the structure of the metrics data returned from the backend
 export interface MetricsData {
   angle: number;
   rom_degree: number;
@@ -44,7 +45,7 @@ export const saveMetrics = async (metricsData: MetricsData) => {
       completed_reps: metricsData.rep_count || 0,
       completed_sets: 1,
 
-      // Height/Angle data 
+      // Max/Min Angle data 
       max_height: metricsData.max_degree || 0,
       min_height: metricsData.min_degree || 0,
       
@@ -58,7 +59,7 @@ export const saveMetrics = async (metricsData: MetricsData) => {
       // Date "YYYY-MM-DD"
       date_performed: new Date().toISOString().split('T')[0], 
       
-      // Feedback TODO
+      // Feedback
       patient_feedback: "", 
       
       current_angle: metricsData.angle,

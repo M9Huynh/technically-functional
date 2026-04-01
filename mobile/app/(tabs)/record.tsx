@@ -22,6 +22,12 @@ import {
 import { saveMetrics } from "../../lib/metricsService";
 import { getUserRole, UserRole } from "../../lib/roleStore";
 
+// SessionState represents the various stages within the recording flow:
+// idle -> waiting state
+// setupCountdown -> allows user to get into their position
+// precheck -> checks the user's environment for lighting and correct positioning of the body within the frame
+// calibrating ->
+// recording ->
 type SessionState =
   | "idle"
   | "setupCountdown"
@@ -29,6 +35,8 @@ type SessionState =
   | "calibrating"
   | "recording";
 
+// Main Recording Feature: This feature handles the camera input, send continuous image frames to the backend,
+// and shows real-time feedback
 export default function Record() {
   const router = useRouter();
 
@@ -60,9 +68,9 @@ export default function Record() {
 
   const busyRef = useRef(false);
 
-  const [appIsActive, setAppIsActive] = useState(true); // track app active state for screen sharing / focus changes
+  const [appIsActive, setAppIsActive] = useState(true); // track app active state for screen sharing 
   const [cameraKey, setCameraKey] = useState(0); // force clean CameraView remount when needed
-  const startRetryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null); // retry start once if camera still initializing
+  const startRetryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null); // retry start once if camera reamins stuck while still initializing
 
   useEffect(() => {
     const loadRole = async () => {
@@ -77,15 +85,15 @@ export default function Record() {
     if (!permission) return;
     if (!permission.granted) requestPermission();
   }, [permission, requestPermission]);
-
+  // Listens for AppState change
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextState) => {
       const active = nextState === "active";
-      setAppIsActive(active);
+      setAppIsActive(active); // tracks if app is currently active
 
       if (active) {
-        setCameraReady(false); // force camera to re-initialize after returning from background / share interruption
-        setCameraKey((prev) => prev + 1); // remount camera if Teams/screen share caused it to get stuck
+        setCameraReady(false); // force camera to re-initialize after returning to the app
+        setCameraKey((prev) => prev + 1); // force camera to remount if leaving the app or screen share caused it to get stuck
       }
     });
 
@@ -113,7 +121,7 @@ export default function Record() {
         ),
       ]);
 
-    const tick = async () => {
+    const runFrameProcessing = async () => {
       if (cancelled) return;
 
       if (
@@ -124,11 +132,11 @@ export default function Record() {
         !cameraReady || // wait until camera is actually ready
         !appIsActive // pause frame processing if app loses focus during screen share
       ) {
-        setTimeout(tick, 300);
+        setTimeout(runFrameProcessing, 300);
         return;
       }
 
-      busyRef.current = true;
+      busyRef.current = true; // marks it as currently processing one frame to avoid multiple frames being processed at the same time
 
       try {
         const photo = await cameraRef.current.takePictureAsync({
@@ -140,7 +148,7 @@ export default function Record() {
         });
 
         if (!photo?.base64) return;
-
+        // Sends frames to the backend for pose detection and the calculation of the metrics
         const data: any = await withTimeout(
           processFrame(photo.base64, side, facing),
           5000
@@ -185,17 +193,17 @@ export default function Record() {
         console.log("Frame error:", e);
       } finally {
         busyRef.current = false;
-        setTimeout(tick, 500);
+        setTimeout(runFrameProcessing, 500);
       }
     };
 
-    tick();
+    runFrameProcessing();
 
     return () => {
       cancelled = true;
       busyRef.current = false;
     };
-  }, [streaming, side, facing, cameraReady, appIsActive]); // added cameraReady and appIsActive
+  }, [streaming, side, facing, cameraReady, appIsActive]);
 
   useEffect(() => {
     if (!streaming || !metrics) return;
@@ -342,7 +350,7 @@ export default function Record() {
       }
 
       startRetryTimeoutRef.current = setTimeout(() => {
-        handleStartRecording(); // one retry after short delay for slow camera init
+        handleStartRecording(); // try one retry after short delay to account for slow camera initialization
       }, 800);
 
       Alert.alert(
@@ -369,7 +377,7 @@ export default function Record() {
 
     setIsPreparing(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 300)); // small delay to avoid race condition after camera init/switch
+    await new Promise((resolve) => setTimeout(resolve, 300)); // add a small delay to avoid race condition from occuring after camera init/switch
 
     setSetupCountdown(5);
     setSessionState("setupCountdown");
