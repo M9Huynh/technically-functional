@@ -249,12 +249,18 @@ All the variables used in each class related to account creation are described b
 \item[\texttt{export const licenseFormatValid}] 
     Function constant that validates physiotherapist license number format (XX-123456). Accepts a license number string as a parameter. Returns an object containing \texttt{isValid} (boolean) and \texttt{errorMessage} (string or null).
 
-
 \item[\texttt{export const registerPhysio}] 
-    Async function constant that registers a new physiotherapist account. Function accepts an object containing \texttt{name}, \texttt{email}, \texttt{password}, \texttt{licenseNumber}, and \texttt{birthday}. Called from \texttt{create-physio.tsx}. Returns the created user data or throws an error on failure.
+    Async function constant that registers a new physiotherapist account. Type: \texttt{(params: \{name, email, password, licenseNumber, birthday\}) => Promise<\{uid: string, role: "physio"\}>}. Returns \texttt{\{uid, role\}} on success.
 
 \item[\texttt{export const registerPatient}] 
-    Async function constant that registers a new patient account. Function accepts an object containing \texttt{name}, \texttt{email}, \texttt{password}, \texttt{inviteCode}, and \texttt{birthday}. Called from \texttt{create-patient.tsx}. Returns the created user data or throws an error on failure.
+    Async function constant that registers a new patient account. Type: \texttt{(params: \{name, email, password, inviteCode, birthday\}) => Promise<\{uid: string, role: "patient"\}>}. Returns \texttt{\{uid, role\}} on success.
+
+\item[\texttt{export const login}] 
+    Async function constant that authenticates a user. Type: \texttt{(email: string, password: string) => Promise<\{uid: string, ...userData\}>}. Returns user data from Firestore on success.
+
+\item[\texttt{export const logout}] 
+    Async function constant that signs out the current user. Type: \texttt{() => Promise<void>}.
+
 \end{description}
 
 
@@ -317,13 +323,13 @@ NA\\
 \endlastfoot
 
 % CreatePatient
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient():} Creates a new patient account using an invite code.} \\
-\hline
-\rowcolor{white}
-\texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
-\texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
-\texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
-\hline
+%\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient():} Creates a new patient account using an invite code.} \\
+%\hline
+%\rowcolor{white}
+%\texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
+%\texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
+%\texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
+%\hline
 
 \multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Screen component for patient registration.} \\
 \hline
@@ -334,8 +340,8 @@ NA\\
 \texttt{Internal validations}\\ \texttt{\& services:}\\
 • Password: min 6 \\chars + at least one\\ number\\
 • Birthday: YYYY-MM\\-DD format validation\\
-• Email: existence check \\via checkEmailExists()\\
-• Invite code: validated \\by licenseFormatValid\\
+• Email: existence \\check via \\checkEmailExists()\\
+• Invite code: validated \\by licenseFormatValid()\\
 • Navigation: \\router.replace() on \\success
 \end{tabular} \\
 
@@ -370,14 +376,26 @@ NA\\
 \endlastfoot
 
 % CreatePhysio
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio():} Creates a new physiotherapist account after license validation.} \\
+%\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio():} Creates a new physiotherapist account after license validation.} \\
+%\hline
+%\rowcolor{white}
+%\texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
+%\texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
+%\texttt{Error} - Invalid license number or Firebase Auth error \\
+%\hline
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
 \hline
 \rowcolor{white}
-\texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
-\texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
-\texttt{Error} - Invalid license number or Firebase Auth error \\
-\hline
-
+\texttt{props: none} &
+\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
+\begin{tabular}{@{}l@{}}
+\texttt{Validations performed:}\\
+• Password: min 6 \\chars + at least \\one number\\
+• Birthday: \\YYYY-MM-DD format\\
+• Email: existence \\check via \\checkEmailExists()\\
+• License format \\validation handled by \\registerPhysio()
+\end{tabular} \\
 
 \end{longtable}
 
@@ -429,16 +447,16 @@ NA\\
 \hline
 
 % registerPhysio
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPhysio:} Registers a new physiotherapist account after license validation.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPhysio:} Registers a new physiotherapist account into the databese after license validation} \\
 \hline
 \rowcolor{white}
-\texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
+\texttt{params: \{name: string, email: string, password: string, licenseNumber: string\}} &
 \texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
 \texttt{Error} - Invalid license format, license not verified, Firebase Auth error \\
 \hline
 
 % registerPatient
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPatient:} Registers a new patient account using an invite code.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPatient:} Registers a new patient account into the database.} \\
 \hline
 \rowcolor{white}
 \texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
@@ -448,23 +466,45 @@ NA\\
 
 \end{longtable}
 
-\noindent \textbf{Exported Access Programs (definitions)} \\
+\textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
+CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
+making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
+
+\noindent \textbf{Exported Access Programs} \\
 \texttt{e}: email \\
-\texttt{l}: licenseNumber \\
-\textit{E(e)}: 'checkEmailExists(e)' \\
-\textit{L(l)}: 'licenseFormatValid(l)' \\
-\textit{db}: '\texttt{users}:' \\
+\texttt{n}: name \\
+\texttt{pw}: password\\
+\texttt{lno}: licenseNumber\\
+\texttt{code}: inviteCode\\
+\texttt{bday}: birthday\\
+\texttt{p}: (n, e, pw, lno, bday)\\
+\texttt{pt}: (n, e, pw, code, bday)\\
+\texttt{cat}: createdAt \\
+\texttt{pid}: physioId \\
+\texttt{v}: verified \\
+\texttt{u}: uid \\
+\texttt{del}: deleted\\
+\textit{db}: \texttt{users} table in database \\
+\textit{db'}: newer version of \texttt{users} table \\
 $i, j, k, l, m, n \in \{0-9\}$ \\
 $a, b \in \{A-Z\}$ \\
+\newline
+\textit{E(e)}: 'checkEmailExists(e)' \\
+\textit{L(l)}: 'licenseFormatValid(l)' \\
+\textit{Phy(p)}: 'registerPhysio(p)'\\
+\textit{Pt(pt)}: 'registerPatient(pt)'\\
 
+
+\noindent \underline{Function definitions:}\\
 \noindent $E(e) \implies e \in db.email$ \\
-\noindent $L(l):$ 
-$\exists$ $l$ $|$ $l = ((a + b $ $+$ $'-' + $ + 'i' + 'j' + 'k' + 'l' + 'm' + 'n')) $\in users.validLicenses$ \\
-$\neg (E(i)) \implies$ $db(i).name \neq db(j).name \cup (db(i).name = db(j).name \cap db(i).birthday \neq db(j).birthday)$ \\
-%REMOVE%
-If an account does not already exist, that implies that the names are different, or if they are the same, the birthdays are different.\\
+\newline
+\noindent $L(l) \implies $ 
+$\exists$ $l$ $|$ $l = (a + b $ $+$ $'-' + $ + 'i' + 'j' + 'k' + 'l' + 'm' + 'n') $\in validLicenses$ \\
+\newline
+$Phy(p) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, e, lno, n, role:'physio', v\}}\} $\\
+\newline
+$Pt(pt) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, del, e, code, n, pid, role:'patient'\}}\} $\\
 
-%\mathbb{Z}^{+}$
 
 \subsubsection{Semantics}
 
