@@ -470,7 +470,7 @@ NA\\
 CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
 making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
 
-\noindent \textbf{Exported Access Programs: labels and function definitions} \label{section: ACexpaccprog}\\
+\noindent \textbf{Exported Access Programs} \hypertarget{acexpprogs}\\
 \texttt{e}: email \\
 \texttt{n}: name \\
 \texttt{pw}: password\\
@@ -499,7 +499,7 @@ $a, b \in \{A-Z\}$ \\
 \noindent $E(e) \implies e \in db.email$ \\
 \newline
 \noindent $L(l) \implies $ 
-$\exists$ $l$ $|$ $l = (a + b $ $+$ $'-' + $ + 'i' + 'j' + 'k' + 'l' + 'm' + 'n') $\in validLicenses$ \\
+$\exists$ $l$ $|$ $l = (a + b $ $+$ $'-' $ + 'i' + 'j' + 'k' + 'l' + 'm' + 'n') $\in validLicenses$ \\
 \newline
 $Phy(p) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, e, lno, n, role:'physio', v\}}\} $\\
 \newline
@@ -511,7 +511,7 @@ $Pt(pt) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, del, e
 
 
 \noindent \textbf{State Variables} \\
-See \ref{section: ACexpaccprog} under exported access programs: labels and function definitions\\
+See \hyperlink{acexpprogs}{here} for a list of additional state variables.\\
 \texttt{first}: user 1\\
 \texttt{second}: user 2\\
 \texttt{first\_uid}: uid of user 1\\
@@ -541,17 +541,37 @@ All users have different uids.\\
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
-\textbf{Exported access routines}
-
-\noindent See \ref{section: ACexpaccprog}: exported access programs: labels and function definitions.\\
+\textbf{Exported access routines} \\
+See \hyperlink{acexpprogs}{here} for state variables being used.
 \newline
-\textit{\underline{E(e)}}\\
+\textit{\underline{checkEmailExists: E(e)}}\\
 \textbf{Pre-condition:}
   e $\in db.email$\\
 \textbf{Function:}
   E(e) = true \\
 \textbf{Post-condition:}
-  Returns true if email already exists in database, false otherwise.\\
+  Returns true if email already exists in database(\texttt{users}), false otherwise.\\
+\textit{\underline{licenseFormatValid: L(l)}}\\
+\textbf{Pre-condition:}
+  l $\in db.validLicenses$\\
+\textbf{Function:}
+  L(l) = true \\
+\textbf{Post-condition:}
+  Returns true if license exists in database(\texttt{validLicenses}), false otherwise.\\
+\textit{\underline{registerPhysio: Phy(p)}}\\
+\textbf{Pre-condition:}
+  $(p.name \cap p.email \cap p.pw \cap p.lno \cap p.bday \neq \emptyset)\cap (L(p.lno)) \cap (\neg (E(p.email)))$\\
+\textbf{Function:}
+   Phy(p)\\
+\textbf{Post-condition:}
+  $p \in \texttt{db}$\\
+\textit{\underline{registerPatient: Pt(pt)}}\\
+\textbf{Pre-condition:}
+  $(p.name \cap p.email \cap p.pw \cap p.code \cap p.bday \neq \emptyset) \cap (\neg (E(p.email))) $\\
+\textbf{Function:}
+   Pt(pt)\\
+\textbf{Post-condition:}
+  $p \in \texttt{db}$\\
 
 
 \subsubsection{Local Functions}
