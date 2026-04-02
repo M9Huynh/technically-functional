@@ -1,3 +1,6 @@
+// included in acc creation MIS (var list): checkEmailExists, licenseFormatValid,
+// registerPhysio, registerPatient
+
 import { auth, db } from "./firebase";
 import {
   createUserWithEmailAndPassword,

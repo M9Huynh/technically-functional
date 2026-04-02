@@ -15,7 +15,7 @@ export default function CreatePatient() {
   const [loading, setLoading] = useState(false);
   const [birthday, setBirthday] = useState(""); ///added new - Maham
   ////// new
-  const validatePassword = (password: string) => {
+  const validatePasswordlength = (password: string) => {
     if (password.length < 6) {
       return "Password must be at least 6 characters long";
     }
@@ -85,7 +85,7 @@ export default function CreatePatient() {
        onPress={async () => {
         try {
           setLoading(true);
-          const passwordError = validatePassword(password);
+          const passwordError = validatePasswordlength(password);
           if (passwordError) {
             Alert.alert("Invalid Password", passwordError);
             setLoading(false);
