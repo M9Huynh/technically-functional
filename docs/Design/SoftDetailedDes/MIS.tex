@@ -189,7 +189,7 @@ The following table is taken directly from the Module Guide document for this pr
 
 \section{MIS}
 This section describes individual module specifications.\\
-
+\textit{See Appendix A for information about the variables used throughout this document.}
 \subsection{Module - Account Creation}
 This module enables the creation of an account for users. It uses a database to store any information that 
 is essential for other modules to perform their actions. A database was used for its ease of manipulation and its 
@@ -574,11 +574,55 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
   $p \in \texttt{db}$\\
 
 \newpage
-\subsubsection{Local Functions}
+\subsubsection{Local Functions} 
+\noindent \underline{\textbf{\textit{create-patient.tsx}}}
 \begin{longtable}{
 |>{\columncolor{softgray}}p{4.2cm}|
 >{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{5.75cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{CreatePatient:} Physiotherapist registration screen component.} \\
+\hline
+\rowcolor{white}
+\texttt{props: none} &
+\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
+\begin{tabular}{@{}l@{}}
+\texttt{Validations performed:}\\
+• Password: min 6 chars + at least one number\\
+• Birthday: YYYY-MM-DD format\\
+• Email: existence check via checkEmailExists()\\
+• License format validation handled by registerPhysio()
+\end{tabular} \\
+\hline
+
+\end{longtable}
+\noindent \underline{\textbf{\textit{create-physio.tsx}}}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
 }
 \hline
 \rowcolor{headerblue}
@@ -609,12 +653,41 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \texttt{JSX.Element} - Renders physiotherapist registration form with validation &
 \begin{tabular}{@{}l@{}}
 \texttt{Validations performed:}\\
-• Password: min 6 chars + at \\ least one number\\
-• Birthday: YYYY-MM-DD \\ format\\
-• Email: existence check via \\checkEmailExists()\\
-• License format \\validation handled by \\registerPhysio()
+• Password: min 6 chars + at least one number\\
+• Birthday: YYYY-MM-DD format\\
+• Email: existence check via checkEmailExists()\\
+• License format validation handled by registerPhysio()
 \end{tabular} \\
 \hline
+
+\end{longtable}
+\noindent \underline{\textbf{\textit{Both files}}}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
 
 \multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{validatePasswordlength():} Internal helper function for password validation.} \\
 \hline
@@ -622,8 +695,8 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \texttt{params: \{password: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Password must be \\ at least 6 \\ characters long" if length $<$ 6\\
-• Returns "Password must \\ contain at least one number" if \\ no numbers present\\
+• Returns "Password must be at least 6 characters long" if length $<$ 6\\
+• Returns "Password must contain at least one number" if no numbers present\\
 • Returns null if valid
 \end{tabular} \\
 \hline
@@ -634,7 +707,7 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \texttt{params: \{birthday: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Please enter \\ birthday in YYYY-MM-DD \\ format" if format entered is \\invalid\\
+• Returns "Please enter birthday in YYYY-MM-DD format" if format entered is invalid\\
 • Returns null if valid
 \end{tabular} \\
 \hline
@@ -741,7 +814,7 @@ invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is
 
 \end{tabularx}
 \caption{Exported Access Routines}
-\label{tab:user_routines_1}
+\label{tab:user_routines_2}
 \end{table}
 \newpage
 \noindent \textbf{State Variables} \\
