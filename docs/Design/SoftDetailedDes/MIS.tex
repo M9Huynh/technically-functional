@@ -45,6 +45,13 @@ urlcolor=cyan          % color of external links
 \definecolor{green}{RGB}{0,80,50}
 \definecolor{lightgreen}{RGB}{0,200,120}
 
+%new colours for final draft
+\definecolor{headerblue}{RGB}{41, 128, 185}
+\definecolor{lightblue}{RGB}{232, 244, 250}
+\definecolor{softgray}{RGB}{245, 245, 245}
+\definecolor{rowstripe}{RGB}{249, 249, 249}
+
+
 
   %\item Exercise data: this table consists of exercise instructions, maximum height (the highest point their leg can lift up to), minimum height (starting point) and user\_account\_p['Name'].
   %\item User activity: This will contain information about a specific patient's exercise activity. Data such as exercise duration, maximum height, number of repetitions, target area, the date the exercise was performed and its time, rest time, number of sets and analysis. Additionally, it will include a column for the patient's feedback on their exercise performance.
@@ -182,7 +189,7 @@ The following table is taken directly from the Module Guide document for this pr
 
 \section{MIS}
 This section describes individual module specifications.\\
-\textit{See Appendix A for information about the variables used throughout this document.}
+
 \subsection{Module - Account Creation}
 This module enables the creation of an account for users. It uses a database to store any information that 
 is essential for other modules to perform their actions. A database was used for its ease of manipulation and its 
@@ -198,9 +205,10 @@ comprehensive, multi-functional nature.
   account creation.
 \end{enumerate}  
 \subsubsection{Uses}
-All the variables used in each class are listed below:\\
-\textbf{\textit{create-patient.tsx, create-physio.tsx}}\\
-\textit{Variables used in both files are listed below.}
+All the variables used in each class related to account creation are described below.\\
+\textbf{\textit{/technically-functional/mobile/app/(auth)/\underline{create-physio.tsx}, \\
+/technically-functional/mobile/app/(auth)/\underline{create-patient.tsx}}}\\
+\textit{Variables used in both of the above files are listed below.}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const router = useRouter();}] 
     Expo Router instance for navigation after form submission. Imported from \texttt{expo-router}.
@@ -218,75 +226,284 @@ All the variables used in each class are listed below:\\
     Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
 
 \item[\texttt{const [birthday, setBirthday] = useState("");}] 
-    Manages the birthday input field; initializes as empty string.
+    Manages the birthday input field; initializes as empty string; valid format is YYYY-MM-DD.
 
   \end{description}
 \textbf{Unique variable in \textit{\underline{create-patient.tsx}}:}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const [inviteCode, setInviteCode] = useState("");}] 
-    Manages the invitation code input field; initializes as empty string.
+    Manages the invitation code input field; initializes as empty string; valid format is 6 capital alphanumeric characters.
 \end{description}
 \textbf{Unique variable in \textit{\underline{create-physio.tsx}}:}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{const [licenseNumber, setLicenseNumber] = useState("");}] 
-    Manages the physiotherapist license number input field; initializes as empty string. Required for physiotherapist verification.
+    Manages the physiotherapist license number input field; initializes as empty string; Required for physiotherapist verification;
+    valid format is XX-123456.
 \end{description}
 
-Account creation generates one object of the type described in \ref{section:user account}
+\noindent \textbf{\textit{/technically-functional/mobile/lib/\underline{authService.ts}}}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{export const checkEmailExists}] 
+    Async function constant that checks if an email is already registered in Firebase Authentication. Function accepts an email string as a parameter. Returns \texttt{true} if the email exists, \texttt{false} otherwise. Used to prevent duplicate account creation.
+
+\item[\texttt{export const licenseFormatValid}] 
+    Function constant that validates physiotherapist license number format (XX-123456). Accepts a license number string as a parameter. Returns an object containing \texttt{isValid} (boolean) and \texttt{errorMessage} (string or null).
+
+\item[\texttt{export const registerPhysio}] 
+    Async function constant that registers a new physiotherapist account. Type: \texttt{(params: \{name, email, password, licenseNumber, birthday\}) => Promise<\{uid: string, role: "physio"\}>}. Returns \texttt{\{uid, role\}} on success.
+
+\item[\texttt{export const registerPatient}] 
+    Async function constant that registers a new patient account. Type: \texttt{(params: \{name, email, password, inviteCode, birthday\}) => Promise<\{uid: string, role: "patient"\}>}. Returns \texttt{\{uid, role\}} on success.
+
+\item[\texttt{export const login}] 
+    Async function constant that authenticates a user. Type: \texttt{(email: string, password: string) => Promise<\{uid: string, ...userData\}>}. Returns user data from Firestore on success.
+
+\item[\texttt{export const logout}] 
+    Async function constant that signs out the current user. Type: \texttt{() => Promise<void>}.
+
+\end{description}
+
+
+%Account creation generates one object of the type described in \ref{section:user account}
 
 
 
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}\\
-\begin{itemize}
-\item email
-\item password
-\item name
-\item birthday \textsuperscript{2}
-\item acc\_double
-\item acc\_id
-\end{itemize}
+\textbf{\textit{\underline{authService.ts}}}
+\begin{description}[style=nextline, leftmargin=2.5cm]
 
-\noindent\textsuperscript{2} \textit{'Birthday' is an exported constant for distinguishing two users that may have the same name. This will be integral
-in a 'get\_userdb\_info' function.} \\
+\item[\texttt{export const registerPatient}] 
+    Async function constant that registers a new patient account. 
 
-\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
+\item[\texttt{export const registerPhysio}] 
+    Async function constant that registers a new physiotherapist account. 
 
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\item[\texttt{export const checkEmailExists}] 
+    Async function constant that checks if an email address is already registered in the system.
+    
+\item[\texttt{export const licenseFormatValid}] 
+    Async function that validates the format of a physiotherapist license number.
+\end{description}
+
+\noindent \textbf{\textit{\underline{create-patient.tsx}, \underline{create-physio.tsx}}}\\
+NA\\
+
+
+\noindent \textbf{Exported Access Programs} 
+
+\noindent \underline{\textbf{\textit{create-patient.tsx}}}
+
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
 \hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
 \hline
+\endfirsthead
 
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
 
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if an account already exists in the user database.} \\
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+% CreatePatient
+%\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient():} Creates a new patient account using an invite code.} \\
+%\hline
+%\rowcolor{white}
+%\texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
+%\texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
+%\texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
+%\hline
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Screen component for patient registration.} \\
 \hline
 \rowcolor{white}
-acc\_exists & \makecell[lt]{\textit{name}\\\textit{birthday}} & \textit{acc\_double} & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
+\texttt{props: none} &
+\texttt{JSX.Element} - Renders registration form with validation &
+\begin{tabular}{@{}l@{}}
+\texttt{Internal validations}\\ \texttt{\& services:}\\
+• Password: min 6 \\chars + at least one\\ number\\
+• Birthday: YYYY-MM\\-DD format validation\\
+• Email: existence \\check via \\checkEmailExists()\\
+• Invite code: validated \\by licenseFormatValid()\\
+• Navigation: \\router.replace() on \\success
+\end{tabular} \\
+
+\end{longtable}
+\noindent \underline{\textbf{\textit{create-physio.tsx}}}
+
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+% CreatePhysio
+%\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio():} Creates a new physiotherapist account after license validation.} \\
+%\hline
+%\rowcolor{white}
+%\texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
+%\texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
+%\texttt{Error} - Invalid license number or Firebase Auth error \\
+%\hline
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
+\hline
+\rowcolor{white}
+\texttt{props: none} &
+\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
+\begin{tabular}{@{}l@{}}
+\texttt{Validations performed:}\\
+• Password: min 6 \\chars + at least \\one number\\
+• Birthday: \\YYYY-MM-DD format\\
+• Email: existence \\check via \\checkEmailExists()\\
+• License format \\validation handled by \\registerPhysio()
+\end{tabular} \\
+
+\end{longtable}
+
+\underline{\textbf{\textit{authService.ts}}} \\
+
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+% checkEmailExists
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{checkEmailExists(email):} Checks if an email is already registered in Firebase Authentication.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string} - User's email address &
+\texttt{Promise<boolean>} - Returns true if email already exists, false otherwise &
+\texttt{Error} - Throws error if there is an error checking email. \\
 \hline
 
-\end{tabularx}
-\caption{Exported Access Routines}
-\label{tab:user_routines_1}
-\end{table}
+% licenseFormatValid
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{licenseFormatValid(licenseNumber):} Validates physiotherapist license number format (XX-123456).} \\
+\hline
+\rowcolor{white}
+\texttt{licenseNumber: string} - PT license number &
+\texttt{boolean} - Returns true if format is valid, false otherwise &
+\texttt{Error} - Throws error if there is an error checking licenseNumber. \\
+\hline
 
-\newpage
+% registerPhysio
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPhysio:} Registers a new physiotherapist account into the databese after license validation} \\
+\hline
+\rowcolor{white}
+\texttt{params: \{name: string, email: string, password: string, licenseNumber: string\}} &
+\texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
+\texttt{Error} - Invalid license format, license not verified, Firebase Auth error \\
+\hline
 
-\noindent \textbf{Exported Access Programs (definitions)} \\
-\textit{E(x)}: 'acc\_exists(x)' \\
-\textit{db}: 'User Account database' \\
-$i, j \in \mathbb{Z}^{+}$ \\
-$\neg (E(i)) \implies$ $db(i).name \neq db(j).name \cup (db(i).name = db(j).name \cap db(i).birthday \neq db(j).birthday)$ \\
-%REMOVE%
-If an account does not already exist, that implies that the names are different, or if they are the same, the birthdays are different.\\
+% registerPatient
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{registerPatient:} Registers a new patient account into the database.} \\
+\hline
+\rowcolor{white}
+\texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
+\texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
+\texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
+\hline
 
+\end{longtable}
+
+\textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
+CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
+making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
+
+\noindent \textbf{Exported Access Programs} \hypertarget{acexpprogs}\\
+\texttt{e}: email \\
+\texttt{n}: name \\
+\texttt{pw}: password\\
+\texttt{lno}: licenseNumber\\
+\texttt{code}: inviteCode\\
+\texttt{bday}: birthday\\
+\texttt{p}: (n, e, pw, lno, bday)\\
+\texttt{pt}: (n, e, pw, code, bday)\\
+\texttt{cat}: createdAt \\
+\texttt{pid}: physioId \\
+\texttt{v}: verified \\
+\texttt{u}: uid \\
+\texttt{del}: deleted\\
+\textit{db}: \texttt{users} table in database \\
+\textit{db'}: newer version of \texttt{users} table \\
+$i, j, k, l, m, n \in \{0-9\}$ \\
+$a, b \in \{A-Z\}$ \\
+\newline
+\textit{E(e)}: 'checkEmailExists(e)' \\
+\textit{L(l)}: 'licenseFormatValid(l)' \\
+\textit{Phy(p)}: 'registerPhysio(p)'\\
+\textit{Pt(pt)}: 'registerPatient(pt)'\\
+
+
+\noindent \underline{Function definitions:}\\
+\noindent $E(e) \implies e \in db.email$ \\
+\newline
+\noindent $L(l) \implies $ 
+$\exists$ $l$ $|$ $l = (a + b $ $+$ $'-' $ + 'i' + 'j' + 'k' + 'l' + 'm' + 'n') $\in validLicenses$ \\
+\newline
+$Phy(p) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, e, lno, n, role:'physio', v\}}\} $\\
+\newline
+$Pt(pt) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, del, e, code, n, pid, role:'patient'\}}\} $\\
 
 
 \subsubsection{Semantics}
@@ -294,23 +511,24 @@ If an account does not already exist, that implies that the names are different,
 
 
 \noindent \textbf{State Variables} \\
-\textit{id}: acc\_id \\
-\textit{name}: name \\
-\textit{role}: role \\
-\textit{email}: email \\
-\textit{dob}: birthday \\
-\textit{pw}: password \\
-\textit{acc\_copy}: acc\_double \\
-\textit{new\_id}: newly created acc\_id \\
+See \hyperlink{acexpprogs}{here} for a list of additional state variables.\\
+\texttt{first}: user 1\\
+\texttt{second}: user 2\\
+\texttt{first\_uid}: uid of user 1\\
+\texttt{second\_uid}: uid of user 2\\
 
 \noindent \textbf{State Invariant} \\
-$\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
+$\forall$ $first, second \in \texttt{db}, first\_uid \cap second\_uid = \emptyset $\\
+All users have different uids.\\
+
+
+%$\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
 %REMOVE%
-If there is no account already present in the user database, that means that there is no acc\_id present \\
+%If there is no account already present in the user database, that means that there is no acc\_id present \\
 %$ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\_id)$ $=$ $\emptyset$ \\
-$acc\_id \cup new\_id \implies$ $\forall n \in name, r \in role, e \in email, d \in dob$, $n \cap r \cap e \cap d \notin \emptyset$ \\ 
+%$acc\_id \cup new\_id \implies$ $\forall n \in name, r \in role, e \in email, d \in dob$, $n \cap r \cap e \cap d \notin \emptyset$ \\ 
 %REMOVE%
-If there is an account present in the user database, that means none of the fields above are empty
+%If there is an account present in the user database, that means none of the fields above are empty
 
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
@@ -318,46 +536,110 @@ If there is an account present in the user database, that means none of the fiel
 
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item Users with the same name have different birthdays.
+  \item Patients with the same name have different birthdays.
+  \item Only one person can access user information in the database at a time since many values that are exported are asynchronous values.
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
-\textbf{Exported access routines}: NA \\
+\textbf{Exported access routines} \\
+See \hyperlink{acexpprogs}{here} for state variables being used.
+\newline
+\textit{\underline{checkEmailExists: E(e)}}\\
+\textbf{Pre-condition:}
+  e $\in db.email$\\
+\textbf{Function:}
+  E(e) = true \\
+\textbf{Post-condition:}
+  Returns true if email already exists in database(\texttt{users}), false otherwise.\\
+\textit{\underline{licenseFormatValid: L(l)}}\\
+\textbf{Pre-condition:}
+  l $\in db.validLicenses$\\
+\textbf{Function:}
+  L(l) = true \\
+\textbf{Post-condition:}
+  Returns true if license exists in database(\texttt{validLicenses}), false otherwise.\\
+\textit{\underline{registerPhysio: Phy(p)}}\\
+\textbf{Pre-condition:}
+  $(p.name \cap p.email \cap p.pw \cap p.lno \cap p.bday \neq \emptyset)\cap (L(p.lno)) \cap (\neg (E(p.email)))$\\
+\textbf{Function:}
+   Phy(p)\\
+\textbf{Post-condition:}
+  $p \in \texttt{db}$\\
+\textit{\underline{registerPatient: Pt(pt)}}\\
+\textbf{Pre-condition:}
+  $(p.name \cap p.email \cap p.pw \cap p.code \cap p.bday \neq \emptyset) \cap (\neg (E(p.email))) $\\
+\textbf{Function:}
+   Pt(pt)\\
+\textbf{Post-condition:}
+  $p \in \texttt{db}$\\
 
-
-
+\newpage
 \subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{5.75cm}|
+}
 \hline
-\rowcolor{green}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
 \hline
+\endfirsthead
 
-\rowcolor{lightgreen}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Creates a new user account} \\
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
 \hline
 \rowcolor{white}
-account\_create & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{user\_account\_p\\or\\user\_account\_pt} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+\texttt{props: none} &
+\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
+\begin{tabular}{@{}l@{}}
+\texttt{Validations performed:}\\
+• Password: min 6 chars + at \\ least one number\\
+• Birthday: YYYY-MM-DD \\ format\\
+• Email: existence check via \\checkEmailExists()\\
+• License format \\validation handled by \\registerPhysio()
+\end{tabular} \\
 \hline
 
-\rowcolor{lightgreen}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sets user information in database} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{validatePasswordlength():} Internal helper function for password validation.} \\
 \hline
 \rowcolor{white}
-set\_user\_info & \makecell[lt]{\textit{Name}\\\textit{Role}\\\textit{Birthday}\\\textit{License\_no/}\\\textit{Invite\_code}\\\textit{Email}\\\textit{Password}} & \makecell[lt]{NA} & \makecell[lt]{Input\_format\_invalid\\Required\_field\_empty\\Account\_already\_\\exists\\Incorrect\_creds\\Invite\_code\_expired} \\
+\texttt{params: \{password: string\}} &
+\texttt{string | null} &
+\begin{tabular}{@{}l@{}}
+• Returns "Password must be \\ at least 6 \\ characters long" if length $<$ 6\\
+• Returns "Password must \\ contain at least one number" if \\ no numbers present\\
+• Returns null if valid
+\end{tabular} \\
 \hline
 
-\end{tabularx}
-\caption{Local Routines}
-\label{tab:account_routines}
-\end{table} 
+\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{validateBirthday():} Internal helper function for birthday format validation.} \\
+\hline
+\rowcolor{white}
+\texttt{params: \{birthday: string\}} &
+\texttt{string | null} &
+\begin{tabular}{@{}l@{}}
+• Returns "Please enter \\ birthday in YYYY-MM-DD \\ format" if format entered is \\invalid\\
+• Returns null if valid
+\end{tabular} \\
+\hline
 
+\end{longtable}
 
 \noindent \textbf{Local Routines (definitions)}\\
 \textit{new(x)}: 'account\_create(x)'\\
@@ -459,7 +741,7 @@ invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is
 
 \end{tabularx}
 \caption{Exported Access Routines}
-\label{tab:user_routines_1}
+\label{tab:user_routines_2}
 \end{table}
 \newpage
 \noindent \textbf{State Variables} \\
