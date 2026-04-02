@@ -264,7 +264,7 @@ All the variables used in each class related to account creation are described b
 \end{description}
 
 
-Account creation generates one object of the type described in \ref{section:user account}
+%Account creation generates one object of the type described in \ref{section:user account}
 
 
 
@@ -470,7 +470,7 @@ NA\\
 CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
 making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
 
-\noindent \textbf{Exported Access Programs} \\
+\noindent \textbf{Exported Access Programs: labels and function definitions} \label{section: ACexpaccprog}\\
 \texttt{e}: email \\
 \texttt{n}: name \\
 \texttt{pw}: password\\
@@ -511,23 +511,24 @@ $Pt(pt) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, del, e
 
 
 \noindent \textbf{State Variables} \\
-\textit{id}: acc\_id \\
-\textit{name}: name \\
-\textit{role}: role \\
-\textit{email}: email \\
-\textit{dob}: birthday \\
-\textit{pw}: password \\
-\textit{acc\_copy}: acc\_double \\
-\textit{new\_id}: newly created acc\_id \\
+See \ref{section: ACexpaccprog} under exported access programs: labels and function definitions\\
+\texttt{first}: user 1\\
+\texttt{second}: user 2\\
+\texttt{first\_uid}: uid of user 1\\
+\texttt{second\_uid}: uid of user 2\\
 
 \noindent \textbf{State Invariant} \\
-$\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
+$\forall$ $first, second \in \texttt{db}, first\_uid \cap second\_uid = \emptyset $\\
+All users have different uids.\\
+
+
+%$\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
 %REMOVE%
-If there is no account already present in the user database, that means that there is no acc\_id present \\
+%If there is no account already present in the user database, that means that there is no acc\_id present \\
 %$ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\_id)$ $=$ $\emptyset$ \\
-$acc\_id \cup new\_id \implies$ $\forall n \in name, r \in role, e \in email, d \in dob$, $n \cap r \cap e \cap d \notin \emptyset$ \\ 
+%$acc\_id \cup new\_id \implies$ $\forall n \in name, r \in role, e \in email, d \in dob$, $n \cap r \cap e \cap d \notin \emptyset$ \\ 
 %REMOVE%
-If there is an account present in the user database, that means none of the fields above are empty
+%If there is an account present in the user database, that means none of the fields above are empty
 
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
@@ -535,12 +536,22 @@ If there is an account present in the user database, that means none of the fiel
 
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item Users with the same name have different birthdays.
+  \item Patients with the same name have different birthdays.
+  \item Only one person can access user information in the database at a time since many values that are exported are asynchronous values.
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
-\textbf{Exported access routines}: NA \\
+\textbf{Exported access routines}
 
+\noindent See \ref{section: ACexpaccprog}: exported access programs: labels and function definitions.\\
+\newline
+\textit{\underline{E(e)}}\\
+\textbf{Pre-condition:}
+  e $\in db.email$\\
+\textbf{Function:}
+  E(e) = true \\
+\textbf{Post-condition:}
+  Returns true if email already exists in database, false otherwise.\\
 
 
 \subsubsection{Local Functions}
