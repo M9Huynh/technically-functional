@@ -34,8 +34,10 @@ interface FeedbackInfo {
   color: string;
 }
 
-const CAL_DURATION_S = 10.0;
+const CAL_DURATION_S = 10.0; //calibration time set to 10s
 
+
+// Show specific feedback case based on metrics
 function getFeedback(metrics: Metrics | null): FeedbackInfo {
   if (!metrics) {
     return {
@@ -105,6 +107,7 @@ function getFeedback(metrics: Metrics | null): FeedbackInfo {
   }
 }
 
+// Displays live visual feedback and audio guidance cues throughout the exercise
 export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
   const feedback = getFeedback(metrics);
 
@@ -180,7 +183,7 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
       startExerciseAnnouncedRef.current = true;
     }
   }, [metrics]);
-
+  // Notifies the user if they are out of frame, to move back into frame
   useEffect(() => {
     const now = Date.now();
 
@@ -194,7 +197,7 @@ export default function FeedbackOverlay({ metrics }: FeedbackOverlayProps) {
       lastOutOfFrameAtRef.current = 0;
     }
   }, [feedback.key]);
-
+  // tells the user the repetition count, as they are going through the exercise
   useEffect(() => {
     if (!metrics || metrics.calibrating) return;
     if (!startExerciseAnnouncedRef.current) return;
