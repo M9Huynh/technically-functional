@@ -109,7 +109,9 @@ See SRS Documentation at \href{https://github.com/M9Huynh/technically-functional
 %new
 The following document details the Module Interface Specifications for the PhysioCompanion app. The application is 
 designed to identify users performing prescribed exercises and provide feedback on their form. This tool uses computer
-vision, specifically OpenCV and MediaPipe, to analyze user video recording and perform analysis. 
+vision, specifically OpenCV and MediaPipe, to analyze user video recording and perform analysis. Please note that certain
+modules exhibit functional overlap, as their respective operations perform equivalent decomposed tasks across different 
+modules. \\
 
 Complementary documents include the \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}{System Requirement Specifications}
 and \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide}.  The full documentation and implementation can be
@@ -293,113 +295,11 @@ NA\\
 
 \noindent \textbf{Exported Access Programs} 
 
-\noindent \underline{\textbf{\textit{create-patient.tsx}}}
-
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-
-\hline
-\endlastfoot
-
-% CreatePatient
-%\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient():} Creates a new patient account using an invite code.} \\
-%\hline
-%\rowcolor{white}
-%\texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
-%\texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
-%\texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
-%\hline
-
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Screen component for patient registration.} \\
-\hline
-\rowcolor{white}
-\texttt{props: none} &
-\texttt{JSX.Element} - Renders registration form with validation &
-\begin{tabular}{@{}l@{}}
-\texttt{Internal validations}\\ \texttt{\& services:}\\
-• Password: min 6 \\chars + at least one\\ number\\
-• Birthday: YYYY-MM\\-DD format validation\\
-• Email: existence \\check via \\checkEmailExists()\\
-• Invite code: validated \\by licenseFormatValid()\\
-• Navigation: \\router.replace() on \\success
-\end{tabular} \\
-
-\end{longtable}
-\noindent \underline{\textbf{\textit{create-physio.tsx}}}
-
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-
-\hline
-\endlastfoot
-
-% CreatePhysio
-%\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio():} Creates a new physiotherapist account after license validation.} \\
-%\hline
-%\rowcolor{white}
-%\texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
-%\texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
-%\texttt{Error} - Invalid license number or Firebase Auth error \\
-%\hline
-
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
-\hline
-\rowcolor{white}
-\texttt{props: none} &
-\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
-\begin{tabular}{@{}l@{}}
-\texttt{Validations performed:}\\
-• Password: min 6 \\chars + at least \\one number\\
-• Birthday: \\YYYY-MM-DD format\\
-• Email: existence \\check via \\checkEmailExists()\\
-• License format \\validation handled by \\registerPhysio()
-\end{tabular} \\
-
-\end{longtable}
-
-\underline{\textbf{\textit{authService.ts}}} \\
+\noindent \underline{\textbf{\textit{create-patient.tsx}}} \\
+NA\\
+\noindent \underline{\textbf{\textit{create-physio.tsx}}} \\
+NA\\
+\noindent \underline{\textbf{\textit{authService.ts}}} \\
 
 \begin{longtable}{
 |>{\columncolor{softgray}}p{4.2cm}|
@@ -466,24 +366,22 @@ NA\\
 
 \end{longtable}
 
-\textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
-CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
-making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
 
 \noindent \textbf{Exported Access Programs} \hypertarget{acexpprogs}\\
-\texttt{e}: email \\
-\texttt{n}: name \\
-\texttt{pw}: password\\
-\texttt{lno}: licenseNumber\\
-\texttt{code}: inviteCode\\
-\texttt{bday}: birthday\\
-\texttt{p}: (n, e, pw, lno, bday)\\
-\texttt{pt}: (n, e, pw, code, bday)\\
-\texttt{cat}: createdAt \\
-\texttt{pid}: physioId \\
-\texttt{v}: verified \\
-\texttt{u}: uid \\
-\texttt{del}: deleted\\
+\texttt{p}: (name, email, password, licenseNumber, birthday)\\
+\texttt{pt}: (name, email, password, inviteCode, birthday)\\
+\texttt{user}: p or pt \\
+\texttt{e}: user.email \\
+\texttt{n}: user.name \\
+\texttt{pw}: user.password\\
+\texttt{lno}: user.licenseNumber\\
+\texttt{code}: user.inviteCode \\
+\texttt{bday}: user.birthday\\
+\texttt{cat}: user.createdAt \\
+\texttt{pid}: user.physioId (for \texttt{pt} only)\\
+\texttt{v}: user.verified (for \texttt{p} only) \\
+\texttt{u}: user.uid \\
+\texttt{del}: user.deleted (for \texttt{pt} only)\\
 \textit{db}: \texttt{users} table in database \\
 \textit{db'}: newer version of \texttt{users} table \\
 $i, j, k, l, m, n \in \{0-9\}$ \\
@@ -520,15 +418,6 @@ See \hyperlink{acexpprogs}{here} for a list of additional state variables.\\
 \noindent \textbf{State Invariant} \\
 $\forall$ $first, second \in \texttt{db}, first\_uid \cap second\_uid = \emptyset $\\
 All users have different uids.\\
-
-
-%$\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
-%REMOVE%
-%If there is no account already present in the user database, that means that there is no acc\_id present \\
-%$ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\_id)$ $=$ $\emptyset$ \\
-%$acc\_id \cup new\_id \implies$ $\forall n \in name, r \in role, e \in email, d \in dob$, $n \cap r \cap e \cap d \notin \emptyset$ \\ 
-%REMOVE%
-%If there is an account present in the user database, that means none of the fields above are empty
 
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
@@ -603,17 +492,17 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \hline
 \endlastfoot
 
-\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{CreatePatient:} Physiotherapist registration screen component.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Physiotherapist registration screen component.} \\
 \hline
 \rowcolor{white}
 \texttt{props: none} &
-\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
+\texttt{JSX.Element} - Renders patient registration form with validation &
 \begin{tabular}{@{}l@{}}
-\texttt{Validations performed:}\\
-• Password: min 6 chars + at least one number\\
-• Birthday: YYYY-MM-DD format\\
-• Email: existence check via checkEmailExists()\\
-• License format validation handled by registerPhysio()
+\texttt{Validations} \\ \texttt{performed:}\\
+• Password: min 6 \\ chars + at least one \\ number\\
+• Birthday:\\ YYYY-MM-DD format\\
+• Email: existence \\ check via \\ checkEmailExists()\\
+• Invite code \\ validation handled by \\ registerPatient()
 \end{tabular} \\
 \hline
 
@@ -646,21 +535,22 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \hline
 \endlastfoot
 
-\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
 \hline
 \rowcolor{white}
 \texttt{props: none} &
 \texttt{JSX.Element} - Renders physiotherapist registration form with validation &
 \begin{tabular}{@{}l@{}}
-\texttt{Validations performed:}\\
-• Password: min 6 chars + at least one number\\
-• Birthday: YYYY-MM-DD format\\
-• Email: existence check via checkEmailExists()\\
-• License format validation handled by registerPhysio()
+\texttt{Validations} \\ \texttt{performed:}\\
+• Password: min 6 \\ chars + at least one \\ number\\
+• Birthday:\\ YYYY-MM-DD format\\
+• Email: existence \\ check via \\ checkEmailExists()\\
+• License number \\ validation handled by \\ registerPhysio()
 \end{tabular} \\
 \hline
 
 \end{longtable}
+\pagebreak
 \noindent \underline{\textbf{\textit{Both files}}}
 \begin{longtable}{
 |>{\columncolor{softgray}}p{4.2cm}|
@@ -689,78 +579,56 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \hline
 \endlastfoot
 
-\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{validatePasswordlength():} Internal helper function for password validation.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{passwordCheck():} Internal helper function for password validation.} \\
 \hline
 \rowcolor{white}
 \texttt{params: \{password: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Password must be at least 6 characters long" if length $<$ 6\\
-• Returns "Password must contain at least one number" if no numbers present\\
+• Returns "Password \\ must be at  least \\ 6 characters long" \\ if length $<$ 6\\
+• Returns "Password \\ must contain at \\ least one number" if \\ no numbers present\\
 • Returns null if valid
 \end{tabular} \\
 \hline
 
-\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{validateBirthday():} Internal helper function for birthday format validation.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{validateBirthday():} Internal helper function for birthday format validation.} \\
 \hline
 \rowcolor{white}
 \texttt{params: \{birthday: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Please enter birthday in YYYY-MM-DD format" if format entered is invalid\\
+• Returns "Please enter \\ birthday in YYYY-MM\\-DD format" if format \\entered is invalid\\
 • Returns null if valid
 \end{tabular} \\
 \hline
 
 \end{longtable}
 
+\noindent \textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
+CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
+making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
+
 \noindent \textbf{Local Routines (definitions)}\\
-\textit{new(x)}: 'account\_create(x)'\\
-\textit{set(y)}: 'set\_user\_info(y)'\\
-\textit{name}: name\\
-\textit{birthday}: birthday\\
-\textit{license}: License\_no \\
-\textit{code}: Invite\_code \\
-\textit{email}: Email\\
-\textit{pw}: password \\
-\textit{patient}: user\_acc\_p\\
-\textit{PT}: user\_acc\_pt\\
-\textit{db}: 'User Account'\\
-\textit{new\_db}: updated 'User Account' \\
-\textit{acc\_copy}: acc\_double\\
+\texttt{p}: (name, email, password, licenseNumber, birthday)\\
+\texttt{pt}: (name, email, password, inviteCode, birthday)\\
+\texttt{user}: p or pt\\
+\texttt{e}: user.email \\
+\texttt{n}: user.name \\
+\texttt{pw}: user.password\\
+\texttt{lno}: user.licenseNumber\\
+\texttt{code}: user.inviteCode\\
+\texttt{bday}: user.birthday\\
+\textit{Pc(pw)}: 'passwordCheck(pw)'\\
+\textit{Vb(bday)}: 'validateBirthday(bday)' \\
 
-\noindent $\textbf{new(x)}:$ \\
-Given: \textit{x} = form submission from user interface \\
-Pre-condition: $\forall$ $n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$: $\neg acc\_copy(x)$ $\cap$ $(n \cap b \cap e \cap p \cap (l \cup c))$\\
-Function: new(x) \\
-Post-condition: $ new\_db = db \cup x$ \\
-
-%\noindent Opt 2: \\
-%$\neg acc\_copy$ $\cap$ 
-%$n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$ $|$
-%$n \cap b \cap e \cap p \cap (l \cup c)$ $\neq \emptyset$ \\
-
-\noindent $\textbf{set(x)}:$ \\
-Given: \textit{x} \\
-Pre-condition: $\neg acc\_exists(x)$ \\
-Function: set(x) \\
-Post-condition: $ new\_db = db \cup {(x.name, x.birthday, (x.license \cup x.code), x.email, x.pw)}$ \\
+\noindent \underline{Function definitions}: \\
+$Pc(pw) \implies pw.length \geq 6 \cap \exists$ $d$ $|$ $d \in \{0 - 9\} \cap d \in pw$ \\
+\texttt{Date} = 'YYYY-MM-DD' $|$ 'YYYY' $\in$ \{0000 - 9999\} $\cap$ 'MM' $\in$ \{01 - 12\} $\cap$ 'DD' $\in$ \{01 - 31\} \\
+$Vb(bday) \implies bday \in Date $ \\
+\textit{Note: See \ref{sec:ui} for CreatePhysio and CreatePatient}
 
 \subsubsection{Access Routine Semantics}
-$n \in Name, r \in role, b \in birthday, l \in license\_no, i \in invite\_code, e \in email, p \in password$ \\
-\textit{db}: User database \\
-\textbf{Local routines}: \\
-\textit{account\_create(n, r, b, l OR i, e, p)}:
-\begin{itemize}
-  \item Output: new \textit{user\_account\_p} or \textit{user\_account\_pt} instance
-  \item Transition: $user\_account\_p$ $\cup$ $user\_account\_pt = \emptyset \implies (user\_account\_p$ $\cup$ $user\_account\_pt) \neq \emptyset$
-  \item Exception: Input\_format\_invalid, Required\_field\_empty, Account\_already\_exists, Incorrect\_creds, Invite\_code\_expired 
-\end{itemize}
-
-\noindent \textit{set\_user\_info}: \\
-NA
-
-
+%TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Valid user}
@@ -2030,7 +1898,7 @@ mpipe\_draw & \makecell[lt]{\textit{unprocessed\_frames}} & \makecell[lt]{\texti
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - UI}
+\subsection{Module - UI} \label{sec:ui}
 NA
 
 
