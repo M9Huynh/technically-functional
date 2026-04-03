@@ -265,13 +265,8 @@ All the variables used in each class related to account creation are described b
 
 \end{description}
 
-
 %Account creation generates one object of the type described in \ref{section:user account}
-
-
-
 \subsubsection{Syntax}
-
 \textbf{Exported Constants}\\
 \textbf{\textit{\underline{authService.ts}}} \label{sec:validexp}
 \begin{description}[style=nextline, leftmargin=2.5cm]
@@ -290,15 +285,14 @@ All the variables used in each class related to account creation are described b
 \end{description}
 
 \noindent \textbf{\textit{\underline{create-patient.tsx}, \underline{create-physio.tsx}}}\\
-NA\\
-
+See \ref{sec:ui} for UI export variables.\\
 
 \noindent \textbf{Exported Access Programs} 
 
 \noindent \underline{\textbf{\textit{create-patient.tsx}}} \\
-NA\\
+See \ref{sec:ui} for UI export programs\\
 \noindent \underline{\textbf{\textit{create-physio.tsx}}} \\
-NA\\
+See \ref{sec:ui} for UI export programs\\
 \noindent \underline{\textbf{\textit{authService.ts}}} \\
 
 \begin{longtable}{
@@ -324,8 +318,6 @@ NA\\
 
 \multicolumn{3}{c}{\textit{Continued on next page}} \\
 \endfoot
-
-\hline
 \endlastfoot
 
 % checkEmailExists
@@ -363,7 +355,7 @@ NA\\
 \texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
 \texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
 \hline
-
+\caption{Exported functions} \label{sec: accountexpprogs}\\
 \end{longtable}
 
 
@@ -393,7 +385,7 @@ $a, b \in \{A-Z\}$ \\
 \textit{Pt(pt)}: 'registerPatient(pt)'\\
 
 
-\noindent \underline{Function definitions:}\\
+\noindent \underline{Function definitions:} \label{sec: ACfuncdef} \\
 \noindent $E(e) \implies e \in db.email$ \\
 \newline
 \noindent $L(l) \implies $ 
@@ -488,8 +480,6 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 
 \multicolumn{3}{c}{\textit{Continued on next page}} \\
 \endfoot
-
-\hline
 \endlastfoot
 
 \multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Physiotherapist registration screen component.} \\
@@ -505,7 +495,7 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 • Invite code \\ validation handled by \\ registerPatient()
 \end{tabular} \\
 \hline
-
+\caption{Account module: CreatePatient function}
 \end{longtable}
 \noindent \underline{\textbf{\textit{create-physio.tsx}}}
 \begin{longtable}{
@@ -531,8 +521,6 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 
 \multicolumn{3}{c}{\textit{Continued on next page}} \\
 \endfoot
-
-\hline
 \endlastfoot
 
 \multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
@@ -548,7 +536,7 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 • License number \\ validation handled by \\ registerPhysio()
 \end{tabular} \\
 \hline
-
+\caption{Account module: CreatePhysio function}
 \end{longtable}
 \pagebreak
 \noindent \underline{\textbf{\textit{Both files}}}
@@ -575,8 +563,6 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 
 \multicolumn{3}{c}{\textit{Continued on next page}} \\
 \endfoot
-
-\hline
 \endlastfoot
 
 \multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{passwordCheck():} Internal helper function for password validation.} \\
@@ -601,7 +587,7 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 • Returns null if valid
 \end{tabular} \\
 \hline
-
+\caption{Account module: CreatePatient and CreatePhysio common functions} \label{pwandbdayvalid}
 \end{longtable}
 
 \noindent \textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
@@ -634,13 +620,10 @@ $Vb(bday) \implies bday \in Date $ \\
 \subsection{Module - Valid user}
 This module's purpose is to check whether a potential user is authorized to create an account.
 For feasible implementation purposes, a file with hard coded invite codes and license numbers will be used.
-The actions accomplishing the module's purpose are within the registerPhysio and registerPatient functions. 
-
+The actions accomplishing the module's purpose are within the registerPhysio and registerPatient functions,
+which contain internal validation of inviteCode and licenseNumber.
 \subsubsection{Uses}
-For interface elements, see \ref{sec:ui}.\\
-
-\noindent \textbf{Input Parameters:}
-\begin{description}[style=nextline, leftmargin=2.5cm]
+\begin{description}[style=nextline, leftmargin=4cm]
 
 \item[\texttt{params}] 
     Input object containing patient registration data. Type: \texttt{\{name: string, email: string, password: string, inviteCode: string, birthday: string\}}.
@@ -658,7 +641,7 @@ For interface elements, see \ref{sec:ui}.\\
     Data from invite code document. Contains fields: \texttt{active} (boolean), \texttt{used} (boolean), \texttt{physioId} (string).
 
 \item[\texttt{physioId}] 
-    Physiotherapist ID extracted from invite code. Type: string.
+    \texttt{uid} of the physiotherapist that provided invite code. Type: string.
 
 \item[\texttt{cred}] 
     Firebase Auth user credential. Type: \texttt{UserCredential}.
@@ -671,22 +654,42 @@ For interface elements, see \ref{sec:ui}.\\
 
 \item[\texttt{auth}] 
     Firebase Authentication instance. Imported from \texttt{./firebase}.
+
+\item[\texttt{licenseNumber}] 
+    State variable managing license number input. Type: string. Initialized as empty string.
+
+\item[\texttt{lic}] 
+    Normalized license number. Type: string. Computed as \texttt{params.licenseNumber.\\trim().toUpperCase()}.
+
+\item[\texttt{licSnap}] 
+    Firestore document snapshot from \texttt{validLicenses} collection. Type: \texttt{DocumentSnapshot}.
+
 \end{description}
 For additional exported constants, see \textbf{\textit{authService.ts}} exported constants in \ref{sec:validexp}. \\
-\textbf{Exported Access Programs} \\
-\textit{Not applicable} \\
+For interface elements, see \ref{sec:ui}.\\
+\newline
+\noindent \textbf{Exported Access Programs} \\
+See Table \ref{sec: accountexpprogs}, \textit{\textbf{registerPatient}} and \textit{\textbf{registerPhysio}}
+details respectively.\\
+\newline
+\underline{\textit{Function definitions:}}\\
+This module has components that have been defined in the Account Creation module. See \hyperref[sec: ACfuncdef]{\textit{Function definitions in \ref*{sec: ACfuncdef}}}.
 
 \subsubsection{Semantics}
 \textbf{State Variables}\\
 See \ref{sec:ui} for UI state variables. \\
-\texttt{pUser}: a patient user type\\
+\texttt{pt}: a patient user type\\
+\texttt{p}: a physio user type \\
 \texttt{code}: a patient invite code \\
 \texttt{lno}: a PT's license number \\
-\textbf{State Invariant}\\
-$ code['used'] == true \implies \exists pUser$ $|$ $pUser.inviteCode == code$\\
+\texttt{users}: \texttt{users} table in database\\
+
+\noindent \textbf{State Invariant}\\
+$ code['used'] = true \implies \exists$ $pt |$ $pt.inviteCode == code$\\
+$ \exists p.uid \in \texttt{users} \implies p.licenseNumber \in \texttt{validLicenses}$ \\
 
 
-\textbf{Environment Variables}\\
+\noindent \textbf{Environment Variables}\\
 \textit{Not applicable}\\
 
 
