@@ -397,9 +397,6 @@ $Pt(pt) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, del, e
 
 
 \subsubsection{Semantics}
-
-
-
 \noindent \textbf{State Variables} \\
 See \hyperlink{acexpprogs}{here} for a list of additional state variables.\\
 \texttt{first}: user 1\\
@@ -421,8 +418,8 @@ All users have different uids.\\
   \item Only one person can access user information in the database at a time since many values that are exported are asynchronous values.
 \end{itemize}
 
-\subsubsection{Access Routine Semantics}
-\textbf{Exported access routines} \\
+\subsubsection{Access Routine Semantics - Exported}
+\textbf{Exported access routines} \label{sec:acARS}\\
 See \hyperlink{acexpprogs}{here} for state variables being used.
 \newline
 \textit{\underline{checkEmailExists: E(e)}}\\
@@ -665,15 +662,17 @@ which contain internal validation of inviteCode and licenseNumber.
     Firestore document snapshot from \texttt{validLicenses} collection. Type: \texttt{DocumentSnapshot}.
 
 \end{description}
-For additional exported constants, see \textbf{\textit{authService.ts}} exported constants in \ref{sec:validexp}. \\
+\subsubsection{Syntax}
+\textbf{Exported Constants}\\
+See \textbf{\textit{authService.ts}} exported constants in \ref{sec:validexp}. \\
 For interface elements, see \ref{sec:ui}.\\
 \newline
 \noindent \textbf{Exported Access Programs} \\
-See Table \ref{sec: accountexpprogs}, \textit{\textbf{registerPatient}} and \textit{\textbf{registerPhysio}}
+See Table \ref{sec: accountexpprogs} for \textit{\textbf{registerPatient}} and \textit{\textbf{registerPhysio}}
 details respectively.\\
 \newline
 \underline{\textit{Function definitions:}}\\
-This module has components that have been defined in the Account Creation module. See \hyperref[sec: ACfuncdef]{\textit{Function definitions in \ref*{sec: ACfuncdef}}}.
+This module has components that have been defined in the Account Creation module. See \hyperref[sec: ACfuncdef]{\textit{function definitions in \ref*{sec: ACfuncdef}}}.
 
 \subsubsection{Semantics}
 \textbf{State Variables}\\
@@ -683,18 +682,26 @@ See \ref{sec:ui} for UI state variables. \\
 \texttt{code}: a patient invite code \\
 \texttt{lno}: a PT's license number \\
 \texttt{users}: \texttt{users} table in database\\
-
 \noindent \textbf{State Invariant}\\
 $ code['used'] = true \implies \exists$ $pt |$ $pt.inviteCode == code$\\
-$ \exists p.uid \in \texttt{users} \implies p.licenseNumber \in \texttt{validLicenses}$ \\
+$ \exists p.uid \in \texttt{users} \implies p.licenseNumber \in \texttt{validLicenses}$ 
+\subsubsection{Environment state variables}
+\textit{Not applicable}
+\subsubsection{Assumptions}
+\begin{itemize}
+    \item All practicing physiotherapists have an active and valid license.
+    \item All active invite codes are used by new and active patients only.
+    \item Invite codes and license numbers are unique.
+\end{itemize}
 
+\subsubsection{Access Routine Semantics - Exported}
+\textbf{Exported access routines} \\
+See \hyperref[sec:acARS]{account creation semantics} for details of respective functions.
 
-\noindent \textbf{Environment Variables}\\
-\textit{Not applicable}\\
+\subsubsection{Local Routines}
+Portions that are pertinent to the module are elaborated on below. \\
 
-
-\subsubsection{registerPatient: Internal Validation Steps}
-
+\noindent \textbf{registerPatient: Internal Validation Steps}\\
 The function performs the following sequential validations on the invite code:
 
 \begin{enumerate}
@@ -704,123 +711,38 @@ The function performs the following sequential validations on the invite code:
 
 \item \textbf{Usage Check}: If \texttt{invite.used = true}, throw "Invite code already used."
 
-\item \textbf{Physio Link Check}: If \texttt{invite.physioId = null} or does not exist, throw "Invite code missing physio link."
+\item \textbf{Physio Link Check}: If \texttt{physioId = null} or does not exist, throw "Invite code missing physio link."
 
-\item \textbf{Extract physioId}: Store \texttt{invite.physioId} for use in patient document.
 \end{enumerate}
 
 Only after all validations pass does the function proceed to:
-\begin{itemize}
+\begin{enumerate}
 \item Create Firebase Auth user
-\item Create Firestore user document with \texttt{role: "patient"} and \texttt{physioId}
-\item Mark invite code as used with \texttt{usedBy: uid}
-\end{itemize}
+\item Create Firestore user document with \texttt{role:"patient"} and \texttt{uid}
+\item Mark invite code as used with \texttt{usedBy:uid}
+\end{enumerate}
 
-\subsubsection{Uses}
-\begin{itemize}
-\item \textit{Name}: Name
-\item \textit{role}: role
-\item \textit{invite}: invite\_code
-\item \textit{license}: license\_no
-\end{itemize}
+\noindent \textbf{registerPhysio: Internal Validation Steps}\\
+The function performs the following sequential validations on the license number:
 
-\subsubsection{Syntax}
+\begin{enumerate}
+\item \textbf{Format Check}: Validate license number format using \texttt{licenseFormatValid()}. License must match pattern: two uppercase letters, a dash, and six digits (e.g., ON-123456). If format is invalid, throw "Invalid license format (example: ON-123456)."
 
-\textbf{Exported Constants}
-\begin{itemize}
-  \item \textit{is\_valid}: is\_valid 
-\end{itemize}
+\item \textbf{Existence Check}: Query Firestore \texttt{validLicenses} collection for document with ID equal to the normalized license number. If not found, throw "License not verified."
 
+\item \textbf{Active Check}: If the license document has \texttt{active} field not equal to true, throw "License not verified."
 
+\end{enumerate}
 
-\noindent \textbf{Exported Access Programs}\\
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
+Only after all validations pass does the function proceed to:
+\begin{enumerate}
+\item Create Firebase Auth user using \texttt{createUserWithEmailAndPassword()}
+\item Create Firestore user document with \texttt{role:"physio"}, \texttt{verified:true}, and \texttt{uid}
+\item Return \texttt{\{uid, role:"physio"\}}
+\end{enumerate}
 
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a physiotherapist's license is valid}. \\
-\hline
-\rowcolor{white}
-license\_check & \makecell[lt]{\textit{name}\\\textit{license}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a new patient's invite code is valid.} \\
-\hline
-\rowcolor{white}
-invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
-\hline
-
-
-\end{tabularx}
-\caption{Exported Access Routines}
-\label{tab:user_routines_2}
-\end{table}
-\newpage
-\noindent \textbf{State Variables} \\
-\textit{A}: user\_account\_p \\
-\textit{B}: user\_account\_pt \\
-\textit{C}: user\_account\_p \\
-\textit{D}: user\_account\_pt \\
-\textit{I}: the set of valid invite\_code\\
-\textit{V}: the set of valid license\_code\\
-\textit{invite\_a}: invite\_code for user A\\
-\textit{license\_b}: license\_no for user B \\
-\textit{invite\_c}: invite\_code for user C\\
-\textit{license\_d}: license\_no for user D\\
-\textit{db}: 'User Account' \\
-
-
-\noindent \textbf{State Invariant} \\
-$\forall a, b, c, d \in A, B, C, D$ $\implies$
-$\forall$ $license\_b, license\_d: license\_b, license\_d$ $\in$ $\{license\_no\}$, \\
-$\forall$ $invite\_a, invite\_c: invite\_a, invite\_c$ $\in$ $\{invite\_code\}$ \\
-%REMOVE
-All license numbers and invite codes belong to their overall respective sets. \\
-\noindent $\forall$ $license\_b \in \mathbb{Z}^{+},$ $\forall$ $license\_d \in
-\mathbb{Z}^{+}:$ 100000 $ \leq license\_b, license\_d \leq$ 999999, $\cap$ $license\_b \neq license\_d$ \\
-\noindent $\forall$ $invite\_a \in \mathbb{Z}^{+},$ $\forall$ $invite\_c \in
-\mathbb{Z}^{+}:$ 100000 $ \leq invite\_a, invite\_c \leq$ 999999, $\cap$ $invite\_a \neq invite\_c$ \\
-%REMOVE
-All the license numbers and invite codes are unique, positive and 6 digits. \\
-\textit{is\_valid} $\in$ $\{true, false\}$
-
-
-\subsubsection{Environment Variables}
-\textit{screen}: The application's display to the user \\
-\textit{touchscreen}: Users will click on the screen to select their desired action
-
-\subsubsection{Assumptions}
-\begin{itemize}
-  \item Invite codes are randomly generated.
-  \item Invite codes and license numbers are unique.
-\end{itemize}
-
-\subsubsection{Access Routine Semantics}
-
-\textbf{\textit{license\_check(license)}}: \\
-Input: license \\
-Transition: \\ %if license code is in valid license codes, then user acc is added \\
-$\forall$ $B \in db$ $\Leftrightarrow$ $\exists$ $license\_b \in V$ \\
-Output: \textit{is\_valid} \\
-\textbf{\textit{invite\_code\_check(invite)}}: \\
-Input: invite \\
-Transition: \\
-$\forall$ $A \in db$ $\Leftrightarrow$ $\exists$ $invite\_a \in I$\\
-Output: \textit{is\_valid} \\
-
-\subsubsection{Local Functions}
-NA
-
+\subsubsection{Access Routine Semantics - Local}
+%See \href
 
 
 
