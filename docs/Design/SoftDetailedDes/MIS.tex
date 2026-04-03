@@ -273,7 +273,7 @@ All the variables used in each class related to account creation are described b
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}\\
-\textbf{\textit{\underline{authService.ts}}}
+\textbf{\textit{\underline{authService.ts}}} \label{sec:validexp}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 
 \item[\texttt{export const registerPatient}] 
@@ -625,7 +625,7 @@ making a new patient account. CreatePhysio and registerPhysio have the same dist
 $Pc(pw) \implies pw.length \geq 6 \cap \exists$ $d$ $|$ $d \in \{0 - 9\} \cap d \in pw$ \\
 \texttt{Date} = 'YYYY-MM-DD' $|$ 'YYYY' $\in$ \{0000 - 9999\} $\cap$ 'MM' $\in$ \{01 - 12\} $\cap$ 'DD' $\in$ \{01 - 31\} \\
 $Vb(bday) \implies bday \in Date $ \\
-\textit{Note: See \ref{sec:ui} for CreatePhysio and CreatePatient}
+\textit{Note: See \ref{sec:ui} for CreatePhysio and CreatePatient interface specifications.}
 
 \subsubsection{Access Routine Semantics}
 %TODO
@@ -634,6 +634,84 @@ $Vb(bday) \implies bday \in Date $ \\
 \subsection{Module - Valid user}
 This module's purpose is to check whether a potential user is authorized to create an account.
 For feasible implementation purposes, a file with hard coded invite codes and license numbers will be used.
+The actions accomplishing the module's purpose are within the registerPhysio and registerPatient functions. 
+
+\subsubsection{Uses}
+For interface elements, see \ref{sec:ui}.\\
+
+\noindent \textbf{Input Parameters:}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+
+\item[\texttt{params}] 
+    Input object containing patient registration data. Type: \texttt{\{name: string, email: string, password: string, inviteCode: string, birthday: string\}}.
+
+\item[\texttt{code}] 
+    Normalized invite code. Type: string. Computed as \texttt{params.inviteCode.trim().\\toUpperCase()}.
+
+\item[\texttt{inviteRef}] 
+    Firestore document reference to \texttt{inviteCodes/code}. Type: \texttt{DocumentReference}.
+
+\item[\texttt{inviteSnap}] 
+    Firestore document snapshot. Type: \texttt{DocumentSnapshot}.
+
+\item[\texttt{invite}] 
+    Data from invite code document. Contains fields: \texttt{active} (boolean), \texttt{used} (boolean), \texttt{physioId} (string).
+
+\item[\texttt{physioId}] 
+    Physiotherapist ID extracted from invite code. Type: string.
+
+\item[\texttt{cred}] 
+    Firebase Auth user credential. Type: \texttt{UserCredential}.
+
+\item[\texttt{uid}] 
+    Firebase Authentication unique user ID. Type: string.
+
+\item[\texttt{db}] 
+    Firestore database instance. Imported from \texttt{./firebase}.
+
+\item[\texttt{auth}] 
+    Firebase Authentication instance. Imported from \texttt{./firebase}.
+\end{description}
+For additional exported constants, see \textbf{\textit{authService.ts}} exported constants in \ref{sec:validexp}. \\
+\textbf{Exported Access Programs} \\
+\textit{Not applicable} \\
+
+\subsubsection{Semantics}
+\textbf{State Variables}\\
+See \ref{sec:ui} for UI state variables. \\
+\texttt{pUser}: a patient user type\\
+\texttt{code}: a patient invite code \\
+\texttt{lno}: a PT's license number \\
+\textbf{State Invariant}\\
+$ code['used'] == true \implies \exists pUser$ $|$ $pUser.inviteCode == code$\\
+
+
+\textbf{Environment Variables}\\
+\textit{Not applicable}\\
+
+
+\subsubsection{registerPatient: Internal Validation Steps}
+
+The function performs the following sequential validations on the invite code:
+
+\begin{enumerate}
+\item \textbf{Existence Check}: Query Firestore \texttt{inviteCodes} collection for document with ID = \texttt{normalize(inviteCode)}. If not found, throw "Invalid invite code."
+
+\item \textbf{Active Check}: If \texttt{invite.active $\neq$ true}, throw "Invite code inactive."
+
+\item \textbf{Usage Check}: If \texttt{invite.used = true}, throw "Invite code already used."
+
+\item \textbf{Physio Link Check}: If \texttt{invite.physioId = null} or does not exist, throw "Invite code missing physio link."
+
+\item \textbf{Extract physioId}: Store \texttt{invite.physioId} for use in patient document.
+\end{enumerate}
+
+Only after all validations pass does the function proceed to:
+\begin{itemize}
+\item Create Firebase Auth user
+\item Create Firestore user document with \texttt{role: "patient"} and \texttt{physioId}
+\item Mark invite code as used with \texttt{usedBy: uid}
+\end{itemize}
 
 \subsubsection{Uses}
 \begin{itemize}
