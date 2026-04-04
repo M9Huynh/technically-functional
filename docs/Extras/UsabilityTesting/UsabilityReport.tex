@@ -9,6 +9,7 @@
 \usepackage{colortbl}
 \usepackage{xr}
 \usepackage{hyperref}
+\usepackage{url}
 \usepackage{longtable}
 \usepackage{xfrac}
 \usepackage{tabularx}
@@ -63,10 +64,10 @@ The goals of the study are:
 
 \section{Techniques}
 The techniques used to conduct these tests were a mixture of both in-person and remote moderated testing. Data was
-collected via a questionnaire or an interview. The choice was up to the discretion of the moderator, but both formats covered
+collected via a questionnaire or an interview. The choice was up to the discretion of the investigator, but both formats covered
 the same core topics.
-They were first asked a series of questions inquiring some background information. 
-The participants were then shown how to install the app on their smartphone. After successful installation of the program, the facilitator prompted
+The participants were first asked a series of questions inquiring some background information. 
+They were then shown how to install the app on their smartphone. After successful installation of the program, the facilitator prompted
 the participant on the app's use. An additional investigator was playing the role of an observer recording the user's behaviour. 
 At the end of the study, participants were asked for their final impressions. The study was voluntary and lasted approximately 30-40 minutes.
 
@@ -132,13 +133,12 @@ a broad target user base. The coverage details are outlined below:
 
 \textit{Participant 4}
 \begin{itemize}
-    \item Name
-    \item Age
-    \item Gender
-    \item Person with disability
-    \item Occupation
-    \item Level of digital literacy
-    \item Familiarity with injury to the knee
+    \item Age: 24
+    \item Gender: Female
+    \item Person with disability: No
+    \item Occupation: Student
+    \item Level of digital literacy: High
+    \item Familiarity with injury to the knee: Not familiar
 \end{itemize}
 
 \textit{Participant 5}
@@ -156,16 +156,18 @@ individuals who satisfied the criteria mentioned above. Furthermore, it was not 
 with a knee injury. However, there were some that had undergone physiotherapy treatment for other health reasons. \\
 Two of the participants were physiotherapists. They were recruited to assess the PT flow of the application and 
 provide their perspective.The remaining participants varied in age and fulfilled different combinations 
-of the criteria above. 
+of the criteria above. Some of the participants were familiar with what 'physiotherapy' entails even though
+none of them have had a knee surgery before. These were the two physiotherapists that were interviewed and the
+participant 3, who had to perform single leg flexion and extension as part of their home exercise program.
 
 \section{Testing}
 All questionnaires' accompanying logic is explained \href{QuestionsExplanations.pdf}{here}.
 \subsection{Pre-session questionnaire}
-See \href{Pre-sessionQuestionnaire.pdf}{pre-session questionnaire}.
+See Appendix \ref{appendix:preq}.
 \subsection{Session questionnaire}
-See \href{SessionQuestionnaire.pdf}{session questionnaire}. 
+See Appendix \ref{appendix:sessQ} 
 \subsection{Post-session questionnaire}
-See \href{Post-sessionQ.pdf}{post-session questionnaire}.
+See Appendix \ref{appendix:post}.
 
 
 \section{Results}
@@ -174,13 +176,39 @@ See \href{Post-sessionQ.pdf}{post-session questionnaire}.
 %There were 5 participants of the study: 2 PTs and 3 others that fulfilled the criteria mentioned above. \\
 
 \noindent \textbf{Physiotherapists} \\
-These points emerged as common feedback for both of the physiotherapist participants (See Appendix A). 
+These points emerged as common feedback for both of the physiotherapist participants (See section Appendix \ref{Appendix: PTfeed}). 
 \begin{itemize}
     \item Both participants emphasized the inclusion of an RPE (Rate of Perceived Exertion) from the patient
     as an additional measure.
     \item They also suggested incorporated the number of sets performed in each exercise session on the 
     Feedback tab.
 \end{itemize}
+
+\noindent \textbf{Patients} \\
+The data obtained from the 'patient' participants hightlighted the observations listed below. \\
+\textbf{Common to participants:}
+\begin{itemize}
+    \item Desire for audio/visual cues: Participants explicitly stated that they had some trouble looking 
+    at the screen while exercising. They emphasized that audio cues would be a beneficial addition to the
+    exercise recording function. In addition to that, they suggested enabling customizable font settings. 
+    These would benefit if there was a change in the ambient environment that prevented clear viewing 
+    of the textual cues.
+    \item Intuitive navigation: Participants agreed that the app was easy to navigate and required 
+    minimal effort to execute a desired action.
+    \item Engagement and motivation: Participants found the app engaging and noted that it may be a good
+    motivator for completing home exercises. 
+\end{itemize}
+\textbf{Unique feedback:} 
+\begin{itemize}
+    \item Pose detection: One participant noted that the app sometimes had trouble detecting movement that
+    resulted in delays. 
+    \item Feedback speed: Delays in pose or form detection did not impact the speed with which on screen
+    feedback was presented. 
+    \item One participant stated that a simplified summary (in plain language) would be helpful. A quick
+    user-friendly overall progress summary in plain language would be preferred to viewing raw data charts.
+\end{itemize}
+
+Feedback speed vs pose detection is insightful because ? %Maham you thought of it just now why did you blank out
 
 \section{Discussion}
 Usability testing proved to be an invaluable asset in evaluating the application. The results were 
@@ -200,8 +228,8 @@ suggests that it has strong potential and can be advantageous to patient recover
 
 
 \section{Conclusion}
-
-\section{Appendix A}
+\appendix
+\section{PT feedback} \label{Appendix: PTfeed}
 \subsection{Usability Test Feedback: Physiotherapist 1}
 
 \begin{itemize}
@@ -299,5 +327,175 @@ suggests that it has strong potential and can be advantageous to patient recover
     \item \textbf{If there was a feature you would add or change to make this more useful in your practice, what would that be?} \\
     Response: Mentioned above (export functionality, visual indicators for clickable elements, and more granular exercise tracking).
 \end{itemize}
+\section{Pre-session Questionnaire} \label{appendix:preq}
+This questionnaire is designed for the patient participants of the study to obtain to obtain 
+some preliminary information about the their experience with a knee injury. \\
+It will be administered in a structured manner, where participants will be presented the questions 
+in the order they were designed. This will ensure consistency and that the essentail amount of
+background detail is relayed to the investigators.
+
+\subsection{\textbf{Patient Experience Information}}
+\begin{enumerate}
+    \item What is your name?
+    \item How old are you?
+    \item What gender do you identify with? 
+    \item What is your occupation?
+    \item Have you ever had a knee injury? \textbf{Yes/No/NA}
+    \begin{enumerate}
+        \item If \textbf{YES}, was it in the past 5 years?
+        \item If \textbf{YES}, have you had physiotherapy after your knee surgery?
+        \item If \textbf{NO}, have you had another kind of orthopaedic surgery?
+        \item If \textbf{NA}, do you personally know anyone who has experienced a knee injury? \textbf{YES/NO}
+    \end{enumerate}
+    \item How long did your post-operative physiotherapy last?
+    \item Were you prescribed knee extensions as an exercise to do at home?
+    \item In your opinion, did you encounter any trouble performing knee extensions? \textbf{YES/NO}
+\end{enumerate}
+
+\subsection{\textbf{DEVICE LITERACY}}
+\begin{enumerate}
+    \setcounter{enumi}{8}
+    \item What do you use your mobile device for?
+    \item How comfortable are you using the camera function? 
+    \\\textbf{Very comfortable\qquad Somewhat comfortable\qquad Comfortable\qquad \\Not comfortable}
+    \item Do you know what a mobile phone tripod is? (selfie stick)
+    \item How comfortable are you using the tripod?
+    \\\textbf{Very comfortable\qquad Somewhat comfortable\qquad Comfortable\qquad \\Not comfortable} 
+\end{enumerate}
+\subsection{\textbf{PRIVACY}}
+This section outlines some private aspects involved in conducting a usability test. These statements 
+should be confirmed with participants to ensure that a well-informed decision to participate has been made. 
+\begin{enumerate}
+    \item Participant identification information will be stored on a database. 
+    \item Information extracted from the recording used in the application will also be stored on a database.
+    \item The database used in the application adheres to data privacy standards and regulations listed \href{https://firebase.google.com/support/privacy}{here}.
+    \item All participant data will be manually deleted by April 8th, 2026. 
+    \item Information access is restricted to any external parties (except the application developers for the duration mentioned above).
+    \item All participant data will be manually deleted by April 8th, 2026. 
+\end{enumerate}
+\section{Session Questionnaire} \label{appendix:sessQ}
+This document contains questions that participants will be asked by the investigator. These questions provide
+a roadmap of the application functionalities and investigators are free to pursue their own line of questioning
+regarding these functionalities. Throughout the application's testing, the investigator will time 
+the duration spent on each section.  Details such as timing justification, survey duration and participant information 
+can be found in the Usability Report. %TODO reference pls
+
+\subsection{Creating an account} 
+After participant verification, the application will be downloaded on the their device. The participant 
+will be asked to launch the application and will proceed through each stage below. \\
+
+\noindent \textbf{Please click on 'create account' to be redirected to the account creation functionality. An invite code/PT license 
+number should be provided to the participant. The duration to accomplish this task should be recorded.}\\ 
+\textit{If the participant selects the \textbf{NO} option for any \textbf{YES/NO} questions, please inquire further.} 
+
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the different elements on the screen logically positioned? \textbf{YES/NO} 
+    \item Is the text font size sufficient for reading?
+    \item Can you clearly distinguish between the different colours on the screen?
+    \item Are the buttons appropriately sized?
+\end{enumerate}
+
+\subsubsection{Functionality}
+\begin{enumerate}
+    \item Rate the difficulty level for creating an account: low, medium, high
+    \\\textbf{Very easy \qquad Easy \qquad Somewhat difficult \qquad Difficult}
+    \item Do you have any comments/improvements for account creation?
+\end{enumerate}
+\textbf{Once the account has been created, the next step will be navigation to the home screen. 
+Initially, the home screen will be empty. It will be populated once an exercise has been recorded.}
+%Ideal case - would be recording time to get through this task
+%However, with a limited pool size, any mean's correctness is harder to assert
+%We can still record how long it takes but not sure how insightful it will be %TODO confirm with Eman
+
+\subsection{Homescreen}
+This is the page that is navigated to after the user has successfully signed in. 
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Are the functions (on the bottom) of each button clearly defined? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+
+\subsection{Recording an exercise}
+\textbf{Partcipant will click on the button at the bottom of the homescreen which will lead them to the 'Record' page}
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Are the functions of each button clearly defined? \textbf{YES/NO}
+    \item Do the icons navigate to their correct page? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate} 
+\subsubsection{Functionality}
+\begin{enumerate}
+    \item Is the app displaying detectable area (of the form) appropriately? \textbf{YES/NO} 
+    \\\textbf{The participant will proceed to perform the exercise once they are in position}
+    \item Is the app effectively detecting the relevant body part? \textbf{YES/NO}
+    \item Is the app detecting form discrepencies (angle too small etc) to a high level of accuracy? \textbf{YES/NO}
+    \item Is the app displaying position modification instructions clearly and effectively? \textbf{YES/NO}
+    \item Is each rep being detected correctly/accurately? \textbf{YES/NO}
+    \item In your opinion, how accurate do you think the detection is? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+
+
+%recording time in this case does not really fill the purpose it does for other functionalities
+%reason? As opposed to a simple button click, this function is more physically involved
+%physical ability plays a bigger role for recording and physical ability may be very different
+
+
+%TODO - current version of app is a little slow in detecting reps; this was one of the early goals (MAYBE). write about 
+% how that isnt feasible for cpastone timeline (only found this during app dev)
+
+\subsection{Exercise page}
+\textbf{The participant will be asked to navigate to the 'Exercises' page.}
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Are those elements clearly defined? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Do the icons navigate to their correct page? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+
+\subsubsection{Functionality}
+\begin{enumerate}
+    \item Are the instructions clear and easy to follow without being overwhelming? \textbf{YES/NO}
+    \item Is the example video showing how to perform the exercise helpful? \textbf{YES/NO}
+    \item Any comments/improvements for this?
+\end{enumerate}
+%Maybe simpler ex instructions might be better for the patient but thats up to the PT
+\subsection{Progress} %bar graphs etc
+\subsubsection{UI}
+\begin{enumerate}
+    \item Are the visual elements arranged logically? \textbf{YES/NO}
+    \item Can you read the text on the screen without difficulty? \textbf{YES/NO}
+    \item Any additional information that could be included?
+\end{enumerate}
+
+\section{Post-session Questionnaire} \label{appendix:post}
+These are more open-ended questions to be asked at the end of the session. Like the questionnaires used previously, the investigators
+are free to follow their own line of questioning provided they include the details below. 
+
+\subsection{Patients}
+\begin{enumerate}
+    \item Would this be a tool that you use in the recovery process (from a knee injury in this case)?
+    \item Can you think of any improvements? (if they say no, probe further. eg. what are their thoughts on UI, pose deteciton etc)
+    \item What did you like about the application?
+\end{enumerate}
+
+\subsection{PTs}
+\begin{enumerate}
+    \item Would you use an application like this in your practice? %i forgot if we already asked this TODO double check
+    \item Can you think of any improvements? (if they say no, probe further. eg. what are their thoughts on UI, pose deteciton etc)
+    \item What did you like about the application? 
+\end{enumerate}
+
+\noindent \textbf{Please remember to thank the participants for their time and invite them to the EXPO on April 7th.}
+
 
 \end{document}
