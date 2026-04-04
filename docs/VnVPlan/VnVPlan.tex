@@ -145,19 +145,41 @@ Verification of the design will rely on feedback from 4G06 teaching assistants, 
 
 \subsection{Verification and Validation Plan Verification}
 
-This document will also be reviewed by the teaching assistants and provided peer-review by another design team, creating issues within the GitHub repository to be dealt with accordingly.
-
-In addition, the test suite derived from this document will be verified via code coverage and mutation testing on the software. For validation, the final outcome of each test will be discussed in the meeting with the project advisor to ensure the system is doing what it should in each test case.
+This document will also be reviewed by the teaching assistants and provided peer-review by another design team, creating issues within the GitHub repository to be dealt with accordingly. To ensure feedback is properly actioned, the following process is followed:
+\begin{itemize}
+    \item Feedback is collected during TA and peer review sessions
+    \item Each comment is converted into a GitHub issue
+    \item Issues are assigned to a responsible team member
+    \item Changes are implemented and committed with reference to the issue
+    \item Updated sections are reviewed again before finalizing
+\end{itemize}
+An issue is considered resolved once the required changes have been implemented, reviewed by at least one additional team member, and the corresponding GitHub issue has been closed. In addition, the test suite derived from this document will be verified via code coverage on the software. For validation, the final outcome of each test will be discussed in the meeting with the project advisor to ensure the system is doing what it should in each test case.
 
 \subsection{Implementation Verification}
 
-For testing the implemented system, there will be a software testing suite developed based on the tests listed in sections 4 and 5 of this document. Additional testing by the team includes code walk-throughs of critical sections both during development and upon reaching milestones within the development cycle. There will also be static analysis on each pull request to GitHub, ensuring naming conventions and best practice are followed throughout the project.
+The implementation verification plan ensures that the system aligns with the System Requirements Specification (SRS) through both dynamic and non-dynamic testing methodsDynamic testing is conducted through unit testing, integration testing, and system-level validation. Unit tests are implemented for both the frontend and backend components to verify core functionality such as authentication, data handling, and computer vision analysis. Integration testing is used to validate interactions between system components, including Firebase authentication, Firestore database operations, and backend API endpoints such as \texttt{/process\_frame} and \texttt{/precheck\_frame}. Performance testing is also carried out to evaluate response time during exercise recording ($\leq$ 2 seconds), system stability under repeated usage, and handling of real-time data processing. Non-dynamic (static) testing is used to evaluate code and design quality without executing the system. This includes structured peer code reviews on all pull requests to assess correctness, readability, and adherence to best practices. Code walkthroughs are performed for critical modules such as authentication and computer vision analysis to help identify potential issues early. In addition, basic static analysis tools such as \texttt{pylint} are used where applicable to check for common coding issues in the backend. Document reviews are also conducted, with issues tracked and resolved through GitHub. Automated test suites are executed during development to detect regressions and ensure that all existing functionality remains intact. GitHub Actions is used to support automated workflows such as builds and checks on pull requests, helping maintain project stability. Manual testing is also performed for real-time features, including camera-based pose detection and user interaction workflows that cannot be fully automated.
 
 \subsection{Automated Testing and Verification Tools}
 
-Automated testing includes the testing suite previously mentioned in this section; derived from the tests found in this document which are based upon the requirements found within the \href{https://github.com/M9Huynh/technically-functional/blob/32182cfc56c602466e270b7fcbad01d892911ea1/docs/SRS/SRS.pdf}{SRS document} of this project. These tests will be verified themselves with mutation testing and code coverage assessments. A testing suite such as pytest or Python Extension will be utilized to implement the tests mentioned in further sections of this document. These suits contain their own internal tools for checking code coverage, and the GitHub will be using continuous integration to ensure base cases continue to pass through all pull requests as well as general compilation checks.
+\textbf{Unit Testing Framework:}
+The project uses standard testing tools for different parts of the system. \texttt{pytest} is used for the Python backend to validate API endpoints, data processing logic, and computer vision functionality. For the frontend, tests are written using \texttt{Jest} to verify UI behavior and component interactions. These tools were selected due to their reliability, documentation support, and compatibility with the development environment.
 
-During development, pylint will ensure the coding standard is adhered to and continuous development within GitHub will ensure no slip-ups on merging.
+\textbf{Code Coverage Tools and Plan:}
+Code coverage is used to measure how much of the system is exercised by the implemented test cases.
+
+\begin{itemize}
+    \item \textbf{Python:} \texttt{pytest-cov} is used alongside \texttt{pytest} to track code coverage for backend components. This includes measuring which parts of the API logic and processing functions are executed during testing.
+    
+    \item \textbf{TypeScript:} \texttt{Jest} provides built-in coverage reporting for frontend components, tracking execution of functions and user interaction flows.
+\end{itemize}
+
+The goal is to achieve meaningful coverage across both codebases, focusing on critical functionality such as authentication, data handling, and core processing logic. Coverage results are used during development to identify untested areas and improve test completeness.
+
+\textbf{Linters and Static Analysis:}
+To maintain code quality, basic static analysis tools such as \texttt{pylint} are used for backend code where applicable. In addition, structured peer code reviews and walkthroughs are conducted on pull requests to ensure readability, correctness, and adherence to best practices.
+
+\textbf{Automated Workflows:}
+GitHub Actions is used to support automated workflows such as builds and checks on pull requests. While full test automation through CI is not currently implemented, these workflows help ensure that the project remains stable as changes are introduced.
 
 \subsection{Software Validation}
 
