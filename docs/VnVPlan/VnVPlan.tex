@@ -984,13 +984,12 @@ by module as well as the key functionalities that are covered.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Valid User Module Tests}
 
 \textbf{Goal:} The valid user module verifies user authentication behavior after account creation. These tests ensure that users with valid credentials can log in successfully, that missing profile information is handled correctly, and that logout functionality clears the active session without error.
 
-\textbf{Target requirement(s):} FR1, FR1.1
+\textbf{Target requirement(s):} FR1, FR1.1, SR-AR1
 
 \begin{itemize}
     \item \textbf{Valid login behavior}
@@ -1012,7 +1011,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsection{User Account Module}
 
@@ -1048,7 +1046,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Query and Lookup Functions}
 
@@ -1059,24 +1056,22 @@ The test cases for this module can be found \href{<LINK>}{here}.
 \begin{itemize}
     \item \textbf{General query behavior}
     \begin{itemize}
-        \item Ensures linked patients, general user lists, and search results are filtered correctly.
+        \item Ensures linked patients and search results are filtered correctly.
         \item Verifies errors return safe fallback values such as empty arrays.
     \end{itemize}
 
     \item \textbf{Detailed user lookup}
     \begin{itemize}
         \item Ensures user database lookups return appropriately categorized physiotherapist and patient results.
-        \item Verifies optional filters such as birthday constraints behave correctly.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Specialized and Validation Functions}
 
 \textbf{Goal:} These tests verify specialized user-account behaviors such as physiotherapist-linked account deletion, user authentication helper functions, initialization routines, and password validation logic.
 
-\textbf{Target requirement(s):} FR1, FR2, FR4, FR22
+\textbf{Target requirement(s):} FR1, FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1
 
 \begin{itemize}
     \item \textbf{Physiotherapist-linked patient account management}
@@ -1094,11 +1089,9 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \item \textbf{Initialization and credential validation}
     \begin{itemize}
         \item Ensures system initialization routines complete successfully.
-        \item Verifies password validation helpers return correct boolean results.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsection{Live Feedback Module}
 
@@ -1124,17 +1117,14 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \item \textbf{No pose detected}
     \begin{itemize}
         \item Ensures the system provides a clear prompt when the user is not detected in frame.
-        \item Verifies no rep is counted in missing-landmark scenarios.
     \end{itemize}
 \end{itemize}
-
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Safety Warning and Latency Handling}
 
 \textbf{Goal:} These tests verify that dangerous movement conditions trigger appropriate safety warnings and that repeated feedback generation remains responsive during valid exercise sequences.
 
-\textbf{Target requirement(s):} FR14, FR16
+\textbf{Target requirement(s):} FR14, FR16, PR-SL2
 
 \begin{itemize}
     \item \textbf{Dangerous movement warning}
@@ -1148,8 +1138,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
         \item Ensures repeated rep processing does not degrade noticeably across a short sequence.
     \end{itemize}
 \end{itemize}
-
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Physiotherapist Comment Submission and Retrieval}
 
@@ -1170,8 +1158,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
         \item Verifies null is returned appropriately when no comment exists.
     \end{itemize}
 \end{itemize}
-
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsection{Video Capture and Review Module}
 
@@ -1194,11 +1180,9 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
-
 \subsubsection{Camera Initialization and Frame Processing Tests}
 
-\textbf{Goal:} These tests verify the camera wrapper and pose-processing workflow. This includes initialization, frame capture, pose detection, and drawing support for live review.
+\textbf{Goal:} These tests verify the camera and pose-detection workflow. This includes initialization, frame capture, pose detection, and drawing support for live review.
 
 \textbf{Target requirement(s):} FR7, FR12, FR14
 
@@ -1225,8 +1209,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
-
 \subsection{Computer Vision and Form Analysis Module}
 
 \subsubsection{Angle and Knee-Angle Calculation Tests}
@@ -1249,7 +1231,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Calibration and Rep Analysis Tests}
 
@@ -1283,8 +1264,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
-
 \subsection{Performance and Latency Module}
 
 \subsubsection{Backend Reset and API Endpoint Tests}
@@ -1312,8 +1291,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
         \item Verifies correct side selection is passed into downstream knee-angle logic.
     \end{itemize}
 \end{itemize}
-
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Frontend Service and Metrics Persistence Tests}
 
@@ -1347,7 +1324,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsection{Profile Activity Module}
 
@@ -1377,7 +1353,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Chart and Comment Data Tests}
 
@@ -1405,7 +1380,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Selected User State Management Tests}
 
@@ -1431,7 +1405,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsubsection{Physiotherapist Invite Code Retrieval Tests}
 
@@ -1447,13 +1420,12 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
 
 \subsection{Exercise Data Module}
 
 \subsubsection{Exercise Retrieval Tests}
 
-\textbf{Goal:} The exercise data module verifies storage and retrieval of user-specific and general exercise data used throughout the prescription and exercise views.
+\textbf{Goal:} The exercise data module verifies storage and retrieval of user-specific and general exercise data used.
 
 \textbf{Target requirement(s):} FR5, FR18, FR21, FR27
 
@@ -1483,8 +1455,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
     \end{itemize}
 \end{itemize}
 
-The test cases for this module can be found \href{<LINK>}{here}.
-
 \subsubsection{Exercise Assignment and Modification Tests}
 
 \textbf{Goal:} These tests verify adding, updating, and removing user exercises as part of physiotherapist-controlled exercise assignment workflows.
@@ -1510,35 +1480,6 @@ The test cases for this module can be found \href{<LINK>}{here}.
         \item Verifies invalid inputs and Firestore errors are handled safely.
     \end{itemize}
 \end{itemize}
-
-The test cases for this module can be found \href{<LINK>}{here}.
-
-% \subsection{Traceability Between Test Cases and Modules}
-
-% \begin{table}[H]
-% 	\centering
-% 	\begin{tabular}{p{4cm} p{7cm} p{4cm}}
-% 		\toprule
-% 		\textbf{Module} & \textbf{Primary Requirements Covered} & \textbf{Representative Test IDs} \\
-% 		\midrule
-% 		1. Authentication \& Account Management & FR 1--4; SR AR 1--4; SR3 & AUTH-UT-001--003 \\
-% 		2. Organization Linking \& Access Codes & FR 1.2--1.3; FR 2--3 & ORG-UT-001--002 \\
-% 		3. Exercise Program Management & FR 5--6; FR 10--11; FR 22; FR 27 & PROG-UT-001--003 \\
-% 		4. Video Capture \& Review & FR 7; FR 15; FR 26 & CAP-UT-001--003 \\
-% 		5. Computer Vision \& Form Analysis & FR 8; FR 12--14; FR 16; PR-PAR 1--2; PR-SCR 1 & CV-UT-001--003 \\
-% 		6. Reporting \& Dashboards & FR 17--20; FR 25 & RPT-UT-001--002 \\
-% 		7. Data Security \& Privacy & FR 21--23; SR-IR 1; SR-PR 1--2 & DATA-UT-001--002 \\
-% 		8. Performance \& Latency & PR-SL 1--2 & PERF-UT-001--002 \\
-% 		9. Reliability \& Offline Operation & PR-RFT 2; MS-AD 1 & REL-UT-001--002 \\
-% 		10. Security \& Backup & SR AR 3; MS-MNT 1 & SEC-UT-001--002 \\
-% 		11. Scalability \& Extensibility & PR-CR 1; PR-SER 1 & EXT-UT-001 \\
-% 		\bottomrule
-% 	\end{tabular}
-% 	\caption{Traceability Between Test Cases and Modules}
-% \end{table}
-
-% This matrix demonstrates coverage of all functional and nonfunctional requirements through at least one representative unit test per module.
-
 
 
 \newpage{}
@@ -1574,11 +1515,33 @@ graduate attribute of Lifelong Learning.
   member pursue, and why did they make this choice?
 \end{enumerate}
 
-\subsection*{Vaisnavi - Reflection}
+\subsection*{Group Reflection Response:}
+
+\begin{enumerate}
+  \setcounter{enumi}{2} % forces it to start numbering at 3 for the group question
+
+  \item To successfully complete the verification and validation of our project, the team collectively needs to acquire the following knowledge and skills:
+
+  \begin{itemize}
+      \item \textbf{Dynamic Testing (Eman):} Knowledge of unit testing, test case design, edge case identification, and ensuring full module coverage.
+      
+      \item \textbf{System Testing (Maham):} Ability to design and evaluate end-to-end system tests that validate overall system behavior and integration.
+      
+      \item \textbf{Testing Tools and Frameworks (Cieran):} Experience using tools such as pytest, linters (e.g., pylint), and developing structured test suites.
+      
+      \item \textbf{Computer Vision Validation (Vaisnavi):} Understanding of OpenCV and MediaPipe for pose detection, landmark tracking, and validating movement analysis.
+      
+      \item \textbf{Usability and Stakeholder Testing (Matthew):} Skills in interpreting user needs, conducting usability testing, and validating the system against stakeholder expectations.
+  \end{itemize}
+
+\end{enumerate}
+
+\subsection*{Individual Reflection Responses:}
+\subsubsection*{Vaisnavi - Reflection}
 \begin{enumerate}
   \item I think one main thing that went well while writing this deliverable was our communication as a group and how that played into the division of work. We had two sub-teams where Matthew and I were focusing on the POC, while Cieran, Maham and Eman were focused on this VnV deliverable. Our communication throughout aided in making this process of working on the deliverable seamless as everyone seemed to be very looped in on what each sub-team was working on. We had our weekly meetings to touch base and ask for any help if it was needed, and it worked very well.
   \item I think one of the main pain points we came across was as a result of us working on the POC, it was a little bit hard at the start to fully keep up with updates for the VnV Plan. However, as mentioned above, with sharing our progress and updates during our team meetings, this helped in providing more clarity and consistency between all group members, and it allowed everyone to be on the same page.
-  \item \textbf{GROUP Q}
+  \item \textbf{Please refer to the reflection response above for this group question}
   \item To improve the knowledge of OpenCV and MediaPipe pose detection for accurate testing of body landmark tracing, we could do the two approaches:
   \begin{enumerate}
     \item Follow documentation and existing examples to understand how to properly utilize OpenCV and Mediapipe to accurately detect the varying body landmarks through pose detection.
@@ -1586,29 +1549,29 @@ graduate attribute of Lifelong Learning.
   \end{enumerate}
 \end{enumerate}
 
-\subsection*{Maham - Reflection}
+\subsubsection*{Maham - Reflection}
 \begin{enumerate}
   \item The team was split into two groups: one was responsible for the POC demonstration, and the other was completing the VnV report. All members were in constant communication even though they had other (very) important deadlines to meet. The sub-teams functioned very well, because each team had members who were (somewhat) more comfortable in the area they were responsible for, and others that wanted to expand their skillset. There was a good balance present. In the end, all members delivered work of the highest calibre and I am happy to be a part of such a great team.
   \item I do not think it was a pain point but I had underestimated the amount of thought and importance that my portion would entail. I think it was challenging balancing the high priority of this deliverable (my part) and my other important (health) engagements as well. However, I used all the time management skills that I have learned and effectively managed to chunk my work into more realizable chunks while ensuring I am taking care of my well-being and delivered some good quality work.
-  \item \textbf{GROUP Q}
+  \item \textbf{Please refer to the reflection response above for this group question}
   \item I had previously acquired some knowledge on software testing and have always been fascinated by it. But to really master the application, I had to be very detail oriented. I did a deep dive into the various components of our system. However, I realized that I had to be careful and not make my focus too narrow - because I was developing system tests. I had to look at the overall picture. I did this in 2 ways. Firstly, I researched ‘system testing’ to further increase my knowledge and get a more concrete idea. However, since I had prior knowledge, I found most of the resources online just broke down system testing into different unit tests. I did not want to pursue that because Eman was working on the unit testing component. I spoke to my teammates on the possible overlap between unit and system testing, and was more confident in my (potential) analysis and approach. In the end, I refined my testing knowledge and by designing different test cases for any possible scenario, and making sure the system was approached from various aspects without being too focused on individual modules. 
 \end{enumerate}
 
-\subsection*{Matthew - Reflection}
+\subsubsection*{Matthew - Reflection}
 \begin{enumerate}
   \item I think one thing that went well when writing this deliverable was how we divided these two weeks up. We had taken the advice from the professor to begin development on the POC while working on the VnV plan. The team was divided into myself and Vais on the POC while Cieran, Maham and Eman were working on the VnV plan. This allowed us to do brief check-ins with each other while beginning development and thus more time to develop before the POC demo.
   \item I think some pain points during this deliverable was tied to external workloads. Since half of the deliverable encompassed reading week, this meant that the team had midterms and assignments for other classes due before this deliverable and managing that was more difficult. We resolved this by being transparent with each of our workloads, by letting each other know in our Teams chat if we were going to be busy and when the next time we would be available is. This allowed us to plan the deliverable better and achieve internal deadlines.
-  \item \textbf{GROUP Q}
+  \item \textbf{Please refer to the reflection response above for this group question}
   \item I would like to improve my knowledge of stakeholder understanding. I think that with stakeholder understanding it is important as they are the target audience for the application and their needs are to be met even if it differs from our own since they are the target. My approach for that will consist of understanding interviews as well as conversations with the stakeholder during testing. Another approach will be different user groups to see if our initial persona and ideas for the stakeholder would make sense. \\
   I think the is important since it is easy to develop requirements by making assumptions but to bridge the gap to the target audience is crucial to make a product or service that they would actually use.
 
 \end{enumerate}
 
-\subsection*{Cieran - Reflection}
+\subsubsection*{Cieran - Reflection}
 \begin{enumerate}
   \item Team communication as always but I won’t expand further on that. There was a decision to split the team into two subteams; a proof of concept team to begin the implementation and a verification and validation team to tackle this document. I feel the subteams have both been incredibly efficient in their work and the communication between the two has not faltered. The proof of concept team worked well together in overall and in subteam meetings to grasp an understanding of the software packages we will be utilizing while the verification and validation team ensured the entire system was covered within the tests outlined in this document.
   \item I expanded on it during the last deliverable, that each person had this ‘own version’ of the system in their mind and we were all building towards a different thing when the assignment started. That wasn’t entirely gone here and we hit a few bumps worrying about what each of the others was including within the system while thinking we don’t need that to be included. Through team meetings and a general walkthrough of the flow of the program, we all got on the same page and managed to generate tests and feel as if we’ve properly outlined a system to ensure the system is designed properly.
-  \item \textbf{GROUP Q}
+  \item \textbf{Please refer to the reflection response above for this group question}
   \item I feel my personal interaction with test suite development lacks for the requirements of this project. To advance this I will attempt to do the following:
   \begin{enumerate}
     \item Follow online guides, walkthroughs, and documentation on the software packages (Python Extension, pytest, pylint, etc.) to ensure the software testing suite developed contains both meaningful tests derived from this document while also covering all the software.
@@ -1616,11 +1579,11 @@ graduate attribute of Lifelong Learning.
   \end{enumerate}
 \end{enumerate}
 
-\subsection*{Eman - Reflection}
+\subsubsection*{Eman - Reflection}
     \begin{enumerate}
       \item The team worked together effectively by dividing into two focused groups, one for the POC demonstration and another for the VnV plan. Communication was strong throughout, and everyone contributed their strengths while helping others learn. The collaboration created a good balance where team members could build on their existing skills while developing new ones.
       \item My main challenge was ensuring complete test coverage across all system modules. I initially underestimated how much detail was needed to properly test each component in isolation. Identifying all the edge cases and understanding how to structure effective unit tests took more effort than expected. I resolved this by creating a systematic checklist that mapped each module to its requirements, then worked through them methodically. Collaborating with teammates to review my test cases also helped catch gaps I had missed.
-      \item \textbf{GROUP Q}
+      \item \textbf{Please refer to the reflection response above for this group question}
       \item I focused on mastering unit testing and test coverage. My first approach was working through practical examples to understand fixtures, mocking, and test isolation. My second approach was carefully reviewing our system requirements and architecture to understand what each module should do. I chose this combination because I needed both the technical testing skills and domain knowledge about our system. Understanding the requirements helped me design tests that actually validated meaningful functionality rather than just checking basic operations. This dual approach allowed me to create comprehensive unit tests covering all eleven modules in our system.
     \end{enumerate}
 
