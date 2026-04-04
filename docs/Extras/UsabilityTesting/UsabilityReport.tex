@@ -26,7 +26,12 @@
 \usepackage{makecell}
 \usepackage{longtable}
 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
+\usepackage{natbib}              
+\usepackage{cite}
+\bibliographystyle{ieeetr}     
 
 \definecolor{linkblue}{RGB}{0, 102, 204}
 \hypersetup{
@@ -208,7 +213,7 @@ The data obtained from the 'patient' participants hightlighted the observations 
     user-friendly overall progress summary in plain language would be preferred to viewing raw data charts.
 \end{itemize}
 
-Feedback speed vs pose detection is insightful because ? %Maham you thought of it just now why did you blank out
+%Feedback speed vs pose detection is insightful because ? %Maham you thought of it just now why did you blank out
 
 \section{Discussion}
 
@@ -234,8 +239,13 @@ application. What distinguishes PhysioCompanion is that the patient and practiti
 employing interfaces that are nearly identical. This design may assist physiotherapists when remotely teaching a patient 
 how to use the app, as they can guide patients easily because the same interface is present on their end.
 
-Their positive response to the application suggests that it has strong potential
-and can be advantageous to patient recovery. 
+An innovative feature that participants appreciated was the exercise recording and live feedback functionality of 
+PhysioCompanion. They observed that this feature is not employed by any current applications on the market. The
+live and instantaneous feedback could prove to be extremely advantageous in patient recovery, as it may ensure correct 
+exercise performance and, consequently, accelerate recovery.
+
+Their positive response to the application suggests that it has strong potential to be an essential tool for effective patient
+recovery.
 
 Reception of the app by the participants playing the role of 'patients' was well-received. They remarked on the intuitive
 navigation, clear layout and enhanced engagement made the app's use seamless and enjoyable. However, important accessibility
@@ -253,19 +263,31 @@ it as instantaneous. A range of factors may account for this distinction, includ
 conditions during exercise performance, differences in internet connectivity stability, or potential packet 
 transmission irregularities since image frames were being sent to the backend to be processed.
 
+Interestingly, one of the ideas proposed by the developers was to construct a desktop version of the app. However, this idea
+was abandoned primarily due to timeline constraints. Additionally, a fundamental objective of this application was 
+to develop it so that it may be used by a larger audience as handling a laptop might be difficult for some users. 
+
 
 %we were going to change how the images get sent over to backend for processing to increase speed and min latency
-
-
-
-
-
-
 %other app comparison to add pls
 %talk about desktop
 
 
 \section{Conclusion}
+After much trial and error, the features that were implemented include:
+\begin{itemize}
+    \item Audio cues: An audio countdown was present after the user clicks on the 'Record' button, allowing sufficient time for them 
+    to get into the frame. Even though the application is recording, backend processing commenced once the users are
+    properly positioned. However, due to latency issues, this was shelved as it was causing processing issues. The audio cues that were
+    successfully implemented include a repetition counter. While this was not the ideal solution, it was successfully achieved and 
+    served as an indication that further development of this was possible.
+    \item Additional exercise information: This required a simple addition to the front end and was successfully implemented.
+    \item Subjective experience: A feedback form presented to the user after successfully recording an exercise enabled collection of
+    the required data. Once completed, the data was then consolidated into the graphs present in the 'Feedback' tab located at 
+    the bottom of the page. 
+\end{itemize}
+
+
 \appendix
 \section{PT feedback} \label{Appendix: PTfeed}
 \subsection{Usability Test Feedback: Physiotherapist 1}
@@ -419,7 +441,7 @@ the duration spent on each section.  Details such as timing justification, surve
 can be found in the Usability Report. %TODO reference pls
 
 \subsection{Creating an account} 
-After participant verification, the application will be run on the investigator's device. Note that the participant 
+After participant verification, the application will be run on the investigator's device. Note that the participants 
 are familiar with operating the device used and will be asked to launch the application and
 proceed through each stage below. \\
 
@@ -508,7 +530,7 @@ This is the page that is navigated to after the user has successfully signed in.
     \item Any comments/improvements for this?
 \end{enumerate}
 %Maybe simpler ex instructions might be better for the patient but thats up to the PT
-\subsection{Progress} %bar graphs etc
+\subsection{Feedback} %bar graphs etc
 \subsubsection{UI}
 \begin{enumerate}
     \item Are the visual elements arranged logically? \textbf{YES/NO}
@@ -535,6 +557,64 @@ are free to follow their own line of questioning provided they include the detai
 \end{enumerate}
 
 \noindent \textbf{Please remember to thank the participants for their time and invite them to the EXPO on April 7th.}
+
+\section{Question reasoning} \label{appendix: reasons}
+\textit{Note: Even though the PT study was conducted in an interview format, the questionnaires serve as a guide for the
+interviews and comments about the PT experience are elaborated on in this document as well.}
+\subsection{Pre-session Questionnaire}
+\subsubsection{\textbf{Participant Experience Information}}
+The first few questions of this survey are used to confirm the identity of the participant being interviewed. \\
+The next few questions examine the participant's experiences. '5 years' is a conservative amount of time that was chosen, because technology is ever-changing, 
+and is projected to change in the near future (\href{https://www.hunimed.eu/news/10-ways-technology-is-changing-healthcare/}{link}).
+In addition, the level of care that was received previously may have been very different than what is practiced today (\href{https://prod.mgma.com/articles/from-error-to-excellence-redesigning-care-whole-system-quality}{link}). \\
+Experience with a personal orthopaedic surgery has a minor overlap with having a knee surgery due to their similar nature.
+In that sense, an orthopaedic patient may be more empathetic to those that have had surgeries recently. They may also impart
+their first-hand understanding of such an experience and provide richer, more nuanced insights into the potential 
+benefit and use of the application. 
+
+\subsubsection{\textbf{Participant device literacy}}
+In order to properly operate the application, there is a minimum level of device literacy needed. These questions specifically
+target smartphone users. Some populations may not have equal access to the level of care (socioeconomic reasons, See that is assumed 
+for this application's use, and that is somewhat portrayed through the use of these questions. The purpose of these questions asserts the
+need for further exploration if/when the target audience is widened and should further development of the application occurs. \\  %check with everyone if this sounds like bs
+
+\subsubsection{\textbf{Participant perspective on privacy}}
+This section outlines some private aspects involved in using the app. These statements 
+should be confirmed with participants to ensure that a well-informed decision to participate and use it has been made.
+
+\subsection{Session questionnaire}
+\subsubsection{Create Account}
+The account creation functionality is a similar one to that of existing apps. It uses a conventional flow that should be familiar to users.
+The ease of this process is evaluated. 
+Once a participant has created an account, they are directed to the Homescreen. This page has different capabilities based
+on the type of user. \\
+\subsubsection{Homescreen}
+On a patient's screen, it displays a history of completed exercises and their dates. %TODO address this in discussion using input given by Kevin
+On a PT's screen, it displays the names of their patients. Once they have selected a patient, the screen is populated
+with the patient's activity. Both the patient's and PT's homescreen only serve as a record, displaying patient activity history. 
+Since both patient and PTs pages look very similar, the main questions posed for this section are
+UI perspectives. Drawing on both perspectives, these questions serve to validate the homescreen's minimal aesthetic,
+confirming that it contains only essential information and is not visually cluttered. The same logic follows the progress
+tab. \\
+
+\subsubsection{Exercise}
+Despite the UI being almost the same, there is a functional difference when the two types of users 
+interact with the Exercises page which is addressed by the questions.\\
+In the case of the patient, the questions aim to determine whether the elements are presented clearly and in a straightforward manner.
+The example video under the complete exercise instructions was implemented at a later stage, necessitating investigation into whether
+it was a helpful decision. \\
+In the PT's case, an additional functionality is introduced. While the exercise list maintains the same appearance, clicking on the 
+exercise reveals a text box which allows modifications to be made to the instructions. The intuitiveness and ease needed to be ascertained. \\
+
+\subsubsection{Record}
+PTs are unable to access this function and the page remains inaccessible. This functionality is not intended for them and was not
+developed further. 
+However, the patient's view provides additional features. The UI elements were assessed to confirm visual appropriateness. 
+The following questions in the section evaluate whether the app successfully carries out its primary purpose. 
+
+\subsubsection{Feedback}
+Both participants and PTs have the exact same 'Feedback' page. These questions were related to the UI elements of the page. 
+Further exploration would have been beneficial, but the feature's construction was still in progress at this point.
 
 
 \end{document}
