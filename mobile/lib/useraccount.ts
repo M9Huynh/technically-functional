@@ -36,9 +36,9 @@ export interface UserData {
   physioId?: string;
   inviteCode?: string;
   createdAt?: any;
-  updatedAt?: any;
+  //updatedAt?: any;
   deleted?: boolean;
-  deletedAt?: any;
+  //deletedAt?: any;
 }
 
 export interface PTLicenseInfo {
@@ -50,7 +50,7 @@ export interface PTLicenseInfo {
   verifiedBy?: string;
   notes?: string;
   createdAt?: any;
-  updatedAt?: any;
+  //updatedAt?: any;
 }
 
 // Custom Error Classes
@@ -99,6 +99,7 @@ export class UserAccountFirebaseInitializationError extends Error {
 // USERACCOUNT CLASS
 export class UserAccountService {
   private usersCollection = "users";
+  //these would be used if the values were not hard coded 
   private validLicensesCollection = "ptLicenses";
   private inviteCodesCollection = "inviteCodes";
 
@@ -191,7 +192,7 @@ export class UserAccountService {
 
       const updateData: Partial<UserData> = {
         ...updates,
-        updatedAt: serverTimestamp(),
+        //updatedAt: serverTimestamp(),
       };
 
       // Remove uid from updates if present (shouldn't be updated)
@@ -407,7 +408,7 @@ export class UserAccountService {
       const deletePromises = patientsToDelete.map(async (doc) => {
         await updateDoc(doc.ref, {
           deleted: true,
-          deletedAt: serverTimestamp(),
+          //deletedAt: serverTimestamp(),
         });
 
         console.log(

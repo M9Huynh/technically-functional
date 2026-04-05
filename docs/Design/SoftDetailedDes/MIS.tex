@@ -610,7 +610,7 @@ $Pc(pw) \implies pw.length \geq 6 \cap \exists$ $d$ $|$ $d \in \{0 - 9\} \cap d 
 $Vb(bday) \implies bday \in Date $ \\
 \textit{Note: See \ref{sec:ui} for CreatePhysio and CreatePatient interface specifications.}
 
-\subsubsection{Access Routine Semantics}
+\subsubsection{Access Routine Semantics - Local}
 %TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -682,6 +682,7 @@ See \ref{sec:ui} for UI state variables. \\
 \texttt{code}: a patient invite code \\
 \texttt{lno}: a PT's license number \\
 \texttt{users}: \texttt{users} table in database\\
+
 \noindent \textbf{State Invariant}\\
 $ code['used'] = true \implies \exists$ $pt |$ $pt.inviteCode == code$\\
 $ \exists p.uid \in \texttt{users} \implies p.licenseNumber \in \texttt{validLicenses}$ 
@@ -751,181 +752,112 @@ Only after all validations pass does the function proceed to:
 
 This module's purpose is facilitate data manipulation within the user database tables. It was created as a separate component
 to simplify implementation.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%\\\\\\\\\
 Account creation generates a single instance of one of the following objects using variables in the table below.\\
+\subsubsection{Uses}
 \underline{\textbf{\textit{useraccount.ts}}}
 \begin{description}
 \item[\texttt{uid: string;}] 
-    Unique identifier for the user.
+    Unique identifier for the user. Used for fetching user data, updating user information, deleting user accounts, and associating patients with physiotherapists.
 
 \item[\texttt{email: string;}] 
-    User's email address for authentication and communication.
+    User's email address for authentication and communication. Used for email existence verification, credential validation, and user authentication.
 
 \item[\texttt{name: string;}] 
-    User's full name.
+    User's full name. Used for searching users by name, retrieving user database information by name, and patient account deletion verification.
 
 \item[\texttt{role: "patient" | "physio";}] 
-    User role designation. Determines which fields are applicable:
-    \begin{itemize}
-        \item \texttt{"patient"} - Receives care from a physiotherapist
-        \item \texttt{"physio"} - Provides care as a physiotherapist
-    \end{itemize}
-
-\item[\texttt{birthday?: string;}] 
-    User's date of birth. Optional field common to both roles.
-
-\item[\texttt{licenseNumber?: string;}] 
-    Professional license number. \textbf{Physio only:} Required for physiotherapists during verification.
-
-\item[\texttt{verified?: boolean;}] 
-    Account verification status. Optional flag common to both roles.
+    User's role in the system. Used for filtering patients by physiotherapist and categorizing users during database information retrieval.
 
 \item[\texttt{physioId?: string;}] 
-    Assigned physiotherapist identifier. \textbf{Patient only:} References the physio they are seeing.
+    Reference to the physiotherapist assigned to a patient. Used for retrieving all patients belonging to a specific physiotherapist.
+
+\item[\texttt{deleted?: boolean;}]
+    Soft delete flag indicating whether the user account has been deleted. Used as a filter when querying active patients and during user account deletion operations.
+
+\item[\texttt{birthday?: string;}] 
+    User's birthday. Used as part of patient profile information.
+
+\item[\texttt{licenseNumber?: string;}] 
+    Professional license number for physiotherapists. Used as part of physiotherapist profile information.
+
+\item[\texttt{verified?: boolean;}] 
+    Flag indicating whether a physiotherapist's license has been verified. Used in physiotherapist profile information.
 
 \item[\texttt{inviteCode?: string;}] 
-    Registration invitation code. \textbf{Patient only:} Used during account creation.
+    Invitation code for patient registration. Used as profile information and account creation validation.
 
-\item[\texttt{createdAt?: any;}] 
-    Account creation timestamp. Optional field for auditing.
+\item[\texttt{createdAt?: any;}]
+    Timestamp of user account creation. Defined in the interface but not set or read by current methods. Recommended for future audit trail implementation.
 
-\item[\texttt{updatedAt?: any;}] 
-    Last update timestamp. Optional field for tracking modifications.
-
-\item[\texttt{deleted?: boolean;}] 
-    Soft delete flag. Optional field indicating if the account is marked for deletion.
-
-\item[\texttt{deletedAt?: any;}] 
-    Deletion timestamp. Optional field recording when soft delete occurred.
 \end{description}
-
 \begin{itemize}
-    \item \textbf{Patient object (\texttt{user\_acc\_patient}):} 
-        \texttt{\{uid, email, name, role: "patient", birthday?, verified?, physioId?, inviteCode?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
+    \item \textbf{Patient object:} 
+        \texttt{\{uid, email, name, role: "patient", physioId?, inviteCode?, createdAt?, deleted?\}}
     
-    \item \textbf{Physio object (\texttt{user\_acc\_physio}):}
-        \texttt{\{uid, email, name, role: "physio", birthday?, licenseNumber?, verified?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
-    
-    \item \textbf{Note:} \texttt{physioId} and \texttt{inviteCode} are exclusive to patients; \texttt{licenseNumber} is exclusive to PTs.
+    \item \textbf{Physio object:}
+        \texttt{\{uid, email, name, role: "physio", birthday?, licenseNumber?, verified?, createdAt?\}}
 \end{itemize}
 %%%%%%%%%%%%\\\\\\\\\\\\\\\\
 
-
-\subsubsection{Uses}
-\begin{itemize}
-\item email
-\item password
-\item name
-\item birthday
-\item acc\_id
-\item role
-\end{itemize}
-
 \subsubsection{Syntax}
 
-\textbf{Exported Constants}
-\\ \textit{name}: name\\
-\textit{id}: acc\_id \\
-\textit{birthday}: birthday \\
+\textbf{Exported Constants}\\
+Not Applicable\\
 
-\noindent \textbf{Exported Access Programs}
+\noindent \textbf{Exported Access Programs}\\
+Not Applicable. This module consists of an interface.
 
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves user account information from the user table} \\
-\hline
-\rowcolor{white}
-get\_userdb\_info$^2$ & \makecell[lt]{\textit{Name}\\\textit{birthday(optional)}} & \makecell[lt]{\textit{user\_acc\_p}\\\textit{user\_acc\_pt}} & \makecell[lt]{UserNotFoundError\\DownloadError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} allows PT to delete a patient account from the system} \\
-\hline
-\rowcolor{white}
-PTaccount\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} verifies if username and password match for authentication} \\
-\hline
-\rowcolor{white}
-username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \makecell[lt]{LoginMatchError} \\
-\hline
-
-
-\end{tabularx}
-\caption{Exported Access Routines}
-\label{tab:user_routines_1}
-\end{table}
-\newpage
-\noindent\textsuperscript{2} \textit{For this function, the output depends on context. For example, if this function was going to be used in one which corresponds to the PT functionality of viewing 
-a patient, their view would be restricted to patients under their care.} \\
-
+\subsubsection{Semantics}
 \noindent \textbf{State Variables} \\
-\textit{email}: email \\
-\textit{pw}: password \\
-\textit{name}: name \\
-\textit{id}: acc\_id \\
-\textit{patient}: user\_acc\_p ([\textit{id}, \textit{name}, \textit{p}: role, \textit{bday}: birthday, \textit{email},
-\textit{pw}]) \\ 
-\textit{physio}: user\_acc\_pt ([\textit{id}, \textit{name}, \textit{pt}: role, \textit{ptbday}: birthday, \textit{email},
-\textit{pw}]) \\ 
-\noindent \textit{D(x)}: 'PT\_account\_delete(x)' \\
-\textit{db}: 'User Account' \\
-\textit{name\_has\_id}: {db.Name} $\mapsto$ \{db.acc\_id\} \\
-\textit{user\_info}: {db.acc\_id} $\mapsto$ \{db.Name, db.role, db.birthday, db.email\} \\
+\underline{\textbf{\textit{useraccount.ts}}}
+\begin{description}
+\item[\texttt{private usersCollection: string}] 
+    Internal state variable storing the Firestore collection name for user documents.
+
+\item[\texttt{private validLicensesCollection: string}] 
+    Internal state variable storing the Firestore collection name for physiotherapist licenses.
+
+\item[\texttt{private inviteCodesCollection: string}] 
+    Internal state variable storing the Firestore collection name for invitation codes.
+\end{description}
 
 \noindent \textbf{State Invariant} \\
-$\exists$ $acc\_id$ $|$ $(email \cap pw \notin \emptyset) $ \\
-%$D(acc\_id) \implies patient \notin db $
+\texttt{users}: 'users' database table\\
+\texttt{u1}: user 1\\
+\texttt{u2}: user 2\\
+\texttt{Phy}: set of all users that have role = 'physio' \\
+\texttt{Pt}: set of all users that have role = 'patient' \\
 
+
+\noindent $\forall$ $u1, u2 \in users, u1 \neq u2 \implies u1.email \neq u2.email$ \\
+$\forall$ $u1$ $\in$ $Phy, u1.physioId = \emptyset$ \\
+$\forall$ $u1$ $\in$ $Phy, u1.verified = true$ \\
+%$\forall$ $u1, u2$ $\in users$ $|$ $u1 \in Pt \cap u2 \in Phy,$ $u1.physioId = u2.uid$ \\
+$\forall$ $u1 \in Pt,$ $u1.deleted = true \implies u1.uid$ $\in \emptyset$ \\
+$\forall$ $u1 \in P, u2 \in Phy,$ $\exists$ $u1.physioId = u2.uid$ \\
+$\forall$ $id \in \{users.uid\}, $$\exists$ $u1| u1.uid = id \cap u1 \in users$ \\
+$\forall$ $u1 \in users \cap u1 \in Phy \implies u1 \notin P$ \\
+$\forall$ $u2 \in users \cap u2 \in Pt \implies u2 \notin Phy$ \\
 
 
 \subsubsection{Environment Variables}
-\textit{screen}: The application's display to the user \\
-\textit{touchscreen}: Users will click on the screen to select their desired action \\
+Not applicable
 
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item If two people have the same name, then it is assumed they have different birthdays. 
-  \item No two users have the same invite codes.
+  \item If two people have the same name, then it is assumed they have different different roles.
   \item No two PTs have the same license numbers.
 \end{itemize}
 
-\noindent \textit{Note: All the modules after this point may have missing information, which will be defined for a future iteration.}
-
-%TODO 
-\subsubsection{Access Routine Semantics}
-\textbf{get\_userdb\_info()}
-\begin{itemize}
-  \item Input: name, birthday(optional)
-  \item Transition: NA
-  \item Output: $\exists$ $n \in db.Name$ $\cup$ $(\exists$ $n \in db.Name$ $\cap$ $b \in db.birthday)$ $\implies$ $patient \in db$ $|$ $patient.Name = n \cap patient.birthday = b$
-\end{itemize}
-
-\textbf{PTaccount\_delete}
-\begin{itemize}
-  \item Input: name, email
-  \item Transition: 
-  \item Output: $\exists$ $n \in db.Name$ $\cup$ $(\exists$ $n \in db.Name$ $\cap$ $b \in db.birthday)$ $\implies$ $patient \in db$ $|$ $patient.Name = n \cap patient.birthday = b$
-\end{itemize}
+\subsubsection{Access Routine Semantics - Exported}
+Not applicable
 
 \subsubsection{Local Functions}
-NA\\
+Not applicable. All helper functions are defined as private class functions. 
 
-
+\subsubsection{Access Routine Semantics - Local}
+Not applicable
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Exercise Data}
