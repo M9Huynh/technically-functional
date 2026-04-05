@@ -25,6 +25,7 @@
 \usepackage{colortbl}
 \usepackage{makecell}
 \usepackage{longtable}
+\usepackage{centernot}
 
 
 \hypersetup{
@@ -753,7 +754,15 @@ Only after all validations pass does the function proceed to:
 This module's purpose is facilitate data manipulation within the user database tables. It was created as a separate component
 to simplify implementation.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%\\\\\\\\\
-Account creation generates a single instance of one of the following objects using variables in the table below.\\
+Account creation generates a single instance of one of the following objects:\\
+\begin{itemize}
+    \item \textbf{Patient object:} 
+        \texttt{\{uid, email, name, role: "patient", birthday?, physioId?, inviteCode?, createdAt?, deleted?\}}
+    
+    \item \textbf{Physio object:}
+        \texttt{\{uid, email, name, role: "physio", licenseNumber?, verified?, createdAt?\}}
+\end{itemize}
+
 \subsubsection{Uses}
 \underline{\textbf{\textit{useraccount.ts}}}
 \begin{description}
@@ -791,13 +800,6 @@ Account creation generates a single instance of one of the following objects usi
     Timestamp of user account creation. Defined in the interface but not set or read by current methods. Recommended for future audit trail implementation.
 
 \end{description}
-\begin{itemize}
-    \item \textbf{Patient object:} 
-        \texttt{\{uid, email, name, role: "patient", physioId?, inviteCode?, createdAt?, deleted?\}}
-    
-    \item \textbf{Physio object:}
-        \texttt{\{uid, email, name, role: "physio", birthday?, licenseNumber?, verified?, createdAt?\}}
-\end{itemize}
 %%%%%%%%%%%%\\\\\\\\\\\\\\\\
 
 \subsubsection{Syntax}
@@ -862,79 +864,262 @@ Not applicable
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Exercise Data}
 
-This module allows manipulation of a patient's exercise instructions data. Despite being a smaller module,
-the functions defined below 
+This module manages exercises that will be performed by the patient. It consists of a data layer (\textit{exerciseData.ts})
+and a UI layer (\textit{exercises.tsx}). The data layer provides database operations using the \texttt{userExercises} table.
+The UI layer fulfills the purpose of interfacing between the user and the module and is discussed in
+\ref{sec:ui}. This structure was chosen to enable:
+\begin{itemize}
+    \item High cohesion: all constituents serve the same business purpose
+    \item Low coupling: there is no direct communication present between the front end and database. They communicate through the backend.
+    \item Easy maintenance: low coupling allows for maintenance of a single 'part' of the module without affecting the rest of the module. 
+\end{itemize}
+The exported type of this module is:
+\begin{itemize}
+    \item Exercise\{id,
+  title,
+  subtitle?,
+  description,
+  demoText?, 
+  enabled,
+  tags?,
+  sets,
+  reps,
+\};
+\end{itemize}
 
 \subsubsection{Uses}
-\begin{itemize}
-\item name
-\item acc\_id
-\item exercise
-\item sets
-\item reps
-\item rest\_time
-\end{itemize}
+\underline{\textbf{\textit{exerciseData.ts - Functions}}}
+\begin{description}
+\item[\texttt{collection}] 
+    Firestore function from "firebase/firestore". Used to reference a database collection for exercise operations.
+
+\item[\texttt{deleteDoc}] 
+    Firestore function from "firebase/firestore". Used to delete an exercise document from the userExercises collection.
+
+\item[\texttt{doc}] 
+    Firestore function from "firebase/firestore". Used to create a document reference when fetching a single exercise.
+
+\item[\texttt{getDoc}] 
+    Firestore function from "firebase/firestore". Used to fetch a single exercise document by ID.
+
+\item[\texttt{getDocs}] 
+    Firestore function from "firebase/firestore". Used to fetch multiple exercise documents.
+
+\item[\texttt{query}] 
+    Firestore function from "firebase/firestore". Used to create filtered queries on exercise collections.
+
+\item[\texttt{where}] 
+    Firestore function from "firebase/firestore". Used to specify filter conditions (userid, title) in exercise queries.
+
+\item[\texttt{addDoc}] 
+    Firestore function from "firebase/firestore". Used to add a new exercise document to the userExercises collection.
+
+\item[\texttt{updateDoc}] 
+    Firestore function from "firebase/firestore". Used to update exercise fields (description, reps, sets, title) in an existing document.
+\end{description}
+\underline{\textbf{\textit{exerciseData.ts - Variables}}}
+\begin{description}
+\item[\texttt{db}] 
+    Firestore database instance from "./firebase". Used as the database reference for all Firestore operations related to this file.
+\end{description}
+\underline{\textbf{\textit{exerciseData.ts - Types}}}
+\begin{description}
+\item[\texttt{Exercise} (type)] 
+    Type definition defined locally within this file. Represents the exercise data structure with properties: id, title, subtitle, description, demoText, enabled, tags, sets, reps.
+\end{description}
+
+\noindent \underline{\textbf{\textit{exercises.tsx - Functions}}}
+\begin{description}
+\item[\texttt{useEffect}] 
+    React hook from "react". Used to perform side effects when user data, role, or selected user changes.
+
+\item[\texttt{useState}] 
+    React hook from "react". Used to manage local state for user data, exercises, modal visibility, and form values.
+
+\item[\texttt{getExercisesById}] 
+    Function from \textit{exerciseData.ts}. Used to fetch patient's assigned exercises for the patient view.
+
+\item[\texttt{getGeneralExercises}] 
+    Function from \textit{exerciseData.ts}. Used to fetch the master exercise library for physiotherapists.
+
+\item[\texttt{getSelectedExercises}] 
+    Function from \textit{exerciseData.ts}. Used to fetch currently assigned exercises for checkbox state and modal preloading.
+
+\item[\texttt{addUserExercise}] 
+    Function from \textit{exerciseData.ts}. Used to assign an exercise to a patient when a physiotherapist checks a checkbox.
+
+\item[\texttt{removeUserExercise}] 
+    Function from \textit{exerciseData.ts}. Used to remove an exercise assignment when a physiotherapist unchecks a checkbox.
+
+\item[\texttt{updateUserExercise}] 
+    Function from \textit{exerciseData.ts}. Used to save modified exercise instructions (description, sets, reps).
+
+\item[\texttt{getCurrentUser}] 
+    Function from "@/lib/temp". Used to fetch the currently authenticated user on component mount.
+
+\item[\texttt{getUserRole}] 
+    Function from "@/lib/roleStore". Used to determine if the current user is a patient or physiotherapist.
+
+\item[\texttt{getSelectedUserID}] 
+    Function from "@/lib/profileActivity". Used to get the patient ID selected by a physiotherapist.
+\end{description}
 
 
 \subsubsection{Syntax}
 
 \noindent \textbf{Exported Constants}
-\\ \textit{exercise}: exercise\\
-\textit{sets}: sets \\
-\textit{reps}: reps \\
-\textit{rest\_time}: rest\_time \\
+\underline{\textbf{\textit{both files}}}
 
+No exported constants are present in any of the reviewed files (exerciseData.ts, exercises.tsx). \\
 
-\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\noindent \textbf{Exported Access Programs}\\
+\textit{exerciseData.ts}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
 \hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
 \hline
+\endfirsthead
 
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} provides exercise instructions to user} \\
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% getExercisesById
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getExercisesById(uid):} Retrieves all exercises assigned to a specific user from the "userExercises" collection.} \\
 \hline
 \rowcolor{white}
-exerc\_instruct & \makecell[lt]{\textit{user\_acc\_p}\\\textit{exercise}} & \textit{ex\_instruct} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\texttt{uid: string} - User ID of the patient &
+\texttt{Promise<Exercise[] | undefined>} - Returns array of exercises or undefined if none found &
+\texttt{Error} - Throws error if there is an issue fetching exercises from Firestore \\
 \hline
 
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} allows physiotherapist to modify exercise parameters} \\
+% getExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getExercise(exid):} Fetches a single exercise document by its ID.} \\
 \hline
 \rowcolor{white}
-PT\_modifies\_exercise & \makecell[lt]{\textit{user\_acc\_p}\\\textit{sets}\\\textit{repetitions}\\\textit{rest\_time}} & \textit{ex\_instruct} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\texttt{exid: string} - Exercise document ID &
+\texttt{Promise<Exercise | undefined>} - Returns exercise object or undefined if not found &
+\texttt{Error} - Throws error if there is an issue fetching the exercise from Firestore \\
 \hline
 
-\end{tabularx}
-\caption{Exported Access Routines}
+% getGeneralExercises
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getGeneralExercises():} Retrieves the master exercise library from the "exercises" collection.} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{Promise<Exercise[] | undefined>} - Returns array of all general exercises or undefined if none found &
+\texttt{Error} - Throws error if there is an issue fetching exercises from Firestore \\
+\hline
 
-\end{table}
+% getSelectedExercises
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getSelectedExercises(uid):} Fetches the current list of exercises assigned to a specific user.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} - User ID of the patient &
+\texttt{Promise<Exercise[] | undefined>} - Returns array of assigned exercises or undefined if none &
+\texttt{Error} - Throws error if there is an issue fetching exercises from Firestore \\
+\hline
+
+% removeUserExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{removeUserExercise(uid, exerciseTitle):} Deletes an exercise assignment from a user's exercise list.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} - User ID of the patient, \texttt{exerciseTitle: string} - Title of the exercise to remove &
+\texttt{Promise<void>} - Returns nothing on successful deletion &
+\texttt{Error} - Throws error if there is an issue deleting the document from Firestore \\
+\hline
+
+% addUserExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{addUserExercise(uid, exercise):} Creates a new exercise assignment for a specific user.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} - User ID of the patient, \texttt{exercise: Exercise} - Exercise object to assign &
+\texttt{Promise<void>} - Returns nothing on successful creation &
+\texttt{Error} - Throws error if there is an issue adding the document to Firestore \\
+\hline
+
+% updateUserExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{updateUserExercise(uid, exerciseTitle, exerciseDescription, exerciseSets, exerciseReps):} Modifies an existing user exercise's instructions (description, sets, reps).} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} - User ID of the patient, \texttt{exerciseTitle: string} - Title of the exercise, \texttt{exerciseDescription: string} - New description, \texttt{exerciseSets: string} - Number of sets (optional), \texttt{exerciseReps: string} - Number of reps (optional) &
+\texttt{Promise<void>} - Returns nothing on successful update &
+\texttt{Error} - Throws error if there is an issue updating the document in Firestore \\
+\hline
+
+\caption{Exported Access Programs - exerciseData.ts} \label{sec: exerciseDataExports}
+\end{longtable}
+\textit{exercises.tsx}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% ExercisesTab
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{ExercisesTab():} Default exported React component that renders the exercises interface for both patients and physiotherapists.} \\
+\hline
+\rowcolor{white}
+\texttt{None} - Takes no props &
+\texttt{JSX.Element} - Returns a React component with role-based views (patient exercise list or physiotherapist exercise selection interface) &
+\texttt{None} - No exceptions thrown; returns null while role is loading \\
+\hline
+
+\caption{Exported Access Programs - exercises.tsx} \label{sec: exercisesExports}
+\end{longtable}
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-\textit{ex}: exercise\\
-\textit{sets}: sets\\
-\textit{reps}: reps\\
-\textit{rest\_time}: rest\_time\\
-\textit{ex\_routine}: [ex, sets, reps, rest\_time]\\
-\textit{name}: name\\
-\textit{acc\_id}: acc\_id\\
+\texttt{userexercises}: \texttt{userExercises} table in the database\\
+\texttt{exercises}: \texttt{exercises} table in user database\\
+\texttt{users}: \texttt{users} table in the database \\
+\texttt{ue}: modified \texttt{exercise} object \\
+%\texttt{userid}: uid
 
-\newpage
 
-%Check requirements doc
 \noindent \textbf{State Invariant} \\
-$\forall x \in ex\_routine: x \notin \emptyset$ \\
-$\forall x \in \{acc\_id\}: \exists y \in \{ex\_routine\}$ $|$ $count(y) = 1$ \\
-$\forall x \in \{ex\_routine\}$ $|$ $x['sets'] = 1$ $\implies$ $x['rest\_time'] = 0$ \\
+$\forall e1, e2 \in exercises, e1 \neq e2 \implies e1.title \neq e2. title \cap e1.description \neq e2.description$ \\
+$\forall e1 \in exercises, \exists e1.reps, e1.sets \in \mathbb{Z}^{+}$ \\
+$\forall e1, e2 \in userexercises, e1.title = e2.title \centernot \implies (e1.id = e2.id \cup 
+e1.reps = e2.reps \cup e1.sets = e2.sets \cup e1.userid = e2.userid)$ \\
+$\forall ue, e1 \in userexercises$ $|$ $ue.userid = e1.userid \cap ue.title = e1.title, \exists ue.description \neq e1.description
+\cup ue.sets \neq e1.sets \cup ue.reps \neq e1.reps$ \\
+
 
 \subsubsection{Environment Variables} %TODO check?
 \textit{screen}: The application's display to the user \\
@@ -1835,6 +2020,8 @@ mpipe\_draw & \makecell[lt]{\textit{unprocessed\_frames}} & \makecell[lt]{\texti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - UI} \label{sec:ui}
 NA
+
+%exercises.tsx
 
 
 \subsubsection{Uses}
