@@ -213,9 +213,6 @@ All the variables used in each class related to account creation are described b
 /technically-functional/mobile/app/(auth)/\underline{create-patient.tsx}}}\\
 \textit{Variables used in both of the above files are listed below.}
 \begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const router = useRouter();}] 
-    Expo Router instance for navigation after form submission. Imported from \texttt{expo-router}.
-
 \item[\texttt{const [name, setName] = useState("");}] 
     Manages the full name input field; initializes as empty string.
 
@@ -1104,37 +1101,79 @@ No exported constants are present in any of the reviewed files (exerciseData.ts,
 
 \subsubsection{Semantics}
 
-\noindent \textbf{State Variables} \\
+\noindent \textbf{State Variables} \hypertarget{svex} \\
 \texttt{userexercises}: \texttt{userExercises} table in the database\\
 \texttt{exercises}: \texttt{exercises} table in user database\\
 \texttt{users}: \texttt{users} table in the database \\
 \texttt{ue}: modified \texttt{exercise} object \\
+\texttt{assigned}: list of assigned exercises \\
 %\texttt{userid}: uid
 
 
 \noindent \textbf{State Invariant} \\
-$\forall e1, e2 \in exercises, e1 \neq e2 \implies e1.title \neq e2. title \cap e1.description \neq e2.description$ \\
-$\forall e1 \in exercises, \exists e1.reps, e1.sets \in \mathbb{Z}^{+}$ \\
-$\forall e1, e2 \in userexercises, e1.title = e2.title \centernot \implies (e1.id = e2.id \cup 
+$\forall$ $e1, e2 \in exercises, e1 \neq e2 \implies e1.title \neq e2. title \cap e1.description \neq e2.description$ \\
+$\forall$ $e1 \in exercises,$ $\exists$ $e1.reps, e1.sets \in \mathbb{Z}^{+}$ \\
+$\forall$ $e1, e2 \in userexercises, e1.title = e2.title \centernot \implies (e1.id = e2.id \cup 
 e1.reps = e2.reps \cup e1.sets = e2.sets \cup e1.userid = e2.userid)$ \\
-$\forall ue, e1 \in userexercises$ $|$ $ue.userid = e1.userid \cap ue.title = e1.title, \exists ue.description \neq e1.description
+$\forall$ $ue, e1 \in userexercises$ $|$ $ue.userid = e1.userid \cap ue.title = e1.title, \exists ue.description \neq e1.description
 \cup ue.sets \neq e1.sets \cup ue.reps \neq e1.reps$ \\
+$\forall$ $user \in users, |assigned| \geq 0$ 
 
-
-\subsubsection{Environment Variables} %TODO check?
-\textit{screen}: The application's display to the user \\
-\textit{touchscreen}: Users will click on the screen to select their desired action \\
+\subsubsection{Environment Variables} 
+Not applicable
 
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item During performance of an exercise, breaks may be needed, but the rest\_time specified maybe 0. In this case, it is assumed that the recording takes the speed of performance into account and records for longer. 
-  \item For the same user, no two exercises with the same name are present.
+  \item For the same user, no two exercises with the same name are present. Conversely, no two 
+  exercises with the same names can be assigned by a PT to one patient.
 \end{itemize}
 
-\subsubsection{Access Routine Semantics}
-%TODO
-
-\newpage
+\subsubsection{Access Routine Semantics - Exported}
+\texttt{db}: database\\
+\texttt{userexercises}: \texttt{userExercises} table in the database\\
+\texttt{exercises}: \texttt{exercises} table in user database\\
+\texttt{users}: \texttt{users} table in the database \\
+\texttt{ue}: modified \texttt{exercise} object \\
+\texttt{assigned}: list of assigned exercises \\
+\texttt{u1}: user \\
+\texttt{exid}: exercise id \\
+\texttt{ex}: exercise (object) \\
+\newline
+\textit{getExercisesById}\\
+\textbf{Pre-condition}: $u1.uid = ex.userid \in \{userexercises.userid\}$ \\
+\textbf{Function}: getExercisesById(u1.uid) \\
+\textbf{Post-condition}: [ex]\\
+\newline
+\textit{getExercise}\\
+\textbf{Pre-condition}: $exid \in \{exercises.id\} \cap exid \neq \emptyset$\\
+\textbf{Function}: getExercises(ex.exid) \\
+\textbf{Post-condition}: $ex \impliedby ex.id = exid $ \\
+\newline
+\textit{getGeneralExercises}\\
+\textbf{Pre-condition}: $\exists exercises \in db $
+\textbf{Function}: getGeneralExercises() \\
+\textbf{Post-condition}: $[ex] \neq \emptyset$ \\
+\newline
+\textit{getSelectedExercises}\\
+\textbf{Pre-condition}: $u1 \in users \cap u1.uid = ex.userid$ \\
+\textbf{Function}: getSelectedExercises(u1.uid) \\
+\textbf{Post-condition}: $[ex]$ \\
+\newline
+\textit{removeUserExercise}\\
+\textbf{Pre-condition}: $u1 \in users \cap u1.uid = ex.userid \cap title = ex.title \in userexercises$
+\textbf{Function}: getSelectedExercises(u1.uid, ex.title) \\
+\textbf{Post-condition}: $user[exercises]' = user[exercises] - ex$ \\
+\newline
+\textit{addUserExercise}\\
+\textbf{Pre-condition}: $u1 \in users \cap ex \in exercises$ \\
+\textbf{Function}: addUserExercise(u1.uid, ex)\\
+\textbf{Post-condition}: $user[exercises]' = user[exercises] + ex$\\
+\newline
+\textit{updateUserExercise}\\
+\textbf{Pre-condition}: $u1 \in users \cap ex \in exercises \cap ex.userid = u1.uid$ \\
+\textbf{Function}: addUserExercise(u1.uid, ex.title, ex.description, ex.sets, ex.reps)\\
+\textbf{Post-condition}: $ue = ex$ $\cap$ $(ex(u1.uid, ue.title)$ $\cup$ $ex(u1.uid, ue.description)$
+$\cup$ $ex(u1.uid, ue.sets)$ $\cup$ $ex(u1.uid, ue.reps))$
 
 \subsubsection{Local Functions}
 \begin{table}[h]
