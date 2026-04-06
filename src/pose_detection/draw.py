@@ -1,13 +1,13 @@
+"""Module for drawing the pose landmarks on the video feed"""
+import os
 import cv2 as cv
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 from mediapipe.tasks.python.vision import PoseLandmarker, PoseLandmarkerOptions
-import os
 
 os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 
-# moved to module-level so server/app can reuse it
 POSE_CONNECTIONS = frozenset([
     (0, 1), (1, 2), (2, 3), (3, 7), (0, 4), (4, 5), (5, 6), (6, 8),
     (9, 10), (11, 12), (11, 13), (13, 15), (15, 17), (15, 19), (15, 21),
@@ -16,7 +16,6 @@ POSE_CONNECTIONS = frozenset([
     (27, 29), (28, 30), (29, 31), (30, 32), (27, 31), (28, 32)
 ])
 
-# optional(not sure if we need this, maybe remove??): less clutter for knee exercise (reduces jitter)
 LEG_CONNECTIONS = frozenset([
     (23, 25), (25, 27), (27, 31),   # left hip->knee->ankle->foot
     (24, 26), (26, 28), (28, 32),   # right hip->knee->ankle->foot
@@ -40,6 +39,7 @@ def extract_landmarks(res):
     return [{"x": float(p.x), "y": float(p.y), "z": float(p.z)} for p in lms]
 
 class PoseCamera:
+    """Class for handling pose detection and drawing on the video feed."""
     def __init__(self, camera_index=0, width=640, height=480, pose_detect=None):
         self.cap = cv.VideoCapture(camera_index)
         self.cap.set(cv.CAP_PROP_FRAME_WIDTH, width)
@@ -47,7 +47,7 @@ class PoseCamera:
         self.display_size = (width, height)
 
         # now points to the shared constant
-        self.POSE_CONNECTIONS = POSE_CONNECTIONS
+        self.pose_connections = POSE_CONNECTIONS
 
         if pose_detect is not None:
             self.pose = pose_detect
@@ -62,27 +62,31 @@ class PoseCamera:
             )
             self.pose = PoseLandmarker.create_from_options(options)
 
-    def isOpened(self):
-        return self.cap.isOpened()
+    def is_opened(self):
+        """Checks if the camera is opened."""
+        return self.cap.is_opened()
 
     def get_frame(self):
+        """Captures a frame and then resizes it to the display size."""
         ret, frame = self.cap.read()
         if ret and frame is not None:
             frame = cv.resize(frame, self.display_size)
         return ret, frame
 
     def process_pose(self, frame):
+        """Runs pose detection on the given frame and returns the results."""
         rgb_frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
         res = self.pose.detect(mp_image)
         return res
 
     def draw_landmarks(self, res, frame):
+        """Draws the pose landmarks and connections on the frame."""
         if res and res.pose_landmarks:
             for landmarks in res.pose_landmarks:
                 h, w, _ = frame.shape
 
-                for start_idx, end_idx in self.POSE_CONNECTIONS:
+                for start_idx, end_idx in self.pose_connections:
                     if start_idx < len(landmarks) and end_idx < len(landmarks):
                         start_point = (int(landmarks[start_idx].x * w), int(landmarks[start_idx].y * h))
                         end_point = (int(landmarks[end_idx].x * w), int(landmarks[end_idx].y * h))
@@ -95,5 +99,7 @@ class PoseCamera:
         return frame
 
     def quit(self):
+        """Quits the camera and releases resources."""
         if hasattr(self, 'cap'):
             self.cap.release()
+            
