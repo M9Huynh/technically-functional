@@ -1,3 +1,4 @@
+"""Creates a Flask server that processes incoming frames for pose detection and analysis."""
 import os
 import base64
 import threading
@@ -18,34 +19,34 @@ os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 app = Flask(__name__)
 CORS(app)
 
-
 def b64_to_bgr_image(b64_str: str):
+    """Converts B64 strings to OpenCV BGR images."""
     img_bytes = base64.b64decode(b64_str)
     np_arr = np.frombuffer(img_bytes, np.uint8)
     frame = cv.imdecode(np_arr, cv.IMREAD_COLOR)
     return frame
 
-
 def mean_brightness(frame):
+    """Calculates the mean brightness of a frame."""
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     return float(np.mean(gray))
 
-
 def darkness_score(frame):
+    """Calculates the ratio of dark pixels in the frame."""
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     dark_pixels = np.sum(gray < 35)
     total_pixels = gray.size
     return dark_pixels / total_pixels
 
-
 def is_too_dark(frame):
+    """Determines if the frame is too dark based on brightness and darkness ratio."""
     brightness = mean_brightness(frame)
     dark_ratio = darkness_score(frame)
     too_dark = brightness < 55.0 or dark_ratio > 0.75
     return too_dark, brightness, dark_ratio
 
-
 def point_in_frame(pt):
+    """Checks if a landmark point is within the normalized frame coordinates."""
     if pt is None:
         return False
 
@@ -56,6 +57,7 @@ def point_in_frame(pt):
 
 
 def check_side_visibility(landmarks, side: str):
+    """Checks if the selected side's knee and nearby joints are visible in the frame."""
     if not landmarks or len(landmarks) < 29:
         return False, False
 
@@ -76,16 +78,17 @@ def check_side_visibility(landmarks, side: str):
 
 
 class PoseBackend:
+    """Class to manage pose detection and analysis state."""
     def __init__(self):
         self.lock = threading.Lock()
 
-        HERE = os.path.dirname(os.path.abspath(__file__))
-        MODEL_PATH = os.path.join(HERE, "pose_landmarker_heavy.task")
-        if not os.path.exists(MODEL_PATH):
-            raise RuntimeError(f"Model file missing at: {MODEL_PATH}")
+        here = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(here, "pose_landmarker_heavy.task")
+        if not os.path.exists(model_path):
+            raise RuntimeError(f"Model file missing at: {model_path}")
 
         options = vision.PoseLandmarkerOptions(
-            base_options=python.BaseOptions(model_asset_path=MODEL_PATH),
+            base_options=python.BaseOptions(model_asset_path=model_path),
             running_mode=vision.RunningMode.IMAGE,
             num_poses=1,
             min_pose_detection_confidence=0.5,
@@ -98,10 +101,12 @@ class PoseBackend:
         self.reset()
 
     def reset(self):
+        """Resets the analyzer state and starts calibration."""
         self.analyzer = Analyzer()
         self.analyzer.start_calibration(duration_s=10.0)
 
     def default_metrics(self):
+        """Returns default metrics when no valid pose is detected."""
         return {
             "angle": 0,
             "min_degree": 0,
@@ -122,6 +127,7 @@ pose_app = PoseBackend()
 
 @app.route("/reset", methods=["POST"])
 def reset_backend():
+    """Endpoint to reset the pose analyzer state and restart calibration."""
     with pose_app.lock:
         pose_app.reset()
     return jsonify({"ok": True})
@@ -129,6 +135,7 @@ def reset_backend():
 
 @app.route("/precheck_frame", methods=["POST"])
 def precheck_frame():
+    """Endpoint to perform a check on the incoming frame."""
     try:
         data = request.get_json(silent=True) or {}
         b64 = data.get("imageBase64")
@@ -214,6 +221,7 @@ def precheck_frame():
 
 @app.route("/process_frame", methods=["POST"])
 def process_frame():
+    """Endpoint to process an incoming frame for pose detection and analysis."""
     data = request.get_json(silent=True) or {}
     b64 = data.get("imageBase64")
     side = data.get("side", "RIGHT")
@@ -303,3 +311,4 @@ def process_frame():
 if __name__ == "__main__":
     print("Flask running on http://0.0.0.0:5001")
     app.run(host="0.0.0.0", port=5001, debug=False, threaded=True)
+    
