@@ -351,87 +351,6 @@ are in the process of being implemented are followed after. The document ends wi
 	
 	\vspace{0.5em}
 	
-	\item \textbf{test-UT-4 : Account Creation (Usability)}
-	
-	\textbf{Initial State:} App installed on participant's device; invite code and PT license number provided.
-	
-	\textbf{Input:} Participant launched the app, selected their role, and completed account creation.
-	
-	\textbf{Output:} All participants created accounts successfully without assistance. PT license and invite code fields completed without difficulty. Minor font size feedback noted and resolved.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-5 : Exercise Recording Initiation}
-	
-	\textbf{Initial State:} Patient logged in on mobile device; camera permission granted; backend server running.
-	
-	\textbf{Input:} Participant navigated to the Record screen and pressed Start Recording.
-	
-	\textbf{Output:} Camera activated and pose detection began. On-screen prompts instructed participant to enter the detectable frame area. Navigation and button labels reported as clear.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-6 : Real-Time Pose Detection and Form Feedback}
-	
-	\textbf{Initial State:} Patient positioned within camera frame; pose detection active; backend returning joint angle and ROM metrics.
-	
-	\textbf{Input:} Participant performed knee extension repetitions.
-	
-	\textbf{Output:} App detected relevant body landmarks and displayed appropriate form feedback overlays. Rep count incremented correctly. Detection accuracy was reported as satisfactory.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-7 : Exercise Page (Instructions)}
-	
-	\textbf{Initial State:} Patient logged in; Exercises tab accessible.
-	
-	\textbf{Input:} Participant navigated to the Exercises page and reviewed listed exercises.
-	
-	\textbf{Output:} Exercises displayed with names, target muscle groups, set/rep counts, and step-by-step instructions. Instructions reported as clear and easy to follow.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-8 : Progress Screen (Session History)}
-	
-	\textbf{Initial State:} Patient logged in with at least one completed session stored in Firestore.
-	
-	\textbf{Input:} Participant navigated to the Progress tab.
-	
-	\textbf{Output:} Session history displayed with ROM and rep count data. Layout was readable and logically arranged. Participants suggested adding sets and pain level as future enhancements.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-9 : PT Dashboard (Patient List and Activity)}
-	
-	\textbf{Initial State:} Physiotherapist logged in; at least one linked patient with recorded sessions.
-	
-	\textbf{Input:} PT participant reviewed the home dashboard and selected a patient to view their activity history.
-	
-	\textbf{Output:} Dashboard displayed linked patients and activity history. Patient detail view showed session history and ROM chart. Layout reported as clear and sufficient for clinical use.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-10 : PT Feedback Submission}
-	
-	\textbf{Initial State:} Physiotherapist logged in; patient session detail page accessible.
-	
-	\textbf{Input:} PT participant selected a session entry and submitted a written comment.
-	
-	\textbf{Output:} Feedback saved to Firestore and associated with the session. Comment visible from the patient's session view. PT participants rated the feature as clinically useful.
-	
-	\textbf{Result:} Pass
 	
 \end{enumerate}
 
@@ -478,6 +397,91 @@ Minor wording improvements were noted and updated.
 \textbf{Output:} Average rating across categories was $\geq$ 4/5. Minor UI refinements (font size and button spacing) were applied based on feedback.
 
 \textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-4 : Account Creation (Usability)}
+	
+\textbf{Initial State:} App installed on participant's device; invite code and PT license number provided.
+
+\textbf{Input:} Participant launched the app, selected their role, and completed account creation.
+
+\textbf{Output:} All participants created accounts successfully without assistance. PT license and invite code fields completed without difficulty. Minor font size feedback noted and resolved.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-5 : Exercise Recording Initiation}
+
+\textbf{Initial State:} Patient logged in on mobile device; camera permission granted; backend server running.
+
+\textbf{Input:} Participant navigated to the Record screen and pressed Start Recording.
+
+\textbf{Output:} Camera activated and pose detection began. On-screen prompts instructed participant to enter the detectable frame area. Navigation and button labels reported as clear.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-6 : Real-Time Pose Detection and Form Feedback}
+
+\textbf{Initial State:} Patient positioned within camera frame; pose detection active; backend returning joint angle and ROM metrics.
+
+\textbf{Input:} Participant performed knee extension repetitions.
+
+\textbf{Output:} App detected relevant body landmarks and displayed appropriate form feedback overlays. Rep count incremented correctly. Detection accuracy was reported as satisfactory.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-7 : Exercise Page (Instructions)}
+
+\textbf{Initial State:} Patient logged in; Exercises tab accessible.
+
+\textbf{Input:} Participant navigated to the Exercises page and reviewed listed exercises.
+
+\textbf{Output:} Exercises displayed with names, target muscle groups, set/rep counts, and step-by-step instructions. Instructions reported as clear and easy to follow.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-8 : Progress Screen (Session History)}
+
+\textbf{Initial State:} Patient logged in with at least one completed session stored in Firestore.
+
+\textbf{Input:} Participant navigated to the Progress tab.
+
+\textbf{Output:} Session history displayed with ROM and rep count data. Layout was readable and logically arranged. Participants suggested adding sets and pain level as future enhancements.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-9 : PT Dashboard (Patient List and Activity)}
+
+\textbf{Initial State:} Physiotherapist logged in; at least one linked patient with recorded sessions.
+
+\textbf{Input:} PT participant reviewed the home dashboard and selected a patient to view their activity history.
+
+\textbf{Output:} Dashboard displayed linked patients and activity history. Patient detail view showed session history and ROM chart. Layout reported as clear and sufficient for clinical use.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-10 : PT Feedback Submission}
+
+\textbf{Initial State:} Physiotherapist logged in; patient session detail page accessible.
+
+\textbf{Input:} PT participant selected a session entry and submitted a written comment.
+
+\textbf{Output:} Feedback saved to Firestore and associated with the session. Comment visible from the patient's session view. PT participants rated the feature as clinically useful.
+
+\textbf{Result:} Pass
+
 
 \end{enumerate}
 		
@@ -1420,6 +1424,13 @@ Table \ref{tab:sections_requirements} showcases both the functional requirements
     UT-1 & LFR-AP1 \\
     UT-2 & UHR-EOU2, UHR-LRN1 \\
     UT-3 & UHR-EOU1, LFR-ST1 \\
+    UT-4 & UHR-EOU1, UHR-LRN1 \\
+    UT-5 & UHR-EOU2, UHR-AR1 \\
+    UT-6 & UHR-UPL1, UHR-AR1 \\
+    UT-7 & UHR-LRN1, UHR-EOU1 \\
+    UT-8 & UHR-EOU1, LFR-ST1 \\
+    UT-9 & UHR-EOU1, LFR-AP1 \\
+    UT-10 & UHR-EOU1, UHR-UPL1 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1557,11 +1568,11 @@ Some areas of improvement would be to fully test each backend module to reach 10
   \end{figure}
 
 
-\section{Extras}
+% \section{Extras}
 
-The Usability Report, found \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{here}, contains the results and analysis from the usability testing conducted on our application. The report is not complete at this time, but performing these tests helped to ensure the system was meeting the non-functional requirements set out at the start of the year. Between now and the final submission, the report will be completed and will include a discussion of the results and recommendations for future development, along with the changes request and realized between now and final demonstration.
+% The Usability Report, found \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{here}, contains the results and analysis from the usability testing conducted on our application. The report is not complete at this time, but performing these tests helped to ensure the system was meeting the non-functional requirements set out at the start of the year. Between now and the final submission, the report will be completed and will include a discussion of the results and recommendations for future development, along with the changes request and realized between now and final demonstration.
 
-The Design Thinking Document is yet to be completed, as incorporating the feedback from usability testing seemed like a unique opportunity to add an additional layer of design to the report. Now that the usability testing has been completed, the design thinking document is a near top priority and will be iterated throughout the coming weeks.
+% The Design Thinking Document is yet to be completed, as incorporating the feedback from usability testing seemed like a unique opportunity to add an additional layer of design to the report. Now that the usability testing has been completed, the design thinking document is a near top priority and will be iterated throughout the coming weeks.
 
 \bibliographystyle{plainnat}
 \bibliography{../../refs/References}
