@@ -1481,88 +1481,7 @@ save\_overall\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & 
 \end{table}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Module - Performance Statistics Generator}
-
-This module's purpose is to display the most recent report, an overall analysis of progress, and rehabilitation insights. \\
-
-%subsubsection{Uses}
-%\begin{itemize}
-%\item recent\_report
-%\item report\_db
-%\item user\_acc\_p
-%\end{itemize}
-
-\subsubsection{Syntax}
-
-\textbf{Exported Constants}
-\\NA
-
-
-\noindent \textbf{Exported Access Programs}
-
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Generates health insights after assessing all past reports} \\
-\hline
-\rowcolor{white}
-generate\_insights & \makecell[lt]{\textit{all\_reports}} & \makecell[lt]{\textit{insights}} & \makecell[lt]{NoActivityError\\NoConnectionError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Generates a specific report} \\
-\hline
-\rowcolor{white}
-generate\_report & \makecell[lt]{\textit{date}\\\textit{time}} & \textit{recent\_report} & \makecell[lt]{CannotGenerateError\\NoActivityError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Retrieves specific report from database} \\
-\hline
-\rowcolor{white}
-get\_report & \makecell[lt]{\textit{Date}\\\textit{Time}} & \textit{Report} & \makecell[lt]{NA} \\
-\hline
-
-\end{tabularx}
-\caption{Generator Access Routines}
-\label{tab:generator_routines}
-\end{table}
-\newpage
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-\textit{A}: an instance of user\_acc\_p \\
-\textit{E}: an instance of recent\_analysis\\
-\textit{V}: video \\
-\textit{R}: report \\
-\textit{RR}: recent\_report \\
-
-\noindent \textbf{State Invariant} \\
-$ \forall RR,$ $\exists (A \cap V) $ \\
-$ \forall R,$ $\exists (A \cap V_i|i \geq 1..n, n \in 1..\mathbb{N})$
-
-\subsubsection{Environment Variables}
-\textit{NA}
-
-\subsubsection{Assumptions}
-%TODO
-NA
-
-\subsubsection{Access Routine Semantics}
-%TODO
-TBD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Profile Activity}
@@ -1680,117 +1599,272 @@ get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\O
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Analysis Control Flow}
-This module handles the video recording, placing markers on it and checking if the patient's form is appropriate for performing the exercise. It does this through the use of external libraries (notably OpenCV).
+This module is responsible for transmitting frames for analysis and the reverse. 
 
 \subsubsection{Uses}
+\noindent \textbf{\textit{\underline{server.py}}}
+
+\noindent \textbf{\underline{\textit{server.py - Functions}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{Flask}] 
+    From "flask". Used to create the Flask web application instance and define API routes.
+
+\item[\texttt{jsonify}] 
+    From "flask". Used to convert Python dictionaries to JSON responses for API endpoints.
+
+\item[\texttt{request}] 
+    From "flask". Used to parse incoming HTTP request data, including JSON payloads and form data.
+
+\item[\texttt{CORS}] 
+    From "flask\_cors". Used to enable Cross-Origin Resource Sharing, allowing the mobile app to communicate with the backend.
+
+\item[\texttt{threading.Lock}] 
+    From Python standard library "threading". Used to create a lock for thread-safe access to the pose backend state.
+
+\item[\texttt{base64.b64decode}] 
+    From Python standard library "base64". Used to decode base64-encoded image strings sent from the mobile app.
+
+\item[\texttt{np.frombuffer}] 
+    From "numpy". Used to convert decoded image bytes into a NumPy array for image processing.
+
+\item[\texttt{cv.imdecode}] 
+    From "cv2" (OpenCV). Used to decode a NumPy array into an OpenCV image format (BGR).
+
+\item[\texttt{cv.cvtColor}] 
+    From "cv2" (OpenCV). Used to convert images between color spaces (BGR to GRAY) for brightness calculation.
+
+\item[\texttt{cv.resize}] 
+    From "cv2" (OpenCV). Used to resize frames to a standard dimension (640x480) before processing.
+
+\item[\texttt{cv.flip}] 
+    From "cv2" (OpenCV). Used to mirror images horizontally when using the front camera.
+
+\item[\texttt{os.path.dirname}] 
+    From Python standard library "os". Used to get the directory path of the current file.
+
+\item[\texttt{os.path.abspath}] 
+    From Python standard library "os". Used to get the absolute path of the current file.
+
+\item[\texttt{os.path.join}] 
+    From Python standard library "os". Used to construct the full file path to the pose landmarker model.
+
+\item[\texttt{os.environ}] 
+    From Python standard library "os". Used to set environment variables (OPENCV\_VIDEOIO\_MSMF\_ENABLE\_HW\_TRANSFORMS).
+
+\item[\texttt{exists}] 
+    From "os.path". Used to check if the pose landmarker model file exists at the specified path.
+
+\item[\texttt{RuntimeError}] 
+    Python built-in exception. Used to raise an error when the model file is missing.
+
+\item[\texttt{threading}] 
+    Python standard library module. Used for thread management and locks.
+\end{description}
+
+\noindent \textbf{\underline{\textit{server.py - Variables}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{app}] 
+    Flask application instance created for running the server.
+
+\item[\texttt{pose\_app}] 
+    Global instance of the PoseBackend class that manages pose detection state.
+
+\item[\texttt{here}] 
+    Variable storing the directory path of the current Python file.
+
+\item[\texttt{model\_path}] 
+    Variable storing the full file system path to the pose\_landmarker\_heavy.task model file.
+\end{description}
+
+\noindent \textbf{\underline{\textit{server.py - Types}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{None}] 
+    No external types are explicitly imported. Type hints use built-in types (str, bool, float, int) and OpenCV/NumPy types implicitly.
+\end{description}
+\noindent \textbf{\textit{\underline{poseService.ts}}}
+
+\noindent \textbf{\underline{\textit{poseService.ts - Functions}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{axios.post}] 
+    From "axios". Used to send HTTP POST requests to the backend server for frame processing, pre-checking, and resetting the backend state.
+\end{description}
+
+\noindent \textbf{\underline{\textit{poseService.ts - Variables}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{SERVER\_URL}] 
+    Constant string variable storing the backend server address and port (http$://10.0.0.34:5001$). Used as the base URL for all API calls to the Flask server.
+
+\item[\texttt{mirrored}] 
+    Local boolean variable within processFrame and precheckFrame functions. Set to true when facing is "front", indicating the image needs to be mirrored.
+
+\item[\texttt{res}] 
+    Local variable storing the axios response object containing the backend response data.
+
+\item[\texttt{headers}] 
+    Configuration object passed to axios.post specifying Content-Type as "application\/json".
+
+\item[\texttt{timeout}] 
+    Configuration value set to 15000ms for processFrame and resetBackend, 10000ms for precheckFrame.
+\end{description}
+
+\noindent \textbf{\underline{\textit{poseService.ts - Types}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{Side}] 
+    Type union defining valid knee sides: "RIGHT" | "LEFT". Used to specify which knee is being analyzed.
+
+\item[\texttt{Facing}] 
+    Type union defining camera orientation: "front" | "back". Used to determine if image mirroring is needed.
+
+\item[\texttt{Landmark}] 
+    Type defining a 3D pose landmark with x, y, z coordinates (all numbers). Represents a detected body point.
+
+\item[\texttt{Connection}] 
+    Type defining a tuple [number, number] representing an edge between two landmark indices. Used to draw skeleton connections.
+
+\item[\texttt{ProcessFrameResponse}] 
+    Type defining the response structure from the \/process\_frame endpoint, containing landmarks, connections, metrics, and optional error.
+
+\item[\texttt{PrecheckFrameResponse}] 
+    Type defining the response structure from the \/precheck\_frame endpoint, containing ok status, lighting and visibility flags, and message.
+\end{description}
 
 \subsubsection{Syntax}
 
-\textbf{Exported Constants}
+\textbf{Exported Constants}\\
+\noindent \underline{\textit{poseService.ts}}\\
+There are no exported constants.\\
+\noindent \underline{\textit{server.py}}\\
+NA \\
 
-\noindent \textbf{Exported Access Programs}
-%record video - records
-%retry record - will just clal record; not sure if i need it
-%draw markers - this is call to the draw module 
-%form vs template - this is call for metrics module to forward the 'correct' metrics to analyze. 
-%submit video - user submits video
-%get metrics - not sure if i need
-%get rt feed - get real-time feed
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
 
-% Function 1
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets metrics from metrics module} \\
+\noindent \textbf{Exported Access Programs}\\
+\noindent \underline{\textit{server.py}}\\
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% reset_backend
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{reset\_backend():} Flask route handler for POST /reset endpoint. Resets pose analyzer state and restarts calibration.} \\
 \hline
 \rowcolor{white}
-get\_metrics & \makecell[lt]{\textit{NA}} & \makecell[lt]{\textit{angle}\\\textit{height}\\\textit{duration}} & \makecell[lt]{DataRetrievalError} \\
+\texttt{None} &
+\texttt{JSON} - Returns \texttt{\{ok: true\}} &
+\texttt{Exception} - Throws exception if reset fails \\
 \hline
 
-% Function 2
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends overall analysis to home module} \\
+% precheck_frame
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{precheck\_frame():} Flask route handler for POST /precheck\_frame endpoint. Validates lighting, frame composition, and knee visibility.} \\
 \hline
 \rowcolor{white}
-overall\_analysis\_home & \makecell[lt]{\textit{name}\\\textit{birthday}} & \makecell[lt]{\textit{overall\_analysis}} & \makecell[lt]{DataRetrievalError\\AnalysisNotFoundError} \\
+\texttt{JSON body:} \texttt{imageBase64: string}, \texttt{side: string}, \texttt{mirrored: boolean}, \texttt{legsOnly: boolean} &
+\texttt{JSON} - Returns \texttt{\{ok, tooDark, inFrame, kneeVisible, message\}} or error response &
+\texttt{Exception} - Throws exception if frame decoding fails or processing error occurs \\
 \hline
 
-% Function 3
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends real time processed frames to metrics (to be forwarded to Analysis)} \\
+% process_frame
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{process\_frame():} Flask route handler for POST /process\_frame endpoint. Processes frame for pose detection and metric calculation.} \\
 \hline
 \rowcolor{white}
-analysis\_rt\_frame & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{\textit{instructions\_ui}} & \makecell[lt]{CannotAnalyzeError\\NoInputError} \\
+\texttt{JSON body:} \texttt{imageBase64: string}, \texttt{side: string}, \texttt{mirrored: boolean}, \texttt{legsOnly: boolean} &
+\texttt{JSON} - Returns \texttt{\{landmarks, connections, metrics\}} or error response with default metrics &
+\texttt{Exception} - Throws exception if frame decoding fails or processing error occurs \\
 \hline
 
-% Function 4
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Performs overall analysis (given at end of recording)} \\
+\caption{Exported Access Programs - server.py} \label{sec:serverExports}
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent \underline{\textit{poseService.ts}}\\
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% processFrame
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{processFrame(imageBase64, side, facing):} Sends a single video frame to the backend for pose detection and metric calculation.} \\
 \hline
 \rowcolor{white}
-analysis\_overall & \makecell[lt]{\textit{recent\_video}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{InsufficientDataError\\ProcessError} \\
+\texttt{imageBase64: string} - Base64 encoded image frame, \texttt{side: Side} - "RIGHT" or "LEFT", \texttt{facing: Facing} - "front" or "back" &
+\texttt{Promise<ProcessFrameResponse>} - Returns landmarks, connections, and metrics &
+\texttt{Error} - Throws error if request fails or timeout occurs (15000ms) \\
 \hline
 
-% Function 5
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Module will provide corrections (received from Metrics) to UI (e.g. angle is too small)} \\
+% precheckFrame
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{precheckFrame(imageBase64, side, facing):} Performs pre-recording environment check including lighting and knee visibility.} \\
 \hline
 \rowcolor{white}
-corrections\_metrics & \makecell[lt]{\textit{rt\_metrics}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\texttt{imageBase64: string} - Base64 encoded image frame, \texttt{side: Side} - "RIGHT" or "LEFT", \texttt{facing: Facing} - "front" or "back" &
+\texttt{Promise<PrecheckFrameResponse>} - Returns ok status, lighting flags, visibility flags, and message &
+\texttt{Error} - Throws error if request fails or timeout occurs (10000ms) \\
 \hline
 
-% Function 6
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Sends recent analysis to home module} \\
+% resetBackend
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{resetBackend():} Resets the backend pose analyzer state and restarts calibration.} \\
 \hline
 \rowcolor{white}
-send\_analysis\_home & \makecell[lt]{\textit{NA}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{UserNotFoundError} \\
+\texttt{None} &
+\texttt{Promise<void>} - Resolves when reset is complete &
+\texttt{Error} - Throws error if request fails or timeout occurs (15000ms) \\
 \hline
 
-\end{tabular}
-\caption{Access Routines for Main Module}
-\label{table:access_routines}
-\end{table}
-
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-% Function 7
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Calls draw to give markers of the leg} \\
-\hline
-\rowcolor{white}
-set\_markers & \makecell[lt]{unprocessed\_frame} & \makecell[lt]{processed\_frame} & \makecell[lt]{InvalidFrameError} \\
-\hline
-
-\end{tabular}
-\caption{Access Routines for Main Module (Continued)}
-\label{table:access_routines_set_markers}
-\end{table}
-
-\newpage
+\caption{Exported Access Programs - poseService.ts} \label{sec:poseServiceExports}
+\end{longtable}
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
+\textit{f}: set of video frames\\\
+\textit{c}: calibrating \\
+\textit{cal\_time\_left}: time left for calibration\\
 
 
-%Check requirements doc
 \noindent \textbf{State Invariant} \\
-
+\noindent
+$\forall$ $b \in \text{Base64}: \text{b64\_to\_bgr\_image}(b) \in F \cup \{\emptyset\}$\\
+$\forall$ $\text{operations on pose\_app}: \text{lock must be acquired first}$\\
+$
+resetBackend() \implies analyzer = new Analyzer() \land c = 
+true \cap cal\_time\_left = 10.0$
 
 \subsubsection{Environment variables}
 %TODO fix this pls @Maham
