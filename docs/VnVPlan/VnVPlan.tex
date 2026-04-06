@@ -341,7 +341,7 @@ This section outlines the tests used to verify both the functional requirements 
 	
 	\textbf{Test Case Derivation:} Derived from requirements FR1.1, FR1.3, and FR2 in the SRS, which require that patient accounts must be linked to a physiotherapist through a valid invite code.
 	
-	\textbf{Pass/Fail Criteria:} Pass if the missing-link case is rejected and no account data is created. Fail otherwise.
+	\textbf{Pass/Fail Criteria:} Pass if the missing link case is rejected and no account data is created. Fail otherwise.
 	
 	\textbf{How test will be performed:} Call \texttt{registerPatient()} with an invite code that lacks a \texttt{physioId} and verify that the system throws the correct error and rejects registration.
 	
