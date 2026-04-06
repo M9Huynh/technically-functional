@@ -1,3 +1,4 @@
+"""Module for analyzing pose angles and metrics."""
 import os
 import time
 
@@ -5,11 +6,11 @@ os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 
 
 class Analyzer:
+    """Analyzes angles to track range of motion, reps, and provide feedback cues."""
     def __init__(self):
         self.started = False
         self.min_angle = 0.0
         self.max_angle = 0.0
-        
 
         # Calibration state
         self.is_calibrating = False
@@ -48,6 +49,7 @@ class Analyzer:
         self.rep_cooldown_s = 0.4
 
     def start_calibration(self, duration_s: float = 10.0):
+        """Begins the calibration process."""
         self.is_calibrating = True
         self.cal_duration_s = float(duration_s)
         self.cal_start_ts = time.time()
@@ -192,7 +194,7 @@ class Analyzer:
                 self.cue_state = "GOOD_EXTENSION"
 
     def update(self, angle: float):
-
+        """Update the analyzer with a new angle measurement."""
         if angle is None:
             self.cue_state = "OUT_OF_FRAME"
             return
@@ -218,9 +220,11 @@ class Analyzer:
         self._rep_update(angle)
 
     def calc_rom(self) -> float:
+        """Calculates the range of motion based on the user's current max and min angles."""
         return self.max_angle - self.min_angle
 
     def summary(self) -> dict:
+        """Returns a summary of the current analysis."""
         if self.is_calibrating and self.cal_start_ts is not None:
             cal_time_left = max(
                 0.0,
@@ -248,3 +252,4 @@ class Analyzer:
             "rep_state": self.rep_state,
             "cue_state": self.cue_state,
         }
+    
