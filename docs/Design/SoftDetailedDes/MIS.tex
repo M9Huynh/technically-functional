@@ -878,7 +878,7 @@ Not applicable
 \subsection{Module - Exercise Data}
 
 This module manages exercises that will be performed by the patient. It consists of a data layer (\textit{exerciseData.ts})
-and a UI layer (\textit{exercises.tsx}). The data layer provides database operations using the \texttt{userExercises} table.
+and a UI layer (\textit{exercises.tsx, [id].tsx}). The data layer provides database operations using the \texttt{userExercises} table.
 The UI layer fulfills the purpose of interfacing between the user and the module and is discussed in
 \ref{sec:ui}. This structure was chosen to enable:
 \begin{itemize}
@@ -886,19 +886,7 @@ The UI layer fulfills the purpose of interfacing between the user and the module
     \item Low coupling: there is no direct communication present between the front end and database. They communicate through the backend.
     \item Easy maintenance: low coupling allows for maintenance of a single 'part' of the module without affecting the rest of the module. 
 \end{itemize}
-The exported type of this module is:
-\begin{itemize}
-    \item Exercise\{id,
-  title,
-  subtitle?,
-  description,
-  demoText?, 
-  enabled,
-  tags?,
-  sets,
-  reps,
-\};
-\end{itemize}
+
 
 \subsubsection{Uses}
 \underline{\textbf{\textit{exerciseData.ts - Functions}}}
@@ -977,13 +965,125 @@ The exported type of this module is:
     Function from "@/lib/profileActivity". Used to get the patient ID selected by a physiotherapist.
 \end{description}
 
+\noindent \textbf{\underline{\textit{exercises.tsx - Variables}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{userData}] 
+    State variable storing current authenticated user. Initialized via getCurrentUser().
+
+\item[\texttt{userRole}] 
+    State variable storing user role. Initialized via getUserRole().
+
+\item[\texttt{selectedUser}] 
+    State variable storing selected patient ID for physio view. Initialized via getSelectedUserID().
+
+\item[\texttt{userExercises}] 
+    State variable storing patient's assigned exercises. Initialized via getExercisesById().
+
+\item[\texttt{selectedIds}] 
+    State variable storing titles of checked exercises. Initialized via getSelectedExercises().
+
+\item[\texttt{physioExercises}] 
+    State variable storing master exercise library. Initialized via getGeneralExercises().
+
+\item[\texttt{roleReady}] 
+    Boolean state variable indicating role has been loaded.
+
+\item[\texttt{modalVisible}] 
+    Boolean state variable controlling modal visibility.
+
+\item[\texttt{modalText}] 
+    State variable storing custom description text in modal.
+
+\item[\texttt{modalSets}] 
+    State variable storing custom sets value in modal.
+
+\item[\texttt{modalReps}] 
+    State variable storing custom reps value in modal.
+
+\item[\texttt{modalExercise}] 
+    State variable storing exercise being modified in modal.
+\end{description} 
+\noindent \underline{\textbf{\textit{exercises.tsx - Types}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{Exercise}] 
+    Type from "../../lib/exerciseData". Used to type exercise objects, exercise lists, and modal exercise state.
+
+\item[\texttt{UserData}] 
+    Type from "@/lib/useraccount". Used to type the current user data state.
+
+\item[\texttt{UserRole}] 
+    Type from "@/lib/roleStore". Used to type the user role state ("patient" | "physio").
+\end{description}
+
+\noindent \textbf{\underline{\textit{[id].tsx - UI Functions (React Native \& Navigation)}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{useLocalSearchParams}] 
+    Expo Router hook from "expo-router". Used to extract the id parameter from the navigation route.
+
+\item[\texttt{useRouter}] 
+    Expo Router hook from "expo-router". Used for navigation (goBack and navigate to record screen).
+
+\item[\texttt{useVideoPlayer}] 
+    Expo Video hook from "expo-video". Used to create and configure the video player instance for exercise demonstration videos.
+
+\item[\texttt{VideoView}] 
+    Component from "expo-video". Used to render the video player UI for exercise demonstrations.
+
+\item[\texttt{View}] 
+    React Native component from "react-native". Used as a container for layout.
+
+\item[\texttt{Text}] 
+    React Native component from "react-native". Used to display exercise title, subtitle, description, sets, reps, and UI text.
+
+\item[\texttt{StyleSheet}] 
+    React Native function from "react-native". Used to create component styles.
+
+\item[\texttt{Pressable}] 
+    React Native component from "react-native". Used to create touchable buttons (Record, Back, Go Back).
+
+\item[\texttt{ScrollView}] 
+    React Native component from "react-native". Used to enable scrolling for exercise details content.
+
+\item[\texttt{require}] 
+    React Native asset loading function. Used to load the local demonstration video file from previously stored tutorial video.
+\end{description}
+
+\noindent \textbf{\underline{\textit{[id].tsx - React Hooks \& Data(Functions)}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{useEffect}] 
+    React hook from "react". Used to fetch exercise data when the component mounts or when the id parameter changes.
+
+\item[\texttt{useState}] 
+    React hook from "react". Used to manage the currentExercise state variable.
+
+\item[\texttt{getExercise}] 
+    Function from "../../lib/exerciseData". Used to fetch a single exercise document by its ID from the Firestore database. This is a data access function, not UI-related.
+\end{description}
+
+
+\noindent \textbf{\underline{\textit{[id.tsx] - Variables}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{id}] 
+    Route parameter extracted from useLocalSearchParams. Contains the exercise ID passed from navigation. Used to fetch the specific exercise from the database.
+
+\item[\texttt{videoSource}] 
+    Local variable that conditionally loads a video asset. Returns require() path only for "Seated Knee Flexion-Extension Exercise", otherwise returns null.
+
+\item[\texttt{player}] 
+    Video player instance created by useVideoPlayer. Used to control video playback (loop, play, pause) in the VideoView component.
+\end{description}
+
+\noindent \textbf{\underline{\textit{[id.tsx] - Imported Types}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{Exercise}] 
+    Type definition imported from "../../lib/exerciseData". Represents the exercise data structure with properties: id, title, subtitle, description, demoText, enabled, tags, sets, reps. Used to type the currentExercise state.
+\end{description}
 
 \subsubsection{Syntax}
 
 \noindent \textbf{Exported Constants}
-\underline{\textbf{\textit{both files}}}
 
-No exported constants are present in any of the reviewed files (exerciseData.ts, exercises.tsx). \\
+No exported constants are present in any of the reviewed files (exerciseData.ts, exercises.tsx, [id].tsx.). \\
 
 \noindent \textbf{Exported Access Programs}\\
 \textit{exerciseData.ts}
@@ -1115,6 +1215,15 @@ No exported constants are present in any of the reviewed files (exerciseData.ts,
 \caption{Exported Access Programs - exercises.tsx} \label{sec: exercisesExports}
 \end{longtable}
 
+\noindent \textit{[id].tsx}
+
+There are no exported access programs in this file. The file exports only the default React component \texttt{ExerciseDetail}, which is a presentation component rather than an access program.
+
+The file \textbf{consumes} the following access programs from \texttt{exerciseData.ts}:
+\begin{itemize}
+    \item \texttt{getExercise()} - Fetches exercise data by ID
+\end{itemize}
+
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \hypertarget{svex} \\
@@ -1155,6 +1264,7 @@ $\forall$ $user \in users, |assigned| \geq 0$ \\
 \textit{Sel(uid)}: $\forall ex \in userexercises,$ $Sel(uid) = [ex]$ $|$ $ex.userid = uid$\\
 \textit{R(uid, title)}: $userexercises' = userexercises - [ex]$ $|$ $ex.title = title \cap ex.userid = uid$\\
 \textit{A(uid, ex)}: $userexercises' = userexercises \cup [ex]$ $|$ $ex \in exercises \cap (ex \in userexercises \cap ex.userid = uid) $ \\
+
 \subsubsection{Environment Variables} 
 Not applicable
 
@@ -1299,7 +1409,7 @@ These functions are UI related. Note that they are included here for readability
 \end{longtable}
 
 \subsubsection{Access Routine Semantics - Local}
-Since these are UI related, they are elaborated on in section \ref{sec:ui}
+Not Applicable: they are UI related.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
