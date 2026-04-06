@@ -33,10 +33,11 @@
 
 \section{Revision History}
 
-\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\begin{tabularx}{\textwidth}{p{5cm}p{2cm}X}
 \toprule {\bf Name(s)} & {\bf Date} & {\bf Notes}\\
 \midrule
-Vaisnavi S. & March 9th, 2026 & Created inital version of VnV Report\\
+Maham, Vaisnavi, Eman, Cieran, Matthew & March 9th, 2026 & Created inital version of VnV Report\\
+Vaisnavi S. & April 4th, 2026 & Applied feedback to the VnV Report\\
 Vaisnavi S. & April 5th, 2026 & Applied feedback to the VnV Report\\
 Vaisnavi S. & April 6th, 2026 & Finalized the final version of the VnV Report\\
 \bottomrule
@@ -855,7 +856,7 @@ and the User Account module test cases extend that to testing for invalid and no
   % SPECIALIZED FUNCTIONS
   \multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline  
 
-  TC19 & FR2, FR4, FR22 & PT\_Account\_Delete: Test with valid physio, non-physio user, and non-existent patient. & Valid case deletes patient; non-physio throws error; non-existent throws error. &
+  TC19 & FR2, FR4, FR22 & \path{PT_Account_Delete:} Test with valid physio, non-physio user, and non-existent patient. & Valid case deletes patient; non-physio throws error; non-existent throws error. &
   Delete operation handled valid and invalid cases correctly with expected outcomes. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
 
   TC20 & SR-AR1, SR-PR1 & Test usernamePwMatch and authenticateUser with valid credentials, invalid password, and non-existent user. & Valid returns true/user; invalid throws appropriate errors; non-existent returns null. &
@@ -988,28 +989,28 @@ The tests below outline the Video Capture and Review functionality. Some of the 
   \label{table:video_capture_tests}
   \endlastfoot
   
-  TC31 & FR12 & Call \texttt{get\_pose \_connections (legs\_only= False)} and verify against \texttt{POSE\_ CONNECTIONS}. & \texttt{POSE\_CONNECTIONS} and \texttt{LEG\_CONNECTIONS} have length greater than 0. \texttt{LEG\_CONNECTIONS} length is less than \texttt{POSE\_CONNECTIONS}, and the set of connections from \texttt{get\_pose\_connections(False)} equals the set of \texttt{POSE\_CONNECTIONS}. &
+  TC31 & FR12 & Call \path{get_pose_connections} \path{(legs_only= False)} and verify against \path{POSE_CONNECTIONS}. & \path{POSE_CONNECTIONS} and \path{LEG_CONNECTIONS} have length greater than 0. \path{LEG_CONNECTIONS} length is less than \path{POSE_CONNECTIONS}, and the set of connections from \path{get_pose_connections(False)} equals the set of \path{POSE_CONNECTIONS}. &
   Connections returned matched expected full pose connections. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC32 & FR12 & Call \texttt{get\_pose \_connections (legs\_only= True)} and verify against \texttt{LEG\_CONNECTIONS}. & The connections returned equal the set of \texttt{LEG\_CONNECTIONS}. &
+  TC32 & FR12 & Call \path{get_pose_connections} \path{(legs_only= True)} and verify against \path{LEG_CONNECTIONS}. & The connections returned equal the set of \path{LEG_CONNECTIONS}. &
   Connections returned matched expected leg-only connections. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC33 & FR12 & Call \texttt{extract\_ landmarks()} with a valid pose result containing 33 landmarks. & Returns a list of 33 landmarks. Each landmark has x, y, z values that are close to the expected i/33 values. &
+  TC33 & FR12 & Call \path{extract_landmarks()} with a valid pose result containing 33 landmarks. & Returns a list of 33 landmarks. Each landmark has x, y, z values that are close to the expected i/33 values. &
   Landmarks were extracted correctly with expected values. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC34 & FR26 & Call \texttt{extract\_ landmarks()} with None and with an empty result (pose\_landmarks =None). & Returns None for both. &
+  TC34 & FR26 & Call \path{extract_landmarks()} with None and with an empty result \path{pose_landmarks=None}. & Returns None for both. &
   Function correctly returned None for invalid inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC35 & FR7 & Initialize PoseCamera with mocked VideoCapture and mocked PoseLandmarker. & Camera initializes successfully. \texttt{display\_size} is set to (640, 480). \texttt{cap.set} is called to configure frame dimensions. &
+  TC35 & FR7 & Initialize PoseCamera with mocked VideoCapture and mocked PoseLandmarker. & Camera initializes successfully. \path{display_size} is set to (640, 480). \texttt{cap.set} is called to configure frame dimensions. &
   Camera initialized and configured as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC36 & FR7 & Call \texttt{get\_frame()} with mocked camera that returns a numpy array frame. & Returns (True, frame) where frame is a numpy array. Frame is resized to display dimensions. &
+  TC36 & FR7 & Call \path{get_frame()} with mocked camera that returns a numpy array frame. & Returns (True, frame) where frame is a numpy array. Frame is resized to display dimensions. &
   Frame was retrieved and resized correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC37 & FR12 & Call \texttt{process\_ pose()} with a mocked frame. & Returns a mock result. The pose detector's \texttt{detect} method is called once with the converted RGB image. &
+  TC37 & FR12 & Call \path{process_pose()} with a mocked frame. & Returns a mock result. The pose detector's \texttt{detect} method is called once with the converted RGB image. &
   Pose processing returned expected result and called detector correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC38 & FR14 & Call \texttt{draw\_ landmarks()} with a mock result and a numpy array frame. & Returns the frame. OpenCV's \texttt{line} and \texttt{circle} functions are called to draw the pose landmarks. &
+  TC38 & FR14 & Call \path{draw_landmarks()} with a mock result and a numpy array frame. & Returns the frame. OpenCV's \texttt{line} and \texttt{circle} functions are called to draw the pose landmarks. &
   Landmarks were drawn correctly on frame. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 \end{longtable}
 \end{center}
@@ -1052,28 +1053,28 @@ The following tests in Table \ref{table:computer_vision_tests} verify the functi
   \label{table:computer_vision_tests}
   \endlastfoot
 
-  TC39 & FR12 & Call \texttt{angle\_deg()} with points forming a 90-degree angle: a=(0,1), b=(1,1), c=(1,0). & Returns 90.0 degrees (within 0.01 tolerance). &
+  TC39 & FR12 & Call \path{angle_deg()} with points forming a 90-degree angle: a=(0,1), b=(1,1), c=(1,0). & Returns 90.0 degrees (within 0.01 tolerance). &
   Angle calculation returned expected value within tolerance. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC40 & FR12 & Call \texttt{angle\_deg()} with points forming a 45-degree angle: a=(0,1), b=(1,1), c=(0,0). & Returns 45.0 degrees (within 0.01 tolerance). &
+  TC40 & FR12 & Call \path{angle_deg()}  with points forming a 45-degree angle: a=(0,1), b=(1,1), c=(0,0). & Returns 45.0 degrees (within 0.01 tolerance). &
   Angle calculation returned expected value within tolerance. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC41 & FR12 & Call \texttt{angle\_deg()} with points forming a 180-degree straight line: a=(0,1), b=(1,1), c=(2,1). & Returns 180.0 degrees (within 0.01 tolerance). &
+  TC41 & FR12 & Call \path{angle_deg()}  with points forming a 180-degree straight line: a=(0,1), b=(1,1), c=(2,1). & Returns 180.0 degrees (within 0.01 tolerance). &
   Angle calculation returned expected value within tolerance. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC42 & FR26 & Call \texttt{angle\_deg()} with None values... & Returns None for all three cases. &
+  TC42 & FR26 & Call \path{angle_deg()}  with None values. & Returns None for all three cases. &
   Function correctly handled invalid inputs and returned None. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC43 & FR12 & Call \texttt{knee\_angle\_from\_result()} (right leg). & Returns valid angle. &
+  TC43 & FR12 & Call \path{knee_angle_from_result()} (right leg). & Returns valid angle. &
   Knee angle was computed correctly from valid input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC44 & FR12 & Call \texttt{knee\_angle\_from\_result()} (left leg). & Returns valid angle. &
+  TC44 & FR12 & Call \path{knee_angle_from_result()} (left leg). & Returns valid angle. &
   Knee angle was computed correctly from valid input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC45 & FR26 & Call \texttt{knee\_angle\_from\_result()} with None. & Returns None. &
+  TC45 & FR26 & Call \path{knee_angle_from_result()} with None. & Returns None. &
   Function correctly returned None for invalid input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC46 & FR26 & Call with \texttt{pose\_landmarks=None}. & Returns None. &
+  TC46 & FR26 & Call with \path{pose_landmarks=None}. & Returns None. &
   Function correctly handled missing landmarks. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC47 & FR26 & Missing right knee landmark. & Returns None. &
@@ -1151,7 +1152,7 @@ The following tests in Table \ref{table:computer_vision_tests} verify the functi
   TC71 & FR8, FR12 & Zero ROM. & No errors. &
   Edge case handled without errors. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC72 & FR12, FR26 & Negative/positive update. & Range expands. &
+  TC72 & FR12, FR26 & Negative or Positive update. & Range expands. &
   Angle range updated correctly for edge values. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC73 & FR12, FR26 & Large angle. & Max expands. &
@@ -1244,21 +1245,21 @@ The following tests in Table \ref{table:performance_latency_tests} verify the fu
 
   TC96 & FR1.1, FR21 & Call \path{saveMetrics()} when user document exists but has no name field. & Saved data uses "Unknown User" for the name field. & Function correctly used "Unknown User" as fallback for missing name field. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC97 & FR1 & Call \path{saveSessionData()} when no user is logged in. & Function throws error "User must be logged in". & Function correctly threw "User must be logged in" when no user was authenticated. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+  TC97 & FR1 & Call \path{saveSession} \path{Data()} when there is no user logged in. & Function throws error "User must be logged in". & Function correctly threw "User must be logged in" when no user was authenticated. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC98 & FR21, FR17, FR11 & Call \path{saveSessionData()} with valid session data. & Returns document ID "mock-doc-id". Saved data contains actid with "session\_" prefix, analysis="completed", completed\_reps=8, duration=1, exercise="Knee Extension Session", max\_height=70.5, min\_height=30.1, average\_rom=40.4, total\_reps=8, avg\_rep\_duration=1.2. & Function returned "mock-doc-id" and correctly saved session data with all expected fields. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+  TC98 & FR21, FR17, FR11 & Call \path{saveSession} \path{Data()} with valid session data. & Returns document ID "mock-doc-id". Saved data contains actid with \path{"session_" prefix, analysis="completed", completed_reps=8, duration=1, exercise="Knee Extension} \path{Session", max_height=70.5, min_height=30.1, average_rom=40.4, total_reps=8, avg_rep_duration=1.2.} & Function returned "mock-doc-id" and correctly saved session data with all expected fields. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC99 & FR11, FR21 & Call \path{saveSessionData()} without avgRepDuration (uses session duration instead). & Saved data has duration calculated from startTime and endTime (0 seconds), and avg\_rep\_duration is undefined. & Function correctly calculated duration and handled missing avgRepDuration as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+  TC99 & FR11, FR21 & Call \path{saveSession} \path{Data()} without avgRepDuration (uses session duration instead). & Saved data has duration calculated from startTime and endTime (0 seconds), and avg\_rep\_duration is undefined. & Function correctly calculated duration and handled missing avgRepDuration as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC100 & FR1.1, FR21 & Call \path{saveSessionData()} when user document does not exist. & Saved data uses "Unknown User" for the name field. & Function correctly used "Unknown User" fallback when user document was missing. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+  TC100 & FR1.1, FR21 & Call \path{saveSession} \path{Data()} when user document does not exist. & Saved data uses "Unknown User" for the name field. & Function correctly used "Unknown User" fallback when user document was missing. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC101 & FR1.1, FR21 & Call \path{getUserDisplayName()} with logged in user and existing user document with name field. & Returns "Test User". Verifies doc and getDoc calls with correct parameters. & Function correctly returned "Test User" and performed expected Firestore calls. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+  TC101 & FR1.1, FR21 & Call \path{getUser} \path{DisplayName()} with logged in user and existing user document with name field. & Returns "Test User". Verifies doc and getDoc calls with correct parameters. & Function correctly returned "Test User" and performed expected Firestore calls. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC102 & FR1.1, FR21 & Call \path{getUserDisplayName()} when user document exists but has no name field. & Returns user email "test@example.com". & Function correctly returned user email "test@example.com" when name field was missing. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+  TC102 & FR1.1, FR21 & Call \path{getUser} \path{DisplayName()} when user document exists but has no name field. & Returns user email \path{"test@example.com"}. & Function correctly returned user email \path{"test@example.com"} when name field was missing. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC103 & FR1 & Call \path{getUserDisplayName()} when no user is logged in. & Returns "Unknown User". & Function correctly returned "Unknown User" when no user was logged in. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+  TC103 & FR1 & Call \path{getUser} \path{DisplayName()} when no user is logged in. & Returns "Unknown User". & Function correctly returned "Unknown User" when no user was logged in. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC104 & FR1.1 & Call \path{getUserDisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & Function correctly handled Firestore error and returned "Unknown User" as fallback. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
+  TC104 & FR1.1 & Call \path{getUser} \path{DisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & Function correctly handled Firestore error and returned "Unknown User" as fallback. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 \end{longtable}
 
 
@@ -1381,11 +1382,11 @@ The tests ensure this functionality works as expected under various conditions, 
 
   TC143 & FR17, FR18, FR19, FR22 & Test clearSelectedUserID on AsyncStorage. & Calls AsyncStorage.removeItem with expected inputs. & Function correctly called AsyncStorage.removeItem with expected inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
 
-  TC144 & FR2, FR3 & Test getPhysioInviteCode when an invite code exists. & Returns the corresponding physio invite code. & Function correctly returned the corresponding physio invite code. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+  TC144 & FR2,\newline FR3 & Test getPhysioInviteCode when an invite code exists. & Returns the corresponding physio invite code. & Function correctly returned the corresponding physio invite code. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
 
-  TC145 & FR2, FR3 & Test getPhysioInviteCode when no invite code exists. & Returns null. & Function correctly returned null when no invite code existed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+  TC145 & FR2,\newline FR3 & Test getPhysioInviteCode when no invite code exists. & Returns null. & Function correctly returned null when no invite code existed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
 
-  TC146 & FR2, FR3 & Test getPhysioInviteCode when userID is invalid. & Returns null. & Function correctly returned null for invalid userID. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
+  TC146 & FR2,\newline FR3 & Test getPhysioInviteCode when userID is invalid. & Returns null. & Function correctly returned null for invalid userID. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 \end{longtable}
 
 \subsection{Exercise Data Tests}
