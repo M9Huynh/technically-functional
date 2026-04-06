@@ -37,7 +37,8 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 March 9th, 2026 & 1.0 & Created inital version of VnV Report\\
-Date 2 & 1.1 & Notes\\
+April 5th, 2026 & 1.1 & Applied Feedback to the VnV Report\\
+April 6th, 2026 & 1.2 & Finalized the final version of the VnV Report\\
 \bottomrule
 \end{tabularx}
 
@@ -625,7 +626,7 @@ modules.
 
 \subsection{Authentication}
 
-\subsubsection{Account Creation Module Tests}
+\subsubsection{Account Creation Tests}
 The following tests in Table \ref{table:account_creation_tests} verify the functionality of the account 
 creation module for both physiotherapists and patients, including validation checks and successful user 
 creation workflows.
@@ -652,7 +653,7 @@ creation workflows.
   \endfoot
 
   \bottomrule
-  \caption{Account Creation Module Test Cases}
+  \caption{Account Creation Test Cases}
   \label{table:account_creation_tests}
   \endlastfoot
 
@@ -693,7 +694,7 @@ creation workflows.
   occur. & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsubsection{Valid User Module Tests}
+\subsubsection{Valid User Tests}
 The following tests in Table \ref{table:valid_user_tests} verify the functionality of the valid user module.
 
 \begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
@@ -718,7 +719,7 @@ The following tests in Table \ref{table:valid_user_tests} verify the functionali
   \endfoot
 
   \bottomrule
-  \caption{Valid User Module Test Cases}
+  \caption{Valid User Test Cases}
   \label{table:valid_user_tests}
   \endlastfoot
 
@@ -741,7 +742,7 @@ The following tests in Table \ref{table:valid_user_tests} verify the functionali
   All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsection{User Account Module Tests}
+\subsection{User Account Tests}
 The tests below outline the User Account module functionality. Note that many new functions were added for this
 iteration. Currently, it serves as an interface between the 
 database and the various other components. Additionally, there may be some overlap between the Account Creation module
@@ -805,7 +806,7 @@ and the User Account module test cases extend that to testing for invalid and no
   TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
 \end{longtable}
 
-\subsection{Live Feedback Module Tests}
+\subsection{Live Feedback Tests}
 The following tests in Table \ref{table:live_feedback_tests} verify the functionality of the live 
 feedback module, including real-time corrective message generation, safety warning triggers, rep 
 counting, and physiotherapist comment submission and retrieval.
@@ -828,7 +829,7 @@ counting, and physiotherapist comment submission and retrieval.
 	\endfoot
 	
 	\bottomrule
-	\caption{Live Feedback Module Test Cases}
+	\caption{Live Feedback Test Cases}
 	\label{table:live_feedback_tests}
 	\endlastfoot
 	
@@ -1102,7 +1103,7 @@ The following tests in Table \ref{table:performance_latency_tests} verify the fu
   TC104 & FR1.1 & Call \texttt{getUserDisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & All assertions pass. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsection{Profile Activity Module Tests}
+\subsection{Profile Activity Tests}
 The following tests in Table \ref{table:profile_activity_tests} verify the functionality of the profile activity module. 
 This module is responsible for storing, retrieving, and handling user activity data, stored user data, summary data, and chart data.
 The tests ensure this functionality works as expected under various conditions, including valid inputs, edge cases, and error scenarios.
@@ -1125,7 +1126,7 @@ The tests ensure this functionality works as expected under various conditions, 
   \endfoot
 
   \hline
-  \caption{Profile Activity Module Test Cases}
+  \caption{Profile Activity Test Cases}
   \label{table:profile_activity_tests}
   \endlastfoot
 
@@ -1214,7 +1215,7 @@ The tests ensure this functionality works as expected under various conditions, 
   TC146 & FR2, FR3 & Test getPhysioInviteCode when userID is invalid. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
 \end{longtable}
 
-\subsection{Exercise Data Module Tests}
+\subsection{Exercise Data Tests}
 The following tests in Table \ref{table:exercise_data_tests} verify the functionality of the exercise data module.
 This module is responsible for storing, retrieving, and handling user exercise data, general exercise data for assignable exercises by physios, and assigned exercises for given users.
 This function also facilitates the modification, addition, and deletion of exercises for users by their assigned physios.
@@ -1238,7 +1239,7 @@ The tests outlined in the table ensure that all of this functionality works as e
   \endfoot
 
   \hline
-  \caption{Exercise Data Module Test Cases}
+  \caption{Exercise Data Test Cases}
   \label{table:exercise_data_tests}
   \endlastfoot
 
@@ -1347,7 +1348,7 @@ they validate, ultimately displaying the traceability to requirements.
   TC19-21 & FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1 \\
   TC22 & FR1, SR-AR1 \\
   \midrule
-  \multicolumn{2}{c}{\textit{Live Feedback Module Tests}} \\
+  \multicolumn{2}{c}{\textit{Live Feedback Tests}} \\
   \midrule
   TC23-25 & FR13, FR14 \\
   TC26 & FR16 \\
@@ -1390,7 +1391,7 @@ they validate, ultimately displaying the traceability to requirements.
   TC98 & FR11, FR17, FR21 \\
   TC104 & FR1.1, FR21 \\
   \midrule
-  \multicolumn{2}{c}{\textit{Profile Activity Module Tests}} \\
+  \multicolumn{2}{c}{\textit{Profile Activity Tests}} \\
   \midrule
   TC105-110 & FR21, FR23 \\
   TC111-114 & FR10, FR11, FR17, FR18, FR21 \\
@@ -1401,7 +1402,7 @@ they validate, ultimately displaying the traceability to requirements.
   TC137-143 & FR17, FR18, FR19, FR22 \\
   TC144-146 & FR2, FR3 \\
   \midrule
-  \multicolumn{2}{c}{\textit{Exercise Data Module Tests}} \\
+  \multicolumn{2}{c}{\textit{Exercise Data Tests}} \\
   \midrule
   TC147-155, 164-166 & FR5, FR18, FR21, FR27 \\
   TC156-163 & FR6, FR18, FR21 \\
@@ -1500,19 +1501,18 @@ which ultimately showcases the overall verification of our system.
   \label{tab:core_modules_tests} \\
     \toprule \textbf{Test ID} & \textbf{Module} \\
     \midrule
-    TC1-8 & M5 (Account Creation) \\
-    TC9-12 & M6 (Valid User) \\
-    TC13-19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
-    TC20-22 & M1 (User Interface), M7 (User Account) \\
-    TC23-30 & M3 (Analysis Control Flow), M11 (Metrics), M12 (Analyze), M13 (Feedback) \\
-    TC31-38 & M11 (Metrics), M12 (Analyze) \\
-    TC39-74 & M3 (Analysis Control Flow), M4 (Draw), M11 (Metrics), M12 (Analyze) \\
-    TC75-104 & M3 (Analysis Control Flow), M4 (Draw), M11 (Metrics), M12 (Analyze), M13 (Feedback) \\
-    TC105-146 & M1 (User Interface), M2 (Profile Activity), M7 (User Details), M9 (Exercise Data) \\
-    TC147-166 & M1 (User Interface), M9 (Exercise Data) \\
-    UT-1, UT-2, UT-3, PR-1, PR-2, RFT-1, RFT-2 & M1 (User Interface) \\
-    SR-1, SR-2 & M5 (Account Creation), M6 (Valid User) \\
-    MS-1, MS-2 & M1 (User Interface), M5 (Account Creation), M6 (Valid User) \\
+    TC1-8 & M1 (Account Creation) \\
+    TC9-12 & M2 (Valid User) \\
+    TC13-22 & M3 (User Account) \\
+    TC22-30 & M8 (Feedback), M11 (UI) \\
+    TC31-38 & M6 (Analysis Control Flow), M10 (Draw) \\
+    TC39-74 & M6 (Analysis Control Flow), M7 (Analyze), M9 (Metrics) \\
+    TC75-104 & M6 (Analysis Control Flow), M11 (UI) \\
+    TC105-146 & M5 (User Activity) \\
+    TC147-166 & M4 (Exercise Data) \\
+    UT-1, UT-2, UT-3, UT-4, UT-5, UT-6, UT-7, UT-8, UT-9, UT-10, PR-1, PR-2, RFT-1, RFT-2 & M11 (UI) \\
+    SR-1, SR-2 & M1 (Account Creation), M2 (Valid User) \\
+    MS-1, MS-2 & M1 (Account Creation), M2 (Valid User), M11 (UI) \\
     \bottomrule
 \end{longtable}
 
