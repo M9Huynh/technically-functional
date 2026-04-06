@@ -25,6 +25,7 @@
 \usepackage{colortbl}
 \usepackage{makecell}
 \usepackage{longtable}
+\usepackage{centernot}
 
 
 \hypersetup{
@@ -109,7 +110,9 @@ See SRS Documentation at \href{https://github.com/M9Huynh/technically-functional
 %new
 The following document details the Module Interface Specifications for the PhysioCompanion app. The application is 
 designed to identify users performing prescribed exercises and provide feedback on their form. This tool uses computer
-vision, specifically OpenCV and MediaPipe, to analyze user video recording and perform analysis. 
+vision, specifically OpenCV and MediaPipe, to analyze user video recording and perform analysis. Please note that certain
+modules exhibit functional overlap, as their respective operations perform equivalent decomposed tasks across different 
+modules. \\
 
 Complementary documents include the \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/SRS/SRS.pdf}{System Requirement Specifications}
 and \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide}.  The full documentation and implementation can be
@@ -189,7 +192,7 @@ The following table is taken directly from the Module Guide document for this pr
 
 \section{MIS}
 This section describes individual module specifications.\\
-
+\textit{See Appendix A for information about the variables used throughout this document.}
 \subsection{Module - Account Creation}
 This module enables the creation of an account for users. It uses a database to store any information that 
 is essential for other modules to perform their actions. A database was used for its ease of manipulation and its 
@@ -210,9 +213,6 @@ All the variables used in each class related to account creation are described b
 /technically-functional/mobile/app/(auth)/\underline{create-patient.tsx}}}\\
 \textit{Variables used in both of the above files are listed below.}
 \begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const router = useRouter();}] 
-    Expo Router instance for navigation after form submission. Imported from \texttt{expo-router}.
-
 \item[\texttt{const [name, setName] = useState("");}] 
     Manages the full name input field; initializes as empty string.
 
@@ -241,37 +241,48 @@ All the variables used in each class related to account creation are described b
     valid format is XX-123456.
 \end{description}
 
-\noindent \textbf{\textit{/technically-functional/mobile/lib/\underline{authService.ts}}}
+\noindent \textbf{\textit{/technically-functional/mobile/lib/\underline{authService.ts}}} \\
+
+\noindent \{Imported Variables\}
 \begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{export const checkEmailExists}] 
-    Async function constant that checks if an email is already registered in Firebase Authentication. Function accepts an email string as a parameter. Returns \texttt{true} if the email exists, \texttt{false} otherwise. Used to prevent duplicate account creation.
+\item[\texttt{auth}] 
+    Firebase Authentication instance imported from "./firebase". Used for all authentication operations including email checking, sign-in, sign-out, and account creation.
 
-\item[\texttt{export const licenseFormatValid}] 
-    Function constant that validates physiotherapist license number format (XX-123456). Accepts a license number string as a parameter. Returns an object containing \texttt{isValid} (boolean) and \texttt{errorMessage} (string or null).
-
-\item[\texttt{export const registerPhysio}] 
-    Async function constant that registers a new physiotherapist account. Type: \texttt{(params: \{name, email, password, licenseNumber, birthday\}) => Promise<\{uid: string, role: "physio"\}>}. Returns \texttt{\{uid, role\}} on success.
-
-\item[\texttt{export const registerPatient}] 
-    Async function constant that registers a new patient account. Type: \texttt{(params: \{name, email, password, inviteCode, birthday\}) => Promise<\{uid: string, role: "patient"\}>}. Returns \texttt{\{uid, role\}} on success.
-
-\item[\texttt{export const login}] 
-    Async function constant that authenticates a user. Type: \texttt{(email: string, password: string) => Promise<\{uid: string, ...userData\}>}. Returns user data from Firestore on success.
-
-\item[\texttt{export const logout}] 
-    Async function constant that signs out the current user. Type: \texttt{() => Promise<void>}.
-
+\item[\texttt{db}] 
+    Firestore database instance imported from "./firebase". Used for reading and writing user data, license validation, and invite code management.
 \end{description}
 
+\noindent \{Imported Types\}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{None}] 
+    No external types are imported in this file. All type definitions are inferred or defined inline.
+\end{description}
+
+\noindent \{Imported Functions\}
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{createUserWithEmailAndPassword}] 
+    Firebase Auth function from "firebase/auth". Used to create new user accounts in Firebase Authentication for both physiotherapist and patient registration.
+
+\item[\texttt{doc}] 
+    Firestore function from "firebase/firestore". Used to create document references for users, validLicenses, and inviteCodes collections.
+
+\item[\texttt{getDoc}] 
+    Firestore function from "firebase/firestore". Used to fetch user documents, license documents, and invite code documents from Firestore.
+
+\item[\texttt{setDoc}] 
+    Firestore function from "firebase/firestore". Used to create new user documents in Firestore during registration.
+
+\item[\texttt{updateDoc}] 
+    Firestore function from "firebase/firestore". Used to mark invite codes as used after patient registration.
+
+\item[\texttt{serverTimestamp}] 
+    Firestore function from "firebase/firestore". Used to set createdAt timestamps on new user documents.
+\end{description}
 
 %Account creation generates one object of the type described in \ref{section:user account}
-
-
-
 \subsubsection{Syntax}
-
 \textbf{Exported Constants}\\
-\textbf{\textit{\underline{authService.ts}}}
+\textbf{\textit{\underline{authService.ts}}} \label{sec:validexp}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 
 \item[\texttt{export const registerPatient}] 
@@ -288,12 +299,15 @@ All the variables used in each class related to account creation are described b
 \end{description}
 
 \noindent \textbf{\textit{\underline{create-patient.tsx}, \underline{create-physio.tsx}}}\\
-NA\\
-
+See \ref{sec:ui} for UI export variables.\\
 
 \noindent \textbf{Exported Access Programs} 
 
-\noindent \underline{\textbf{\textit{create-patient.tsx}}}
+\noindent \underline{\textbf{\textit{create-patient.tsx}}} \\
+See \ref{sec:ui} for UI export programs\\
+\noindent \underline{\textbf{\textit{create-physio.tsx}}} \\
+See \ref{sec:ui} for UI export programs\\
+\noindent \underline{\textbf{\textit{authService.ts}}} \\
 
 \begin{longtable}{
 |>{\columncolor{softgray}}p{4.2cm}|
@@ -318,114 +332,6 @@ NA\\
 
 \multicolumn{3}{c}{\textit{Continued on next page}} \\
 \endfoot
-
-\hline
-\endlastfoot
-
-% CreatePatient
-%\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient():} Creates a new patient account using an invite code.} \\
-%\hline
-%\rowcolor{white}
-%\texttt{params: \{name: string, email: string, password: string, inviteCode: string, birthday: string\}} &
-%\texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
-%\texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
-%\hline
-
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Screen component for patient registration.} \\
-\hline
-\rowcolor{white}
-\texttt{props: none} &
-\texttt{JSX.Element} - Renders registration form with validation &
-\begin{tabular}{@{}l@{}}
-\texttt{Internal validations}\\ \texttt{\& services:}\\
-• Password: min 6 \\chars + at least one\\ number\\
-• Birthday: YYYY-MM\\-DD format validation\\
-• Email: existence \\check via \\checkEmailExists()\\
-• Invite code: validated \\by licenseFormatValid()\\
-• Navigation: \\router.replace() on \\success
-\end{tabular} \\
-
-\end{longtable}
-\noindent \underline{\textbf{\textit{create-physio.tsx}}}
-
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-
-\hline
-\endlastfoot
-
-% CreatePhysio
-%\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio():} Creates a new physiotherapist account after license validation.} \\
-%\hline
-%\rowcolor{white}
-%\texttt{params: \{name: string, email: string, password: string, licenseNumber: string, birthday: string\}} &
-%\texttt{Promise<\{uid: string, role: "physio"\}>} - Returns user ID and role &
-%\texttt{Error} - Invalid license number or Firebase Auth error \\
-%\hline
-
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
-\hline
-\rowcolor{white}
-\texttt{props: none} &
-\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
-\begin{tabular}{@{}l@{}}
-\texttt{Validations performed:}\\
-• Password: min 6 \\chars + at least \\one number\\
-• Birthday: \\YYYY-MM-DD format\\
-• Email: existence \\check via \\checkEmailExists()\\
-• License format \\validation handled by \\registerPhysio()
-\end{tabular} \\
-
-\end{longtable}
-
-\underline{\textbf{\textit{authService.ts}}} \\
-
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-
-\hline
 \endlastfoot
 
 % checkEmailExists
@@ -463,27 +369,25 @@ NA\\
 \texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
 \texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
 \hline
-
+\caption{Exported functions} \label{sec: accountexpprogs}\\
 \end{longtable}
 
-\textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
-CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
-making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
 
 \noindent \textbf{Exported Access Programs} \hypertarget{acexpprogs}\\
-\texttt{e}: email \\
-\texttt{n}: name \\
-\texttt{pw}: password\\
-\texttt{lno}: licenseNumber\\
-\texttt{code}: inviteCode\\
-\texttt{bday}: birthday\\
-\texttt{p}: (n, e, pw, lno, bday)\\
-\texttt{pt}: (n, e, pw, code, bday)\\
-\texttt{cat}: createdAt \\
-\texttt{pid}: physioId \\
-\texttt{v}: verified \\
-\texttt{u}: uid \\
-\texttt{del}: deleted\\
+\texttt{p}: (name, email, password, licenseNumber, birthday)\\
+\texttt{pt}: (name, email, password, inviteCode, birthday)\\
+\texttt{user}: p or pt \\
+\texttt{e}: user.email \\
+\texttt{n}: user.name \\
+\texttt{pw}: user.password\\
+\texttt{lno}: user.licenseNumber\\
+\texttt{code}: user.inviteCode \\
+\texttt{bday}: user.birthday\\
+\texttt{cat}: user.createdAt \\
+\texttt{pid}: user.physioId (for \texttt{pt} only)\\
+\texttt{v}: user.verified (for \texttt{p} only) \\
+\texttt{u}: user.uid \\
+\texttt{del}: user.deleted (for \texttt{pt} only)\\
 \textit{db}: \texttt{users} table in database \\
 \textit{db'}: newer version of \texttt{users} table \\
 $i, j, k, l, m, n \in \{0-9\}$ \\
@@ -495,7 +399,7 @@ $a, b \in \{A-Z\}$ \\
 \textit{Pt(pt)}: 'registerPatient(pt)'\\
 
 
-\noindent \underline{Function definitions:}\\
+\noindent \underline{Function definitions:} \label{sec: ACfuncdef} \\
 \noindent $E(e) \implies e \in db.email$ \\
 \newline
 \noindent $L(l) \implies $ 
@@ -507,9 +411,6 @@ $Pt(pt) \implies db' = db \cup \texttt{users}\mapsto\{{uid \mapsto \{cat, del, e
 
 
 \subsubsection{Semantics}
-
-
-
 \noindent \textbf{State Variables} \\
 See \hyperlink{acexpprogs}{here} for a list of additional state variables.\\
 \texttt{first}: user 1\\
@@ -521,15 +422,6 @@ See \hyperlink{acexpprogs}{here} for a list of additional state variables.\\
 $\forall$ $first, second \in \texttt{db}, first\_uid \cap second\_uid = \emptyset $\\
 All users have different uids.\\
 
-
-%$\neg$ $acc\_copy \implies$ $\neg (\exists$ $id)$ \\
-%REMOVE%
-%If there is no account already present in the user database, that means that there is no acc\_id present \\
-%$ \forall (name \cap role \cap email \cap dob \cap pw)$ $\implies$ $\neg$ $(new\_id)$ $=$ $\emptyset$ \\
-%$acc\_id \cup new\_id \implies$ $\forall n \in name, r \in role, e \in email, d \in dob$, $n \cap r \cap e \cap d \notin \emptyset$ \\ 
-%REMOVE%
-%If there is an account present in the user database, that means none of the fields above are empty
-
 \subsubsection{Environment Variables}
 \textit{screen}: The application's display to the user \\
 \textit{touchscreen}: Users will click on the screen to select their desired action
@@ -540,8 +432,8 @@ All users have different uids.\\
   \item Only one person can access user information in the database at a time since many values that are exported are asynchronous values.
 \end{itemize}
 
-\subsubsection{Access Routine Semantics}
-\textbf{Exported access routines} \\
+\subsubsection{Access Routine Semantics - Exported}
+\textbf{Exported access routines} \label{sec:acARS}\\
 See \hyperlink{acexpprogs}{here} for state variables being used.
 \newline
 \textit{\underline{checkEmailExists: E(e)}}\\
@@ -574,11 +466,12 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
   $p \in \texttt{db}$\\
 
 \newpage
-\subsubsection{Local Functions}
+\subsubsection{Local Functions} 
+\noindent \underline{\textbf{\textit{create-patient.tsx}}}
 \begin{longtable}{
 |>{\columncolor{softgray}}p{4.2cm}|
 >{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{5.75cm}|
+>{\columncolor{white}}p{4.2cm}|
 }
 \hline
 \rowcolor{headerblue}
@@ -598,207 +491,273 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 
 \multicolumn{3}{c}{\textit{Continued on next page}} \\
 \endfoot
-
-\hline
 \endlastfoot
 
-\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Physiotherapist registration screen component.} \\
+\hline
+\rowcolor{white}
+\texttt{props: none} &
+\texttt{JSX.Element} - Renders patient registration form with validation &
+\begin{tabular}{@{}l@{}}
+\texttt{Validations} \\ \texttt{performed:}\\
+• Password: min 6 \\ chars + at least one \\ number\\
+• Birthday:\\ YYYY-MM-DD format\\
+• Email: existence \\ check via \\ checkEmailExists()\\
+• Invite code \\ validation handled by \\ registerPatient()
+\end{tabular} \\
+\hline
+\caption{Account module: CreatePatient function}
+\end{longtable}
+\noindent \underline{\textbf{\textit{create-physio.tsx}}}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
 \hline
 \rowcolor{white}
 \texttt{props: none} &
 \texttt{JSX.Element} - Renders physiotherapist registration form with validation &
 \begin{tabular}{@{}l@{}}
-\texttt{Validations performed:}\\
-• Password: min 6 \\chars + at least \\one number\\
-• Birthday: \\YYYY-MM-DD format\\
-• Email: existence \\check via \\checkEmailExists()\\
-• License format \\validation handled by \\registerPhysio()
+\texttt{Validations} \\ \texttt{performed:}\\
+• Password: min 6 \\ chars + at least one \\ number\\
+• Birthday:\\ YYYY-MM-DD format\\
+• Email: existence \\ check via \\ checkEmailExists()\\
+• License number \\ validation handled by \\ registerPhysio()
 \end{tabular} \\
 \hline
+\caption{Account module: CreatePhysio function}
+\end{longtable}
+\pagebreak
+\noindent \underline{\textbf{\textit{Both files}}}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
 
-\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{validatePasswordlength():} Internal helper function for password validation.} \\
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{passwordCheck():} Internal helper function for password validation.} \\
 \hline
 \rowcolor{white}
 \texttt{params: \{password: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Password must be \\ at least 6 \\ characters long" if length $<$ 6\\
-• Returns "Password must \\ contain at least one number" if \\ no numbers present\\
+• Returns "Password \\ must be at  least \\ 6 characters long" \\ if length $<$ 6\\
+• Returns "Password \\ must contain at \\ least one number" if \\ no numbers present\\
 • Returns null if valid
 \end{tabular} \\
 \hline
 
-\multicolumn{3}{|>{\columncolor{lightblue}}p{15cm}|}{\textbf{validateBirthday():} Internal helper function for birthday format validation.} \\
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{validateBirthday():} Internal helper function for birthday format validation.} \\
 \hline
 \rowcolor{white}
 \texttt{params: \{birthday: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Please enter \\ birthday in YYYY-MM-DD \\ format" if format entered is \\invalid\\
+• Returns "Please enter \\ birthday in YYYY-MM\\-DD format" if format \\entered is invalid\\
 • Returns null if valid
 \end{tabular} \\
 \hline
-
+\caption{Account module: CreatePatient and CreatePhysio common functions} \label{pwandbdayvalid}
 \end{longtable}
 
+\noindent \textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
+CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
+making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
+
 \noindent \textbf{Local Routines (definitions)}\\
-\textit{new(x)}: 'account\_create(x)'\\
-\textit{set(y)}: 'set\_user\_info(y)'\\
-\textit{name}: name\\
-\textit{birthday}: birthday\\
-\textit{license}: License\_no \\
-\textit{code}: Invite\_code \\
-\textit{email}: Email\\
-\textit{pw}: password \\
-\textit{patient}: user\_acc\_p\\
-\textit{PT}: user\_acc\_pt\\
-\textit{db}: 'User Account'\\
-\textit{new\_db}: updated 'User Account' \\
-\textit{acc\_copy}: acc\_double\\
+\texttt{p}: (name, email, password, licenseNumber, birthday)\\
+\texttt{pt}: (name, email, password, inviteCode, birthday)\\
+\texttt{user}: p or pt\\
+\texttt{e}: user.email \\
+\texttt{n}: user.name \\
+\texttt{pw}: user.password\\
+\texttt{lno}: user.licenseNumber\\
+\texttt{code}: user.inviteCode\\
+\texttt{bday}: user.birthday\\
+\textit{Pc(pw)}: 'passwordCheck(pw)'\\
+\textit{Vb(bday)}: 'validateBirthday(bday)' \\
 
-\noindent $\textbf{new(x)}:$ \\
-Given: \textit{x} = form submission from user interface \\
-Pre-condition: $\forall$ $n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$: $\neg acc\_copy(x)$ $\cap$ $(n \cap b \cap e \cap p \cap (l \cup c))$\\
-Function: new(x) \\
-Post-condition: $ new\_db = db \cup x$ \\
+\noindent \underline{Function definitions}: \\
+$Pc(pw) \implies pw.length \geq 6 \cap \exists$ $d$ $|$ $d \in \{0 - 9\} \cap d \in pw$ \\
+\texttt{Date} = 'YYYY-MM-DD' $|$ 'YYYY' $\in$ \{0000 - 9999\} $\cap$ 'MM' $\in$ \{01 - 12\} $\cap$ 'DD' $\in$ \{01 - 31\} \\
+$Vb(bday) \implies bday \in Date $ \\
+\textit{Note: See \ref{sec:ui} for CreatePhysio and CreatePatient interface specifications.}
 
-%\noindent Opt 2: \\
-%$\neg acc\_copy$ $\cap$ 
-%$n \in x.name, b \in x.birthday, l \in x.license, c \in x.code, e \in x.email, p \in x.pw$ $|$
-%$n \cap b \cap e \cap p \cap (l \cup c)$ $\neq \emptyset$ \\
-
-\noindent $\textbf{set(x)}:$ \\
-Given: \textit{x} \\
-Pre-condition: $\neg acc\_exists(x)$ \\
-Function: set(x) \\
-Post-condition: $ new\_db = db \cup {(x.name, x.birthday, (x.license \cup x.code), x.email, x.pw)}$ \\
-
-\subsubsection{Access Routine Semantics}
-$n \in Name, r \in role, b \in birthday, l \in license\_no, i \in invite\_code, e \in email, p \in password$ \\
-\textit{db}: User database \\
-\textbf{Local routines}: \\
-\textit{account\_create(n, r, b, l OR i, e, p)}:
-\begin{itemize}
-  \item Output: new \textit{user\_account\_p} or \textit{user\_account\_pt} instance
-  \item Transition: $user\_account\_p$ $\cup$ $user\_account\_pt = \emptyset \implies (user\_account\_p$ $\cup$ $user\_account\_pt) \neq \emptyset$
-  \item Exception: Input\_format\_invalid, Required\_field\_empty, Account\_already\_exists, Incorrect\_creds, Invite\_code\_expired 
-\end{itemize}
-
-\noindent \textit{set\_user\_info}: \\
-NA
-
-
+\subsubsection{Access Routine Semantics - Local}
+%TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Valid user}
 This module's purpose is to check whether a potential user is authorized to create an account.
 For feasible implementation purposes, a file with hard coded invite codes and license numbers will be used.
-
+The actions accomplishing the module's purpose are within the registerPhysio and registerPatient functions,
+which contain internal validation of inviteCode and licenseNumber.
 \subsubsection{Uses}
-\begin{itemize}
-\item \textit{Name}: Name
-\item \textit{role}: role
-\item \textit{invite}: invite\_code
-\item \textit{license}: license\_no
-\end{itemize}
+\begin{description}[style=nextline, leftmargin=4cm]
 
+\item[\texttt{params}] 
+    Input object containing patient registration data. Type: \texttt{\{name: string, email: string, password: string, inviteCode: string, birthday: string\}}.
+
+\item[\texttt{code}] 
+    Normalized invite code. Type: string. Computed as \texttt{params.inviteCode.trim().\\toUpperCase()}.
+
+\item[\texttt{inviteRef}] 
+    Firestore document reference to \texttt{inviteCodes/code}. Type: \texttt{DocumentReference}.
+
+\item[\texttt{inviteSnap}] 
+    Firestore document snapshot. Type: \texttt{DocumentSnapshot}.
+
+\item[\texttt{invite}] 
+    Data from invite code document. Contains fields: \texttt{active} (boolean), \texttt{used} (boolean), \texttt{physioId} (string).
+
+\item[\texttt{physioId}] 
+    \texttt{uid} of the physiotherapist that provided invite code. Type: string.
+
+\item[\texttt{cred}] 
+    Firebase Auth user credential. Type: \texttt{UserCredential}.
+
+\item[\texttt{uid}] 
+    Firebase Authentication unique user ID. Type: string.
+
+\item[\texttt{db}] 
+    Firestore database instance. Imported from \texttt{./firebase}.
+
+\item[\texttt{auth}] 
+    Firebase Authentication instance. Imported from \texttt{./firebase}.
+
+\item[\texttt{licenseNumber}] 
+    State variable managing license number input. Type: string. Initialized as empty string.
+
+\item[\texttt{lic}] 
+    Normalized license number. Type: string. Computed as \texttt{params.licenseNumber.\\trim().toUpperCase()}.
+
+\item[\texttt{licSnap}] 
+    Firestore document snapshot from \texttt{validLicenses} collection. Type: \texttt{DocumentSnapshot}.
+
+\end{description}
 \subsubsection{Syntax}
+\textbf{Exported Constants}\\
+See \textbf{\textit{authService.ts}} exported constants in \ref{sec:validexp}. \\
+For interface elements, see \ref{sec:ui}.\\
+\newline
+\noindent \textbf{Exported Access Programs} \\
+See Table \ref{sec: accountexpprogs} for \textit{\textbf{registerPatient}} and \textit{\textbf{registerPhysio}}
+details respectively.\\
+\newline
+\underline{\textit{Function definitions:}}\\
+This module has components that have been defined in the Account Creation module. See \hyperref[sec: ACfuncdef]{\textit{function definitions in \ref*{sec: ACfuncdef}}}.
 
-\textbf{Exported Constants}
-\begin{itemize}
-  \item \textit{is\_valid}: is\_valid 
-\end{itemize}
+\subsubsection{Semantics}
+\textbf{State Variables}\\
+See \ref{sec:ui} for UI state variables. \\
+\texttt{pt}: a patient user type\\
+\texttt{p}: a physio user type \\
+\texttt{code}: a patient invite code \\
+\texttt{lno}: a PT's license number \\
+\texttt{users}: \texttt{users} table in database\\
 
-
-
-\noindent \textbf{Exported Access Programs}\\
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a physiotherapist's license is valid}. \\
-\hline
-\rowcolor{white}
-license\_check & \makecell[lt]{\textit{name}\\\textit{license}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} This checks if a new patient's invite code is valid.} \\
-\hline
-\rowcolor{white}
-invite\_code\_check & \makecell[lt]{\textit{name}\\\textit{invite}} & \textit{is\_valid} & \makecell[lt]{FieldEmptyError\\InvalidCredsError} \\
-\hline
-
-
-\end{tabularx}
-\caption{Exported Access Routines}
-\label{tab:user_routines_1}
-\end{table}
-\newpage
-\noindent \textbf{State Variables} \\
-\textit{A}: user\_account\_p \\
-\textit{B}: user\_account\_pt \\
-\textit{C}: user\_account\_p \\
-\textit{D}: user\_account\_pt \\
-\textit{I}: the set of valid invite\_code\\
-\textit{V}: the set of valid license\_code\\
-\textit{invite\_a}: invite\_code for user A\\
-\textit{license\_b}: license\_no for user B \\
-\textit{invite\_c}: invite\_code for user C\\
-\textit{license\_d}: license\_no for user D\\
-\textit{db}: 'User Account' \\
-
-
-\noindent \textbf{State Invariant} \\
-$\forall a, b, c, d \in A, B, C, D$ $\implies$
-$\forall$ $license\_b, license\_d: license\_b, license\_d$ $\in$ $\{license\_no\}$, \\
-$\forall$ $invite\_a, invite\_c: invite\_a, invite\_c$ $\in$ $\{invite\_code\}$ \\
-%REMOVE
-All license numbers and invite codes belong to their overall respective sets. \\
-\noindent $\forall$ $license\_b \in \mathbb{Z}^{+},$ $\forall$ $license\_d \in
-\mathbb{Z}^{+}:$ 100000 $ \leq license\_b, license\_d \leq$ 999999, $\cap$ $license\_b \neq license\_d$ \\
-\noindent $\forall$ $invite\_a \in \mathbb{Z}^{+},$ $\forall$ $invite\_c \in
-\mathbb{Z}^{+}:$ 100000 $ \leq invite\_a, invite\_c \leq$ 999999, $\cap$ $invite\_a \neq invite\_c$ \\
-%REMOVE
-All the license numbers and invite codes are unique, positive and 6 digits. \\
-\textit{is\_valid} $\in$ $\{true, false\}$
-
-
-\subsubsection{Environment Variables}
-\textit{screen}: The application's display to the user \\
-\textit{touchscreen}: Users will click on the screen to select their desired action
-
+\noindent \textbf{State Invariant}\\
+$ code['used'] = true \implies \exists$ $pt |$ $pt.inviteCode == code$\\
+$ \exists p.uid \in \texttt{users} \implies p.licenseNumber \in \texttt{validLicenses}$ 
+\subsubsection{Environment state variables}
+\textit{Not applicable}
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item Invite codes are randomly generated.
-  \item Invite codes and license numbers are unique.
+    \item All practicing physiotherapists have an active and valid license.
+    \item All active invite codes are used by new and active patients only.
+    \item Invite codes and license numbers are unique.
 \end{itemize}
 
-\subsubsection{Access Routine Semantics}
+\subsubsection{Access Routine Semantics - Exported}
+\textbf{Exported access routines} \\
+See \hyperref[sec:acARS]{account creation semantics} for details of respective functions.
 
-\textbf{\textit{license\_check(license)}}: \\
-Input: license \\
-Transition: \\ %if license code is in valid license codes, then user acc is added \\
-$\forall$ $B \in db$ $\Leftrightarrow$ $\exists$ $license\_b \in V$ \\
-Output: \textit{is\_valid} \\
-\textbf{\textit{invite\_code\_check(invite)}}: \\
-Input: invite \\
-Transition: \\
-$\forall$ $A \in db$ $\Leftrightarrow$ $\exists$ $invite\_a \in I$\\
-Output: \textit{is\_valid} \\
+\subsubsection{Local Routines}
+Portions that are pertinent to the module are elaborated on below. \\
 
-\subsubsection{Local Functions}
-NA
+\noindent \textbf{registerPatient: Internal Validation Steps}\\
+The function performs the following sequential validations on the invite code:
 
+\begin{enumerate}
+\item \textbf{Existence Check}: Query Firestore \texttt{inviteCodes} collection for document with ID = \texttt{normalize(inviteCode)}. If not found, throw "Invalid invite code."
+
+\item \textbf{Active Check}: If \texttt{invite.active $\neq$ true}, throw "Invite code inactive."
+
+\item \textbf{Usage Check}: If \texttt{invite.used = true}, throw "Invite code already used."
+
+\item \textbf{Physio Link Check}: If \texttt{physioId = null} or does not exist, throw "Invite code missing physio link."
+
+\end{enumerate}
+
+Only after all validations pass does the function proceed to:
+\begin{enumerate}
+\item Create Firebase Auth user
+\item Create Firestore user document with \texttt{role:"patient"} and \texttt{uid}
+\item Mark invite code as used with \texttt{usedBy:uid}
+\end{enumerate}
+
+\noindent \textbf{registerPhysio: Internal Validation Steps}\\
+The function performs the following sequential validations on the license number:
+
+\begin{enumerate}
+\item \textbf{Format Check}: Validate license number format using \texttt{licenseFormatValid()}. License must match pattern: two uppercase letters, a dash, and six digits (e.g., ON-123456). If format is invalid, throw "Invalid license format (example: ON-123456)."
+
+\item \textbf{Existence Check}: Query Firestore \texttt{validLicenses} collection for document with ID equal to the normalized license number. If not found, throw "License not verified."
+
+\item \textbf{Active Check}: If the license document has \texttt{active} field not equal to true, throw "License not verified."
+
+\end{enumerate}
+
+Only after all validations pass does the function proceed to:
+\begin{enumerate}
+\item Create Firebase Auth user using \texttt{createUserWithEmailAndPassword()}
+\item Create Firestore user document with \texttt{role:"physio"}, \texttt{verified:true}, and \texttt{uid}
+\item Return \texttt{\{uid, role:"physio"\}}
+\end{enumerate}
+
+\subsubsection{Access Routine Semantics - Local}
+%See \href
 
 
 
@@ -807,298 +766,540 @@ NA
 
 This module's purpose is facilitate data manipulation within the user database tables. It was created as a separate component
 to simplify implementation.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%\\\\\\\\\
-Account creation generates a single instance of one of the following objects using variables in the table below.\\
+Account creation generates a single instance of one of the following objects:\\
+\begin{itemize}
+    \item \textbf{Patient object:} 
+        \texttt{\{uid, email, name, role: "patient", birthday?, physioId?, inviteCode?, createdAt?, deleted?\}}
+    
+    \item \textbf{Physio object:}
+        \texttt{\{uid, email, name, role: "physio", licenseNumber?, verified?, createdAt?\}}
+\end{itemize}
+
+\subsubsection{Uses}
 \underline{\textbf{\textit{useraccount.ts}}}
 \begin{description}
 \item[\texttt{uid: string;}] 
-    Unique identifier for the user.
+    Unique identifier for the user. Used for fetching user data, updating user information, deleting user accounts, and associating patients with physiotherapists.
 
 \item[\texttt{email: string;}] 
-    User's email address for authentication and communication.
+    User's email address for authentication and communication. Used for email existence verification, credential validation, and user authentication.
 
 \item[\texttt{name: string;}] 
-    User's full name.
+    User's full name. Used for searching users by name, retrieving user database information by name, and patient account deletion verification.
 
 \item[\texttt{role: "patient" | "physio";}] 
-    User role designation. Determines which fields are applicable:
-    \begin{itemize}
-        \item \texttt{"patient"} - Receives care from a physiotherapist
-        \item \texttt{"physio"} - Provides care as a physiotherapist
-    \end{itemize}
-
-\item[\texttt{birthday?: string;}] 
-    User's date of birth. Optional field common to both roles.
-
-\item[\texttt{licenseNumber?: string;}] 
-    Professional license number. \textbf{Physio only:} Required for physiotherapists during verification.
-
-\item[\texttt{verified?: boolean;}] 
-    Account verification status. Optional flag common to both roles.
+    User's role in the system. Used for filtering patients by physiotherapist and categorizing users during database information retrieval.
 
 \item[\texttt{physioId?: string;}] 
-    Assigned physiotherapist identifier. \textbf{Patient only:} References the physio they are seeing.
+    Reference to the physiotherapist assigned to a patient. Used for retrieving all patients belonging to a specific physiotherapist.
+
+\item[\texttt{deleted?: boolean;}]
+    Soft delete flag indicating whether the user account has been deleted. Used as a filter when querying active patients and during user account deletion operations.
+
+\item[\texttt{birthday?: string;}] 
+    User's birthday. Used as part of patient profile information.
+
+\item[\texttt{licenseNumber?: string;}] 
+    Professional license number for physiotherapists. Used as part of physiotherapist profile information.
+
+\item[\texttt{verified?: boolean;}] 
+    Flag indicating whether a physiotherapist's license has been verified. Used in physiotherapist profile information.
 
 \item[\texttt{inviteCode?: string;}] 
-    Registration invitation code. \textbf{Patient only:} Used during account creation.
+    Invitation code for patient registration. Used as profile information and account creation validation.
 
-\item[\texttt{createdAt?: any;}] 
-    Account creation timestamp. Optional field for auditing.
+\item[\texttt{createdAt?: any;}]
+    Timestamp of user account creation. Defined in the interface but not set or read by current methods. Recommended for future audit trail implementation.
 
-\item[\texttt{updatedAt?: any;}] 
-    Last update timestamp. Optional field for tracking modifications.
-
-\item[\texttt{deleted?: boolean;}] 
-    Soft delete flag. Optional field indicating if the account is marked for deletion.
-
-\item[\texttt{deletedAt?: any;}] 
-    Deletion timestamp. Optional field recording when soft delete occurred.
 \end{description}
-
-\begin{itemize}
-    \item \textbf{Patient object (\texttt{user\_acc\_patient}):} 
-        \texttt{\{uid, email, name, role: "patient", birthday?, verified?, physioId?, inviteCode?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
-    
-    \item \textbf{Physio object (\texttt{user\_acc\_physio}):}
-        \texttt{\{uid, email, name, role: "physio", birthday?, licenseNumber?, verified?, createdAt?, updatedAt?, deleted?, deletedAt?\}}
-    
-    \item \textbf{Note:} \texttt{physioId} and \texttt{inviteCode} are exclusive to patients; \texttt{licenseNumber} is exclusive to PTs.
-\end{itemize}
 %%%%%%%%%%%%\\\\\\\\\\\\\\\\
-
-
-\subsubsection{Uses}
-\begin{itemize}
-\item email
-\item password
-\item name
-\item birthday
-\item acc\_id
-\item role
-\end{itemize}
 
 \subsubsection{Syntax}
 
-\textbf{Exported Constants}
-\\ \textit{name}: name\\
-\textit{id}: acc\_id \\
-\textit{birthday}: birthday \\
+\textbf{Exported Constants}\\
+Not Applicable\\
 
-\noindent \textbf{Exported Access Programs}
+\noindent \textbf{Exported Access Programs}\\
+Not Applicable. This module consists of an interface.
 
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} retrieves user account information from the user table} \\
-\hline
-\rowcolor{white}
-get\_userdb\_info$^2$ & \makecell[lt]{\textit{Name}\\\textit{birthday(optional)}} & \makecell[lt]{\textit{user\_acc\_p}\\\textit{user\_acc\_pt}} & \makecell[lt]{UserNotFoundError\\DownloadError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} allows PT to delete a patient account from the system} \\
-\hline
-\rowcolor{white}
-PTaccount\_delete & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{FieldEmptyError\\UserNotFoundError} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} verifies if username and password match for authentication} \\
-\hline
-\rowcolor{white}
-username\_pw\_match & \makecell[lt]{\textit{email}\\\textit{password}} & NA & \makecell[lt]{LoginMatchError} \\
-\hline
-
-
-\end{tabularx}
-\caption{Exported Access Routines}
-\label{tab:user_routines_1}
-\end{table}
-\newpage
-\noindent\textsuperscript{2} \textit{For this function, the output depends on context. For example, if this function was going to be used in one which corresponds to the PT functionality of viewing 
-a patient, their view would be restricted to patients under their care.} \\
-
+\subsubsection{Semantics}
 \noindent \textbf{State Variables} \\
-\textit{email}: email \\
-\textit{pw}: password \\
-\textit{name}: name \\
-\textit{id}: acc\_id \\
-\textit{patient}: user\_acc\_p ([\textit{id}, \textit{name}, \textit{p}: role, \textit{bday}: birthday, \textit{email},
-\textit{pw}]) \\ 
-\textit{physio}: user\_acc\_pt ([\textit{id}, \textit{name}, \textit{pt}: role, \textit{ptbday}: birthday, \textit{email},
-\textit{pw}]) \\ 
-\noindent \textit{D(x)}: 'PT\_account\_delete(x)' \\
-\textit{db}: 'User Account' \\
-\textit{name\_has\_id}: {db.Name} $\mapsto$ \{db.acc\_id\} \\
-\textit{user\_info}: {db.acc\_id} $\mapsto$ \{db.Name, db.role, db.birthday, db.email\} \\
+\underline{\textbf{\textit{useraccount.ts}}}
+\begin{description}
+\item[\texttt{private usersCollection: string}] 
+    Internal state variable storing the Firestore collection name for user documents.
+
+\item[\texttt{private validLicensesCollection: string}] 
+    Internal state variable storing the Firestore collection name for physiotherapist licenses.
+
+\item[\texttt{private inviteCodesCollection: string}] 
+    Internal state variable storing the Firestore collection name for invitation codes.
+\end{description}
 
 \noindent \textbf{State Invariant} \\
-$\exists$ $acc\_id$ $|$ $(email \cap pw \notin \emptyset) $ \\
-%$D(acc\_id) \implies patient \notin db $
+\texttt{users}: 'users' database table\\
+\texttt{u1}: user 1\\
+\texttt{u2}: user 2\\
+\texttt{Phy}: set of all users that have role = 'physio' \\
+\texttt{Pt}: set of all users that have role = 'patient' \\
 
+
+\noindent $\forall$ $u1, u2 \in users, u1 \neq u2 \implies u1.email \neq u2.email$ \\
+$\forall$ $u1$ $\in$ $Phy, u1.physioId = \emptyset$ \\
+$\forall$ $u1$ $\in$ $Phy, u1.verified = true$ \\
+%$\forall$ $u1, u2$ $\in users$ $|$ $u1 \in Pt \cap u2 \in Phy,$ $u1.physioId = u2.uid$ \\
+$\forall$ $u1 \in Pt,$ $u1.deleted = true \implies u1.uid$ $\in \emptyset$ \\
+$\forall$ $u1 \in P, u2 \in Phy,$ $\exists$ $u1.physioId = u2.uid$ \\
+$\forall$ $id \in \{users.uid\}, $$\exists$ $u1| u1.uid = id \cap u1 \in users$ \\
+$\forall$ $u1 \in users \cap u1 \in Phy \implies u1 \notin P$ \\
+$\forall$ $u2 \in users \cap u2 \in Pt \implies u2 \notin Phy$ \\
 
 
 \subsubsection{Environment Variables}
-\textit{screen}: The application's display to the user \\
-\textit{touchscreen}: Users will click on the screen to select their desired action \\
+Not applicable
 
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item If two people have the same name, then it is assumed they have different birthdays. 
-  \item No two users have the same invite codes.
+  \item If two people have the same name, then it is assumed they have different different roles.
   \item No two PTs have the same license numbers.
 \end{itemize}
 
-\noindent \textit{Note: All the modules after this point may have missing information, which will be defined for a future iteration.}
-
-%TODO 
-\subsubsection{Access Routine Semantics}
-\textbf{get\_userdb\_info()}
-\begin{itemize}
-  \item Input: name, birthday(optional)
-  \item Transition: NA
-  \item Output: $\exists$ $n \in db.Name$ $\cup$ $(\exists$ $n \in db.Name$ $\cap$ $b \in db.birthday)$ $\implies$ $patient \in db$ $|$ $patient.Name = n \cap patient.birthday = b$
-\end{itemize}
-
-\textbf{PTaccount\_delete}
-\begin{itemize}
-  \item Input: name, email
-  \item Transition: 
-  \item Output: $\exists$ $n \in db.Name$ $\cup$ $(\exists$ $n \in db.Name$ $\cap$ $b \in db.birthday)$ $\implies$ $patient \in db$ $|$ $patient.Name = n \cap patient.birthday = b$
-\end{itemize}
+\subsubsection{Access Routine Semantics - Exported}
+Not applicable
 
 \subsubsection{Local Functions}
-NA\\
+Not applicable. All helper functions are defined as private class functions. 
 
-
+\subsubsection{Access Routine Semantics - Local}
+Not applicable
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Exercise Data}
 
-This module allows manipulation of a patient's exercise instructions data. Despite being a smaller module,
-the functions defined below 
+This module manages exercises that will be performed by the patient. It consists of a data layer (\textit{exerciseData.ts})
+and a UI layer (\textit{exercises.tsx}). The data layer provides database operations using the \texttt{userExercises} table.
+The UI layer fulfills the purpose of interfacing between the user and the module and is discussed in
+\ref{sec:ui}. This structure was chosen to enable:
+\begin{itemize}
+    \item High cohesion: all constituents serve the same business purpose
+    \item Low coupling: there is no direct communication present between the front end and database. They communicate through the backend.
+    \item Easy maintenance: low coupling allows for maintenance of a single 'part' of the module without affecting the rest of the module. 
+\end{itemize}
+The exported type of this module is:
+\begin{itemize}
+    \item Exercise\{id,
+  title,
+  subtitle?,
+  description,
+  demoText?, 
+  enabled,
+  tags?,
+  sets,
+  reps,
+\};
+\end{itemize}
 
 \subsubsection{Uses}
-\begin{itemize}
-\item name
-\item acc\_id
-\item exercise
-\item sets
-\item reps
-\item rest\_time
-\end{itemize}
+\underline{\textbf{\textit{exerciseData.ts - Functions}}}
+\begin{description}
+\item[\texttt{collection}] 
+    Firestore function from "firebase/firestore". Used to reference a database collection for exercise operations.
+
+\item[\texttt{deleteDoc}] 
+    Firestore function from "firebase/firestore". Used to delete an exercise document from the userExercises collection.
+
+\item[\texttt{doc}] 
+    Firestore function from "firebase/firestore". Used to create a document reference when fetching a single exercise.
+
+\item[\texttt{getDoc}] 
+    Firestore function from "firebase/firestore". Used to fetch a single exercise document by ID.
+
+\item[\texttt{getDocs}] 
+    Firestore function from "firebase/firestore". Used to fetch multiple exercise documents.
+
+\item[\texttt{query}] 
+    Firestore function from "firebase/firestore". Used to create filtered queries on exercise collections.
+
+\item[\texttt{where}] 
+    Firestore function from "firebase/firestore". Used to specify filter conditions (userid, title) in exercise queries.
+
+\item[\texttt{addDoc}] 
+    Firestore function from "firebase/firestore". Used to add a new exercise document to the userExercises collection.
+
+\item[\texttt{updateDoc}] 
+    Firestore function from "firebase/firestore". Used to update exercise fields (description, reps, sets, title) in an existing document.
+\end{description}
+\underline{\textbf{\textit{exerciseData.ts - Variables}}}
+\begin{description}
+\item[\texttt{db}] 
+    Firestore database instance from "./firebase". Used as the database reference for all Firestore operations related to this file.
+\end{description}
+\underline{\textbf{\textit{exerciseData.ts - Types}}}
+\begin{description}
+\item[\texttt{Exercise} (type)] 
+    Type definition defined locally within this file. Represents the exercise data structure with properties: id, title, subtitle, description, demoText, enabled, tags, sets, reps.
+\end{description}
+
+\noindent \underline{\textbf{\textit{exercises.tsx - Functions}}}
+\begin{description}
+\item[\texttt{useEffect}] 
+    React hook from "react". Used to perform side effects when user data, role, or selected user changes.
+
+\item[\texttt{useState}] 
+    React hook from "react". Used to manage local state for user data, exercises, modal visibility, and form values.
+
+\item[\texttt{getExercisesById}] 
+    Function from \textit{exerciseData.ts}. Used to fetch patient's assigned exercises for the patient view.
+
+\item[\texttt{getGeneralExercises}] 
+    Function from \textit{exerciseData.ts}. Used to fetch the master exercise library for physiotherapists.
+
+\item[\texttt{getSelectedExercises}] 
+    Function from \textit{exerciseData.ts}. Used to fetch currently assigned exercises for checkbox state and modal preloading.
+
+\item[\texttt{addUserExercise}] 
+    Function from \textit{exerciseData.ts}. Used to assign an exercise to a patient when a physiotherapist checks a checkbox.
+
+\item[\texttt{removeUserExercise}] 
+    Function from \textit{exerciseData.ts}. Used to remove an exercise assignment when a physiotherapist unchecks a checkbox.
+
+\item[\texttt{updateUserExercise}] 
+    Function from \textit{exerciseData.ts}. Used to save modified exercise instructions (description, sets, reps).
+
+\item[\texttt{getCurrentUser}] 
+    Function from "@/lib/temp". Used to fetch the currently authenticated user on component mount.
+
+\item[\texttt{getUserRole}] 
+    Function from "@/lib/roleStore". Used to determine if the current user is a patient or physiotherapist.
+
+\item[\texttt{getSelectedUserID}] 
+    Function from "@/lib/profileActivity". Used to get the patient ID selected by a physiotherapist.
+\end{description}
 
 
 \subsubsection{Syntax}
 
 \noindent \textbf{Exported Constants}
-\\ \textit{exercise}: exercise\\
-\textit{sets}: sets \\
-\textit{reps}: reps \\
-\textit{rest\_time}: rest\_time \\
+\underline{\textbf{\textit{both files}}}
 
+No exported constants are present in any of the reviewed files (exerciseData.ts, exercises.tsx). \\
 
-\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\noindent \textbf{Exported Access Programs}\\
+\textit{exerciseData.ts}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
 \hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
 \hline
+\endfirsthead
 
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} provides exercise instructions to user} \\
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% getExercisesById
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getExercisesById(uid):} Retrieves all exercises assigned to a specific user from the "userExercises" collection.} \\
 \hline
 \rowcolor{white}
-exerc\_instruct & \makecell[lt]{\textit{user\_acc\_p}\\\textit{exercise}} & \textit{ex\_instruct} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\texttt{uid: string} - User ID of the patient &
+\texttt{Promise<Exercise[] | undefined>} - Returns array of exercises or undefined if none found &
+\texttt{Error} - Throws error if there is an issue fetching exercises from Firestore \\
 \hline
 
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} allows physiotherapist to modify exercise parameters} \\
+% getExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getExercise(exid):} Fetches a single exercise document by its ID.} \\
 \hline
 \rowcolor{white}
-PT\_modifies\_exercise & \makecell[lt]{\textit{user\_acc\_p}\\\textit{sets}\\\textit{repetitions}\\\textit{rest\_time}} & \textit{ex\_instruct} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\texttt{exid: string} - Exercise document ID &
+\texttt{Promise<Exercise | undefined>} - Returns exercise object or undefined if not found &
+\texttt{Error} - Throws error if there is an issue fetching the exercise from Firestore \\
 \hline
 
-\end{tabularx}
-\caption{Exported Access Routines}
+% getGeneralExercises
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getGeneralExercises():} Retrieves the master exercise library from the "exercises" collection.} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{Promise<Exercise[] | undefined>} - Returns array of all general exercises or undefined if none found &
+\texttt{Error} - Throws error if there is an issue fetching exercises from Firestore \\
+\hline
 
-\end{table}
+% getSelectedExercises
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getSelectedExercises(uid):} Fetches the current list of exercises assigned to a specific user.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} - User ID of the patient &
+\texttt{Promise<Exercise[] | undefined>} - Returns array of assigned exercises or undefined if none &
+\texttt{Error} - Throws error if there is an issue fetching exercises from Firestore \\
+\hline
+
+% removeUserExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{removeUserExercise(uid, exerciseTitle):} Deletes an exercise assignment from a user's exercise list.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} - User ID of the patient, \texttt{exerciseTitle: string} - Title of the exercise to remove &
+\texttt{Promise<void>} - Returns nothing on successful deletion &
+\texttt{Error} - Throws error if there is an issue deleting the document from Firestore \\
+\hline
+
+% addUserExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{addUserExercise(uid, exercise):} Creates a new exercise assignment for a specific user.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} - User ID of the patient, \texttt{exercise: Exercise} - Exercise object to assign &
+\texttt{Promise<void>} - Returns nothing on successful creation &
+\texttt{Error} - Throws error if there is an issue adding the document to Firestore \\
+\hline
+
+% updateUserExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{updateUserExercise(uid, exerciseTitle, exerciseDescription, exerciseSets, exerciseReps):} Modifies an existing user exercise's instructions (description, sets, reps).} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} - User ID of the patient, \texttt{exerciseTitle: string} - Title of the exercise, \texttt{exerciseDescription: string} - New description, \texttt{exerciseSets: string} - Number of sets (optional), \texttt{exerciseReps: string} - Number of reps (optional) &
+\texttt{Promise<void>} - Returns nothing on successful update &
+\texttt{Error} - Throws error if there is an issue updating the document in Firestore \\
+\hline
+
+\caption{Exported Access Programs - exerciseData.ts} \label{sec: exerciseDataExports}
+\end{longtable}
+\textit{exercises.tsx}
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% ExercisesTab
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{ExercisesTab():} Default exported React component that renders the exercises interface for both patients and physiotherapists.} \\
+\hline
+\rowcolor{white}
+\texttt{None} - Takes no props &
+\texttt{JSX.Element} - Returns a React component with role-based views (patient exercise list or physiotherapist exercise selection interface) &
+\texttt{None} - No exceptions thrown; returns null while role is loading \\
+\hline
+
+\caption{Exported Access Programs - exercises.tsx} \label{sec: exercisesExports}
+\end{longtable}
 
 \subsubsection{Semantics}
 
-\noindent \textbf{State Variables} \\
-\textit{ex}: exercise\\
-\textit{sets}: sets\\
-\textit{reps}: reps\\
-\textit{rest\_time}: rest\_time\\
-\textit{ex\_routine}: [ex, sets, reps, rest\_time]\\
-\textit{name}: name\\
-\textit{acc\_id}: acc\_id\\
+\noindent \textbf{State Variables} \hypertarget{svex} \\
+\texttt{userexercises}: \texttt{userExercises} table in the database\\
+\texttt{exercises}: \texttt{exercises} table in user database\\
+\texttt{users}: \texttt{users} table in the database \\
+\texttt{ue}: modified \texttt{exercise} object \\
+\texttt{uue}: unmodifies \texttt{exercise} object\\
+\texttt{assigned}: list of assigned exercises \\
+\texttt{u1}: user \\
+\texttt{exid}: exercise id \\
+\texttt{ex}: exercise (object) \\
+%\texttt{extitle}: exercise title\\
+%\texttt{userid}: uid
 
-\newpage
 
-%Check requirements doc
 \noindent \textbf{State Invariant} \\
-$\forall x \in ex\_routine: x \notin \emptyset$ \\
-$\forall x \in \{acc\_id\}: \exists y \in \{ex\_routine\}$ $|$ $count(y) = 1$ \\
-$\forall x \in \{ex\_routine\}$ $|$ $x['sets'] = 1$ $\implies$ $x['rest\_time'] = 0$ \\
-
-\subsubsection{Environment Variables} %TODO check?
-\textit{screen}: The application's display to the user \\
-\textit{touchscreen}: Users will click on the screen to select their desired action \\
+$\forall$ $e1, e2 \in exercises, e1 \neq e2 \implies e1.title \neq e2. title \cap e1.description \neq e2.description$ \\
+$\forall$ $e1 \in exercises,$ $\exists$ $e1.reps, e1.sets \in \mathbb{Z}^{+}$ \\
+$\forall$ $e1, e2 \in userexercises, e1.title = e2.title \centernot \implies (e1.id = e2.id \cup 
+e1.reps = e2.reps \cup e1.sets = e2.sets \cup e1.userid = e2.userid)$ \\
+$\forall$ $ue, e1 \in userexercises$ $|$ $ue.userid = e1.userid \cap ue.title = e1.title, \exists ue.description \neq e1.description
+\cup ue.sets \neq e1.sets \cup ue.reps \neq e1.reps$ \\
+$\forall$ $user \in users, |assigned| \geq 0$ \\
+\textit{\underline{Function definitions}}\\
+\texttt{u1}: user\\
+\texttt{uid}: uid (e.g. u1.uid)\\
+\texttt{title}: exercise title \\
+\textit{Ux}: 'getExercisesById(uid)'\\
+\textit{Ge}: 'getExercise(exid)'\\
+\textit{Gen}: 'getGeneralExercises()'\\
+\textit{Sel}: 'getSelectedExercises(uid)'\\
+\textit{R}: 'removeUserExercise(uid, ex.title)\\
+\textit{A}: 'addUserExercise(uid, ex)'
+\textit{Ux(uid)}: $\forall ex \in userexercises$ $Ux(uid) = [ex]$ $|$ $ex.userid = uid$\\
+\textit{Ge(exid)}: $\forall$ $ex \in exercises, Ge(exid) = [ex]$ $|$ $ex.id = exid$\\ 
+\textit{Gen()}: $Gen() \rightarrow \{ex\} \in exercises$ \\
+\textit{Sel(uid)}: $\forall ex \in userexercises,$ $Sel(uid) = [ex]$ $|$ $ex.userid = uid$\\
+\textit{R(uid, title)}: $userexercises' = userexercises - [ex]$ $|$ $ex.title = title \cap ex.userid = uid$\\
+\textit{A(uid, ex)}: $userexercises' = userexercises \cup [ex]$ $|$ $ex \in exercises \cap (ex \in userexercises \cap ex.userid = uid) $ \\
+\subsubsection{Environment Variables} 
+Not applicable
 
 \subsubsection{Assumptions}
 \begin{itemize}
-  \item During performance of an exercise, breaks may be needed, but the rest\_time specified maybe 0. In this case, it is assumed that the recording takes the speed of performance into account and records for longer. 
-  \item For the same user, no two exercises with the same name are present.
+  \item For the same user, no two exercises with the same name are present. Conversely, no two 
+  exercises with the same names can be assigned by a PT to one patient.
 \end{itemize}
 
-\subsubsection{Access Routine Semantics}
-%TODO
-
-\newpage
+\subsubsection{Access Routine Semantics - Exported}
+\texttt{db}: database\\
+\texttt{userexercises}: \texttt{userExercises} table in the database\\
+\texttt{exercises}: \texttt{exercises} table in user database\\
+\texttt{users}: \texttt{users} table in the database \\
+\texttt{ue}: modified \texttt{exercise} object \\
+\texttt{assigned}: list of assigned exercises \\
+\texttt{u1}: user \\
+\texttt{exid}: exercise id \\
+\texttt{ex}: exercise (object) \\
+\newline
+\textit{getExercisesById}\\
+\textbf{Pre-condition}: $u1.uid = ex.userid \in \{userexercises.userid\}$ \\
+\textbf{Function}: getExercisesById(u1.uid) \\
+\textbf{Post-condition}: [ex]\\
+\newline
+\textit{getExercise}\\
+\textbf{Pre-condition}: $exid \in \{exercises.id\} \cap exid \neq \emptyset$\\
+\textbf{Function}: getExercises(ex.exid) \\
+\textbf{Post-condition}: $ex \impliedby ex.id = exid $ \\
+\newline
+\textit{getGeneralExercises}\\
+\textbf{Pre-condition}: $\exists exercises \in db $
+\textbf{Function}: getGeneralExercises() \\
+\textbf{Post-condition}: $[ex] \neq \emptyset$ \\
+\newline
+\textit{getSelectedExercises}\\
+\textbf{Pre-condition}: $u1 \in users \cap u1.uid = ex.userid$ \\
+\textbf{Function}: getSelectedExercises(u1.uid) \\
+\textbf{Post-condition}: $[ex]$ \\
+\newline
+\textit{removeUserExercise}\\
+\textbf{Pre-condition}: $u1 \in users \cap u1.uid = ex.userid \cap title = ex.title \in userexercises$
+\textbf{Function}: getSelectedExercises(u1.uid, ex.title) \\
+\textbf{Post-condition}: $user[exercises]' = user[exercises] - ex$ \\
+\newline
+\textit{addUserExercise}\\
+\textbf{Pre-condition}: $u1 \in users \cap ex \in exercises$ \\
+\textbf{Function}: addUserExercise(u1.uid, ex)\\
+\textbf{Post-condition}: $user[exercises]' = user[exercises] + ex$\\
+\newline
+\textit{updateUserExercise}\\
+\textbf{Pre-condition}: $u1 \in users \cap ex \in exercises \cap ex.userid = u1.uid$ \\
+\textbf{Function}: addUserExercise(u1.uid, ex.title, ex.description, ex.sets, ex.reps)\\
+\textbf{Post-condition}: $ue = ex$ $\cap$ $(ex(u1.uid, ue.title)$ $\cup$ $ex(u1.uid, ue.description)$
+$\cup$ $ex(u1.uid, ue.sets)$ $\cup$ $ex(u1.uid, ue.reps))$
 
 \subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\rowcolors{2}{lavender}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\textit{\underline{exerciseData.ts}}\\
+There are no local routines/helper functions present in this file. \\
+\textit{\underline{exercises.tsx}}\\
+These functions are UI related. Note that they are included here for readability. They are also in section \ref{sec:ui}.\\
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
 \hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
 \hline
+\endfirsthead
 
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} provides exercise instructions to user} \\
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% openExercise
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{openExercise(ex):} Navigates to the exercise detail page for the selected exercise.} \\
 \hline
 \rowcolor{white}
-add\_ex & \makecell[lt]{\textit{name}\\\textit{exercise}\\\textit{acc\_id}\\\textit{sets}\\\textit{reps}\\\textit{rest\_time}} & \textit{NA} & \makecell[lt]{UserNotFoundError\\DownloadError\\NoExerciseError} \\
+\texttt{ex: Exercise} - The exercise object to view &
+\texttt{void} - Navigates to "/exercise/[id]" route using router.push() &
+\texttt{None} \\
 \hline
 
-\end{tabularx}
-\caption{Local Routines}
+% toggleSelection
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{toggleSelection(ex):} Toggles exercise selection for a patient (physiotherapist view only).} \\
+\hline
+\rowcolor{white}
+\texttt{ex: Exercise} - The exercise to toggle &
+\texttt{void} - Updates selectedIds state and calls onChecked() or onUnchecked() &
+\texttt{None} \\
+\hline
 
-\end{table}
+% onChecked
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onChecked(ex):} Assigns an exercise to the selected patient.} \\
+\hline
+\rowcolor{white}
+\texttt{ex: Exercise} - The exercise to assign &
+\texttt{void} - Calls addUserExercise(selectedUser, ex) to save to database and logs selection &
+\texttt{None} \\
+\hline
+
+% onUnchecked
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onUnchecked(id):} Removes an exercise assignment from the selected patient.} \\
+\hline
+\rowcolor{white}
+\texttt{id: string} - The exercise title to remove &
+\texttt{void} - Calls removeUserExercise(selectedUser, id) to delete from database and logs deselection &
+\texttt{None} \\
+\hline
+
+% modifyInstructions
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{modifyInstructions(ex):} Opens modal to edit exercise instructions for a patient.} \\
+\hline
+\rowcolor{white}
+\texttt{ex: Exercise} - The exercise to modify &
+\texttt{Promise<void>} - Sets modalExercise state, fetches existing instructions via getSelectedExercises(), and opens modal with preloaded values &
+\texttt{None} \\
+\hline
+
+% updateInstructions
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{updateInstructions(ex, newDesc, newSets, newReps):} Saves modified exercise instructions to the database.} \\
+\hline
+\rowcolor{white}
+\texttt{ex: Exercise} - The exercise being modified, \texttt{newDesc: string} - New description, \texttt{newSets: string} - New sets value, \texttt{newReps: string} - New reps value &
+\texttt{void} - Calls updateUserExercise(selectedUser, ex.title, newDesc, newSets, newReps) and logs the update &
+\texttt{None} \\
+\hline
+
+\caption{Local Routines - exercises.tsx} \label{sec: exercisesLocalRoutines}
+\end{longtable}
+
+\subsubsection{Access Routine Semantics - Local}
+Since these are UI related, they are elaborated on in section \ref{sec:ui}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1957,8 +2158,10 @@ mpipe\_draw & \makecell[lt]{\textit{unprocessed\_frames}} & \makecell[lt]{\texti
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - UI}
+\subsection{Module - UI} \label{sec:ui}
 NA
+
+%exercises.tsx
 
 
 \subsubsection{Uses}
