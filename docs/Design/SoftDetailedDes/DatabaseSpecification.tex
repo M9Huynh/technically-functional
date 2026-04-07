@@ -1,0 +1,93 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{amsmath, mathtools}
+
+\usepackage[round]{natbib}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{xr}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{xfrac}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{enumitem}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[section]{placeins}
+\usepackage{caption}
+\usepackage{fullpage}
+\usepackage[table]{xcolor}
+\usepackage{array} 
+\usepackage{colortbl}
+\usepackage{makecell}
+\usepackage{longtable}
+\usepackage{centernot}
+\usepackage{verbatim}
+
+\definecolor{headerblue}{RGB}{100, 150, 220}
+
+\hypersetup{
+bookmarks=true,     % show bookmarks bar?
+colorlinks=true,       % false: boxed links; true: colored links
+linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+citecolor=blue,      % color of links to bibliography
+filecolor=magenta,  % color of file links
+urlcolor=cyan          % color of external links
+}
+
+\newcolumntype{L}{>{\raggedright\arraybackslash}p{0.25\linewidth}}
+\newcolumntype{R}{>{\raggedright\arraybackslash}p{0.70\linewidth}}
+\begin{document}
+\title{Database Specification}
+
+%\author{\authname}
+
+\date{\today}
+
+\maketitle
+\pagenumbering{roman}
+
+\begin{longtable}{L R}
+\caption{Database Schema}\\
+\toprule
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Tables}} & \textcolor{white}{\textbf{Fields}} \\
+\midrule
+\endfirsthead
+
+\multicolumn{2}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\toprule
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Tables}} & \textcolor{white}{\textbf{Fields}} \\
+\midrule
+\endhead
+
+\bottomrule
+\multicolumn{2}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\textbf{activities} & \texttt{actid, createdAt, duration, email, exercise, timestamp, uid, analysis, avg\_rep\_duration, completed\_reps, completed\_sets, current\_angle, current\_rep\_duration, date\_performed, effort, max\_height, min\_height, name, pain, patient\_feedback, rep\_state, rom\_degree, satisfaction, target\_area, Database location} \\
+\midrule
+\textbf{comments} & \texttt{actid, author, cid, comment, date, uid} \\
+\midrule
+\textbf{exercises} & \texttt{description, reps, sets, title} \\
+\midrule
+\textbf{inviteCodes} & \texttt{active, physioId, used, usedBy} \\
+\midrule
+\textbf{userExercises} & \texttt{description, id, reps, sets, title, userid} \\
+\midrule
+\textbf{users} & \texttt{birthday, createdAt, email, inviteCode, name, physioId, role} \\
+\midrule
+\textbf{validLicenses} & \texttt{active} \\
+
+\end{longtable}
+
+\end{document}
