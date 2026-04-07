@@ -47,7 +47,7 @@
 
 \begin{document}
 
-\title{Software Requirements Specification for \progname: subtitle describing software} 
+\title{Software Requirements Specification for PhysioCompanion}
 \author{\authname}
 \date{\today}
 	
@@ -66,7 +66,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\textbf{Date}} & {\textbf{Version}} & {\textbf{Notes}}\\
 \midrule
-October 10, 2025 & 1.0 & Initial draft of the SRS (ALL)\\ 
+& 1.0 & Initial draft of the SRS (ALL)\\ 
 Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
@@ -326,7 +326,7 @@ Furthermore, any data will not be shared without any explicit consent and stored
 \begin{table}[H]
 \begin{tabular}{l m{10cm}}
   \textbf{\#} & \textbf{Assumption} \\
-  A1 & The user of the system is a post-operative patient requiring physiotherapy. \\
+  A1 & The user of the system is a patient undergoing physiotherapy who was advised to perform exercises at home. \\
   A2 & Users have prescribed physiotherapy exercises from a professional physiotherapist. \\
   A3 & Users prescribed exercise names will remain consistent across physiotherapists. \\
   A4 & Messages from the system are recommended actions and not healthcare advice. \\
@@ -339,8 +339,11 @@ Furthermore, any data will not be shared without any explicit consent and stored
   A11 & Users will be able to read or listen to advice from the system during exercise video-feeds. \\
   A12 & Assume that the user knows how to use the smart device and generally how to navigate it when human-centered interfaces are used. \\
   A13 & Only one user is within the frame of the smart device. \\
-  A14 & Users will be receptive to feedback.
-\end{tabular}
+  A14 & Users will be receptive to feedback. \\
+  A15 & The user only has mobility issues pertaining to the knee area and performs exercises involving a single joint activity. \\
+  A16 & The user is honest when providing subjective data such as perceived exertion (RPE) and pain levels. \\
+  A17 & Physiotherapists using the application are licensed by their provincial regulatory body.
+  \end{tabular}
 \end{table}
 
 \section{The Scope of the Work}
@@ -588,8 +591,9 @@ Normal Flow: The exercise overview is stored in the user database tied to the us
 	\rationale{Data access restrictions protect patient privacy, comply with healthcare privacy regulations, and prevent unauthorized disclosure of sensitive medical information.}
 	\fitcrit{Patients can only view and interact with data associated with their own account. Attempts to access other patients' data through URL manipulation or other means are blocked 100\% of the time.}
 	
-	\item[FR 24.] The system shall allow video storage (locally or database), ensuring compliance with data retention and privacy requirements.
-	\rationale{Video evidence is crucial for PT review and treatment decisions, but must be stored in compliance with healthcare regulations regarding retention periods and privacy protection.}
+	\item[FR 24.] The system shall store only the biomechanical metrics and performance data extracted from video analysis; raw video recordings shall not be retained on the server.
+	\rationale{Storing only derived metrics rather than raw video reduces privacy risk and storage burden while still providing PTs with all data needed for clinical decision-making. This approach limits exposure of sensitive patient imagery and simplifies compliance with PIPEDA and provincial health privacy legislation.}
+	\fitcrit{Raw video recordings are processed on-device and discarded after metric extraction is complete. No video files are transmitted to or persisted on the server. The system stores only computed metrics (e.g., joint angles, rep counts, pain scores) associated with each session. Compliance is verified by confirming no video data exists in the server database following session completion.}
 	
 	\item[FR 25.] The system shall ensure video and performance data are available for PT review and decision-making.
 	\rationale{Timely access to performance data enables PTs to make informed clinical decisions, adjust treatment plans appropriately, and provide evidence-based care.}
@@ -685,7 +689,11 @@ N/A
 	\item[PR-SL 2.] The system shall process video feedback and deliver corrective cues within 1 second of detected motion.
 	\rationale{Real-time feedback requires minimal latency to be effective. Delayed feedback may occur after the patient has already moved to the next repetition, making corrections impossible to implement immediately.}
 	\fitcrit{From the moment a form deviation is detected in the video stream, corrective feedback (visual and audible) is delivered within 1 second in 95\% of cases. Latency is measured from deviation occurrence to feedback display.}
-\end{reqlist}
+	
+	\item[PR-SL 3.] The system shall complete the upload of a typical exercise video file to the server within 60 seconds under normal network conditions.
+	\rationale{Timely upload ensures patients receive session confirmation and that PTs have access to performance data without excessive delay. Long upload times reduce engagement and disrupt the post-exercise workflow.}
+	\fitcrit{A video file of 50~MB or less uploads successfully and receives a server acknowledgment within 60 seconds on a connection with a minimum 10~Mbps upload speed. A success notification is displayed to the user upon confirmed upload completion.}
+	\end{reqlist}
 
 \subsection{Safety-Critical Requirements}
 \begin{reqlist}
@@ -812,8 +820,6 @@ N/A
 	\item[SR-AR 3.] The system shall automatically log out users after 60 minutes of inactivity.
 	\rationale{Automatic logout prevents unauthorized access if a user leaves their device unattended, protecting patient privacy particularly in shared home or clinical environments.}
 	
-	\item[SR-AR 4.] The system shall enforce a 2FA when creating an account and logging in. The system will ensure 2FA through the email address of the user stored on the database.
-	\rationale{Two-factor authentication (2FA) adds an additional layer of security beyond passwords, significantly reducing the risk of unauthorized account access from compromised credentials. Using email-based 2FA provides a balance between security and usability, as most users have ready access to email on separate devices. This is especially critical for protecting sensitive patient health information and ensuring compliance with healthcare data protection regulations.}
 	
 	\item[SR3.] The system shall include an option to reset the password if too many (5) attempts are made with incorrect login.
 	\rationale{Limiting login attempts to five protects accounts from brute force attacks where attackers systematically try multiple password combinations. Offering a password reset option after failed attempts balances security with user convenience, allowing legitimate users who have forgotten their password to regain access without being permanently locked out. This threshold is high enough to accommodate normal user errors but low enough to deter automated attacks.}

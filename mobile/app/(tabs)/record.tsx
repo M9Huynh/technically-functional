@@ -1,18 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Alert, AppState } from "react-native"; // added AppState
+import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import { useRouter, Redirect } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import * as Speech from "expo-speech";
+import FeedbackOverlay from "../../components/FeedbackOverlay";
 
 import ScreenContainer from "@/components/screenContainer";
 import PrimaryButton from "../../components/primaryButton";
-import FeedbackOverlay from "../../components/FeedbackOverlay";
 
 import Svg, { Circle, Line } from "react-native-svg";
 
 import {
   processFrame,
-  precheckFrame,
   resetBackend,
   Landmark,
   Connection,
@@ -22,43 +20,24 @@ import {
 import { saveMetrics } from "../../lib/metricsService";
 import { getUserRole, UserRole } from "../../lib/roleStore";
 
-// SessionState represents the various stages within the recording flow:
-// idle -> waiting state
-// setupCountdown -> allows user to get into their position
-// precheck -> checks the user's environment for lighting and correct positioning of the body within the frame
-// calibrating ->
-// recording ->
-type SessionState =
-  | "idle"
-  | "setupCountdown"
-  | "precheck"
-  | "calibrating"
-  | "recording";
-
-// Main Recording Feature: This feature handles the camera input, send continuous image frames to the backend,
-// and shows real-time feedback
 export default function Record() {
   const router = useRouter();
 
-  const [sessionState, setSessionState] = useState<SessionState>("idle");
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
-  const [insufficientData, setInsufficientData] = useState(false);
-  const [isPreparing, setIsPreparing] = useState(false);
-  const [setupCountdown, setSetupCountdown] = useState(5);
-  const [cameraReady, setCameraReady] = useState(false);
-
+  // Role guard hooks
   const [role, setRole] = useState<UserRole | null>(null);
   const [loadingRole, setLoadingRole] = useState(true);
 
+  // Camera hooks (MUST be before any return)
   const cameraRef = useRef<any>(null);
   const [permission, requestPermission] = useCameraPermissions();
 
+  // Other hooks
   const [streaming, setStreaming] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [showPostRecordingActions, setShowPostRecordingActions] =
-    useState(false);
 
   const [metrics, setMetrics] = useState<any>(null);
+
+  // NEW: keep last good metrics so STOP still shows totals
   const [finalMetrics, setFinalMetrics] = useState<any>(null);
 
   const [side, setSide] = useState<Side | null>(null);
@@ -67,14 +46,10 @@ export default function Record() {
   const [landmarks, setLandmarks] = useState<Landmark[] | null>(null);
   const [connections, setConnections] = useState<Connection[]>([]);
 
-  const [savedExercise, setSavedExercise] = useState<string | null>(null);
-
+  //NEW: busyRef prevents overlap (only 1 frame at a time)
   const busyRef = useRef(false);
 
-  const [appIsActive, setAppIsActive] = useState(true); // track app active state for screen sharing 
-  const [cameraKey, setCameraKey] = useState(0); // force clean CameraView remount when needed
-  const startRetryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null); // retry start once if camera reamins stuck while still initializing
-
+  // Load role once
   useEffect(() => {
     const loadRole = async () => {
       const r = await getUserRole();
@@ -84,98 +59,57 @@ export default function Record() {
     loadRole();
   }, []);
 
-  useEffect(() => {
-    if (!savedExercise) return;
-    console.log("savedExercise: ", savedExercise);
-    router.push({
-        pathname: "/progress",
-        params: {
-          exerciseId: savedExercise,
-          showSurvey: "true",
-        },});
-  }, [savedExercise]);
-
+  // Ask for camera permission
   useEffect(() => {
     if (!permission) return;
     if (!permission.granted) requestPermission();
   }, [permission, requestPermission]);
-  // Listens for AppState change
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextState) => {
-      const active = nextState === "active";
-      setAppIsActive(active); // tracks if app is currently active
 
-      if (active) {
-        setCameraReady(false); // force camera to re-initialize after returning to the app
-        setCameraKey((prev) => prev + 1); // force camera to remount if leaving the app or screen share caused it to get stuck
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (startRetryTimeoutRef.current) {
-        clearTimeout(startRetryTimeoutRef.current);
-      }
-    };
-  }, []);
-
+  //NEW/CHANGED: Streaming loop WITHOUT setInterval
+  // We process the next frame only AFTER the previous finishes → less lag/backlog.
   useEffect(() => {
     let cancelled = false;
 
+    //NEW: timeout helper so a slow backend frame doesn’t hang forever
     const withTimeout = <T,>(p: Promise<T>, ms: number) =>
       Promise.race([
         p,
         new Promise<T>((_, reject) =>
-          setTimeout(() => reject(new Error("timeout")), ms),
+          setTimeout(() => reject(new Error("timeout")), ms)
         ),
       ]);
 
-    const runFrameProcessing = async () => {
+    const tick = async () => {
       if (cancelled) return;
 
-      if (
-        !streaming ||
-        !cameraRef.current ||
-        !side ||
-        busyRef.current ||
-        !cameraReady || // wait until camera is actually ready
-        !appIsActive // pause frame processing if app loses focus during screen share
-      ) {
-        setTimeout(runFrameProcessing, 300);
+      // Not streaming / not ready → check again soon
+      if (!streaming || !cameraRef.current || !side || busyRef.current) {
+        setTimeout(tick, 300); //150 before
         return;
       }
 
-      busyRef.current = true; // marks it as currently processing one frame to avoid multiple frames being processed at the same time
+      busyRef.current = true;
 
       try {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
-          quality: 0.12,
-          shutterSound: false,
+          quality: 0.12, // CHANGED: lower quality = faster (demo friendly)
           skipProcessing: true,
-          exif: false,
+          exif: false, // NEW: less work per capture
         });
 
         if (!photo?.base64) return;
-        // Sends frames to the backend for pose detection and the calculation of the metrics
+
         const data: any = await withTimeout(
           processFrame(photo.base64, side, facing),
-          5000
+          2000
         );
 
-        const hasValidLandmarks =
-          Array.isArray(data?.landmarks) && data.landmarks.length === 33;
-
-        setInsufficientData(!hasValidLandmarks);
-
+        // CHANGED: update live + keep last good metrics
         if (data?.metrics) {
           setMetrics(data.metrics);
 
+          // NEW: keep "best" final metrics so bad frames don't overwrite totals
           setFinalMetrics((prev: any) => {
             const next = data.metrics;
             if (!prev) return next;
@@ -183,12 +117,13 @@ export default function Record() {
             const prevReps = prev?.rep_count ?? 0;
             const nextReps = next?.rep_count ?? 0;
 
+            // never replace higher reps with lower reps
             if (nextReps < prevReps) return prev;
 
+            // don't overwrite with obvious bad zeros
             const looksBad =
               nextReps === 0 &&
-              next?.min_degree === 0 &&
-              next?.max_degree === 0;
+              (next?.min_degree === 0 && next?.max_degree === 0);
 
             if (looksBad) return prev;
 
@@ -196,10 +131,10 @@ export default function Record() {
           });
         }
 
+        // CHANGED: only update overlay when landmarks are valid (prevents flicker)
         if (Array.isArray(data?.landmarks) && data.landmarks.length === 33) {
           setLandmarks(data.landmarks);
         }
-
         if (Array.isArray(data?.connections) && data.connections.length > 0) {
           setConnections(data.connections);
         }
@@ -207,263 +142,21 @@ export default function Record() {
         console.log("Frame error:", e);
       } finally {
         busyRef.current = false;
-        setTimeout(runFrameProcessing, 500);
+
+        // NEW: schedule next frame AFTER finishing (no backlog)
+        setTimeout(tick, 350);
       }
     };
 
-    runFrameProcessing();
+    tick();
 
     return () => {
       cancelled = true;
       busyRef.current = false;
     };
-  }, [streaming, side, facing, cameraReady, appIsActive]);
+  }, [streaming, side, facing]);
 
-  useEffect(() => {
-    if (!streaming || !metrics) return;
-
-    if (sessionState === "calibrating") {
-      if (metrics.calibrating) {
-        const secondsLeft = Math.ceil(metrics.cal_time_left ?? 0);
-        setStatusMessage(
-          `Calibration in progress... ${secondsLeft}s remaining`,
-        );
-      } else {
-        setSessionState("recording");
-        setStatusMessage("Exercise in progress...");
-      }
-    }
-  }, [metrics, streaming, sessionState]);
-
-  useEffect(() => {
-    if (sessionState !== "setupCountdown") return;
-
-    setStatusMessage(
-      setupCountdown > 0
-        ? "Get into position..."
-        : "Checking lighting and camera position..."
-    );
-
-    if (setupCountdown <= 0) {
-      const runPrecheck = async () => {
-        try {
-          await resetBackend();
-
-          setSessionState("precheck");
-
-          const envCheck = await validateEnvironmentBeforeStart();
-
-          if (!envCheck.ok) {
-            setSessionState("idle");
-            setStatusMessage(null);
-            setIsPreparing(false);
-            Alert.alert("Adjust Setup", envCheck.message);
-            return;
-          }
-
-          await resetBackend();
-
-          setMetrics(null);
-          setFinalMetrics(null);
-          setLandmarks(null);
-          setConnections([]);
-          setInsufficientData(false);
-          setShowPostRecordingActions(false);
-
-          setSessionState("calibrating");
-          setStatusMessage("Calibration in progress...");
-          setStreaming(true);
-        } catch (e: any) {
-          console.log("runPrecheck failed:", e?.message || e);
-          setSessionState("idle");
-          setStatusMessage(null);
-          setIsPreparing(false);
-          Alert.alert("Error", "Backend timed out. Please try again.");
-        }
-      };
-
-      runPrecheck();
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      if (setupCountdown === 5) {
-        Speech.stop();
-        Speech.speak("Get ready", { rate: 1.0, pitch: 1.0 });
-      }
-
-      setSetupCountdown((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [sessionState, setupCountdown]);
-
-  const validateEnvironmentBeforeStart = async () => {
-    if (!cameraRef.current || !cameraReady) {
-      return {
-        ok: false,
-        message: "Camera is not ready yet. Please wait a moment and try again.",
-      };
-    }
-
-    if (!side) {
-      return { ok: false, message: "Please select a knee before recording." };
-    }
-
-    try {
-      const photo = await cameraRef.current.takePictureAsync({
-        base64: true,
-        quality: 0.08,
-        shutterSound: false,
-        skipProcessing: true,
-        exif: false,
-      });
-
-      if (!photo?.base64) {
-        return { ok: false, message: "Could not capture preview frame." };
-      }
-
-      const result = await precheckFrame(photo.base64, side, facing);
-
-      return {
-        ok: result.ok,
-        message: result.message,
-      };
-    } catch (e: any) {
-      console.log("Precheck error:", e?.response?.data || e?.message || e);
-      return {
-        ok: false,
-        message:
-          e?.response?.data?.message ||
-          e?.message ||
-          "Unable to check setup. Please try again.",
-      };
-    }
-  };
-
-  const handleStartRecording = async () => {
-    if (
-    isPreparing ||
-    streaming ||
-    sessionState === "setupCountdown" ||
-    sessionState === "precheck" ||
-    sessionState === "calibrating"
-  ) return;
-
-    if (!appIsActive) { // avoid starting while app is not active
-      Alert.alert(
-        "Camera unavailable",
-        "Please return to the app and wait a moment for the camera to reconnect."
-      );
-      return;
-    }
-
-    if (!cameraReady) {
-      setStatusMessage("Setting up camera..."); // update status while waiting for camera to initialize
-
-      if (startRetryTimeoutRef.current) {
-        clearTimeout(startRetryTimeoutRef.current);
-      }
-
-      startRetryTimeoutRef.current = setTimeout(() => {
-        handleStartRecording(); // try one retry after short delay to account for slow camera initialization
-      }, 800);
-
-      Alert.alert(
-        "Camera Not Ready",
-        "Please wait a moment for the camera to finish loading.",
-      );
-      return;
-    }
-
-    if (!side) {
-      Alert.alert(
-        "Choose a knee first",
-        "Select Right or Left knee before recording.",
-      );
-      return;
-    }
-
-    setMetrics(null);
-    setFinalMetrics(null);
-    setLandmarks(null);
-    setConnections([]);
-    setInsufficientData(false);
-    setShowPostRecordingActions(false);
-
-    setIsPreparing(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 300)); // add a small delay to avoid race condition from occuring after camera init/switch
-
-    setSetupCountdown(5);
-    setSessionState("setupCountdown");
-    setStatusMessage("Get into position...");
-  };
-
-  const handleStopRecording = async () => {
-    if (!streaming) return;
-
-    setStreaming(false);
-    setSessionState("idle");
-    setStatusMessage("Recording complete.");
-    setShowPostRecordingActions(true);
-  };
-
-  const handleRetake = async () => {
-    setStreaming(false);
-    setMetrics(null);
-    setFinalMetrics(null);
-    setLandmarks(null);
-    setConnections([]);
-    setInsufficientData(false);
-    setStatusMessage(null);
-    setShowPostRecordingActions(false);
-    setSessionState("idle");
-    setSetupCountdown(5);
-    setIsPreparing(false);
-
-    try {
-      await resetBackend();
-    } catch (e) {
-      console.log("Retake reset failed:", e);
-    }
-  };
-
-  const handleSaveMetrics = async () => {
-    const m = finalMetrics;
-    if (!m || isSaving) return;
-
-    try {
-      setIsSaving(true);
-
-      setSavedExercise(await saveMetrics({
-        angle: m.angle || 0,
-        rom_degree: m.rom_degree || 0,
-        min_degree: m.min_degree || 0,
-        max_degree: m.max_degree || 0,
-        rep_count: m.rep_count || 0,
-        rep_state: m.rep_state || "None",
-        avg_rep_duration: m.avg_rep_duration || 0,
-        current_rep_duration: m.current_rep_duration || 0,
-        timestamp: Date.now(),
-      }));
-
-      Alert.alert("Saved", "Metrics saved to Firebase");
-      console.log("savedExercise: ", savedExercise);
-//      router.push({
-//        pathname: "/progress",
-//        params: {
-//          exerciseId: savedExercise,
-//          showSurvey: "true",
-//        },
-//      });
-    } catch (e: any) {
-      Alert.alert("Error", e?.message || "Failed to save metrics");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
+  // Now safe to return
   if (loadingRole) {
     return (
       <ScreenContainer>
@@ -475,6 +168,68 @@ export default function Record() {
   if (role === "physio") {
     return <Redirect href="/" />;
   }
+
+  const handleToggleRecording = async () => {
+    if (!side) {
+      Alert.alert(
+        "Choose a knee first",
+        "Select Right or Left knee before recording."
+      );
+      return;
+    }
+
+    if (!streaming) {
+      // START recording
+      try {
+        await resetBackend();
+      } catch (e) {
+        console.log("Reset failed:", e);
+      }
+
+      setMetrics(null);
+
+      // NEW: clear finalMetrics for a fresh session
+      setFinalMetrics(null);
+
+      setLandmarks(null);
+      setConnections([]);
+    } else {
+      // STOP recording
+      // keep finalMetrics and show it in UI (displayMetrics below handles this)
+      setMetrics((prev: any) => prev); // no-op, but keeps intent clear
+    }
+
+    setStreaming((s) => !s);
+  };
+
+  // CHANGED: Save uses finalMetrics when stopped, metrics when streaming
+  const handleSaveMetrics = async () => {
+    const m = streaming ? metrics : finalMetrics; // NEW
+    if (!m || isSaving) return;
+
+    try {
+      setIsSaving(true);
+
+      await saveMetrics({
+        angle: m.angle || 0,
+        rom_degree: m.rom_degree || 0,
+        min_degree: m.min_degree || 0,
+        max_degree: m.max_degree || 0,
+        rep_count: m.rep_count || 0,
+        rep_state: m.rep_state || "None",
+        avg_rep_duration: m.avg_rep_duration || 0,
+        current_rep_duration: m.current_rep_duration || 0,
+        timestamp: Date.now(),
+      });
+
+      Alert.alert("Saved", "Metrics saved to Firebase");
+      router.push("/progress");
+    } catch (e: any) {
+      Alert.alert("Error", e?.message || "Failed to save metrics");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   if (!permission) {
     return (
@@ -493,45 +248,21 @@ export default function Record() {
     );
   }
 
+  // NEW: when stopped, show finalMetrics; when streaming, show live metrics
   const displayMetrics = streaming ? metrics : finalMetrics;
 
   return (
     <ScreenContainer>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.cameraBox}>
-          <CameraView
-            key={`${facing}-${cameraKey}`} // force clean remount on switch / app resume
-            ref={cameraRef}
-            style={styles.camera}
-            facing={facing}
-            onCameraReady={() => setCameraReady(true)}
-          />
+          <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
 
-          <View style={styles.statusChip}>
-            <Text style={styles.statusChipText}>
-              {sessionState === "idle" && "Ready"}
-              {sessionState === "setupCountdown" && "Get Ready"}
-              {sessionState === "precheck" && "Pre-Check"}
-              {sessionState === "calibrating" && "Calibrating"}
-              {sessionState === "recording" && "Live Analysis"}
-            </Text>
-          </View>
+          {/* Debug label: safe to remove later */}
+          <Text style={{ position: "absolute", top: 5, left: 5, color: "white" }}>
+            LM: {landmarks ? landmarks.length : 0}
+          </Text>
 
-          {statusMessage && (
-            <View style={styles.infoBanner}>
-              <Text style={styles.infoBannerText}>{statusMessage}</Text>
-            </View>
-          )}
-
-          {insufficientData && streaming && (
-            <View style={styles.warningBanner}>
-              <Text style={styles.warningText}>
-                Adjust lighting, camera angle, or move fully into frame.
-              </Text>
-            </View>
-          )}
-
-          {streaming && landmarks && landmarks.length > 0 && (
+          {landmarks && landmarks.length > 0 && (
             <Svg
               style={StyleSheet.absoluteFill}
               width="100%"
@@ -557,34 +288,25 @@ export default function Record() {
               })}
 
               {landmarks.map((p, i) => (
-                <Circle
-                  key={`p-${i}`}
-                  cx={p.x}
-                  cy={p.y}
-                  r={0.008}
-                  fill="lime"
-                />
+                <Circle key={`p-${i}`} cx={p.x} cy={p.y} r={0.008} fill="lime" />
               ))}
             </Svg>
-          )}
-
-          {streaming && <FeedbackOverlay metrics={metrics} />}
+                  )}
+                  {streaming && (
+                      <FeedbackOverlay metrics={metrics} />
+                  )}
         </View>
 
         <View style={styles.kneeRow}>
           <View style={styles.kneeBtn}>
             <PrimaryButton
-              label={
-                side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"
-              }
+              label={side === "LEFT" ? "Left Knee Selected" : "Select Left Knee"}
               onPress={() => setSide("LEFT")}
             />
           </View>
           <View style={styles.kneeBtn}>
             <PrimaryButton
-              label={
-                side === "RIGHT" ? "Right Knee Selected" : "Select Right Knee"
-              }
+              label={side === "RIGHT" ? "Right Knee Selected" : "Select Right Knee"}
               onPress={() => setSide("RIGHT")}
             />
           </View>
@@ -592,89 +314,52 @@ export default function Record() {
 
         <View style={styles.pill}>
           <Text style={styles.pillText}>
-            {side
-              ? side === "RIGHT"
-                ? "Right knee"
-                : "Left knee"
-              : "No knee selected"}{" "}
-            • {facing === "front" ? "Front camera" : "Back camera"}
+            {side ? (side === "RIGHT" ? "Right knee" : "Left knee") : "No knee selected"} •{" "}
+            {facing === "front" ? "Front camera" : "Back camera"}
           </Text>
         </View>
 
         <PrimaryButton
           label={`Switch to ${facing === "front" ? "back" : "front"} camera`}
-          onPress={() => {
-            setCameraReady(false); // reset ready state before switch
-            setFacing((f) => (f === "front" ? "back" : "front"));
-            setCameraKey((prev) => prev + 1); // ensure clean remount when switching cameras
-            setStatusMessage("Switching camera..."); // helpful status during camera change
-          }}
+          onPress={() => setFacing((f) => (f === "front" ? "back" : "front"))}
           style={{ marginTop: 8 }}
         />
 
-        {!showPostRecordingActions && (
-          <PrimaryButton
-            label={
-              sessionState === "setupCountdown"
-                ? `Get Ready (${setupCountdown})`
-                : sessionState === "precheck"
-                  ? "Checking Setup..."
-                  : sessionState === "calibrating"
-                    ? "Calibrating..."
-                    : streaming
-                      ? "Stop Recording"
-                      : "Start Recording"
-            }
-            onPress={streaming ? handleStopRecording : handleStartRecording}
-            style={{ marginTop: 10 }}
-          />
-        )}
+        <PrimaryButton
+          label={streaming ? "Stop Recording" : "Start Recording"}
+          onPress={handleToggleRecording}
+          style={{ marginTop: 10 }}
+        />
 
-        {showPostRecordingActions && (
-          <>
-            <PrimaryButton
-              label="Retake"
-              onPress={handleRetake}
-              style={{ marginTop: 10 }}
-            />
-            <PrimaryButton
-              label={isSaving ? "Saving..." : "Save Metrics & View Progress"}
-              onPress={handleSaveMetrics}
-              style={{ marginTop: 10 }}
-            />
-          </>
-        )}
+        <PrimaryButton
+          label={isSaving ? "Saving..." : "Save Metrics & View Progress"}
+          onPress={handleSaveMetrics}
+          style={{ marginTop: 10 }}
+        />
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Live Metrics</Text>
 
+          {/* CHANGED: use displayMetrics so STOP keeps last totals */}
           <View style={styles.metricRow}>
             <Text style={styles.metricLabel}>Angle</Text>
             <Text style={styles.metricValue}>{displayMetrics?.angle ?? 0}</Text>
           </View>
           <View style={styles.metricRow}>
             <Text style={styles.metricLabel}>ROM</Text>
-            <Text style={styles.metricValue}>
-              {displayMetrics?.rom_degree ?? 0}
-            </Text>
+            <Text style={styles.metricValue}>{displayMetrics?.rom_degree ?? 0}</Text>
           </View>
           <View style={styles.metricRow}>
             <Text style={styles.metricLabel}>Min</Text>
-            <Text style={styles.metricValue}>
-              {displayMetrics?.min_degree ?? 0}
-            </Text>
+            <Text style={styles.metricValue}>{displayMetrics?.min_degree ?? 0}</Text>
           </View>
           <View style={styles.metricRow}>
             <Text style={styles.metricLabel}>Max</Text>
-            <Text style={styles.metricValue}>
-              {displayMetrics?.max_degree ?? 0}
-            </Text>
+            <Text style={styles.metricValue}>{displayMetrics?.max_degree ?? 0}</Text>
           </View>
           <View style={[styles.metricRow, { borderBottomWidth: 0 }]}>
             <Text style={styles.metricLabel}>Reps</Text>
-            <Text style={styles.metricValue}>
-              {displayMetrics?.rep_count ?? 0}
-            </Text>
+            <Text style={styles.metricValue}>{displayMetrics?.rep_count ?? 0}</Text>
           </View>
         </View>
       </ScrollView>
@@ -686,14 +371,13 @@ const styles = StyleSheet.create({
   text: { color: "#666", textAlign: "center" },
 
   cameraBox: {
-    height: 360,
+    height: 260,
     borderRadius: 18,
     overflow: "hidden",
     marginBottom: 14,
     backgroundColor: "#000",
     borderWidth: 1,
     borderColor: "#eee",
-    position: "relative",
   },
   camera: { width: "100%", height: "100%" },
   content: { padding: 16, paddingBottom: 40 },
@@ -730,49 +414,11 @@ const styles = StyleSheet.create({
     borderColor: "#EAEAEA",
   },
   pillText: { textAlign: "center", color: "#333", fontWeight: "600" },
-
-  statusChip: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    backgroundColor: "rgba(0,0,0,0.65)",
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  statusChipText: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 12,
-  },
-  infoBanner: {
-    position: "absolute",
-    top: 45,
-    left: 10,
-    right: 10,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 12,
-  },
-  infoBannerText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "600",
-  },
-  warningBanner: {
-    position: "absolute",
-    bottom: 10,
-    left: 10,
-    right: 10,
-    backgroundColor: "rgba(255, 170, 0, 0.95)",
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 12,
-  },
-  warningText: {
-    color: "#222",
-    fontWeight: "700",
-    textAlign: "center",
-  },
 });
+
+// const styles = StyleSheet.create({
+//   container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 18 },
+//   title: { fontSize: 22, fontWeight: "800", marginBottom: 8 },
+//   subheading: { fontSize: 18, fontWeight: "200", marginBottom: 8 },
+//   text: { color: "#666", textAlign: "center" },
+// });
