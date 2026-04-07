@@ -277,8 +277,6 @@ TSWLatexianTemp*
 
 # DS_Store file from Mac computers
 .DS_Store
-mobile/lib/poseService.ts
-
 # Firebase credentials
 serviceAccountKey.json
 *.pem
