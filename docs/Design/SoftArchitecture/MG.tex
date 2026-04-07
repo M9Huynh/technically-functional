@@ -164,10 +164,13 @@ The user interface of the application may be changed to include additional featu
   \item How feedback is presented to the user as the exercise is performed (i.e. written, auditory, alerts, etc.).
   \item How the insights are generated to the user on their account dashboard (i.e. displayed as a line graph, columns of data, does the user have the option to select from multiple views, etc.).
 \end{enumerate}
+These changes would be reflected in the Feedback Module (M8) and the User Interface Module (M11). These modules handle the feedback generation from both captured metrics in the videos and the overall statistics of user activities, as well as the logic for displaying that information to the user. It is expected that these changes would increase clarity of stored data and data manipulation within the system, as well as increase patient confidence with better feedback and extendable exercise information.
 \item[\refstepcounter{acnum} \actheacnum \label{AC2}:]
-The angles that are calculated to support different exercises. Currently, the application supports the 'single leg raise' exercises which is routinely used in rehabilitation for post-operative knee surgery. Future iterations of the application may include additional body parts and exercises.
+The angles that are calculated to support different exercises. Currently, the application supports the 'single leg raise' exercises which is routinely used in rehabilitation for post-operative knee surgery. Future iterations of the application may include additional body parts and exercises. \\
+This change would be reflected in the Exercise Data Module (M4), the Analyze Module (M7), and the Metrics Module (M9). The Exercise Data Module (M4) maintains a library of all the exercises assigned to each user, and it also facilitates the addition of exercises by physiotherapists to assigned patients and the modification of instructions, sets, and reps to assigned exercises. The Analyze Module (M7) calculates joint angles from landmark coordinates and would have to be modified to vary across different landmarks. IT also measures time-under-tension and exercise duration which are required for all the exercises in the system. The Metrics Module (M9) processes video frames to detect and track body landmarks using pose estimation, identifies key joints relevant to knee exercises (hip, knee, ankle, foot), extracts coordinate data for joint positions across video frames, and implements the core CV library integration (OpenCV, MediaPipe). This would also need to be modified to accept variable landmark selection by different exercises.
 \item[\refstepcounter{acnum} \actheacnum \label{AC3}:]
-Changes to the feedback/guidance given. As more requirements are met, there should be changes to encapsulate the prompts required for the motion (i.e. 'keep the torso straight as this movement is performed'). Additionally, there may be alternate prompts with varying degrees of complexity, which relates to accessibility and the patients understanding of the exercise (i.e. 'during this motion you want to engage your quadriceps as you drive your toe towards the sky ~8 inches off the ground).
+Changes to the feedback/guidance given. As more requirements are met, there should be changes to encapsulate the prompts required for the motion (i.e. 'keep the torso straight as this movement is performed'). Additionally, there may be alternate prompts with varying degrees of complexity, which relates to accessibility and the patients understanding of the exercise (i.e. 'during this motion you want to engage your quadriceps as you drive your toe towards the sky ~8 inches off the ground). \\
+These changes would be reflected in the Feedback Module (M8). This module generates real-time corrective feedback messages based on form analysis results, provides step-by-step exercise guidance, creates descriptive messages for form deviations specifying required adjustments, and triggers safety warnings for dangerous movements. It is expected that these changes would increase patient confidence and motivation to perform the exercises correctly, as well as increase the accessibility of the system to a wider range of patients with varying levels of understanding of the exercises.
 \end{description}
 
 
@@ -183,16 +186,22 @@ decisions will be changed.
 
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: Recording/Video Upload, Output: On-Screen Feedback/Corrections).
+  (Input: Recording/Video Upload, Output: On-Screen Feedback/Corrections). \\
+  Modifying devices takes an extended amount of work to allow for different IPs for selected cameras, different formats are a possibility, as well as varying frame rates and possible latency on feedback generation; limitations in the video handling modules (M7-M10) and the Feedback Module (M8) are expected to be the most affected by this change.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The knee will remain modeled as a single–degree-of-freedom (1-DOF) 
-hinge joint in the sagittal plane (flexion and extension only). No expansion to multi-DOF modelling or other joints is planned.
+hinge joint in the sagittal plane (flexion and extension only). No expansion to multi-DOF modelling or other joints is planned. \\
+This design would require a data structure change in all the video handling modules (M7-M10) to support the additional landmarks and angles, as well as many additional changes to the Analyze Module (M7) to support more angles and form criteria.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Users will only perform physiotherapist-approved rehabilitation exercises. 
-The system will not automatically generate or recommend new, unverified exercises.
+The system will not automatically generate or recommend new, unverified exercises. \\
+This specifically has to do with health regulations and the system's inability to provide medical care advice to patients using the system.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Feedback will be limited to movement-based corrections and joint angle guidance. 
-The system will not provide medical diagnosis or replace professional physiotherapy assessment.
+The system will not provide medical diagnosis or replace professional physiotherapy assessment. \\
+This was a difficulty faced with the latency on the system, a complete redesign of the front-end would be required in a python front-end language to support better real-time feedback it is estimated. However even this is not a guaranteed fix, so this excess amount of work for no guarantee of success is not worth the risk at this stage of development.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The system is not being built to integrate feedback from external sensors, wearable devices, 
-and specialized specialized motion-capture equipment.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The scope will remain focused on knee rehabilitation. The system will not expand to whole-body tracking or unrelated physiotherapy movements.
+and specialized specialized motion-capture equipment. \\
+This ties back to the limitation and UC 1, as well as the fact that the system is being built to be accessible to patients at home with only a smartphone, so the addition of external sensors would limit the accessibility of the system and increase the cost for patients.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The scope will remain focused on knee rehabilitation. The system will not expand to whole-body tracking or unrelated physiotherapy movements. \\
+This is primarily a scope issue, however you can see the implications of this change in the video handling modules (M7-M10) and the Analyze Module (M7) as per UC 2 and 3. They would need to be modified to support additional joints and angles, as well as the addition of new modules to support the new body parts and exercises.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -432,50 +441,50 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-FR1 & M5, M6, M7\\
-FR2 & M5, M7\\
-FR3 & M6\\
-FR4 & M7\\
-FR5 & M4, M9\\
-FR6 & M2, M9, M10\\
-FR7 & M3\\
-FR8 & M3, M11\\
-FR9 & M2, M3\\
-FR10 & M2\\
-FR11 & M2\\
-FR12 & M11, M12\\
-FR13 & M3, M9, M12, M13\\
-FR14 & M4, M12, M13\\
-FR15 & M3\\
-FR16 & M13\\
-FR17 & M10\\
-FR18 & M1, M7\\
-FR19 & M1, M10\\
-FR20 & M10\\
-FR21 & M7, M8, M9, M12\\
-FR22 & M2, M7\\
-FR23 & M7\\
-FR24 & M1\\
-FR25 & M1, M8, M10\\
-FR26 & M3\\
-FR27 & M2\\
-LFR-ST1 & M4\\
-MS-AD1 & M9\\
-MS-MNT1 & M12\\
-PR-PAR1 & M12\\
-PR-PAR2 & M12\\
-PR-RFT2 & M12\\
-PR-SCR1 & M12, M13\\
-SR-AR1 & M7\\
-SR-AR2 & M6\\
-SR-AR3 & M2, M7\\
-SR-IR1 & M7, M8, M9, M12\\
-SR-PR1 & M7, M9\\
-SR-PR2 & M7\\
-UHR-EOU2 & M4\\
-UHR-EOU3 & M3\\
-UHR-EOU5 & M4\\
-UHR-EOU6 & M4\\
+FR1 & M1, M2, M3\\
+FR2 & M1, M3\\
+FR3 & M2\\
+FR4 & M3\\
+FR5 & M4, M10\\
+FR6 & M4, M11\\
+FR7 & M6\\
+FR8 & M6, M9\\
+FR9 & M6, M11\\
+FR10 & M11\\
+FR11 & M11\\
+FR12 & M7, M9\\
+FR13 & M4, M6, M7, M8\\
+FR14 & M7, M8, M10\\
+FR15 & M6\\
+FR16 & M8\\
+FR17 & M11\\
+FR18 & M3, M11\\
+FR19 & M11\\
+FR20 & M11\\
+FR21 & M3, M4, M5, M7\\
+FR22 & M3, M11\\
+FR23 & M3\\
+FR24 & M11\\
+FR25 & M5, M11\\
+FR26 & M6\\
+FR27 & M11\\
+LFR-ST1 & M10\\
+MS-AD1 & M4\\
+MS-MNT1 & M7\\
+PR-PAR1 & M7\\
+PR-PAR2 & M7\\
+PR-RFT2 & M7\\
+PR-SCR1 & M7, M8\\
+SR-AR1 & M3\\
+SR-AR2 & M2\\
+SR-AR3 & M3, M11\\
+SR-IR1 & M3, M4, M5, M7\\
+SR-PR1 & M3, M4\\
+SR-PR2 & M3\\
+UHR-EOU2 & M10\\
+UHR-EOU3 & M6\\
+UHR-EOU5 & M10\\
+UHR-EOU6 & M10\\
 \bottomrule
 \caption{Trace Between Requirements and Modules}
 \label{TblRT}
@@ -487,9 +496,9 @@ UHR-EOU6 & M4\\
 \toprule
 \textbf{AC} & \textbf{Modules}\\
 \midrule
-AC1 & M2, M3, M10, M13\\
-AC2 & M2, M3, M8, M9, M11, M12\\
-AC3 & M3, M11, M12, M13\\
+AC1 & M6, M8, M11\\
+AC2 & M4, M5, M6, M7, M9, M11\\
+AC3 & M6, M7, M8, M9\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
@@ -520,7 +529,7 @@ AC3 & M3, M11, M12, M13\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{UsesHierarchy_3.png}
+\includegraphics[width=0.7\textwidth]{UsesHierarchy_4.png}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
