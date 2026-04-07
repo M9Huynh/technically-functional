@@ -33,11 +33,13 @@
 
 \section{Revision History}
 
-\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
-\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\begin{tabularx}{\textwidth}{p{5cm}p{2cm}X}
+\toprule {\bf Name(s)} & {\bf Date} & {\bf Notes}\\
 \midrule
-March 9th, 2026 & 1.0 & Created inital version of VnV Report\\
-Date 2 & 1.1 & Notes\\
+Maham, Vaisnavi, Eman, Cieran, Matthew & March 9th, 2026 & Created inital version of VnV Report\\
+Vaisnavi S. & April 4th, 2026 & Applied feedback to the VnV Report\\
+Vaisnavi S. & April 5th, 2026 & Applied feedback to the VnV Report\\
+Vaisnavi S. & April 6th, 2026 & Finalized the final version of the VnV Report\\
 \bottomrule
 \end{tabularx}
 
@@ -60,6 +62,9 @@ Date 2 & 1.1 & Notes\\
   \toprule		
   \textbf{symbol} & \textbf{description}\\
   \midrule 
+  VnV & Verification and Validation\\
+  SRS & Software Requirements Specification\\
+  API & Application Programming Interface\\
   TC & Test Case\\
   UT & Usability Test\\
   PR & Performance Test\\
@@ -76,10 +81,11 @@ Date 2 & 1.1 & Notes\\
 \pagenumbering{arabic}
 
 \section{Introduction}
-This document contains information about all the tests that were conducted to inspect PhysioCompanion's behaviour and output.
-There is some deviation from the original VnV plan, and the justifications are elaborated on within those sections. Functional tests
-are described initially, and those are followed by individual module or functionality unit tests. Changes that have been or 
-are in the process of being implemented are followed after. The document ends with some code coverage statistics and their discussion.
+This document presents the results of all tests conducted to evaluate the behaviour and output of 
+PhysioCompanion. The report aligns with the test cases outlined in the Verification and Validation (VnV) plan. 
+It begins with an evaluation of both functional and non-functional requirements, followed by individual module or
+functionality unit tests . The changes implemented after usability testing are then discussed, and the document 
+concludes with code coverage statistics and analysis.
 
 
 \section{Functional Requirements Evaluation}
@@ -350,87 +356,6 @@ are in the process of being implemented are followed after. The document ends wi
 	
 	\vspace{0.5em}
 	
-	\item \textbf{test-UT-4 : Account Creation (Usability)}
-	
-	\textbf{Initial State:} App installed on participant's device; invite code and PT license number provided.
-	
-	\textbf{Input:} Participant launched the app, selected their role, and completed account creation.
-	
-	\textbf{Output:} All participants created accounts successfully without assistance. PT license and invite code fields completed without difficulty. Minor font size feedback noted and resolved.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-5 : Exercise Recording Initiation}
-	
-	\textbf{Initial State:} Patient logged in on mobile device; camera permission granted; backend server running.
-	
-	\textbf{Input:} Participant navigated to the Record screen and pressed Start Recording.
-	
-	\textbf{Output:} Camera activated and pose detection began. On-screen prompts instructed participant to enter the detectable frame area. Navigation and button labels reported as clear.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-6 : Real-Time Pose Detection and Form Feedback}
-	
-	\textbf{Initial State:} Patient positioned within camera frame; pose detection active; backend returning joint angle and ROM metrics.
-	
-	\textbf{Input:} Participant performed knee extension repetitions.
-	
-	\textbf{Output:} App detected relevant body landmarks and displayed appropriate form feedback overlays. Rep count incremented correctly. Detection accuracy was reported as satisfactory.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-7 : Exercise Page (Instructions)}
-	
-	\textbf{Initial State:} Patient logged in; Exercises tab accessible.
-	
-	\textbf{Input:} Participant navigated to the Exercises page and reviewed listed exercises.
-	
-	\textbf{Output:} Exercises displayed with names, target muscle groups, set/rep counts, and step-by-step instructions. Instructions reported as clear and easy to follow.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-8 : Progress Screen (Session History)}
-	
-	\textbf{Initial State:} Patient logged in with at least one completed session stored in Firestore.
-	
-	\textbf{Input:} Participant navigated to the Progress tab.
-	
-	\textbf{Output:} Session history displayed with ROM and rep count data. Layout was readable and logically arranged. Participants suggested adding sets and pain level as future enhancements.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-9 : PT Dashboard (Patient List and Activity)}
-	
-	\textbf{Initial State:} Physiotherapist logged in; at least one linked patient with recorded sessions.
-	
-	\textbf{Input:} PT participant reviewed the home dashboard and selected a patient to view their activity history.
-	
-	\textbf{Output:} Dashboard displayed linked patients and activity history. Patient detail view showed session history and ROM chart. Layout reported as clear and sufficient for clinical use.
-	
-	\textbf{Result:} Pass
-	
-	\vspace{0.5em}
-	
-	\item \textbf{test-UT-10 : PT Feedback Submission}
-	
-	\textbf{Initial State:} Physiotherapist logged in; patient session detail page accessible.
-	
-	\textbf{Input:} PT participant selected a session entry and submitted a written comment.
-	
-	\textbf{Output:} Feedback saved to Firestore and associated with the session. Comment visible from the patient's session view. PT participants rated the feature as clinically useful.
-	
-	\textbf{Result:} Pass
 	
 \end{enumerate}
 
@@ -477,6 +402,91 @@ Minor wording improvements were noted and updated.
 \textbf{Output:} Average rating across categories was $\geq$ 4/5. Minor UI refinements (font size and button spacing) were applied based on feedback.
 
 \textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-4 : Account Creation (Usability)}
+	
+\textbf{Initial State:} App installed on participant's device; invite code and PT license number provided.
+
+\textbf{Input:} Participant launched the app, selected their role, and completed account creation.
+
+\textbf{Output:} All participants created accounts successfully without assistance. PT license and invite code fields completed without difficulty. Minor font size feedback noted and resolved.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-5 : Exercise Recording Initiation}
+
+\textbf{Initial State:} Patient logged in on mobile device; camera permission granted; backend server running.
+
+\textbf{Input:} Participant navigated to the Record screen and pressed Start Recording.
+
+\textbf{Output:} Camera activated and pose detection began. On-screen prompts instructed participant to enter the detectable frame area. Navigation and button labels reported as clear.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-6 : Real-Time Pose Detection and Form Feedback}
+
+\textbf{Initial State:} Patient positioned within camera frame; pose detection active; backend returning joint angle and ROM metrics.
+
+\textbf{Input:} Participant performed knee extension repetitions.
+
+\textbf{Output:} App detected relevant body landmarks and displayed appropriate form feedback overlays. Rep count incremented correctly. Detection accuracy was reported as satisfactory.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-7 : Exercise Page (Instructions)}
+
+\textbf{Initial State:} Patient logged in; Exercises tab accessible.
+
+\textbf{Input:} Participant navigated to the Exercises page and reviewed listed exercises.
+
+\textbf{Output:} Exercises displayed with names, target muscle groups, set/rep counts, and step-by-step instructions. Instructions reported as clear and easy to follow.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-8 : Progress Screen (Session History)}
+
+\textbf{Initial State:} Patient logged in with at least one completed session stored in Firestore.
+
+\textbf{Input:} Participant navigated to the Progress tab.
+
+\textbf{Output:} Session history displayed with ROM and rep count data. Layout was readable and logically arranged. Participants suggested adding sets and pain level as future enhancements.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-9 : PT Dashboard (Patient List and Activity)}
+
+\textbf{Initial State:} Physiotherapist logged in; at least one linked patient with recorded sessions.
+
+\textbf{Input:} PT participant reviewed the home dashboard and selected a patient to view their activity history.
+
+\textbf{Output:} Dashboard displayed linked patients and activity history. Patient detail view showed session history and ROM chart. Layout reported as clear and sufficient for clinical use.
+
+\textbf{Result:} Pass
+
+\vspace{0.5em}
+
+\item \textbf{test-UT-10 : PT Feedback Submission}
+
+\textbf{Initial State:} Physiotherapist logged in; patient session detail page accessible.
+
+\textbf{Input:} PT participant selected a session entry and submitted a written comment.
+
+\textbf{Output:} Feedback saved to Firestore and associated with the session. Comment visible from the patient's session view. PT participants rated the feature as clinically useful.
+
+\textbf{Result:} Pass
+
 
 \end{enumerate}
 		
@@ -610,7 +620,7 @@ were no major functional issues identified during review.
 	
 \section{Comparison to Existing Implementation}	
 
-This section will not be appropriate for every project.
+N/A.
 
 \section{Unit Testing}
 
@@ -625,12 +635,26 @@ modules.
 
 \subsection{Authentication}
 
-\subsubsection{Account Creation Module Tests}
+\subsubsection{Account Creation Tests}
 The following tests in Table \ref{table:account_creation_tests} verify the functionality of the account 
 creation module for both physiotherapists and patients, including validation checks and successful user 
 creation workflows.
 
-\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
+  % {cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
    % >{\raggedright\arraybackslash}p{1.5cm}
     %>{\raggedright\arraybackslash}p{4.5cm}
     %>{\raggedright\arraybackslash}p{4cm}
@@ -652,7 +676,7 @@ creation workflows.
   \endfoot
 
   \bottomrule
-  \caption{Account Creation Module Test Cases}
+  \caption{Account Creation Test Cases}
   \label{table:account_creation_tests}
   \endlastfoot
 
@@ -660,43 +684,62 @@ creation workflows.
   \texttt{validLicenses} with \texttt{active=true}. & Auth user is created. Firestore \texttt{users/\{uid\}} 
   document is written with \texttt{role="physio"}, trimmed name, lowercased email, uppercased license number, 
   \texttt{verified=true}, and \texttt{createdAt}. &
-  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  User created successfully and required data written to Firestore as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1.1, FR1.2 & Register physiotherapist with an invalid license format (e.g., a missing dash or incorrect digits). 
   & Error \texttt{"Invalid license format (example: ON-123456)."} is thrown. No Auth user is created. No Firestore 
-  writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  writes occur. &
+  Expected error was correctly returned and no unintended operations occurred. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1.1, FR1.2 & Register physiotherapist with valid format but license is not found in \texttt{validLicenses} or
-   \texttt{active != true}. & Error \texttt{"License not verified."} is thrown. No Auth user is created. No Firestore 
-   writes occur. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  \texttt{active != true}. & Error \texttt{"License not verified."} is thrown. No Auth user is created. No Firestore 
+  writes occur. &
+  Expected error was correctly returned and no unintended operations occurred. All assertions passed and matched expected behaviour.
+  & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1.1, FR1.3, FR2, FR3 & Register patient with invite code that exists in \texttt{inviteCodes}, is \texttt{active=true}, 
   \texttt{used=false}, and includes a \texttt{physioId}. & Auth user is created. Firestore \texttt{users/\{uid\}} 
   document is written with \texttt{role="patient"}, trimmed name, lowercased email, stored \texttt{physioId}, 
   normalized invite code, and \texttt{createdAt}. Invite is updated with \texttt{used=true} and 
-  \texttt{usedBy=\{uid\}}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  \texttt{usedBy=\{uid\}}. &
+  User created successfully and related records updated as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1.3, FR3 & Register patient with an invite code that does not exist in \texttt{inviteCodes}. &
   Error \texttt{"Invalid invite code."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
-  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  Expected error was correctly returned and no unintended operations occurred. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1.3, FR3 & Register patient with an invite code that exists but \texttt{active=false}. &
   Error \texttt{"Invite code inactive."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
-  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  Expected error was correctly returned and no unintended operations occurred. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1.3, FR2 & Register patient with an invite code that exists but \texttt{used=true}. &
   Error \texttt{"Invite code already used."} is thrown. No Auth user is created. No Firestore writes/updates occur. &
-  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  Expected error was correctly returned and no unintended operations occurred. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1.3, FR2 & Register patient with an invite code that exists but missing \texttt{physioId}. &
   Error \texttt{"Invite code missing physio link."} is thrown. No Auth user is created. No Firestore writes/updates 
-  occur. & All assertions pass. & \cellcolor{green} Pass \\
-\end{longtable}
+  occur. &
+  Expected error was correctly returned and no unintended operations occurred. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
+  \end{longtable}
 
-\subsubsection{Valid User Module Tests}
+\subsubsection{Valid User Tests}
 The following tests in Table \ref{table:valid_user_tests} verify the functionality of the valid user module.
 
-\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
+  % {cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
    % >{\raggedright\arraybackslash}p{1.5cm}
     %>{\raggedright\arraybackslash}p{4.5cm}
     %>{\raggedright\arraybackslash}p{4cm}
@@ -718,30 +761,32 @@ The following tests in Table \ref{table:valid_user_tests} verify the functionali
   \endfoot
 
   \bottomrule
-  \caption{Valid User Module Test Cases}
+  \caption{Valid User Test Cases}
   \label{table:valid_user_tests}
   \endlastfoot
 
   TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials for a physiotherapist whose Firestore profile \texttt{users/\{uid\}} 
   exists and contains \texttt{role="physio"}. & Login returns an object containing the \texttt{uid} and stored 
-  profile data (including role and user fields). No errors occur. & All assertions pass. 
+  profile data (including role and user fields). No errors occur. &
+  Login returned correct uid and physiotherapist data as expected. All assertions passed and matched expected behaviour.
   & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials for a patient whose Firestore profile \texttt{users/\{uid\}} 
   exists and contains \texttt{role="patient"}. & Login returns an object containing the \texttt{uid} and 
-  stored profile data (including role and user fields). No errors occur. & All assertions pass. 
+  stored profile data (including role and user fields). No errors occur. &
+  Login returned correct uid and patient data as expected. All assertions passed and matched expected behaviour.
   & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & FR1, FR1.1, SR-AR1 & Login with valid credentials where the Firestore profile \texttt{users/\{uid\}} does not exist. &
-  Error \texttt{"User profile missing in Firestore."} is thrown and login is rejected. & 
-  All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  Error \texttt{"User profile missing in Firestore."} is thrown and login is rejected. &
+  Expected error was correctly returned and login was rejected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
   TC\testcount & & Logout after a user session is active. &
   The Auth sign-out operation is called once and completes without error. &
-  All assertions pass. & \cellcolor{green} Pass \\
-\end{longtable}
+  Sign-out completed successfully without errors. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
+  \end{longtable}
 
-\subsection{User Account Module Tests}
+\subsection{User Account Tests}
 The tests below outline the User Account module functionality. Note that many new functions were added for this
 iteration. Currently, it serves as an interface between the 
 database and the various other components. Additionally, there may be some overlap between the Account Creation module
@@ -749,7 +794,21 @@ and Valid User module. While the modules themselves perform a few different func
 due to their handling of the same entity. For example, the Valid User module consists of tests the ensure successful Login
 and the User Account module test cases extend that to testing for invalid and non-existent users.
 
-\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
+  % {cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
   \hline
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -773,44 +832,71 @@ and the User Account module test cases extend that to testing for invalid and no
 
   % USER MANAGEMENT FUNCTIONS
   \multicolumn{6}{c}{\textbf{USER MANAGEMENT FUNCTIONS}} \\ \hline
-  
-  TC13 & FR23, FR21 & Get User Data: Test with valid \texttt{uid}, non-existent \texttt{uid}, and empty \texttt{uid}. & Valid \texttt{uid} returns \texttt{UserData}; non-existent returns null; empty throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
-  
-  TC14 & FR21 & User Lookup: Test get user by email and email existence check with registered and unregistered emails. & Registered email returns user and true; unregistered returns null and false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
-  
-  TC15 & FR2, FR6, FR22 & Update User: Test update user data. & Valid update returns true. & All assertions pass. & \cellcolor{green} Pass \\ \hline
-  
-  TC16 & FR4 & Delete User: Test delete by \texttt{uid} and by email with valid and non-existent cases. & Valid cases return true; non-existent return false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  TC13 & FR23, FR21 & Get User Data: Test with valid \texttt{uid}, non-existent \texttt{uid}, and empty \texttt{uid}. & Valid \texttt{uid} returns \texttt{UserData}; non-existent returns null; empty throws error. &
+  Correct data was returned for valid and invalid inputs as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC14 & FR21 & User Lookup: Test get user by email and email existence check with registered and unregistered emails. & Registered email returns user and true; unregistered returns null and false. &
+  Lookup results matched expected values for registered and unregistered emails. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC15 & FR2, FR6, FR22 & Update User: Test update user data. & Valid update returns true. &
+  Update operation completed successfully and returned expected result. All assertions passed and matched expected behaviour.
+  & \cellcolor{green} Pass \\ \hline
+
+  TC16 & FR4 & Delete User: Test delete by \texttt{uid} and by email with valid and non-existent cases. & Valid cases return true; non-existent return false. &
+  Delete operation behaved correctly for valid and invalid cases. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
 
   % QUERY FUNCTIONS
   \multicolumn{6}{c}{\textbf{QUERY FUNCTIONS}} \\ \hline
-  
-  TC17 & FR18 & User Queries: Test get patients by physioId, search by name, and get all users. & Returns correctly filtered arrays; errors return empty arrays. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  TC17 & FR18 & User Queries: Test get patients by physioId, search by name, and get all users. & Returns correctly filtered arrays; errors return empty arrays. &
+  Query results returned correct filtered data and handled errors as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
 
   % SPECIALIZED FUNCTIONS
-  %\multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline
-  
-  TC18 & FR21, FR25 & User Info Lookup: Test getUserdbInfo with name only and with name+birthday filter. & Returns categorized patients/physios correctly; filtering works as expected. & All assertions pass. & \cellcolor{green} Pass \\ \hline
-  %SPECIALIZED FUNCTIONS
+  TC18 & FR21, FR25 & User Info Lookup: Test getUserdbInfo with name only and with name+birthday filter. & Returns categorized patients/physios correctly; filtering works as expected. &
+  Lookup results were correctly categorized and filtered as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  % SPECIALIZED FUNCTIONS
   \multicolumn{6}{c}{\textbf{SPECIALIZED FUNCTIONS}} \\ \hline  
-  TC19 & FR2, FR4, FR22 & PT\_Account\_Delete: Test with valid physio, non-physio user, and non-existent patient. & Valid case deletes patient; non-physio throws error; non-existent throws error. & All assertions pass. & \cellcolor{green} Pass \\ \hline
-  
-  TC20 & SR-AR1, SR-PR1 & Test usernamePwMatch and authenticateUser with valid credentials, invalid password, and non-existent user. & Valid returns true/user; invalid throws appropriate errors; non-existent returns null. & All assertions pass. & \cellcolor{green} Pass \\ \hline
-  
-  TC21 & SR-AR1, SR-AR2 & System Initialization: Test initializeSystem. & Logs success message to console. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  TC19 & FR2, FR4, FR22 & \path{PT_Account_Delete:} Test with valid physio, non-physio user, and non-existent patient. & Valid case deletes patient; non-physio throws error; non-existent throws error. &
+  Delete operation handled valid and invalid cases correctly with expected outcomes. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC20 & SR-AR1, SR-PR1 & Test usernamePwMatch and authenticateUser with valid credentials, invalid password, and non-existent user. & Valid returns true/user; invalid throws appropriate errors; non-existent returns null. &
+  Authentication results matched expected outcomes for all cases. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC21 & SR-AR1, SR-AR2 & System Initialization: Test initializeSystem. & Logs success message to console. &
+  System initialized successfully and logged expected output. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
 
   % VALIDATION HELPERS
   \multicolumn{6}{c}{\textbf{VALIDATION HELPERS}} \\ \hline
-  
-  TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. & All assertions pass. & \cellcolor{green} Pass \\ \hline
+
+  TC22 & FR1, SR-AR1 & Test validateCredentials with correct and incorrect passwords. & Correct returns true; incorrect returns false. &
+  Validation results correctly distinguished valid and invalid credentials. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
 \end{longtable}
 
-\subsection{Live Feedback Module Tests}
+
+\subsection{Live Feedback Tests}
 The following tests in Table \ref{table:live_feedback_tests} verify the functionality of the live 
 feedback module, including real-time corrective message generation, safety warning triggers, rep 
 counting, and physiotherapist comment submission and retrieval.
 
-\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
+  % {cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
 	\toprule
 	\textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
 	\textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -828,41 +914,41 @@ counting, and physiotherapist comment submission and retrieval.
 	\endfoot
 	
 	\bottomrule
-	\caption{Live Feedback Module Test Cases}
+	\caption{Live Feedback Test Cases}
 	\label{table:live_feedback_tests}
 	\endlastfoot
 	
 	TC23 & FR13, FR14 & Submit joint angle measurements within the acceptable range for a knee extension rep. &
-	No corrective feedback message is generated. Rep count increments by one. Positive reinforcement message returned. &
-	All assertions pass. & \cellcolor{green} Pass \\ \midrule
-	
-	TC24 & FR13, FR14 & Submit joint angle measurements below the minimum threshold for knee extension (insufficient range of motion). &
-	Corrective feedback message is generated (e.g., \texttt{"Extend your knee further to complete the rep."}). Rep is not counted. &
-	All assertions pass. & \cellcolor{green} Pass \\ \midrule
-	
-	TC25 & FR13, FR14 & Submit joint angle measurements above the maximum safe threshold, simulating an overextension. &
-	Corrective feedback message is generated (e.g., \texttt{"Reduce the range of your movement."}). Rep is not counted. &
-	All assertions pass. & \cellcolor{green} Pass \\ \midrule
-	
-	TC26 & FR16, PR-SCR1 & Submit joint angle measurements that exceed the defined dangerous movement threshold. &
-	Safety warning is triggered (e.g., \texttt{"Stop immediately — dangerous movement detected."}). Exercise session is halted. &
-	All assertions pass. & \cellcolor{green} Pass \\ \midrule
-	
-	TC27 & FR14, PR-SL2 & Submit a sequence of 5 consecutive valid reps and verify feedback generation latency for each. &
-	Feedback is returned for each rep within 2 seconds. Rep count reflects 5 completed reps. No degradation in response time across reps. &
-	All assertions pass. & \cellcolor{green} Pass \\ \midrule
-	
-	TC28 & FR14 & Invoke the feedback generator with no pose landmarks detected (user out of frame). &
-	Feedback message returned is \texttt{"Please step into the camera frame."} No rep is counted. No safety warning triggered. &
-	All assertions pass. & \cellcolor{green} Pass \\ \midrule
-	
-	TC29 & FR20, FR25 & Physiotherapist submits a written comment on a completed patient session. &
-	Comment is saved to Firestore and associated with the correct session document. No errors thrown. &
-	All assertions pass. & \cellcolor{green} Pass \\ \midrule
-	
-	TC30 & FR19, FR25 & Patient retrieves physiotherapist feedback for a session that has an associated PT comment. &
-	Correct comment text is returned and associated with the matching session. Non-existent session returns null. &
-	All assertions pass. & \cellcolor{green} Pass \\
+  No corrective feedback message is generated. Rep count increments by one. Positive reinforcement message returned. &
+  Feedback and rep count behaved as expected for valid input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+
+  TC24 & FR13, FR14 & Submit joint angle measurements below the minimum threshold for knee extension (insufficient range of motion). &
+  Corrective feedback message is generated (e.g., \texttt{"Extend your knee further to complete the rep."}). Rep is not counted. &
+  Corrective feedback was returned and rep was not counted as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+
+  TC25 & FR13, FR14 & Submit joint angle measurements above the maximum safe threshold, simulating an overextension. &
+  Corrective feedback message is generated (e.g., \texttt{"Reduce the range of your movement."}). Rep is not counted. &
+  Corrective feedback was returned and rep was not counted as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+
+  TC26 & FR16, PR-SCR1 & Submit joint angle measurements that exceed the defined dangerous movement threshold. &
+  Safety warning is triggered (e.g., \texttt{"Stop immediately — dangerous movement detected."}). Exercise session is halted. &
+  Safety warning was triggered and session was halted as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+
+  TC27 & FR14, PR-SL2 & Submit a sequence of 5 consecutive valid reps and verify feedback generation latency for each. &
+  Feedback is returned for each rep within 2 seconds. Rep count reflects 5 completed reps. No degradation in response time across reps. &
+  Feedback latency and rep count met expected performance requirements. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+
+  TC28 & FR14 & Invoke the feedback generator with no pose landmarks detected (user out of frame). &
+  Feedback message returned is \texttt{"Please step into the camera frame."} No rep is counted. No safety warning triggered. &
+  Correct feedback was returned and no rep was counted as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+
+  TC29 & FR20, FR25 & Physiotherapist submits a written comment on a completed patient session. &
+  Comment is saved to Firestore and associated with the correct session document. No errors thrown. &
+  Comment was saved and linked to the correct session as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+
+  TC30 & FR19, FR25 & Patient retrieves physiotherapist feedback for a session that has an associated PT comment. &
+  Correct comment text is returned and associated with the matching session. Non-existent session returns null. &
+  Correct comment was retrieved and invalid cases handled as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 \end{longtable}
 	
 \subsection{Video Capture and Review Tests}
@@ -870,7 +956,21 @@ The tests below outline the Video Capture and Review functionality. Some of the 
 
 \begin{center}
   
-\begin{longtable}{cp{1.2cm}p{2.5cm}p{4cm}p{4cm}p{2.75cm}c}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
+  % {cp{1.2cm}p{2.5cm}p{4cm}p{4cm}p{2.75cm}c}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -892,32 +992,49 @@ The tests below outline the Video Capture and Review functionality. Some of the 
   \label{table:video_capture_tests}
   \endlastfoot
   
-  TC31 & FR12 & Call \texttt{get\_pose \_connections (legs\_only= False)} and verify against \texttt{POSE\_ CONNECTIONS}. & \texttt{POSE\_CONNECTIONS} and \texttt{LEG\_CONNECTIONS} have length greater than 0. \texttt{LEG\_CONNECTIONS} length is less than \texttt{POSE\_CONNECTIONS}, and the set of connections from \texttt{get\_pose\_connections(False)} equals the set of \texttt{POSE\_CONNECTIONS}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC31 & FR12 & Call \path{get_pose_connections} \path{(legs_only= False)} and verify against \path{POSE_CONNECTIONS}. & \path{POSE_CONNECTIONS} and \path{LEG_CONNECTIONS} have length greater than 0. \path{LEG_CONNECTIONS} length is less than \path{POSE_CONNECTIONS}, and the set of connections from \path{get_pose_connections(False)} equals the set of \path{POSE_CONNECTIONS}. &
+  Connections returned matched expected full pose connections. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC32 & FR12 & Call \texttt{get\_pose \_connections (legs\_only= True)} and verify against \texttt{LEG\_CONNECTIONS}. & The connections returned equal the set of \texttt{LEG\_CONNECTIONS}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC32 & FR12 & Call \path{get_pose_connections} \path{(legs_only= True)} and verify against \path{LEG_CONNECTIONS}. & The connections returned equal the set of \path{LEG_CONNECTIONS}. &
+  Connections returned matched expected leg-only connections. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC33 & FR12 & Call \texttt{extract\_ landmarks()} with a valid pose result containing 33 landmarks. & Returns a list of 33 landmarks. Each landmark has x, y, z values that are close to the expected i/33 values. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC33 & FR12 & Call \path{extract_landmarks()} with a valid pose result containing 33 landmarks. & Returns a list of 33 landmarks. Each landmark has x, y, z values that are close to the expected i/33 values. &
+  Landmarks were extracted correctly with expected values. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC34 & FR26 & Call \texttt{extract\_ landmarks()} with None and with an empty result (pose\_landmarks =None). & Returns None for both. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC34 & FR26 & Call \path{extract_landmarks()} with None and with an empty result \path{pose_landmarks=None}. & Returns None for both. &
+  Function correctly returned None for invalid inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC35 & FR7 & Initialize PoseCamera with mocked VideoCapture and mocked PoseLandmarker. & Camera initializes successfully. \texttt{display\_size} is set to (640, 480). \texttt{cap.set} is called to configure frame dimensions. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC35 & FR7 & Initialize PoseCamera with mocked VideoCapture and mocked PoseLandmarker. & Camera initializes successfully. \path{display_size} is set to (640, 480). \texttt{cap.set} is called to configure frame dimensions. &
+  Camera initialized and configured as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC36 & FR7 & Call \texttt{get\_frame()} with mocked camera that returns a numpy array frame. & Returns (True, frame) where frame is a numpy array. Frame is resized to display dimensions. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC36 & FR7 & Call \path{get_frame()} with mocked camera that returns a numpy array frame. & Returns (True, frame) where frame is a numpy array. Frame is resized to display dimensions. &
+  Frame was retrieved and resized correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC37 & FR12 & Call \texttt{process\_ pose()} with a mocked frame. & Returns a mock result. The pose detector's \texttt{detect} method is called once with the converted RGB image. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC37 & FR12 & Call \path{process_pose()} with a mocked frame. & Returns a mock result. The pose detector's \texttt{detect} method is called once with the converted RGB image. &
+  Pose processing returned expected result and called detector correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC38 & FR14 & Call \texttt{draw\_ landmarks()} with a mock result and a numpy array frame. & Returns the frame. OpenCV's \texttt{line} and \texttt{circle} functions are called to draw the pose landmarks. & All assertions pass. & \cellcolor{green} Pass \\
+  TC38 & FR14 & Call \path{draw_landmarks()} with a mock result and a numpy array frame. & Returns the frame. OpenCV's \texttt{line} and \texttt{circle} functions are called to draw the pose landmarks. &
+  Landmarks were drawn correctly on frame. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 \end{longtable}
 \end{center}
 
 \subsection{Computer Vision and Form Analysis Tests}
 The following tests in Table \ref{table:computer_vision_tests} verify the functionality of the computer vision and form analysis module by ensuring that joint angles are accurately calculated, knee angles are correctly extracted from pose landmarks, the analyzer calibrates to the user’s range of motion, repetitions are counted properly, and summary metrics are generated as expected.
 
-\begin{longtable}{c
-    >{\raggedright\arraybackslash}p{1.2cm}
-    >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{3.5cm}
-    >{\raggedright\arraybackslash}p{2.5cm} c}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -939,87 +1056,133 @@ The following tests in Table \ref{table:computer_vision_tests} verify the functi
   \label{table:computer_vision_tests}
   \endlastfoot
 
-  TC39 & FR12 & Call \texttt{angle\_deg()} with points forming a 90-degree angle: a=(0,1), b=(1,1), c=(1,0). & Returns 90.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC39 & FR12 & Call \path{angle_deg()} with points forming a 90-degree angle: a=(0,1), b=(1,1), c=(1,0). & Returns 90.0 degrees (within 0.01 tolerance). &
+  Angle calculation returned expected value within tolerance. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC40 & FR12 & Call \texttt{angle\_deg()} with points forming a 45-degree angle: a=(0,1), b=(1,1), c=(0,0). & Returns 45.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC40 & FR12 & Call \path{angle_deg()}  with points forming a 45-degree angle: a=(0,1), b=(1,1), c=(0,0). & Returns 45.0 degrees (within 0.01 tolerance). &
+  Angle calculation returned expected value within tolerance. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC41 & FR12 & Call \texttt{angle\_deg()} with points forming a 180-degree straight line: a=(0,1), b=(1,1), c=(2,1). & Returns 180.0 degrees (within 0.01 tolerance). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC41 & FR12 & Call \path{angle_deg()}  with points forming a 180-degree straight line: a=(0,1), b=(1,1), c=(2,1). & Returns 180.0 degrees (within 0.01 tolerance). &
+  Angle calculation returned expected value within tolerance. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC42 & FR26 & Call \texttt{angle\_deg()} with None values for each parameter position: (None, (1,1), (1,0)), ((0,1), None, (1,0)), ((0,1), (1,1), None). & Returns None for all three cases. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC42 & FR26 & Call \path{angle_deg()}  with None values. & Returns None for all three cases. &
+  Function correctly handled invalid inputs and returned None. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC43 & FR12 & Call \texttt{knee\_angle\_ from\_result()} with a valid mock result containing right leg landmarks (hip=24, knee=26, ankle=28) forming a 90-degree angle. & Returns a valid angle value between 0 and 180 degrees. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC43 & FR12 & Call \path{knee_angle_from_result()} (right leg). & Returns valid angle. &
+  Knee angle was computed correctly from valid input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC44 & FR12 & Call \texttt{knee\_angle\_ from\_result()} with a valid mock result containing left leg landmarks (hip=23, knee=25, ankle=27) forming a 90-degree angle. & Returns a valid angle value between 0 and 180 degrees. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC44 & FR12 & Call \path{knee_angle_from_result()} (left leg). & Returns valid angle. &
+  Knee angle was computed correctly from valid input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC45 & FR26 & Call \texttt{knee\_angle\_ from\_result()} with None instead of a result object. & Returns None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC45 & FR26 & Call \path{knee_angle_from_result()} with None. & Returns None. &
+  Function correctly returned None for invalid input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC46 & FR26 & Call \texttt{knee\_angle\_ from\_result()} with a result object that has \texttt{pose\_landmarks=None}. & Returns None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC46 & FR26 & Call with \path{pose_landmarks=None}. & Returns None. &
+  Function correctly handled missing landmarks. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC47 & FR26 & Modify the mock result by setting the right knee landmark (index 26) to None, then call \texttt{knee\_angle\_ from\_result()} with side="RIGHT". & Returns None due to missing landmark. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC47 & FR26 & Missing right knee landmark. & Returns None. &
+  Missing landmark was handled correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC48 & FR26 & Modify the mock result by setting the left knee landmark (index 25) to None, then call \texttt{knee\_angle\_ from\_result()} with side="LEFT". & Returns None due to missing landmark. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC48 & FR26 & Missing left knee landmark. & Returns None. &
+  Missing landmark was handled correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC49 & FR26 & Set the mock result's \texttt{pose\_landmarks} to an empty list and call \texttt{knee\_angle\_ from\_result()}. & Returns None due to empty landmarks. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC49 & FR26 & Empty landmarks. & Returns None. &
+  Empty input was handled correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC50 & FR12 & Initialize Analyzer with default values. & \texttt{started=False}, \texttt{min\_angle=0.0}, \texttt{max\_angle=0.0}, \texttt{is\_calibrating=False}, \texttt{cal\_start\_ts=None}, \texttt{cal\_duration\_s=10.0}, \texttt{cal\_min=None}, \texttt{cal\_max=None}, \texttt{rep\_count=0}, \texttt{current\_rep=None}, \texttt{rep\_durations=[]}, \texttt{rep\_state=""}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC50 & FR12 & Initialize Analyzer. & Default values set. &
+  Analyzer initialized with correct default state. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC51 & FR8, FR27 & Call \texttt{start\_calibration (duration\_s=5.0)}. & \texttt{is\_calibrating= True}, \texttt{cal\_duration\_s=5.0}, \texttt{cal\_start\_ts} is set, \texttt{cal\_min=None}, \texttt{cal\_max=None}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC51 & FR8, FR27 & Start calibration. & Calibration fields updated. &
+  Calibration started and parameters set correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC52 & FR8, FR27 & During calibration, update with angles [30, 45, 60, 50, 70, 20]. & \texttt{cal\_min} updates to min value (20), \texttt{cal\_max} updates to max value (70). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC52 & FR8, FR27 & Calibration updates. & Min/max updated. &
+  Calibration values updated correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC53 & FR8, FR27 & During calibration with duration 0.1s, update with angle 50 at t=100.05s (within duration), then angle 60 at t=100.16s (past duration). & First update: \texttt{is\_calibrating} remains True. Second update: \texttt{is\_calibrating} becomes False, \texttt{started} becomes True, \texttt{min\_angle=50}, \texttt{max\_angle=60}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC53 & FR8, FR27 & Calibration timing. & Calibration completes. &
+  Calibration timing handled correctly and state updated. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC54 & FR8, FR26 & During calibration, call \texttt{\_calibrate\_ with\_angle(None)}. & Calibration ignores None values. \texttt{cal\_min} and \texttt{cal\_max} remain None. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
-  
-  TC55 & FR8, FR16 & Set \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, \texttt{started=True} & \texttt{rep\_state} is either "Extension" or empty. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC54 & FR8, FR26 & Calibration with None. & Ignored. &
+  Invalid input ignored during calibration as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC56 & FR8, FR14 & With rep state "Extension", update with angle 35. & Rep state transitions to "Flexion". \texttt{current\_rep} timestamp is updated. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC55 & FR8, FR16 & Set analyzer state. & Valid state. &
+  Analyzer state initialized correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC57 & FR8, FR11 & With rep state "Flexion" and \texttt{current\_rep=100.0}, update with angle 68 at t=101.5s (1.5s later). & Rep state transitions to "Extension". Rep count increments to 1. Rep duration of 1.5s is recorded. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC56 & FR8, FR14 & Extension → Flexion. & State change. &
+  Rep state transitioned correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC58 & FR8, FR11 & With rep state "Flexion" but \texttt{current\_rep=None}, update with angle 68. & Rep state transitions to "Extension" but no rep is counted. Rep count remains 0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC57 & FR8, FR11 & Flexion → Extension. & Rep counted. &
+  Rep counted and duration recorded correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC59 & FR8, FR12 & Call \texttt{update(25)} and \texttt{update(75)} and verify min/max expansion via \texttt{\_rep\_update}. & \texttt{min\_angle} updates to 25, \texttt{max\_angle} updates to 75. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC58 & FR8, FR11 & Missing current rep. & No count. &
+  Rep was not counted as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC60 & FR8, FR27 & During calibration mode, call \texttt{update(45.0)}. & \texttt{\_calibrate\_ with\_angle} is called with 45.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC59 & FR8, FR12 & Min/max expansion. & Updated values. &
+  Min and max values updated correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC61 & FR8, FR12 & Before \texttt{started} is set, call \texttt{update(45.0)}. & \texttt{min\_angle} and \texttt{max\_angle} are both set to 45.0. \texttt{started} becomes True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC60 & FR8, FR27 & Calibration update call. & Function called. &
+  Calibration update was triggered correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC62 & FR8, FR27 & With \texttt{started=True}, \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, call \texttt{update(20.0)}. & \texttt{min\_angle} updates to 20.0. \texttt{max\_angle} remains 70.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC61 & FR8, FR12 & Initial update. & Set min/max. &
+  Initial values set correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC63 & FR8, FR27 & With \texttt{started=True}, \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, call \texttt{update(80.0)}. & \texttt{max\_angle} updates to 80.0. \texttt{min\_angle} remains 30.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC62 & FR8, FR27 & Update lower bound. & Min updated. &
+  Minimum angle updated correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC64 & FR8, FR26 & With \texttt{started=True}, call \texttt{update(None)}. & Values remain unchanged: \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC63 & FR8, FR27 & Update upper bound. & Max updated. &
+  Maximum angle updated correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC65 & FR11, FR17 & With \texttt{min\_angle=30.0}, \texttt{max\_angle=70.0}, \texttt{rep\_count=5}, \texttt{rep\_state= "Extension"}, \texttt{rep\_durations=[1.2, 1.3, 1.1, 1.4, 1.2]}, call \texttt{summary()}. & Summary contains all expected keys: \texttt{min\_degree}, \texttt{max\_degree}, \texttt{rom\_degree}, \texttt{calibrating}, \texttt{cal\_time\_left}, \texttt{rep\_count}, \texttt{current\_rep\_duration}, \texttt{avg\_rep\_duration}, \texttt{rep\_state}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC64 & FR8, FR26 & Update with None. & No change. &
+  State remained unchanged as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC66 & FR11, FR17 & With \texttt{min\_angle=30.123}, \texttt{max\_angle=70.456}, \texttt{rep\_count=5}, \texttt{rep\_state= "Extension"}, \texttt{rep\_durations=[1.2, 1.3, 1.1, 1.4, 1.2]}, call \texttt{summary()}. & \texttt{min\_degree} rounds to 30.1, \texttt{max\_degree} rounds to 70.5, \texttt{rom\_degree} calculates to 40.3. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC65 & FR11, FR17 & Summary output. & All fields present. &
+  Summary returned expected structure and values. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC67 & FR8, FR27 & During calibration with \texttt{cal\_start\_ts=100.0}, \texttt{cal\_duration\_s=10.0}, at current time 105.0, call \texttt{summary()}. & \texttt{calibrating=True}, \texttt{cal\_time\_left=5.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC66 & FR11, FR17 & Summary rounding. & Rounded values. &
+  Summary values were computed and rounded correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC68 & FR11, FR17 & When not calibrating, call \texttt{summary()}. & \texttt{calibrating=False}, \texttt{cal\_time\_left=0.0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC67 & FR8, FR27 & Calibration summary. & Time left. &
+  Calibration state and timing reported correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC69 & FR11, FR17 & With \texttt{rep\_durations=[]} (no reps completed), call \texttt{summary()}. & \texttt{avg\_rep\_duration=0}, \texttt{current\_rep\_ duration=0}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC68 & FR11, FR17 & Non-calibrating summary. & No time left. &
+  Summary correctly reflected non-calibrating state. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC70 & FR11, FR8 & With \texttt{current\_rep=100.0} and \texttt{rep\_durations=[1.2, 1.3]}, at current time 101.5, call \texttt{summary()}. & \texttt{current\_rep\_ duration=1.5}, \texttt{avg\_rep\_ duration=1.25}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC69 & FR11, FR17 & No reps. & Zero durations. &
+  Summary handled empty rep data correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC71 & FR8, FR12 & With \texttt{min\_angle=50.0}, \texttt{max\_angle=50.0}, \texttt{started=True}, call \texttt{\_rep\_update(50.0)}. & Function handles gracefully without division by zero errors. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC70 & FR11, FR8 & Active rep timing. & Correct durations. &
+  Rep duration values calculated correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC72 & FR12, FR26 & With \texttt{started=True}, \texttt{min\_angle=-10.0}, \texttt{max\_angle=30.0}, update with angle -20.0 then 40.0. & \texttt{min\_angle} expands to -20.0, \texttt{max\_angle} expands to 40.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC71 & FR8, FR12 & Zero ROM. & No errors. &
+  Edge case handled without errors. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC73 & FR12, FR26 & With \texttt{started=True}, \texttt{min\_angle=0.0}, \texttt{max\_angle=180.0}, update with angle 200.0. & \texttt{max\_angle} expands to 200.0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC72 & FR12, FR26 & Negative or Positive update. & Range expands. &
+  Angle range updated correctly for edge values. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC74 & FR8 & With \texttt{min\_angle=50.0}, \texttt{max\_angle=50.0}, \texttt{started=True}, \texttt{rep\_state= "Extension"}, call \texttt{\_rep\_update(50.0)}. & No state change occurs. Rep state remains "Extension". Rep count remains 0. & All assertions pass. & \cellcolor{green} Pass \\
+  TC73 & FR12, FR26 & Large angle. & Max expands. &
+  Upper bound updated correctly. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
+
+  TC74 & FR8 & No state change case. & No update. &
+  State remained unchanged as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 \end{longtable}
 
 \subsection{Performance and Latency Tests}
 The following tests in Table \ref{table:performance_latency_tests} verify the functionality of the performance and latency module by ensuring that the backend services initialize correctly, API endpoints respond appropriately to valid and invalid requests, frame processing handles mirroring and landmark detection correctly, frontend services communicate with the backend, and exercise metrics are saved to Firestore with proper error handling.
 
-\begin{longtable}{c
-    >{\raggedright\arraybackslash}p{1.2cm}
-    >{\raggedright\arraybackslash}p{4cm}
-    >{\raggedright\arraybackslash}p{3.5cm}
-    >{\raggedright\arraybackslash}p{2.5cm} c}
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
   \toprule
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -1041,73 +1204,88 @@ The following tests in Table \ref{table:performance_latency_tests} verify the fu
   \label{table:performance_latency_tests}
   \endlastfoot
 
-  TC75 & FR12 & Start the PoseBackend with mocked values. & PoseBackend init values work as intended successfully and \texttt{is\_calibrating} is set to True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC75 & FR12 & Start the PoseBackend with mocked values. & PoseBackend init values work as intended successfully and \path{is_calibrating} is set to True. & Backend initialized with \path{is_calibrating=True} as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC76 & FR8 & Call \texttt{reset()} method on PoseBackend. & Previous analyzer is replaced with a newer analyzer object. New one has \texttt{is\_calibrating} set to True. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC76 & FR8 & Call \path{reset()} method on PoseBackend. & Previous analyzer is replaced with a newer analyzer object. New one has \path{is_calibrating} set to True. & Previous analyzer was replaced with a new analyzer instance and \path{is_calibrating=True} was correctly set. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC77 & FR8 & Send POST request to \texttt{/reset} endpoint. & Response status 200 with JSON \texttt{\{"ok": true\}}. Backend reset method is called. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC77 & FR8 & Send POST request to \path{/reset} endpoint. & Response status 200 with JSON \path{\{"ok": true\}}. Backend reset method is called. & Response returned status 200 with correct JSON and backend reset method was successfully invoked. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC78 & FR7, FR26 & Send POST request to \texttt{/process\_frame} with empty image data. & Response status 400 with error message \texttt{"Missing imageBase64"}. Landmarks is null. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC78 & FR7, FR26 & Send POST request to \path{/process_frame} with empty image data. & Response status 400 with error message \path{"Missing} \path{imageBase64"}. Landmarks is null. & Response returned status 400 with the expected error message and null landmarks for missing input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC79 & FR7, FR26 & Send POST request to \texttt{/process\_frame} with invalid base64 image string. & Response status 400 with error message. No frame processing occurs. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC79 & FR7, FR26 & Send POST request to \path{/process_frame} with invalid base64 image string. & Response status 400 with error message. No frame processing occurs. & Response returned status 400 with error message and no frame processing occurred for invalid input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC80 & FR7, FR12 & Send POST request to \texttt{/process\_frame} with valid base64 image, \texttt{side="RIGHT"}, \texttt{mirrored=true}, \texttt{legsOnly=true}. Landmarks detected. & Response status 200. Contains all landmarks (33). Metrics contain correct values (angle=45.6, rep\_count=5, rep\_state="Extension"). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC80 & FR7, FR12 & Send POST request to \path{/process_frame} with valid base64 image, \path{side="RIGHT"}, \path{mirrored=true}, \path{legsOnly=true}. Landmarks detected. & Response status 200. Contains all landmarks (33). Metrics contain correct values \path{angle=45.6, rep\_count=5, rep\_state="Extension"}. & Response returned status 200 with all 33 landmarks and correct metrics including angle, rep count, and rep state. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC81 & FR7, FR26 & Send POST request to \texttt{/process\_frame} with valid image but no pose landmarks detected. & Response status 200. Landmarks is null. Default metrics returned with \texttt{calibrating=True}. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC81 & FR7, FR26 & Send POST request to \path{/process_frame} with valid image but no pose landmarks detected. & Response status 200. Landmarks is null. Default metrics returned with \path{calibrating=True}. & Response returned status 200 with null landmarks and default metrics including \path{calibrating=True}. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC82 & FR7 & Send POST request to \texttt{/process\_frame} with \texttt{mirrored=True} and verify frame flipping. & Frame is flipped horizontally before processing. \texttt{cv2.flip} is called once with the frame. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC82 & FR7 & Send POST request to \path{/process_frame} with \path{mirrored=True} and verify frame flipping. & Frame is flipped horizontally before processing. \path{cv2.flip} is called once with the frame. & Frame was correctly flipped horizontally and \path{cv2.flip} was called once as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC83 & FR7 & Send POST request to \texttt{/process\_frame} with \texttt{mirrored=False} and verify no frame flipping. & Frame is not flipped. \texttt{cv2.flip} is not called. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC83 & FR7 & Send POST request to \path{/process_frame} with \path{mirrored=False} and verify no frame flipping. & Frame is not flipped. \path{cv2.flip} is not called. & Frame was not flipped and \path{cv2.flip} was not called as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC84 & FR7 & Test \texttt{b64\_to\_bgr\_image} helper function with a valid test image. & Function correctly decodes base64 string back to a numpy array with expected dimensions (100, 100, 3). & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC84 & FR7 & Test \path{b64_to_bgr_image} helper function with a valid test image. & Function correctly decodes base64 string back to a numpy array with expected dimensions (100, 100, 3). & Function correctly decoded the base64 string into a numpy array with expected dimensions (100, 100, 3). All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC85 & FR12 & Send POST requests with \texttt{side="RIGHT"} and \texttt{side="LEFT"} parameters. & \texttt{knee\_angle\_ from\_result} is called twice with correct side parameters: first with 'RIGHT', then with 'LEFT'. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC85 & FR12 & Send POST requests with \path{side="RIGHT"} and \path{side="LEFT"} parameters. & \path{knee_angle_from_result} is called twice with correct side parameters: first with 'RIGHT', then with 'LEFT'. & Function was called twice with correct side parameters 'RIGHT' and 'LEFT' as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC86 & FR7, FR26 & Send POST request with valid image but simulate decoding error by returning None. & Response status 400 with error message in JSON. & All assertions pass. & \cellcolor{green} Pass \\
+  TC86 & FR7, FR26 & Send POST request with valid image but simulate decoding error by returning None. & Response status 400 with error message in JSON. & Response returned status 400 with expected error message when decoding failed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 
-  TC87 & FR7 & Call \texttt{processFrame()} with front camera facing, RIGHT side, and a valid base64 image. Mock successful API response. & Function calls axios.post with correct URL, payload includes \texttt{mirrored: true}, \texttt{side: "RIGHT"}, \texttt{legsOnly: true}. Returns the mocked response data with landmarks, connections, and metrics. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC87 & FR7 & Call \path{processFrame()} with front camera facing, RIGHT side, and a valid base64 image. Mock successful API response. & Function calls axios.post with correct URL, payload includes \path{mirrored: true}, \path{side: "RIGHT"}, \path{legsOnly: true}. Returns the mocked response data with landmarks, connections, and metrics. & Function called axios.post with correct payload including mirrored, side, and legsOnly values, and returned the expected mocked response data. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC88 & FR7 & Call \texttt{processFrame()} with back camera facing, LEFT side. & Function calls axios.post with \texttt{mirrored: false} in the payload. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC88 & FR7 & Call \path{processFrame()} with back camera facing, LEFT side. & Function calls axios.post with \path{mirrored: false} in the payload. & Function correctly sent payload with \path{mirrored: false} for back camera. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC89 & FR7 & Call \texttt{processFrame()} and simulate a network error. & Function throws an error with message "Network error". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC89 & FR7 & Call \path{processFrame()} and simulate a network error. & Function throws an error with message "Network error". & Function correctly threw a "Network error" when request failed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC90 & FR8 & Call \texttt{resetBackend()} and mock successful response. & Function calls axios.post to \texttt{/reset} endpoint with timeout 8000ms. Returns successfully. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC90 & FR8 & Call \path{resetBackend()} and mock successful response. & Function calls axios.post to \path{/reset} endpoint with timeout 8000ms. Returns successfully. & Function successfully called axios.post to \path{/reset} with correct timeout and returned as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC91 & FR8 & Call \texttt{resetBackend()} and simulate a failure. & Function throws an error with message "Reset failed". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC91 & FR8 & Call \path{resetBackend()} and simulate a failure. & Function throws an error with message "Reset failed". & Function correctly threw "Reset failed" error on failure. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC92 & FR1, FR1.1 & Call \texttt{saveMetrics()} when no user is logged in (getAuth returns null). & Function throws error "User must be logged in to save metrics". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC92 & FR1, FR1.1 & Call \path{saveMetrics()} when no user is logged in (getAuth returns null). & Function throws error "User must be logged in to save metrics". & Function correctly threw "User must be logged in to save metrics" when no user was authenticated. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC93 & FR1.1, FR21 & Call \texttt{saveMetrics()} when user is logged in but user document does not exist in Firestore. & Function throws error "User data not found in Firestore". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC93 & FR1.1, FR21 & Call \path{saveMetrics()} when user is logged in but user document does not exist in Firestore. & Function throws error "User data not found in Firestore". & Function correctly threw "User data not found in Firestore" when user document was missing. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC94 & FR21, FR11 & Call \texttt{saveMetrics()} with valid metrics data and mocked Firebase responses. & Returns document ID "mock-doc-id". Verifies Firestore calls: doc, getDoc, collection, addDoc. Saved data contains correct fields including actid with timestamp, analysis="pending", exercise="Knee Extension", completed\_reps=8, max\_height=70.5, min\_height=30.1, duration=1, user info, current\_angle=45.6, rom\_degree=40.4, rep\_state="Extension", avg\_rep\_duration=1.2, current\_rep\_duration=0.5. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC94 & FR21, FR11 & Call \path{saveMetrics()} with valid metrics data and mocked Firebase responses. & Returns document ID "mock-doc-id". Verifies Firestore calls: doc, getDoc, collection, addDoc. Saved data contains all of the correct fields including actid with timestamp. & Function returned "mock-doc-id" and correctly saved all expected fields including metrics, user info, and Firestore interactions. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC95 & FR11, FR21 & Call \texttt{saveMetrics()} with minimal metrics data (missing optional avg\_rep\_duration and current\_rep\_duration). & Saved data has avg\_rep\_duration=0, current\_rep\_duration=0, duration=0. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC95 & FR11, FR21 & Call \path{saveMetrics()} with minimal metrics data (missing optional \path{avg_rep_duration} and \path{current_rep_duration)}. & Saved data has \path{avg_rep_duration=0, current_rep_duration=0, duration=0}. & Function correctly saved default values for missing optional fields including avg\_rep\_duration and current\_rep\_duration. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC96 & FR1.1, FR21 & Call \texttt{saveMetrics()} when user document exists but has no name field. & Saved data uses "Unknown User" for the name field. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC96 & FR1.1, FR21 & Call \path{saveMetrics()} when user document exists but has no name field. & Saved data uses "Unknown User" for the name field. & Function correctly used "Unknown User" as fallback for missing name field. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC97 & FR1 & Call \texttt{saveSessionData()} when no user is logged in. & Function throws error "User must be logged in". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC97 & FR1 & Call \path{saveSession} \path{Data()} when there is no user logged in. & Function throws error "User must be logged in". & Function correctly threw "User must be logged in" when no user was authenticated. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC98 & FR21, FR17, FR11 & Call \texttt{saveSessionData()} with valid session data. & Returns document ID "mock-doc-id". Saved data contains actid with "session\_" prefix, analysis="completed", completed\_reps=8, duration=1, exercise="Knee Extension Session", max\_height=70.5, min\_height=30.1, average\_rom=40.4, total\_reps=8, avg\_rep\_duration=1.2. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC98 & FR21, FR17, FR11 & Call \path{saveSession} \path{Data()} with valid session data. & Returns document ID "mock-doc-id". Saved data contains actid with \path{"session_" prefix, analysis="completed", completed_reps=8, duration=1, exercise="Knee Extension} \path{Session", max_height=70.5, min_height=30.1, average_rom=40.4, total_reps=8, avg_rep_duration=1.2.} & Function returned "mock-doc-id" and correctly saved session data with all expected fields. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC99 & FR11, FR21 & Call \texttt{saveSessionData()} without avgRepDuration (uses session duration instead). & Saved data has duration calculated from startTime and endTime (0 seconds), and avg\_rep\_duration is undefined. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC99 & FR11, FR21 & Call \path{saveSession} \path{Data()} without avgRepDuration (uses session duration instead). & Saved data has duration calculated from startTime and endTime (0 seconds), and avg\_rep\_duration is undefined. & Function correctly calculated duration and handled missing avgRepDuration as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC100 & FR1.1, FR21 & Call \texttt{saveSessionData()} when user document does not exist. & Saved data uses "Unknown User" for the name field. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC100 & FR1.1, FR21 & Call \path{saveSession} \path{Data()} when user document does not exist. & Saved data uses "Unknown User" for the name field. & Function correctly used "Unknown User" fallback when user document was missing. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC101 & FR1.1, FR21 & Call \texttt{getUserDisplayName()} with logged in user and existing user document with name field. & Returns "Test User". Verifies doc and getDoc calls with correct parameters. & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC101 & FR1.1, FR21 & Call \path{getUser} \path{DisplayName()} with logged in user and existing user document with name field. & Returns "Test User". Verifies doc and getDoc calls with correct parameters. & Function correctly returned "Test User" and performed expected Firestore calls. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC102 & FR1.1, FR21 & Call \texttt{getUserDisplayName()} when user document exists but has no name field. & Returns user email "test@example.com". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC102 & FR1.1, FR21 & Call \path{getUser} \path{DisplayName()} when user document exists but has no name field. & Returns user email \path{"test@example.com"}. & Function correctly returned user email \path{"test@example.com"} when name field was missing. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC103 & FR1 & Call \texttt{getUserDisplayName()} when no user is logged in. & Returns "Unknown User". & All assertions pass. & \cellcolor{green} Pass \\ \midrule
+  TC103 & FR1 & Call \path{getUser} \path{DisplayName()} when no user is logged in. & Returns "Unknown User". & Function correctly returned "Unknown User" when no user was logged in. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \midrule
 
-  TC104 & FR1.1 & Call \texttt{getUserDisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & All assertions pass. & \cellcolor{green} Pass \\
+  TC104 & FR1.1 & Call \path{getUser} \path{DisplayName()} and simulate a Firestore error. & Returns "Unknown User" (error caught and handled gracefully). & Function correctly handled Firestore error and returned "Unknown User" as fallback. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsection{Profile Activity Module Tests}
+
+\subsection{Profile Activity Tests}
 The following tests in Table \ref{table:profile_activity_tests} verify the functionality of the profile activity module. 
 This module is responsible for storing, retrieving, and handling user activity data, stored user data, summary data, and chart data.
 The tests ensure this functionality works as expected under various conditions, including valid inputs, edge cases, and error scenarios.
 
-\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
+  % {cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
   \hline
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -1125,102 +1303,116 @@ The tests ensure this functionality works as expected under various conditions, 
   \endfoot
 
   \hline
-  \caption{Profile Activity Module Test Cases}
+  \caption{Profile Activity Test Cases}
   \label{table:profile_activity_tests}
   \endlastfoot
 
-  TC105 & FR21, FR23 & Test getCurrentUser with correct inputs. & Returns the correct user object. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC106 & FR21, FR23 & Test getCurrentUser with no current user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC107 & FR21, FR23 & Test getCurrentUser with non-existent user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC108 & FR21, FR23 & Test getCurrentUser with Firestore error. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC109 & FR21, FR23 & Test getCurrentUserID with correct inputs. & Returns the correct user ID. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC110 & FR21, FR23 & Test getCurrentUserID with no current user. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC111 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with correct inputs. & Returns the correct array of activities. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC112 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with no activities. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC113 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with Firestore error. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC114 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with incorrect uid. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC115 & FR10, FR11, FR17 & Test getUserSummary with correct inputs. & Returns the correct summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC116 & FR10, FR11, FR17 & Test getUserSummary with correct inputs but duplicate dates. & Returns the correct summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC117 & FR10, FR11, FR17 & Test getUserSummary with Firestore error. & Returns zero summary data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC118 & FR10, FR18 & Test repsChartData with correct inputs. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC119 & FR10, FR18 & Test repsChartData with correct inputs and duplicate dates. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC120 & FR10, FR18 & Test repsChartData with activities but no reps. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC121 & FR10, FR18 & Test repsChartData with no activites. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC122 & FR10, FR18 & Test repsChartData with firestore error. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC123 & FR10, FR18 & Test exerciseChartData with correct data. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC124 & FR10, FR18 & Test exerciseChartData with correct data and duplicate dates. & Returns the correct chart data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC125 & FR10, FR18 & Test exerciseChartData with no activities. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC126 & FR10, FR18 & Test exerciseChartData with firestore error. & Returns all 0 chart values. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC127 & FR10, FR11, FR18, FR19, FR22 & Test getComments with correct inputs and data. & Returns the correct comment data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC128 & FR10, FR11, FR18, FR19, FR22 & Test getComments with no existing comments. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC129 & FR10, FR11, FR18, FR19, FR22 & Test getComments with firestore error. & Returns an empty array. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC130 & FR10, FR11, FR18, FR19, FR22 & Test postComment with correct inputs and data. & Calls collection and update functions with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC131 & FR10, FR11, FR18, FR19, FR22 & Test postComment with an empty comment. & Should not call collection, addDoc, or setDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC132 & FR10, FR11, FR18, FR19, FR22 & Test postComment with firestore error. & Should not call setDoc, but should proceed until addDoc errors. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC133 & FR18, FR21 & Test getName with correct inputs and data. & Returns the corresponding user's name. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC134 & FR18, FR21 & Test getName with an unknown user. & Returns 'Unknown User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC135 & FR18, FR21 & Test getName with a user with no name. & Returns 'Unnamed User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC136 & FR18, FR21 & Test getName with firestore error. & Returns 'Unknown User'. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC137 & FR17, FR18, FR19, FR22 & Test setSelectedUserID with a valid userID. & Calls AsyncStorage with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC138 & FR17, FR18, FR19, FR22 & Test setSelectedUserID with an empty userID. & Does not call AsyncStorage. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC139 & FR17, FR18, FR19, FR22 & Test getSelectedUserID when a userID is stored. & Returns the correct stored userID. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC140 & FR17, FR18, FR19, FR22 & Test getSelectedUserID when no userID is stored. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC141 & FR17, FR18, FR19, FR22 & Test getSelectedUser when a user is stored. & Returns the stored UserData structure. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC142 & FR17, FR18, FR19, FR22 & Test getSelectedUser when no user is stored. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC143 & FR17, FR18, FR19, FR22 & Test clearSelectedUserID on AsyncStorage. & Calls AsyncStorage.removeItem with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC144 & FR2, FR3 & Test getPhysioInviteCode when an invite code exists. & Returns the corresponding physio invite code. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC145 & FR2, FR3 & Test getPhysioInviteCode when no invite code exists. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC146 & FR2, FR3 & Test getPhysioInviteCode when userID is invalid. & Returns null. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC105 & FR21, FR23 & Test getCurrentUser with correct inputs. & Returns the correct user object. & Function returned the correct user object as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC106 & FR21, FR23 & Test getCurrentUser with no current user. & Returns null. & Function correctly returned null when no current user was present. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC107 & FR21, FR23 & Test getCurrentUser with non-existent user. & Returns null. & Function correctly returned null for non-existent user. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC108 & FR21, FR23 & Test getCurrentUser with Firestore error. & Returns null. & Function correctly handled Firestore error and returned null. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC109 & FR21, FR23 & Test getCurrentUserID with correct inputs. & Returns the correct user ID. & Function returned the correct user ID as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC110 & FR21, FR23 & Test getCurrentUserID with no current user. & Returns null. & Function correctly returned null when no user was logged in. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC111 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with correct inputs. & Returns the correct array of activities. & Function returned the correct array of activities as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC112 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with no activities. & Returns an empty array. & Function correctly returned an empty array when no activities were found. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC113 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with Firestore error. & Returns an empty array. & Function correctly handled Firestore error and returned an empty array. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC114 & FR10, FR11, FR17, FR18, FR21 & Test getUserActivities with incorrect uid. & Returns an empty array. & Function correctly returned an empty array for invalid uid. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC115 & FR10, FR11, FR17 & Test getUserSummary with correct inputs. & Returns the correct summary data. & Function returned the correct summary data as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC116 & FR10, FR11, FR17 & Test getUserSummary with correct inputs but duplicate dates. & Returns the correct summary data. & Function correctly handled duplicate dates and returned accurate summary data. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC117 & FR10, FR11, FR17 & Test getUserSummary with Firestore error. & Returns zero summary data. & Function correctly handled Firestore error and returned zero summary data. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC118 & FR10, FR18 & Test repsChartData with correct inputs. & Returns the correct chart data. & Function returned the correct reps chart data as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC119 & FR10, FR18 & Test repsChartData with correct inputs and duplicate dates. & Returns the correct chart data. & Function correctly handled duplicate dates and returned accurate chart data. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC120 & FR10, FR18 & Test repsChartData with activities but no reps. & Returns all 0 chart values. & Function correctly returned all zero chart values when no reps were present. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC121 & FR10, FR18 & Test repsChartData with no activites. & Returns all 0 chart values. & Function correctly returned all zero chart values when no activities existed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC122 & FR10, FR18 & Test repsChartData with firestore error. & Returns all 0 chart values. & Function correctly handled Firestore error and returned zero chart values. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC123 & FR10, FR18 & Test exerciseChartData with correct data. & Returns the correct chart data. & Function returned the correct exercise chart data as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC124 & FR10, FR18 & Test exerciseChartData with correct data and duplicate dates. & Returns the correct chart data. & Function correctly handled duplicate dates and returned accurate chart data. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC125 & FR10, FR18 & Test exerciseChartData with no activities. & Returns all 0 chart values. & Function correctly returned zero chart values when no activities were present. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC126 & FR10, FR18 & Test exerciseChartData with firestore error. & Returns all 0 chart values. & Function correctly handled Firestore error and returned zero chart values. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC127 & FR10, FR11, FR18, FR19, FR22 & Test getComments with correct inputs and data. & Returns the correct comment data. & Function returned the correct comment data as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC128 & FR10, FR11, FR18, FR19, FR22 & Test getComments with no existing comments. & Returns an empty array. & Function correctly returned an empty array when no comments existed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC129 & FR10, FR11, FR18, FR19, FR22 & Test getComments with firestore error. & Returns an empty array. & Function correctly handled Firestore error and returned an empty array. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC130 & FR10, FR11, FR18, FR19, FR22 & Test postComment with correct inputs and data. & Calls collection and update functions with expected inputs. & Function correctly called collection and update functions with expected inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC131 & FR10, FR11, FR18, FR19, FR22 & Test postComment with an empty comment. & Should not call collection, addDoc, or setDoc. & Function correctly prevented database calls for empty comment input. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC132 & FR10, FR11, FR18, FR19, FR22 & Test postComment with firestore error. & Should not call setDoc, but should proceed until addDoc errors. & Function correctly handled Firestore error and stopped at addDoc failure as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC133 & FR18, FR21 & Test getName with correct inputs and data. & Returns the corresponding user's name. & Function returned the correct user's name as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC134 & FR18, FR21 & Test getName with an unknown user. & Returns 'Unknown User'. & Function correctly returned "Unknown User" for unknown user. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC135 & FR18, FR21 & Test getName with a user with no name. & Returns 'Unnamed User'. & Function correctly returned "Unnamed User" when name field was missing. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC136 & FR18, FR21 & Test getName with firestore error. & Returns 'Unknown User'. & Function correctly handled Firestore error and returned "Unknown User". All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC137 & FR17, FR18, FR19, FR22 & Test setSelectedUserID with a valid userID. & Calls AsyncStorage with expected inputs. & Function correctly called AsyncStorage with expected inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC138 & FR17, FR18, FR19, FR22 & Test setSelectedUserID with an empty userID. & Does not call AsyncStorage. & Function correctly avoided calling AsyncStorage for empty userID. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC139 & FR17, FR18, FR19, FR22 & Test getSelectedUserID when a userID is stored. & Returns the correct stored userID. & Function correctly returned the stored userID. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC140 & FR17, FR18, FR19, FR22 & Test getSelectedUserID when no userID is stored. & Returns null. & Function correctly returned null when no userID was stored. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC141 & FR17, FR18, FR19, FR22 & Test getSelectedUser when a user is stored. & Returns the stored UserData structure. & Function correctly returned the stored UserData structure. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC142 & FR17, FR18, FR19, FR22 & Test getSelectedUser when no user is stored. & Returns null. & Function correctly returned null when no user was stored. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC143 & FR17, FR18, FR19, FR22 & Test clearSelectedUserID on AsyncStorage. & Calls AsyncStorage.removeItem with expected inputs. & Function correctly called AsyncStorage.removeItem with expected inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC144 & FR2,\newline FR3 & Test getPhysioInviteCode when an invite code exists. & Returns the corresponding physio invite code. & Function correctly returned the corresponding physio invite code. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC145 & FR2,\newline FR3 & Test getPhysioInviteCode when no invite code exists. & Returns null. & Function correctly returned null when no invite code existed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC146 & FR2,\newline FR3 & Test getPhysioInviteCode when userID is invalid. & Returns null. & Function correctly returned null for invalid userID. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\
 \end{longtable}
 
-\subsection{Exercise Data Module Tests}
+\subsection{Exercise Data Tests}
 The following tests in Table \ref{table:exercise_data_tests} verify the functionality of the exercise data module.
 This module is responsible for storing, retrieving, and handling user exercise data, general exercise data for assignable exercises by physios, and assigned exercises for given users.
 This function also facilitates the modification, addition, and deletion of exercises for users by their assigned physios.
 The tests outlined in the table ensure that all of this functionality works as expected under various conditions, including valid inputs, edge cases, and error scenarios.
 
-\begin{longtable}{cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.2cm}
+  >{\raggedright\arraybackslash}p{1.8cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\raggedright\arraybackslash}p{3.0cm}
+  >{\centering\arraybackslash}p{1.3cm}
+}
+  % {cp{1.5cm}p{4cm}p{4cm}p{2.75cm}c}
   \hline
   \textbf{ID} & \textbf{Ref. Req.} & \textbf{Action} &
   \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Result} \\
@@ -1238,55 +1430,53 @@ The tests outlined in the table ensure that all of this functionality works as e
   \endfoot
 
   \hline
-  \caption{Exercise Data Module Test Cases}
+  \caption{Exercise Data Test Cases}
   \label{table:exercise_data_tests}
   \endlastfoot
 
-  TC147 & FR5, FR18, FR21, FR27 & Tests getExercisesById with valid userID and exercise data & Returns the corresponding user's exercises. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC148 & FR5, FR18, FR21, FR27 & Tests getExercisesById with valid userID but no exercise data & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC149 & FR5, FR18, FR21, FR27 & Tests getExercisesById with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC150 & FR5, FR18, FR21, FR27 & Tests getExercise with valid exerciseID & Returns the corresponding exercise. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC151 & FR5, FR18, FR21, FR27 & Tests getExercise with an invalid exerciseID & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC152 & FR5, FR18, FR21, FR27 & Tests getExercise with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC153 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises when general exercises exist & Returns a list of all exercises. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC154 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises when no general exercises exist & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC155 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC156 & FR6, FR18, FR21 & Tests removeUserExercise with valid userID and exercise data & Calls deleteDoc with the expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC157 & FR6, FR18, FR21 & Tests removeUserExercise with valid userID but invalid exercise data & Does not call deleteDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC158 & FR6, FR18, FR21 & Tests removeUserExercise with firestore error & Does not call deleteDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC159 & FR6, FR18, FR21 & Tests addUserExercise with valid userID and exercise data & Calls addDoc and updateDoc with the expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC160 & FR6, FR18, FR21 & Tests addUserExercise with firestore error & Does not call updateDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC161 & FR6, FR18, FR21 & Tests updateUserExercise with valid userID and exercise data & Calls updateDoc with expected inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC162 & FR6, FR18, FR21 & Tests updateUserExercise with valid userID but invalid exercise data & Does not call updateDoc with bad inputs. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC163 & FR6, FR18, FR21 & Tests updateUserExercise with firestore error & Does not call updateDoc. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC164 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with valid user ID and exercise data. & Returns corresponding exercise data. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC165 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with valid user ID but no exercise data. & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
-  
-  TC166 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with firestore error & Returns undefined. & All Assertions Pass & \cellcolor{green} Pass \\ \hline
+  TC147 & FR5, FR18, FR21, FR27 & Tests getExercisesById with valid userID and exercise data & Returns the corresponding user's exercises. & Function returned the corresponding user's exercises as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC148 & FR5, FR18, FR21, FR27 & Tests getExercisesById with valid userID but no exercise data & Returns undefined. & Function correctly returned undefined when no exercise data existed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC149 & FR5, FR18, FR21, FR27 & Tests getExercisesById with firestore error & Returns undefined. & Function correctly handled Firestore error and returned undefined. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC150 & FR5, FR18, FR21, FR27 & Tests getExercise with valid exerciseID & Returns the corresponding exercise. & Function returned the corresponding exercise as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC151 & FR5, FR18, FR21, FR27 & Tests getExercise with an invalid exerciseID & Returns undefined. & Function correctly returned undefined for invalid exerciseID. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC152 & FR5, FR18, FR21, FR27 & Tests getExercise with firestore error & Returns undefined. & Function correctly handled Firestore error and returned undefined. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC153 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises when general exercises exist & Returns a list of all exercises. & Function returned a list of all exercises as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC154 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises when no general exercises exist & Returns undefined. & Function correctly returned undefined when no general exercises existed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC155 & FR5, FR18, FR21, FR27 & Tests getGeneralExercises with firestore error & Returns undefined. & Function correctly handled Firestore error and returned undefined. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC156 & FR6, FR18, FR21 & Tests removeUserExercise with valid userID and exercise data & Calls deleteDoc with the expected inputs. & Function correctly called deleteDoc with expected inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC157 & FR6, FR18, FR21 & Tests removeUserExercise with valid userID but invalid exercise data & Does not call deleteDoc. & Function correctly did not call deleteDoc for invalid exercise data. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC158 & FR6, FR18, FR21 & Tests removeUserExercise with firestore error & Does not call deleteDoc. & Function correctly handled Firestore error and did not call deleteDoc. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC159 & FR6, FR18, FR21 & Tests addUserExercise with valid userID and exercise data & Calls addDoc and updateDoc with the expected inputs. & Function correctly called addDoc and updateDoc with expected inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC160 & FR6, FR18, FR21 & Tests addUserExercise with firestore error & Does not call updateDoc. & Function correctly handled Firestore error and did not call updateDoc. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC161 & FR6, FR18, FR21 & Tests updateUserExercise with valid userID and exercise data & Calls updateDoc with expected inputs. & Function correctly called updateDoc with expected inputs. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC162 & FR6, FR18, FR21 & Tests updateUserExercise with valid userID but invalid exercise data & Does not call updateDoc with bad inputs. & Function correctly did not call updateDoc for invalid exercise data. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC163 & FR6, FR18, FR21 & Tests updateUserExercise with firestore error & Does not call updateDoc. & Function correctly handled Firestore error and did not call updateDoc. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC164 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with valid user ID and exercise data. & Returns corresponding exercise data. & Function returned corresponding exercise data as expected. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC165 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with valid user ID but no exercise data. & Returns undefined. & Function correctly returned undefined when no exercise data existed. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
+
+  TC166 & FR5, FR18, FR21, FR27 & Tests getSelectedExercises with firestore error & Returns undefined. & Function correctly handled Firestore error and returned undefined. All assertions passed and matched expected behaviour. & \cellcolor{green} Pass \\ \hline
 
 \end{longtable}
 
 \section{Changes Due to Testing}
-
-There were a few changes that were implemented as a result of testing. Note that some of these changes are in progress. 
 
 \subsection{Usability Testing Results}
 Analyses from usability testing revealed important user experience insights which has provided clarity with what should
@@ -1301,8 +1491,8 @@ for a clearer picture on the patient's performance, and inclusion of a post-exer
 The other participants highlighted the need for audio cues while performing the exercise. Reading the instructions from
 the acceptable distance necessary for proper application function was troublesome. Secondly, additional data on the Progress tab would
 be beneficial for patients to keep track, in a non-technical context, of their recovery. \\
-See \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{Usability Report} for additional information.\\
-\textit{Note: The usability testing has been completed, but the document's Results and Discussion still remain.}\\
+Please refer to the \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{Usability Report} for additional information.\\
+% \textit{Note: The usability testing has been completed, but the document's Results and Discussion still remain.}\\
 
 
 % \wss{This section should highlight how feedback from the users and from 
@@ -1347,7 +1537,7 @@ they validate, ultimately displaying the traceability to requirements.
   TC19-21 & FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1 \\
   TC22 & FR1, SR-AR1 \\
   \midrule
-  \multicolumn{2}{c}{\textit{Live Feedback Module Tests}} \\
+  \multicolumn{2}{c}{\textit{Live Feedback Tests}} \\
   \midrule
   TC23-25 & FR13, FR14 \\
   TC26 & FR16 \\
@@ -1390,7 +1580,7 @@ they validate, ultimately displaying the traceability to requirements.
   TC98 & FR11, FR17, FR21 \\
   TC104 & FR1.1, FR21 \\
   \midrule
-  \multicolumn{2}{c}{\textit{Profile Activity Module Tests}} \\
+  \multicolumn{2}{c}{\textit{Profile Activity Tests}} \\
   \midrule
   TC105-110 & FR21, FR23 \\
   TC111-114 & FR10, FR11, FR17, FR18, FR21 \\
@@ -1401,13 +1591,13 @@ they validate, ultimately displaying the traceability to requirements.
   TC137-143 & FR17, FR18, FR19, FR22 \\
   TC144-146 & FR2, FR3 \\
   \midrule
-  \multicolumn{2}{c}{\textit{Exercise Data Module Tests}} \\
+  \multicolumn{2}{c}{\textit{Exercise Data Tests}} \\
   \midrule
   TC147-155, 164-166 & FR5, FR18, FR21, FR27 \\
   TC156-163 & FR6, FR18, FR21 \\
 \end{longtable}
 
-Table \ref{tab:sections_requirements} showcases both the functional requirements and their respective test cases.
+Table \ref{tab:functional_requirements_trace} showcases both the functional requirements and their respective test cases.
 
 \begin{table}[H]
   \centering
@@ -1419,6 +1609,13 @@ Table \ref{tab:sections_requirements} showcases both the functional requirements
     UT-1 & LFR-AP1 \\
     UT-2 & UHR-EOU2, UHR-LRN1 \\
     UT-3 & UHR-EOU1, LFR-ST1 \\
+    UT-4 & UHR-EOU1, UHR-LRN1 \\
+    UT-5 & UHR-EOU2, UHR-AR1 \\
+    UT-6 & UHR-UPL1, UHR-AR1 \\
+    UT-7 & UHR-LRN1, UHR-EOU1 \\
+    UT-8 & UHR-EOU1, LFR-ST1 \\
+    UT-9 & UHR-EOU1, LFR-AP1 \\
+    UT-10 & UHR-EOU1, UHR-UPL1 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1500,19 +1697,18 @@ which ultimately showcases the overall verification of our system.
   \label{tab:core_modules_tests} \\
     \toprule \textbf{Test ID} & \textbf{Module} \\
     \midrule
-    TC1-8 & M5 (Account Creation) \\
-    TC9-12 & M6 (Valid User) \\
-    TC13-19 & M1 (User Interface), M2 (Profile Activity), M5 (Account Creation), M7 (User Account), M8 (User Activity), M10 (Performance Statistics Generator), M13 (Feedback)\\
-    TC20-22 & M1 (User Interface), M7 (User Account) \\
-    TC23-30 & M3 (Analysis Control Flow), M11 (Metrics), M12 (Analyze), M13 (Feedback) \\
-    TC31-38 & M11 (Metrics), M12 (Analyze) \\
-    TC39-74 & M3 (Analysis Control Flow), M4 (Draw), M11 (Metrics), M12 (Analyze) \\
-    TC75-104 & M3 (Analysis Control Flow), M4 (Draw), M11 (Metrics), M12 (Analyze), M13 (Feedback) \\
-    TC105-146 & M1 (User Interface), M2 (Profile Activity), M7 (User Details), M9 (Exercise Data) \\
-    TC147-166 & M1 (User Interface), M9 (Exercise Data) \\
-    UT-1, UT-2, UT-3, PR-1, PR-2, RFT-1, RFT-2 & M1 (User Interface) \\
-    SR-1, SR-2 & M5 (Account Creation), M6 (Valid User) \\
-    MS-1, MS-2 & M1 (User Interface), M5 (Account Creation), M6 (Valid User) \\
+    TC1-8 & M1 (Account Creation) \\
+    TC9-12 & M2 (Valid User) \\
+    TC13-22 & M3 (User Account) \\
+    TC22-30 & M8 (Feedback), M11 (UI) \\
+    TC31-38 & M6 (Analysis Control Flow), M10 (Draw) \\
+    TC39-74 & M6 (Analysis Control Flow), M7 (Analyze), M9 (Metrics) \\
+    TC75-104 & M6 (Analysis Control Flow), M11 (UI) \\
+    TC105-146 & M5 (User Activity) \\
+    TC147-166 & M4 (Exercise Data) \\
+    UT-1, UT-2, UT-3, UT-4, UT-5, UT-6, UT-7, UT-8, UT-9, UT-10, PR-1, PR-2, RFT-1, RFT-2 & M11 (UI) \\
+    SR-1, SR-2 & M1 (Account Creation), M2 (Valid User) \\
+    MS-1, MS-2 & M1 (Account Creation), M2 (Valid User), M11 (UI) \\
     \bottomrule
 \end{longtable}
 
@@ -1559,9 +1755,7 @@ Some areas of improvement would be to fully test each backend module to reach 10
 
 \section{Extras}
 
-The Usability Report, found \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{here}, contains the results and analysis from the usability testing conducted on our application. The report is not complete at this time, but performing these tests helped to ensure the system was meeting the non-functional requirements set out at the start of the year. Between now and the final submission, the report will be completed and will include a discussion of the results and recommendations for future development, along with the changes request and realized between now and final demonstration.
-
-The Design Thinking Document is yet to be completed, as incorporating the feedback from usability testing seemed like a unique opportunity to add an additional layer of design to the report. Now that the usability testing has been completed, the design thinking document is a near top priority and will be iterated throughout the coming weeks.
+The extras set out for the system consist of both a Design Thinking Document and a Usability Report. The Design Thinking Document aims to explain the process behind, and work done towards, the final design of the system. This document explains the overall flow of processing through the system and the interfacing elements, external libraries utilized, and more. The document flow is iterative, as is the design process, and aims to communicate the entire design process of the system. The Design Thinking Document can be found \href{../Extras/DesignThinking}{here}. The Usability Report aims to focus on evaluating the system from a user perspective. This report documents usability testing conducted with participants to assess ease of navigation, clarity of instructions, and overall user experience. It includes observations, user feedback, and analysis of interaction patterns to identify the key areas to foucs on and address. The findings are used to ensure the system meets the non-functional requirements and to guide improvements to the interface for both patients and physiotherapists. The Usability Report can be found \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{here}.
 
 \bibliographystyle{plainnat}
 \bibliography{../../refs/References}

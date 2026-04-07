@@ -47,8 +47,8 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+Jan 21, 2026 & 1.0 & Initial documentation completed.\\
+April 6, 2026 & 1.1 & Timeline Fixes.\\
 \bottomrule
 \end{tabularx}
 
@@ -164,10 +164,13 @@ The user interface of the application may be changed to include additional featu
   \item How feedback is presented to the user as the exercise is performed (i.e. written, auditory, alerts, etc.).
   \item How the insights are generated to the user on their account dashboard (i.e. displayed as a line graph, columns of data, does the user have the option to select from multiple views, etc.).
 \end{enumerate}
+These changes would be reflected in the Feedback Module (M8) and the User Interface Module (M11). These modules handle the feedback generation from both captured metrics in the videos and the overall statistics of user activities, as well as the logic for displaying that information to the user. It is expected that these changes would increase clarity of stored data and data manipulation within the system, as well as increase patient confidence with better feedback and extendable exercise information.
 \item[\refstepcounter{acnum} \actheacnum \label{AC2}:]
-The angles that are calculated to support different exercises. Currently, the application supports the 'single leg raise' exercises which is routinely used in rehabilitation for post-operative knee surgery. Future iterations of the application may include additional body parts and exercises.
+The angles that are calculated to support different exercises. Currently, the application supports the 'single leg raise' exercises which is routinely used in rehabilitation for post-operative knee surgery. Future iterations of the application may include additional body parts and exercises. \\
+This change would be reflected in the Exercise Data Module (M4), the Analyze Module (M7), and the Metrics Module (M9). The Exercise Data Module (M4) maintains a library of all the exercises assigned to each user, and it also facilitates the addition of exercises by physiotherapists to assigned patients and the modification of instructions, sets, and reps to assigned exercises. The Analyze Module (M7) calculates joint angles from landmark coordinates and would have to be modified to vary across different landmarks. IT also measures time-under-tension and exercise duration which are required for all the exercises in the system. The Metrics Module (M9) processes video frames to detect and track body landmarks using pose estimation, identifies key joints relevant to knee exercises (hip, knee, ankle, foot), extracts coordinate data for joint positions across video frames, and implements the core CV library integration (OpenCV, MediaPipe). This would also need to be modified to accept variable landmark selection by different exercises.
 \item[\refstepcounter{acnum} \actheacnum \label{AC3}:]
-Changes to the feedback/guidance given. As more requirements are met, there should be changes to encapsulate the prompts required for the motion (i.e. 'keep the torso straight as this movement is performed'). Additionally, there may be alternate prompts with varying degrees of complexity, which relates to accessibility and the patients understanding of the exercise (i.e. 'during this motion you want to engage your quadriceps as you drive your toe towards the sky ~8 inches off the ground).
+Changes to the feedback/guidance given. As more requirements are met, there should be changes to encapsulate the prompts required for the motion (i.e. 'keep the torso straight as this movement is performed'). Additionally, there may be alternate prompts with varying degrees of complexity, which relates to accessibility and the patients understanding of the exercise (i.e. 'during this motion you want to engage your quadriceps as you drive your toe towards the sky ~8 inches off the ground). \\
+These changes would be reflected in the Feedback Module (M8). This module generates real-time corrective feedback messages based on form analysis results, provides step-by-step exercise guidance, creates descriptive messages for form deviations specifying required adjustments, and triggers safety warnings for dangerous movements. It is expected that these changes would increase patient confidence and motivation to perform the exercises correctly, as well as increase the accessibility of the system to a wider range of patients with varying levels of understanding of the exercises.
 \end{description}
 
 
@@ -183,16 +186,22 @@ decisions will be changed.
 
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: Recording/Video Upload, Output: On-Screen Feedback/Corrections).
+  (Input: Recording/Video Upload, Output: On-Screen Feedback/Corrections). \\
+  Modifying devices takes an extended amount of work to allow for different IPs for selected cameras, different formats are a possibility, as well as varying frame rates and possible latency on feedback generation; limitations in the video handling modules (M7-M10) and the Feedback Module (M8) are expected to be the most affected by this change.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The knee will remain modeled as a single–degree-of-freedom (1-DOF) 
-hinge joint in the sagittal plane (flexion and extension only). No expansion to multi-DOF modelling or other joints is planned.
+hinge joint in the sagittal plane (flexion and extension only). No expansion to multi-DOF modelling or other joints is planned. \\
+This design would require a data structure change in all the video handling modules (M7-M10) to support the additional landmarks and angles, as well as many additional changes to the Analyze Module (M7) to support more angles and form criteria.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Users will only perform physiotherapist-approved rehabilitation exercises. 
-The system will not automatically generate or recommend new, unverified exercises.
+The system will not automatically generate or recommend new, unverified exercises. \\
+This specifically has to do with health regulations and the system's inability to provide medical care advice to patients using the system.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Feedback will be limited to movement-based corrections and joint angle guidance. 
-The system will not provide medical diagnosis or replace professional physiotherapy assessment.
+The system will not provide medical diagnosis or replace professional physiotherapy assessment. \\
+This was a difficulty faced with the latency on the system, a complete redesign of the front-end would be required in a python front-end language to support better real-time feedback it is estimated. However even this is not a guaranteed fix, so this excess amount of work for no guarantee of success is not worth the risk at this stage of development.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The system is not being built to integrate feedback from external sensors, wearable devices, 
-and specialized specialized motion-capture equipment.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The scope will remain focused on knee rehabilitation. The system will not expand to whole-body tracking or unrelated physiotherapy movements.
+and specialized specialized motion-capture equipment. \\
+This ties back to the limitation and UC 1, as well as the fact that the system is being built to be accessible to patients at home with only a smartphone, so the addition of external sensors would limit the accessibility of the system and increase the cost for patients.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] The scope will remain focused on knee rehabilitation. The system will not expand to whole-body tracking or unrelated physiotherapy movements. \\
+This is primarily a scope issue, however you can see the implications of this change in the video handling modules (M7-M10) and the Analyze Module (M7) as per UC 2 and 3. They would need to be modified to support additional joints and angles, as well as the addition of new modules to support the new body parts and exercises.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -203,19 +212,17 @@ below, which are leaves in the hierarchy tree, are the modules that will
 actually be implemented.
 
 \begin{description}
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Interface Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Profile Activity Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Analysis Control Flow Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Draw Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Account Creation Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Account Validity Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Details Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Activity Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Valid User Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Account Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Exercise Data Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Performance Statistics Generator Module
-\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Metrics Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] User Activity Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Analysis Control Flow Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Analyze Module
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Feedback Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Metrics Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Draw Module
+\item [\refstepcounter{mnum} \mthemnum \label{mHH}:] UI Module
 \end{description}
 
 
@@ -229,21 +236,19 @@ actually be implemented.
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{5}{0.3\textwidth}{Behaviour-Hiding Module}& User Interface Module\\
-& Profile Activity Module\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding Module}& Account Creation Module\\
 & Analysis Control Flow Module\\
 & Draw Module \\
-& Account Creation Module\\
+& User Interface Module\\
 \midrule
 
-\multirow{8}{0.3\textwidth}{Software Decision Module} & Account Validity Module\\
-& User Details Module\\
-& User Activity Module\\
+\multirow{8}{0.3\textwidth}{Software Decision Module} & Valid User Module\\
+& User Account Module\\
 & Exercise Data Module\\
-& Performance Statistics Generator Module\\
-& Metrics Module\\
+& User Activity Module\\
 & Analyze Module\\
 & Feedback Module\\
+& Metrics Module\\
 \bottomrule
 
 \end{tabular}
@@ -258,11 +263,14 @@ The design of the system is intended to satisfy the requirements developed in th
 \subsection*{Design Decisions}
 
 \begin{description}
-	\item[\textbf{Security}] To satisfy security and privacy requirements (FR21--FR23, SR-IR1, SR-PR1--2), the system implements end-to-end encryption for data at rest and in transit using industry-standard encryption protocols. User authentication employs session-based tokens with automatic timeout after 60 minutes of inactivity.
-	\item[\textbf{Real-time Performance}] To meet the requirement for real-time feedback (FR13--14, PR-SL1--2), the computer vision processing pipeline is optimized to provide analysis results within 1~second of detecting form deviations. This is achieved through efficient pose estimation algorithms and selective processing of critical joint angles.
-	\item[\textbf{Offline Capability}] To address reliability requirements (PR-RFT2, MS-AD1), the system implements local caching of exercise instructions and video queuing for uploads. This ensures users can access exercise information and record sessions even without internet connectivity, with automatic synchronization when connection is restored.
-	\item[\textbf{Modular Exercise Library}] To support extensibility (PR-CR1, PR-SER1), the exercise library is designed as a modular system where new exercises and joint types can be added without modifying core analysis logic. Each exercise type has its own parameter set defining acceptable ranges and form criteria.
-	\item[\textbf{Two-Camera View Analysis}] To address the risk of 3D motion measurement with 2D cameras, the system supports analysis from the sagittal view as primary, with optional frontal view for enhanced accuracy. The analysis algorithms are designed to work with single or multiple camera angles.
+	\item[\textbf{Security}] To satisfy security and privacy requirements (FR21--FR23, SR-IR1, SR-PR1--2), the system implements end-to-end encryption for data at rest and in transit using industry-standard encryption protocols. User authentication employs session-based tokens with automatic timeout after 60 minutes of inactivity. \\
+	This functionality is included in both the Account Creation Module (M1) and the Valid User Module (M2) to ensure secure account creation and login processes. The User Account Module (M3) also incorporates role-based access control to restrict data access to authorized users.
+	\item[\textbf{Real-time Performance}] To meet the requirement for real-time feedback (FR13--14, PR-SL1--2), the computer vision processing pipeline is optimized to provide analysis results within 1~second of detecting form deviations. This is achieved through efficient pose estimation algorithms and selective processing of critical joint angles. \\
+	The Analysis Control Flow Module (M6), with assistance from the Analyze Module (M7), the Feedback Module (M8), the Metrics Module (M9), and the Draw Module (M10), is designed to minimize latency and ensure timely feedback to users during exercise sessions. All video operations are performed in a flow between these modules, each controlling a finer band of information handed from the previous module.
+	\item[\textbf{Modular Exercise Library}] To support extensibility (PR-CR1, PR-SER1), the exercise library is designed as a modular system where new exercises and joint types can be added without modifying core analysis logic. Each exercise type has its own parameter set defining acceptable ranges and form criteria. \\
+	This functionality is provided by the Exercise Data Module (M4), which maintains a library of all the exercises assigned to each user. It also facilitates the addition of exercises by physiotherapists to assigned patients and the modification of isntructions, sets, and reps to assigned exercises. All of this information is stored in the database, to ensure consistency across devices and sessions.
+	\item[\textbf{Two-Camera View Analysis}] To address the risk of 3D motion measurement with 2D cameras, the system supports analysis from the sagittal view as primary. The analysis algorithms are designed to work with a single camera from nearly any angle, supporting the data gathering of angles across the knee from almost any perspective. \\
+	As this functionality is related to video, it again falls to the video handling modules (M7-10). The dot product of the vectors created between landmarks placed on the video gets a little less accurate at certain perspectives, but most are still accurate enough to support the functionality of our system and uphold requirements.
 \end{description}
 
 \section{Module Decomposition} \label{SecMD}
@@ -274,7 +282,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 \begin{description}
 	\item[Secrets:] The data structure and algorithm used to implement the virtual hardware.
 	\item[Services:] Serves as a virtual hardware used by the rest of the system. This module provides the interface between the hardware and the software, including camera access, screen display, audio output, and device sensors. The system can use it to capture video, display outputs, or accept touch inputs.
-	\item[Implemented By:] Android~OS
+	\item[Implemented By:] N/A (OS and standard libraries through React Native)
 \end{description}
 
 \subsection{Behaviour-Hiding Modules}
@@ -285,25 +293,16 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Implemented By:] \progname{}
 \end{description}
 
-\subsubsection{User Interface Module (M1)}
+\subsubsection{Account Creation Module (M1)}
 \begin{description}
-	\item[Secrets:] The user interface layout and interaction logic for patient and physiotherapist dashboards.
-	\item[Services:] Displays patient exercise history, progress charts, and upcoming exercises. Shows PT patient list with status indicators and alerts. Provides access to video review and report viewing. Enables PT comments on patient sessions. Presents analytics and visualizations of exercise data.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR18, FR19, FR24, FR25
+    \item[Secrets:] The logic for creating and storing both PTs and patient accounts, and creating pysiotherapist invite codes.
+    \item[Services:] Handles new user account creations for both patients and PTs with input information. Also generates unique invite codes for PT accounts upon creation for linking patient accounts. Stores user account information securely in a remote database.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:] Library Module
+    \item[Related Requirements:] FR1, FR2
 \end{description}
 
-\subsubsection{Profile Activity Module (M2)}
-\begin{description}
-	\item[Secrets:] The data structures and business logic for managing patient-specific exercise programs, including customization and progress tracking.
-	\item[Services:] Allows physiotherapists to create and customize exercise programs for individual patients, including sets, reps, rest times, and weekly limits. Tracks patient exercise completion and progress over time. Enforces PT-defined limitations on exercise frequency and intensity.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Object
-	\item[Related Requirements:] FR6, FR9, FR10, FR11, FR22, FR27, SR-AR3
-\end{description}
-
-\subsubsection{Analysis Control Flow Module (M3)}
+\subsubsection{Analysis Control Flow Module (M6)}
 \begin{description}
 	\item[Secrets:] The implementation of video recording, including camera configuration, frame rate management, and recording controls.
 	\item[Services:] Captures video of users performing exercises at minimum 720p resolution and 30 fps. Performs pre-capture environment checks (lighting, framing). Provides recording controls (start, stop, retry). Ensures video meets minimum quality standards before proceeding to analysis.
@@ -312,7 +311,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR7, FR9, FR13, FR15, FR26, UHR-EOU3
 \end{description}
 
-\subsubsection{Draw Module (M4)}
+\subsubsection{Draw Module (M10)}
 \begin{description}
 	\item[Secrets:] The graphical representation of landmarks and objects of interest within the video provided by the user.
 	\item[Services:] Graphically shows the user the system's understanding of their movements by highlighting landmarks such as their ankle, knee, and hip. Additionally, draws lines between these landmarks to communicate how the system interprets limb movement.
@@ -321,14 +320,23 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR5, FR14, LFR-ST1, UHR-EOU2, UHR-EOU5, UHR-EOU6
 \end{description}
 
-\subsubsection{Account Creation Module (M5)}
+\subsubsection{User Interface Module (M11)}
 \begin{description}
-    \item[Secrets:] The logic for creating and storing both PTs and patient accounts, and creating pysiotherapist invite codes.
-    \item[Services:] Handles new user account creations for both patients and PTs with input information. Also generates unique invite codes for PT accounts upon creation for linking patient accounts. Stores user account information securely in a remote database.
-    \item[Implemented By:] \progname{}
-    \item[Type of Module:] Library Module
-    \item[Related Requirements:] FR1, FR2
+	\item[Secrets:] The user interface layout and interaction logic for patient and physiotherapist dashboards.
+	\item[Services:] Displays patient exercise history, progress charts, and upcoming exercises. Shows PT patient list with status indicators and alerts. Provides access to video review and report viewing. Enables PT comments on patient sessions. Presents analytics and visualizations of exercise data.
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Object
+	\item[Related Requirements:] FR18, FR19, FR24, FR25
 \end{description}
+
+% \subsubsection{Profile Activity Module (M2)}
+% \begin{description}
+% 	\item[Secrets:] The data structures and business logic for managing patient-specific exercise programs, including customization and progress tracking.
+% 	\item[Services:] Allows physiotherapists to create and customize exercise programs for individual patients, including sets, reps, rest times, and weekly limits. Tracks patient exercise completion and progress over time. Enforces PT-defined limitations on exercise frequency and intensity.
+% 	\item[Implemented By:] \progname{}
+% 	\item[Type of Module:] Abstract Object
+% 	\item[Related Requirements:] FR6, FR9, FR10, FR11, FR22, FR27, SR-AR3
+% \end{description}
 
 \subsection{Software Decision Module}
 
@@ -347,7 +355,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 % 	\item[Related Requirements:] FR1, FR2, FR3, FR5, FR18, FR21, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2, MS-AD1
 % \end{description}
 
-\subsubsection{Valid User Module (M6)}
+\subsubsection{Valid User Module (M2)}
 \begin{description}
     \item[Secrets:] The validation and authorization logic for all user credentials (patient and PT), invite codes, and physiotherapist identification numbers.
     \item[Services:] Checks input user information to ensure unique entries into the remote database. Ensures valid invite code during patient account creation to link new account to relevant PT account. Ensures physiotherapist identification numbers are valid through the publicly accessible records during PT account creation.
@@ -356,7 +364,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
     \item[Related Requirements:] FR1, FR3
 \end{description}
 
-\subsubsection{User Account Module (M7)}
+\subsubsection{User Account Module (M3)}
 \begin{description}
     \item[Secrets:] The authorization logic for existing user actions, and the retrieval and modification logic for user information in the remote database.
     \item[Services:] User logins (both patient and PT) authorized by checking the remote database for matching email and password. Enables physiotherapists to delete linked patient accounts for housekeeping and service limitation purposes. Additionally, retrieves all relevant user account information from the remote database for other module usage.
@@ -365,16 +373,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
     \item[Related Requirements:] FR1, FR2, FR4, FR18, FR21, FR22, FR23, SR-AR1, SR-AR3, SR-IR1, SR-PR1, SR-PR2
 \end{description}
 
-\subsubsection{User Activity Module (M8)}
-\begin{description}
-    \item[Secrets:] The structure and storage logic for users historic activity data.
-    \item[Services:] Formats, links, and stores user activity data in the remote database in a table for historic activity summaries. Formats input from the Analyze Module.
-    \item[Implemented By:] \progname{}
-    \item[Type of Module:] Abstract Object
-    \item[Related Requirements:] FR21, FR25, SR-IR1
-\end{description}
-
-\subsubsection{Exercise Data Module (M9)}
+\subsubsection{Exercise Data Module (M4)}
 \begin{description}
     \item[Secrets:] The structure and storage logic for user relevant exercise data.
     \item[Services:] Provides exercise information to users on demand. Maintains a library of knee recovery relevant exercises along with exercise instructions. Allows user specific modification of prescribed exercises by linked PT account.
@@ -383,25 +382,16 @@ Modules are decomposed according to the principle of ``information hiding.'' The
     \item[Related Requirements:] FR5, FR6, FR13, FR21, MS-AD1, SR-IR1, SR-PR1
 \end{description}
 
-\subsubsection{Performance Statistics Generator Module (M10)}
+\subsubsection{User Activity Module (M5)}
 \begin{description}
-	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
-	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Library
-	\item[Related Requirements:] FR17, FR19, FR20, FR25
+    \item[Secrets:] The structure and storage logic for users historic activity data.
+    \item[Services:] Formats, links, and stores user activity data in the remote database in a table for historic activity summaries. Formats input from the Analyze Module.
+    \item[Implemented By:] \progname{}
+    \item[Type of Module:] Abstract Object
+    \item[Related Requirements:] FR21, FR25, SR-IR1
 \end{description}
 
-\subsubsection{Metrics Module (M11)}
-\begin{description}
-	\item[Secrets:] The specific computer vision algorithms and implementation details for pose detection, joint tracking, and body landmark identification.
-	\item[Services:] Processes video frames to detect and track body landmarks using pose estimation. Identifies key joints relevant to knee exercises (hip, knee, ankle, foot). Extracts coordinate data for joint positions across video frames. Handles varying lighting conditions and camera angles. Implements the core CV library integration (OpenCV, MediaPipe).
-	\item[Implemented By:] \progname{}
-	\item[Type of Module:] Abstract Data Type
-	\item[Related Requirements:] FR8, FR12
-\end{description}
-
-\subsubsection{Analyze Module (M12)}
+\subsubsection{Analyze Module (M7)}
 \begin{description}
 	\item[Secrets:] The mathematical models and algorithms for calculating joint angles, range of motion, and determining form correctness based on exercise parameters. Also the mechanism for storing video files through local caching.
 	\item[Services:] Calculates joint angles from landmark coordinates with ±5° accuracy. Measures range of motion with ±10\% accuracy. Compares measured values against exercise-specific acceptable ranges. Detects form deviations and classifies severity. Identifies dangerous movements requiring immediate halt. Measures time-under-tension and exercise duration. Also stores recorded exercise videos securely (encrypted at rest per SR-IR1).
@@ -410,7 +400,7 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Related Requirements:] FR12, FR13, FR14, FR21, SR-IR1, PR-RFT2, PR-PAR1, PR-PAR2, PR-SCR1, MS-MNT1
 \end{description}
 
-\subsubsection{Feedback Module (M13)}
+\subsubsection{Feedback Module (M8)}
 \begin{description}
 	\item[Secrets:] The rules and logic for converting analysis results into user-friendly feedback messages and instructions.
 	\item[Services:] Generates real-time corrective feedback messages based on form analysis results. Provides step-by-step exercise guidance. Creates descriptive messages for form deviations specifying required adjustments. Triggers safety warnings for dangerous movements.
@@ -418,6 +408,26 @@ Modules are decomposed according to the principle of ``information hiding.'' The
 	\item[Type of Module:] Library
 	\item[Related Requirements:] FR13, FR14, FR16, PR-SCR1
 \end{description}
+
+\subsubsection{Metrics Module (M9)}
+\begin{description}
+	\item[Secrets:] The specific computer vision algorithms and implementation details for pose detection, joint tracking, and body landmark identification.
+	\item[Services:] Processes video frames to detect and track body landmarks using pose estimation. Identifies key joints relevant to knee exercises (hip, knee, ankle, foot). Extracts coordinate data for joint positions across video frames. Handles varying lighting conditions and camera angles. Implements the core CV library integration (OpenCV, MediaPipe).
+	\item[Implemented By:] \progname{}
+	\item[Type of Module:] Abstract Data Type
+	\item[Related Requirements:] FR8, FR12
+\end{description}
+
+% \subsubsection{Performance Statistics Generator Module (M10)}
+% \begin{description}
+% 	\item[Secrets:] The format and generation logic for exercise session reports and progress summaries.
+% 	\item[Services:] Generates comprehensive session reports including completion rate, form score, pain level, and patient feedback. Creates progress summaries showing improvement over time. Generates alerts for repeated incorrect attempts or concerning patterns. Formats reports for PT review.
+% 	\item[Implemented By:] \progname{}
+% 	\item[Type of Module:] Library
+% 	\item[Related Requirements:] FR17, FR19, FR20, FR25
+% \end{description}
+
+
 
 
 \section{Traceability Matrix} \label{SecTM}
@@ -431,50 +441,50 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-FR1 & M5, M6, M7\\
-FR2 & M5, M7\\
-FR3 & M6\\
-FR4 & M7\\
-FR5 & M4, M9\\
-FR6 & M2, M9, M10\\
-FR7 & M3\\
-FR8 & M3, M11\\
-FR9 & M2, M3\\
-FR10 & M2\\
-FR11 & M2\\
-FR12 & M11, M12\\
-FR13 & M3, M9, M12, M13\\
-FR14 & M4, M12, M13\\
-FR15 & M3\\
-FR16 & M13\\
-FR17 & M10\\
-FR18 & M1, M7\\
-FR19 & M1, M10\\
-FR20 & M10\\
-FR21 & M7, M8, M9, M12\\
-FR22 & M2, M7\\
-FR23 & M7\\
-FR24 & M1\\
-FR25 & M1, M8, M10\\
-FR26 & M3\\
-FR27 & M2\\
-LFR-ST1 & M4\\
-MS-AD1 & M9\\
-MS-MNT1 & M12\\
-PR-PAR1 & M12\\
-PR-PAR2 & M12\\
-PR-RFT2 & M12\\
-PR-SCR1 & M12, M13\\
-SR-AR1 & M7\\
-SR-AR2 & M6\\
-SR-AR3 & M2, M7\\
-SR-IR1 & M7, M8, M9, M12\\
-SR-PR1 & M7, M9\\
-SR-PR2 & M7\\
-UHR-EOU2 & M4\\
-UHR-EOU3 & M3\\
-UHR-EOU5 & M4\\
-UHR-EOU6 & M4\\
+FR1 & M1, M2, M3\\
+FR2 & M1, M3\\
+FR3 & M2\\
+FR4 & M3\\
+FR5 & M4, M10\\
+FR6 & M4, M11\\
+FR7 & M6\\
+FR8 & M6, M9\\
+FR9 & M6, M11\\
+FR10 & M11\\
+FR11 & M11\\
+FR12 & M7, M9\\
+FR13 & M4, M6, M7, M8\\
+FR14 & M7, M8, M10\\
+FR15 & M6\\
+FR16 & M8\\
+FR17 & M11\\
+FR18 & M3, M11\\
+FR19 & M11\\
+FR20 & M11\\
+FR21 & M3, M4, M5, M7\\
+FR22 & M3, M11\\
+FR23 & M3\\
+FR24 & M11\\
+FR25 & M5, M11\\
+FR26 & M6\\
+FR27 & M11\\
+LFR-ST1 & M10\\
+MS-AD1 & M4\\
+MS-MNT1 & M7\\
+PR-PAR1 & M7\\
+PR-PAR2 & M7\\
+PR-RFT2 & M7\\
+PR-SCR1 & M7, M8\\
+SR-AR1 & M3\\
+SR-AR2 & M2\\
+SR-AR3 & M3, M11\\
+SR-IR1 & M3, M4, M5, M7\\
+SR-PR1 & M3, M4\\
+SR-PR2 & M3\\
+UHR-EOU2 & M10\\
+UHR-EOU3 & M6\\
+UHR-EOU5 & M10\\
+UHR-EOU6 & M10\\
 \bottomrule
 \caption{Trace Between Requirements and Modules}
 \label{TblRT}
@@ -486,9 +496,9 @@ UHR-EOU6 & M4\\
 \toprule
 \textbf{AC} & \textbf{Modules}\\
 \midrule
-AC1 & M2, M3, M10, M13\\
-AC2 & M2, M3, M8, M9, M11, M12\\
-AC3 & M3, M11, M12, M13\\
+AC1 & M6, M8, M11\\
+AC2 & M4, M5, M6, M7, M9, M11\\
+AC3 & M6, M7, M8, M9\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
@@ -519,7 +529,7 @@ AC3 & M3, M11, M12, M13\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{UsesHierarchy_3.png}
+\includegraphics[width=0.7\textwidth]{UsesHierarchy_4.png}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
@@ -566,60 +576,105 @@ A detailed task breakdownis maintained on our \href{https://github.com/users/M9H
 schedule is listed below:\ 
 
 
-\textbf{Present to Mid-November}
 \begin{itemize}
-    \item \textbf{POC Finalization \& Testing} (Responsible: Entire Team)
+    \item \textbf{November 14th, 2025: Analysis Control Flow Module} (Responsible: Matthew, Vaisnavi)
     \begin{itemize}
-        \item Complete camera and pose detection reliability.
-         \item Work out demo to showcase to professor and TA
+        \item Video recording capabilities fully implemented and ready for POC.
     \end{itemize}
 
-    \item \textbf{Design Document Revision 0} (Responsible: Entire Team)
+    \item \textbf{November 14th, 2025: Draw Module} (Responsible: Matthew)
     \begin{itemize}
-        \item Write system architecture, data flow, MediaPipe integration, hazards and mitigations.
-        \item Add code comments, diagrams, and updated requirement traceability.
-    \end{itemize}
-\end{itemize}
-
-\textbf{December to January}
-\begin{itemize}
-    \item \textbf{Work on project as a whole in preposition for Revision 0 Demo} (Responsible: Entire Team)
-    \begin{itemize}
-        \item Work on entire project, start building and revising the remaining modules, to begin putting together all the pieces
-    \end{itemize}
-\end{itemize}
-\textbf{February}
-\begin{itemize}
-    \item \textbf{Rev0 Presentations} (Responsible: Entire Team)
-    \begin{itemize}
-        \item Implement feedback from the professor and TA in the previous deliverables.
-        \item Refactor code to ensure it is functional, stable, and ready for the presentation.
-        \item Finalize demonstration plan and speaking roles.
-    \end{itemize}
-\end{itemize}
-
-\textbf{Late March -- Early April}
-\begin{itemize}
-    \item \textbf{Final Demonstration (Revision 1)} (Responsible: Entire Team)
-    \begin{itemize}
-        \item Implement improvements from TA feedback.
-        \item Enhance UI transparency (tracking visualization, angles, notifications).
-        \item Prepare live demo and video recording.
+        \item Landmark placement and line drawing capabilities fully implemented and ready for POC.
     \end{itemize}
 
-    \item \textbf{EXPO Demonstration} (Responsible: Entire Team)
+    \item \textbf{November 14th, 2025: Metrics Module} (Responsible: Matthew, Vaisnavi)
     \begin{itemize}
-        \item Build poster and prepare speaking roles.
-        \item Conduct demo rehearsals and ensure hardware stability.
+        \item Numerical data extraction from video feed fully implemented and ready for POC.
     \end{itemize}
-\end{itemize}
 
-\textbf{April -- Final Week}
-\begin{itemize}
-    \item \textbf{Final Documentation (Revision 1)} (Responsible: Entire Team)
+    \item \textbf{November 14th, 2025: Analyze Module} (Responsible: Vaisnavi)
     \begin{itemize}
-        \item Submit Problem Statement, Development Plan, POC Plan, Requirements, Hazard Analysis, Design Document, V\&V Plan, V\&V Report, Extra Documentation, and Source Code.
-        \item Include GitHub repository link, README, demo video, and traceability matrices.
+        \item Exercise analysis, feedback generation, and data parsing capabilities fully implemented and ready for POC.
+    \end{itemize}
+
+    \item \textbf{November 16th, 2025: POC Testing} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Run throughs and debugging of the POC to ensure everything is working as expected before the POC demonstration.
+    \end{itemize}
+
+    \item \textbf{During November, 2025: Design Doc Rev0 and further development} (Responsible: Eman, Cieran, Maham)
+    \begin{itemize}
+        \item Work on the remaining modules (see dates below), and refine design documents from -1 to 0 for deliverable in January.
+    \end{itemize}
+
+    \item \textbf{January 23rd, 2026: Design Doc Rev0} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Complete MG and MIS documents with all modules fully described and connected to requirements, and with the use hierarchy fully defined.
+    \end{itemize}
+
+    \item \textbf{January 26th, 2026: User Account Module} (Responsible: Maham)
+    \begin{itemize}
+        \item Complete implementation of account data manipulation capabilities, including user login/logout, session management, and retrieval of user information for other module usage.
+    \end{itemize}
+
+    \item \textbf{January 26th, 2026: User Creation Module} (Responsible: Maham)
+    \begin{itemize}
+        \item Complete implementation of account creation capabilities, including user input handling and database communication.
+    \end{itemize}
+
+    \item \textbf{January 27th, 2026: UI Module} (Responsible: Vaisnavi)
+    \begin{itemize}
+        \item React frontend development of the user interface with basic navigational capabilities, and respective places for linking backend data to be displayed.
+    \end{itemize}
+    
+    \item \textbf{January 27th, 2026: UI Module} (Responsible: Vaisnavi)
+    \begin{itemize}
+        \item React frontend development of the user interface with basic navigational capabilities, and respective places for linking backend data to be displayed.
+    \end{itemize}
+
+    \item \textbf{January 28th, 2026: User Activity Module} (Responsible: Cieran)
+    \begin{itemize}
+        \item Complete implementation of user activity tracking capabilities, including logging and recalling of user activities from the database.
+    \end{itemize}
+
+    \item \textbf{January 29th, 2026: Exercise Data Module} (Responsible: Eman)
+    \begin{itemize}
+        \item Complete implementation of exercise data handling capabilities, including data collection, storage, and retrieval of exercise instructions.
+    \end{itemize}
+
+    \item \textbf{January 30th, 2026: Valid User Module} (Responsible: Eman)
+    \begin{itemize}
+        \item User validation logic implemented, including checks for unique user information and valid invite codes during account creation.
+    \end{itemize}
+
+    \item \textbf{January 30th, 2026: UI Module Finalization} (Responsible: Cieran)
+    \begin{itemize}
+        \item Complete implementation of dashboard, exercise, progress, and profile pages with database stored information, linked to backend modules.
+    \end{itemize}
+
+    \item \textbf{January 26th, 2026: Rev0 Testing} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Runthroughs and debugging of the entire system to ensure everything is working as expected before the Rev0 demonstration.
+    \end{itemize}
+
+    \item \textbf{February 5th, 2026: Rev0 Demonstration} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Complete implementation expected for display of all modules and functionalities to be demonstrated.
+    \end{itemize}
+
+    \item \textbf{March 27th, 2026: Module Updates} (Responsible: Entire Team)
+    \begin{itemize}
+        \item Updates from Rev0 to Rev1 based on Professor and TA feedback, including improvements to the UI, analysis capabilities, and overall system stability.
+    \end{itemize}
+
+    \item \textbf{March 28th, 2026: Final Demonstration} (Responsible: Maham)
+    \begin{itemize}
+        \item Demonstration to Professor and TA of the final system with all modules fully implemented and working together to satisfy the requirements. No further changes to implementation expected beyond this point.
+    \end{itemize}
+
+    \item \textbf{April 6th, 2026: Final Documentation} (Responsible: Maham)
+    \begin{itemize}
+        \item Final update and changes to this document and all related modules and design documents based on feedback from the final demonstration, and submission of all final documentation to the course repository.
     \end{itemize}
 \end{itemize}
 
