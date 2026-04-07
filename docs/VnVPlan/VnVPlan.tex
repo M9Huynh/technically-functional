@@ -33,8 +33,9 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Name(s)} & {\bf Date} & {\bf Notes}\\
 \midrule
-Maham, Cieran and Eman & Oct 27, 2025 & Added initial first draft of the VnV Plan\\
-Date 2 & 1.1 & Notes\\
+Maham, Cieran and Eman & October 27th, 2025 & Added initial first draft of the VnV Plan\\
+Vaisnavi S. & April 5th, 2026 & Applied feedback to the VnV Plan\\
+Vaisnavi S. & April 6th, 2026 & Finalized the final version of the VnV Plan\\
 \bottomrule
 \end{tabularx}
 
@@ -55,7 +56,17 @@ Date 2 & 1.1 & Notes\\
   \toprule		
   \textbf{symbol} & \textbf{description}\\
   \midrule 
-  T & Test\\
+  VnV & Verification and Validation\\
+  SRS & Software Requirements Specification\\
+  API & Application Programming Interface\\
+  TC & Test Case\\
+  UT & Usability Test\\
+  PR & Performance Test\\
+  RFT & Reliability and Fault-Tolerance Test\\
+  SR & Security Test\\
+  MS & Maintainability and Support Test\\
+  FR & Functional Requirement\\
+  SR-AR & Security Access Requirement\\
   \bottomrule
 \end{tabular}\\
 
@@ -71,9 +82,9 @@ This document aims to outline the verification and validation that the Physiothe
 
 \subsection{Summary}
 
-The software focused on in this document is the Physiotherapy Companion application, built for smart devices with camera access to assess a patient undergoing physiotherapy on their form during assigned physiotherapy exercises.
+The software focused on in this document is the Physiotherapy Companion application, built for smart devices with camera access to help guide a patient undergoing physiotherapy with their assigned physiotherapy exercises.
 
-The application will provide support and guidance for the exercise and make real-time suggestions to improve the user’s form using a video-feed. It will also provide overviews of previous exercises to allow users to see progress and consistency, assisting in forming healthy habits towards recovery and reinforce confidence.
+The application will provide support and guidance for the exercise and provide real-time feedback to help the user using a video-feed. It will also provide overviews of previous exercises to allow users to see progress and consistency, assisting in forming healthy habits towards recovery and reinforce confidence.
 
 The application will also support a more administrative function for physiotherapists, allowing them to view exercise summaries for patients assigned to them. Additionally, physiotherapists may leave comments on summaries to ensure consistent and timely usage of the application for healthy exercising.
 
@@ -82,9 +93,9 @@ The application will also support a more administrative function for physiothera
 
 The objectives of the testing expanded upon within this document focus on general system usability, the security of user profiles and video-feed data, and the verification of stakeholder requirements.
 
-Usage of the system should be easily explainable for first-time users with simple dialogue popups and limited visible guiding from one function to the next. Additionally, for the video-feed portion of the application’s usage, the user should be reasonably guided through the exercise and process to set them up for successful exercise execution and form recommendation acceptance.
+Usage of the system should be easily explainable for first-time users with simple dialogue popups and limited visible guiding from one function to the next. Additionally, for the video-feed portion of the application’s usage, the user should be reasonably guided through the exercise and process to set them up for successful exercise execution and feedback recommendation acceptance.
 
-User profile and video-feed data should be securely stored, whether locally or within a remote database accessed by the system. User data security has become an increasingly sensitive topic within the software industry of late and users may question how their data is being stored and utilized. Users should be aware of the usage of their data and the system should ensure unauthorized access outside of the communicated plan is never possible.
+User profile and video-feed data should be securely stored, whether locally or within a remote database accessed by the system. User data security has become an increasingly sensitive topic within the software industry and users may question how their data is being stored and utilized \citep{secureflag2026sensitive}. Users should be aware of the usage of their data and the system should ensure unauthorized access outside of the communicated plan is never possible.
 
 Meeting stakeholder requirements, whether they be data restrictive or process flow in nature, is what will validate the core features of the system. If users do not find value in the expected usage expected from the system, then, ultimately, the system has failed to perform its primary goal. Ensuring stakeholder requirements and feedback are incorporated into the system as it is developed, both initially and onward, will ensure the system is both wanted and usable to the intended audience.
 
@@ -94,12 +105,7 @@ For performance, the system should respond in a timely manner that does not frus
 
 \subsection{Extras}
 
-The extras set out for the system consist of a Design Thinking Document and a User Instructional Video.
-
-The Design Thinking Document aims to explain the process behind, and work done towards, the final design of the system. This document explains the overall flow of processing through the system and the interfacing elements, external libraries utilized, and more. The document flow is iterative, as is the design process, and aims to communicate the entire design process of the system.
-
-The User Instructional Video aims to communicate the method of usage of the system to the primary stakeholders. The video will demonstrate the usage of the dashboard and analytics display, the video-feed  form recommendation function, as well as an explanation of the overall feedback provided for each completed exercise. AThe instructions will be patient-centred. For the physiotherapist view the patient list, comment features, and analytical display function will be explained.
-
+The extras set out for the system consist of both a Design Thinking Document and a Usability Report. The Design Thinking Document aims to explain the process behind, and work done towards, the final design of the system. This document explains the overall flow of processing through the system and the interfacing elements, external libraries utilized, and more. The document flow is iterative, as is the design process, and aims to communicate the entire design process of the system. The Design Thinking Document can be found \href{../Extras/DesignThinking}{here}. The Usability Report aims to focus on evaluating the system from a user perspective. This report documents usability testing conducted with participants to assess ease of navigation, clarity of instructions, and overall user experience. It includes observations, user feedback, and analysis of interaction patterns to identify the key areas to foucs on and address. The findings are used to ensure the system meets the non-functional requirements and to guide improvements to the interface for both patients and physiotherapists. The Usability Report can be found \href{../Extras/UsabilityTesting/UsabilityReport.pdf}{here}.
 
 \subsection{Relevant Documentation}
 \begin{itemize}
@@ -107,7 +113,7 @@ The User Instructional Video aims to communicate the method of usage of the syst
   \item Development Plan: \citet{DevPlan}
   \item System Requirements Specification: \citet{SRS}
   \item Hazard Analysis: \citet{HA}
-  \item User Instructional Video: \citet{UserVideo}
+  \item Usability Report: \citet{UsabilityTesting}
   \item Design Thinking Document: \citet{DesignThinking}
 \end{itemize}
 All of the above document are important artifacts for the implementation of the system. These documents outline how the implementation will be approached and what the implementation will  follow.
@@ -141,835 +147,1348 @@ For verification of non-functional requirements within the SRS, in addition to t
 
 \subsection{Design Verification}
 
-Verification of the design will rely on feedback from 4G06 teaching assistants, peer-review feedback provided by colleagues on another design team, as well as advisor and stakeholder inquiries. The feedback from teaching assistants and peer-review feedback will be created as issues within our repository and handled accordingly. For advisor and stakeholder inquiry, there will be software handouts along with a questionnaire which is expanded on more at the end of this section.
+Verification of the design will rely on feedback from 4G06 teaching assistants, peer-review feedback provided by colleagues on another design team, as well as advisor and stakeholder inquiries. The feedback from teaching assistants and peer-review feedback will be created as issues within our repository and handled accordingly. For advisor and stakeholder inquiry, there will be software handouts along with a questionnaire which is expanded on more in our Usability Report, which is referenced in the appendix of this document (Section 6.1).
 
 \subsection{Verification and Validation Plan Verification}
 
-This document will also be reviewed by the teaching assistants and provided peer-review by another design team, creating issues within the GitHub repository to be dealt with accordingly.
-
-In addition, the test suite derived from this document will be verified via code coverage and mutation testing on the software. For validation, the final outcome of each test will be discussed in the meeting with the project advisor to ensure the system is doing what it should in each test case.
+This document will also be reviewed by the teaching assistants and provided peer-review by another design team, creating issues within the GitHub repository to be dealt with accordingly. To ensure feedback is properly actioned, the following step-by-step process is followed:
+\begin{itemize}
+    \item Feedback is collected during TA and peer review sessions
+    \item Each comment is converted into a GitHub issue
+    \item Issues are assigned to a responsible team member
+    \item Changes are implemented and committed with reference to the issue
+    \item Updated sections are reviewed again before finalizing
+\end{itemize}
+An issue is considered resolved once the required changes have been implemented, reviewed by at least one additional team member, and the corresponding GitHub issue has been closed. In addition, the test suite derived from this document will be verified via code coverage on the software. For validation, the final outcome of each test will be discussed in the meeting with the project advisor to ensure the system is doing what it should in each test case.
 
 \subsection{Implementation Verification}
 
-For testing the implemented system, there will be a software testing suite developed based on the tests listed in sections 4 and 5 of this document. Additional testing by the team includes code walk-throughs of critical sections both during development and upon reaching milestones within the development cycle. There will also be static analysis on each pull request to GitHub, ensuring naming conventions and best practice are followed throughout the project.
+The implementation verification plan ensures that the system aligns with the System Requirements Specification (SRS) through both dynamic and non-dynamic testing methods.
 
+Dynamic testing is conducted through unit testing, integration testing, and system-level validation. Unit tests are implemented for both the frontend and backend components to verify core functionality such as authentication, data handling, and computer vision analysis. Integration testing is used to validate interactions between system components, including Firebase authentication, Firestore database operations, and backend API endpoints such as \path{/process_frame} and \path{/precheck_frame}. Performance testing is also carried out to evaluate response time during exercise recording ($\leq$ 2 seconds), system stability under repeated usage, and handling of real-time data processing.
+
+Static (non-dynamic) testing is used to evaluate code and design quality without executing the system. This includes peer code reviews on all pull requests to ensure best practices are followed. Code walkthroughs are also conducted for critical modules and functionalities to identify potential issues early. In addition, tools like \texttt{pylint} are used to catch code quality issues such as inconsistent formatting and unused variables. Documentation is regularly reviewed, with issues tracked and resolved through GitHub.
+
+Automated test suites and GitHub Actions are used to ensure functionality remains intact and to help maintain system stability. Manual testing is also carried out for real-time features, including MediaPipe pose detection and user interaction workflows that cannot be fully automated. These combined efforts help ensure that all features and functionality remain reliable.
 \subsection{Automated Testing and Verification Tools}
 
-Automated testing includes the testing suite previously mentioned in this section; derived from the tests found in this document which are based upon the requirements found within the \href{https://github.com/M9Huynh/technically-functional/blob/32182cfc56c602466e270b7fcbad01d892911ea1/docs/SRS/SRS.pdf}{SRS document} of this project. These tests will be verified themselves with mutation testing and code coverage assessments. A testing suite such as pytest or Python Extension will be utilized to implement the tests mentioned in further sections of this document. These suits contain their own internal tools for checking code coverage, and the GitHub will be using continuous integration to ensure base cases continue to pass through all pull requests as well as general compilation checks.
+\textbf{Unit Testing:}
+The project uses \texttt{pytest} for the Python backend to validate API endpoints, data processing, and computer vision functionality. For the frontend, \texttt{Jest} is used to verify the UI and component interactions. 
 
-During development, pylint will ensure the coding standard is adhered to and continuous development within GitHub will ensure no slip-ups on merging.
+\textbf{Code Coverage:}
+Code coverage is used to measure how much of the system is covered by the test cases.
+
+\begin{itemize}
+    \item \textbf{Python:} We use \texttt{pytest-cov} with \texttt{pytest} to keep track of code coverage for the backend. 
+    
+    \item \textbf{TypeScript:} We use \texttt{Jest} to keep track fo code coverage for the frontend.
+\end{itemize}
+Overall, the goal is to achieve meaningful code coverage, and identify any gaps so we know where to focus next. To maintain code quality, we use static analysis tools such as \texttt{pylint} to help with code quality where applicable. In addition, we conduct peer code reviews and walkthroughs consistently to ensure our code is abiding by best practices. In terms of automated workflows, we use GitHub Actions to conduct automated builds and checks on pull requests. Ultimately, these workflows help ensure that the project remains stable as new changes to the code are constantly being introduced.
 
 \subsection{Software Validation}
 
-For software validation, to ensure the correct system was designed to solve the problems outlined within the problem statement document, there will be system walkthroughs and interviews with stakeholders and the project advisor. These interviews will assess time to use the systems functions, understanding of the system and how it processes data, as well as a general acceptance of the system. The interview will end with questions outlined in the appendix of this document. (Section 6.2)
+For software validation, to ensure the correct system was designed to solve the problems outlined within the problem statement document, there will be system walkthroughs and interviews with stakeholders and the project advisor. These interviews will assess time to use the systems functions, understanding of the system and how it processes data, as well as a general acceptance of the system. The interview will end with questions outlined in our Usability Report which is referenced in the appendix of this document (Section 6.1).
 
 \section{System testing}
-The tests outlined below have been divided into 3 key areas: \\
+This section outlines the tests used to verify both the functional requirements (FRs) and non-functional requirements (NFRs) of the system. Ultimately, these tests ensure that the software behaves as expected in terms of its core functionality, while also meeting performance, usability, and reliability expectations. 
+
+\subsection{Tests for Functional Requirements} 
+
+
 \begin{enumerate}
-\item \textbf{User registration suite:} the tests listed here have been designed for the purpose of testing the system's handling of the registration process. 
-\item \textbf{PT specific testing:} These tests have been tailored to test the functionalities available to the physiotherapists. 
-\item \textbf{Patient focused testing:} The results from this will give insight into how well the system accomplishes its intended purpose. 
-\end{enumerate}
-\textbf{Note: Automatic tests will be run using a script. See Appendix for an example template of script.
-The use of ‘display’ indicates both audio and visual formats are provided.}
+	
+	\item \textbf{test-TC1 : Physiotherapist Registration (Valid License)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} App launched; registration screen accessible; Firebase Auth and Firestore active.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with a valid license format and an active license in \texttt{validLicenses}.
+	
+	\textbf{Output:} Auth user created. Firestore \texttt{users/\{uid\}} written with \texttt{role="physio"}, \texttt{verified=true}, and \texttt{createdAt}. All assertions passed.
+	
+	\textbf{Test Case Derivation:} Derived from requirement FR1.1 and FR1.2 in the SRS, which state that verified physiotherapists must be able to register successfully using a valid license.
 
-\subsection{User registration suite} 
-This section contains: user\_acc\_create, invalid\_format\_create, cannot\_verify\_creds, acc\_exists.
-
-\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
-\caption{Software Test Cases for User Account Creation} \\
-\hline
-\textbf{Test Case ID} & \textbf{user\_acc\_create} \\
-\hline
-\endfirsthead
-
-\hline
-Control & Automatic \\
-\hline
-Rationale & The system must be able to create and store a new account. \\
-\hline
-State & User does not have an account on the application. \\
-\hline
-Input & Govt id (name, date of birth), license number (PT) OR invite code (patient), email, password (will be set at the end of the registration process) \\
-\hline
-Output & "Account created successfully" displayed on page and user is successfully added to the user database \\
-\hline
-How the test will be performed & 
-The test will be conducted with the use of a script (see template in Appendix)  \\
-\hline
-
-\textbf{Test Case ID} & \textbf{invalid\_format\_create} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & The data input by the user has to be in the correct format for our system to accept it as valid. \\
-\hline
-State & User does not have an account on the application. \\
-\hline
-Input & Incorrect format of license number/invite code OR incorrect format of date of birth, email,  password (will be set at the end of the registration process) \\
-\hline
-Output & System displays 'incorrect format of one or more inputs' \\
-\hline
-How the test will be performed & 
-The test will be conducted with the use of a script (see template in Appendix)  \\
-\hline
-
-\textbf{Test Case ID} & \textbf{cannot\_verify\_creds} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & Successful verification for both types of users is needed to use the application \\
-\hline
-State & User does not have an account on the application. \\
-\hline
-Input & Incorrect license number/mismatch of license number and govt id OR incorrect format of invite code, email, password (will be set at the end of the registration process)  \\
-\hline
-Output & System displays 'License number cannot verified' OR 'invalid invite code' \\
-\hline
-How the test will be performed & 
-The test will be conducted with the use of a script (see template in Appendix)  \\
-\hline
-
-\textbf{Test Case ID} & \textbf{acc\_exists} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & New users should not already have an account on the system \\
-\hline
-State & Account already exists on system \\
-\hline
-Input & Govt id (name, date of birth), license number/invite code, email, password \\
-\hline
-Output & 'Account already exists. Wrong password. Try again.' \\
-\hline
-How the test will be performed & 
-The test will be conducted with the use of a script (see template in Appendix)  \\
-\hline
-
-\end{longtable}
-
-\subsection{PT focused testing}
-This section contains: PT\_sends\_invite, PT\_adjusts\_exercise, PT\_deletes\_patient\_acc.
-
-\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
-\caption{Software Test Cases for Physical Therapist (PT) Functions} \\
-\hline
-
-\textbf{Test Case ID} & \textbf{PT\_sends\_invite} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & A patient can only sign up if they have an invite code from the PT. \\
-\hline
-State & Patient does not have an account on the application while PT does. \\
-\hline
-Input & PT adds patient's information and contact method (where the code will be sent). \\
-\hline
-Output & An 'Invite sent' message is displayed on the screen \\
-\hline
-How the test will be performed & 
-The test will be conducted with the use of a script (see template in Appendix) \\
-\hline
-
-\textbf{Test Case ID} & \textbf{PT\_adjusts\_exercise} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & The system allows the PT to obtain an overview of patient performance and adjust different parameters accordingly (eg. number of repetitions). \\
-\hline
-State & PT and patient have an account on application, PT has patient on their patient list \\
-\hline
-Input & PT accesses the patient's profile page and adds/modifies exercise \\
-\hline
-Output & Patient exercise criteria is modified. \\
-\hline
-How the test will be performed & 
-The test will be conducted with the use of a script (see template in Appendix)  \\
-\hline
-
-
-\textbf{Test Case ID} & \textbf{PT\_deletes\_patient\_acc} \\
-
-\hline
-Control & Automatic \\
-\hline
-Rationale & This ensures PTs control over patients' accounts. PT can remove patient(s) profiles from the application. \\
-\hline
-State & PT and patient have account on application, PT has the patient on their patient list \\
-\hline
-Input & PT requests a specific patient's account deletion \\
-\hline
-Output & Account deleted from user database and PT patient list. Patient is unable to log in ('Account not found'). \\
-\hline
-How the test will be performed & 
-The test will be conducted with the use of a script (see template in Appendix)  \\
-\hline
-
-
-\end{longtable}
-
-\subsection{Patient focused testing}
-This section contains: system\_exercise\_overview, system\_record\_exercise, system\_performs\_correctly, video\_store, video\_retrieval, post\_ex\_patient\_feedback,
-incorrect\_form\_adjustment \\
-
-\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
-\caption{Software Test Cases for Exercise System and Additional Functions} \\
-\hline
-
-\textbf{Test Case ID} & \textbf{system\_exercise\_overview} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & In order to record the patient performing the exercise, the system has to be able to provide instructions to the patient on how to perform it. \\
-\hline
-State & Patient is logged into the application and has it open on their device. Patient has selected the exercise they want to perform on their exercise list. \\
-\hline
-Input & Patient clicks on exercise from exercise list. \\
-\hline
-Output & System displays an overview of the steps required for the exercise.\\
-\hline
-How the test will be performed & The test will be conducted with the use of a script (see template in Appendix)  \\
-
-\hline
-\textbf{Test Case ID} & \textbf{system\_record\_exercise} \\
-\hline
-Control & Manual \\
-\hline
-Rationale & Patient performance of the exercise has to be successfully recorded to aid system analysis of its correctness. \\
-\hline
-State & Patient is currently logged in and has the application open on their device. Patient has selected the exercise they would like to perform from the exercise list. \\
-\hline
-Input & Patient clicks on the 'record' button \\
-\hline
-Output & Exercise successfully recorded, saved and ready for viewing \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item Patient clicks on the 'exercise list' and selects the exercise they would like to perform
-    \item System directs patient to a screen with a live video stream of themselves
-    \item Patient clicks on the 'record' button
-    \item System records exercise
-\end{itemize} \\
-\hline
-
-\textbf{Test Case ID} & \textbf{system\_performs\_correctly} \\
-\hline
-Control & Manual \\
-\hline
-Rationale & System has to effectively perform analysis on patient exercise form to provide feedback. \\
-\hline
-State & Patient is recording exercise \\
-\hline
-Input & System receives visual of patient performing exercise \\
-\hline
-Output & System provides feedback to patient (e.g. instructions for the next steps in the exercise) \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item Patient performs exercise correctly
-    \item System monitors and analyzes exercise performance in real-time
-    \item System provides correct feedback
-\end{itemize} \\
-\hline
-
-\textbf{Test Case ID} & \textbf{video\_store} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & The system has to be able to store a recorded video of the patient performing the exercises. \\
-\hline
-State & Patient has performed and recorded exercise being performed. \\
-\hline
-Input & Patient clicks on 'Save exercise' button. \emph{Note: The team has not decided whether to store the video locally or on the user database. }\\
-\hline
-Output & Video has been successfully saved and is ready for viewing. \\
-\hline
-How the test will be performed & The test will be conducted with the use of a script (see template in Appendix)  \\
-\hline
-
-\textbf{Test Case ID} & \textbf{video\_retrieval} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & The system has to be able to retrieve the most recent recorded video in storage (either locally or database). \\
-\hline
-State & Patient has performed and recorded exercise being performed \\
-\hline
-Input & Patient OR PT clicks on video stored (local or database) for viewing. \emph{Note: The team has not decided whether to store the video locally or on the user database. }\\
-\hline
-Output & Video has been successfully retrieved and is ready for viewing. \\
-\hline
-How the test will be performed & The test will be conducted with the use of a script (see template in Appendix) \\
-\hline
-
-
-\textbf{Test Case ID} & \textbf{post\_ex\_patient\_feedback} \\
-\hline
-Control & Automatic \\
-\hline
-Rationale & The system has to be able to store patient feedback of the performed exercise (e.g. the level of (perceived) difficulty of the exercise) \\
-\hline
-State & Patient has performed and recorded exercise being performed and system has successfully performed analysis of the performance \\
-\hline
-Input & Patient input into feedback form (See Appendix \emph{Patient post-exercise feedback form}). \\
-\hline
-Output & Answers are stored successfully \\
-\hline
-How the test will be performed & The test will be conducted with the use of a script (see template in Appendix) \\
-\hline
-
-\textbf{Test Case ID} & \textbf{incorrect\_form\_adjustment} \\
-\hline
-Control & Manual \\
-\hline
-Rationale & The system has to be able to differentiate between correct and incorrect forms to provide accurate feedback. \\
-\hline
-State & Patient is performing the selected exercise \\
-\hline
-Input & Incorrect form during exercise performance \\
-\hline
-Output & Adjustment directives displayed to patient \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item Patient performs exercise with incorrect form
-    \item System detects the incorrect posture/movement
-    \item System provides real-time adjustment instructions
-\end{itemize} \\
-\hline
-
-\end{longtable}
-
-\newpage
-
-\section{Nonfunctional Requirements Evaluation}
-\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{12cm}|}
-\caption{Non-Functional Requirements Testing} \\
-\hline
-\textbf{Test Case ID} & \textbf{ui\_testing} \\
-
-
-\hline
-Type & Static \\
-\hline
-Rationale & Ensure user interface meets usability standards and stakeholder expectations \\
-\hline
-State & N/A \\
-\hline
-Input & User interface elements and survey responses \\
-\hline
-Output & Modified user interface based on feedback \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item A survey will be given to users (see 'Stakeholders' in SRS for the type of users) to test different interface elements
-    \item See Appendix for survey questions
-    \item Based on the feedback received, the user interface will be modified in order to satisfy additional requirements
-\end{itemize} \\
-\hline
-
-\textbf{Test Case ID} & \textbf{ex\_int\_speed} \\
-\hline
-Type & Automatic \\
-\hline
-Rationale & Ensure exercise interface loads within acceptable time limits for good user experience \\
-\hline
-State & User is logged in and has application open on their device \\
-\hline
-Input & User clicks on exercise interface \\
-\hline
-Output & Interface loads within 2 seconds \\
-\hline
-How the test will be performed & The test will use external tools (Postman) to measure API latency. In order to replicate real world conditions, 
-an increasing amount of simulated user loads can be used. Statistical analysis will be performed on the collected results to provide a more accurate value. 
-\\
-\hline
-
-\textbf{Test Case ID} & \textbf{fail\_recovery} \\
-\hline
-Type & Dynamic \\
-\hline
-Rationale & The system must be able to restore its pre-failure state 95\% of the time within 5 minutes \\
-\hline
-State & User is currently using the application on their device \\
-\hline
-Input & System failure (simulated) \\
-\hline
-Output & System restarts and recovers within 5 minutes \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item A failure scenario will be simulated
-    \item Recovery time and success rate will be measured
-    \item System's state will be compared to pre-failure state to confirm if properly restored.
-\end{itemize} \\
-\hline
-
-\textbf{Test Case ID} & \textbf{Interrupted\_vid} \\
-\hline
-Type & Dynamic \\
-\hline
-Rationale & The system must be able to attempt resubmission of video after restoring internet connection \\
-\hline
-State & A video of the user performing the exercise is being uploaded \\
-\hline
-Input & Internet connection interruption during upload \\
-\hline
-Output & Video is successfully re-queued for upload to the system. Re-upload is resumed at the point of failure \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item Network is disconnected during video upload
-    \item Connection is restored after interruption
-    \item The system detects interruption and queues video for re-upload
-    \item Confirm upload resumes from point of failure (not restarting)
-    \item Video integrity is confirmed after successful upload
-\end{itemize} \\
-\hline
-
- & \textbf{PR-RFT 3, PR-RFT 4, PR-CR1, PR-SER 1} \\
-
-Rationale & These requirements address advanced system capabilities beyond current testing scope \\
-\hline
-How the test will be performed & 
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item These requirements are unable to be tested in a timely manner due to project constraints (time, money)
-    \item Testing deferred to future development phases
-    \item Requirements marked for re-evaluation in next project iteration
-\end{itemize} \\
-\hline
-
-\end{longtable}
+	\textbf{Pass/Fail Criteria:} Pass if the account is created successfully and the correct Firestore fields are written. Fail if registration is rejected or the stored data is incomplete or incorrect.
+	
+	\textbf{How test will be performed:} Call \texttt{registerPhysio()} with a valid and active license, then verify that authentication succeeds and the correct physiotherapist profile is created in Firestore.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC2 : Physiotherapist Registration (Invalid License Format)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} App launched; registration screen accessible.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with an invalid license format (missing dash or incorrect digits).
+	
+	\textbf{Output:} Error ``Invalid license format'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Test Case Derivation:} Derived from requirement FR1.1 and FR1.2 in the SRS, which require that the system validates input format and rejects invalid physiotherapist license formats.
+	
+	\textbf{Pass/Fail Criteria:} Pass if the invalid license is rejected, the correct error is thrown, and no account data is created. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{registerPhysio()} with incorrectly formatted license values and verify that registration fails and no user data is written to Firestore.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC3 : Physiotherapist Registration (Unverified License)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} App launched; registration screen accessible.
+	
+	\textbf{Input:} \texttt{registerPhysio()} called with valid format but license not found or \texttt{active=false} in \texttt{validLicenses}.
+	
+	\textbf{Output:} Error ``License not verified'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Test Case Derivation:} Derived from requirement FR1.1 and FR1.2 in the SRS, which specify that only verified physiotherapists are allowed to create accounts.
+	
+	\textbf{Pass/Fail Criteria:} Pass if the unverified license is rejected, the correct error is returned, and no account is created. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{registerPhysio()} with a correctly formatted but unverified license and confirm that the system prevents registration and does not write profile data.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC4 : Patient Registration (Valid Invite Code)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} collection seeded with an active, unused code containing a \texttt{physioId}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a valid invite code.
+	
+	\textbf{Output:} Auth user created. Firestore \texttt{users/\{uid\}} written with \texttt{role="patient"} and stored \texttt{physioId}. Invite code updated with \texttt{used=true} and \texttt{usedBy=\{uid\}}.
+	
+	\textbf{Test Case Derivation:} Derived from requirements FR1.1, FR1.3, FR2, and FR3 in the SRS, which state that patients must register using valid invite codes and be linked to a physiotherapist.
+	
+	\textbf{Pass/Fail Criteria:} Pass if the patient account is created, the linked physiotherapist is stored, and the invite code is marked as used. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{registerPatient()} with a valid invite code and verify account creation, Firestore data, and invite code update behaviour.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC5 : Patient Registration (Non-Existent Invite Code)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} collection does not contain the submitted code.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a code that does not exist in \texttt{inviteCodes}.
+	
+	\textbf{Output:} Error ``Invalid invite code'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Test Case Derivation:} Derived from requirements FR1.1 and FR1.3 in the SRS, which require that the system rejects invalid or non-existent invite codes during patient registration.
+	
+	\textbf{Pass/Fail Criteria:} Pass if the invalid code is rejected and no user record is created. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{registerPatient()} with a code that is not present in the invite code collection and verify that registration is blocked.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC6 : Patient Registration (Inactive Invite Code)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with \texttt{active=false}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with an inactive invite code.
+	
+	\textbf{Output:} Error ``Invite code inactive'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Test Case Derivation:} Derived from requirements FR1.1 and FR1.3 in the SRS, which state that inactive invite codes must not be accepted for patient registration.
+	
+	\textbf{Pass/Fail Criteria:} Pass if the inactive code is rejected and no account is created. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{registerPatient()} with an inactive invite code and verify that the request fails and no database writes occur.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC7 : Patient Registration (Already Used Invite Code)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with \texttt{used=true}.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with an already used invite code.
+	
+	\textbf{Output:} Error ``Invite code already used'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Test Case Derivation:} Derived from requirements FR1.1 and FR1.3 in the SRS, which enforce that invite codes are single-use and cannot be reused.
+	
+	\textbf{Pass/Fail Criteria:} Pass if reuse of the invite code is blocked and no new account is created. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{registerPatient()} using a code already marked as used and verify that the system rejects the request.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC8 : Patient Registration (Invite Code Missing Physio Link)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} App launched; \texttt{inviteCodes} contains a matching code with no \texttt{physioId} field.
+	
+	\textbf{Input:} \texttt{registerPatient()} called with a code missing a \texttt{physioId}.
+	
+	\textbf{Output:} Error ``Invite code missing physio link'' thrown. No Auth user or Firestore writes created.
+	
+	\textbf{Test Case Derivation:} Derived from requirements FR1.1, FR1.3, and FR2 in the SRS, which require that patient accounts must be linked to a physiotherapist through a valid invite code.
+	
+	\textbf{Pass/Fail Criteria:} Pass if the missing link case is rejected and no account data is created. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{registerPatient()} with an invite code that lacks a \texttt{physioId} and verify that the system throws the correct error and rejects registration.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC9 : User Login (Valid Physiotherapist Credentials)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} Login screen available; Firestore contains a profile with \texttt{role="physio"}.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid PT credentials.
+	
+	\textbf{Output:} Login returns object with \texttt{uid} and profile data including \texttt{role="physio"}. No errors thrown.
+	
+	\textbf{Test Case Derivation:} Derived from requirements FR1 and FR1.1 in the SRS, which state that registered physiotherapists must be able to log in using valid credentials.
+	
+	\textbf{Pass/Fail Criteria:} Pass if login succeeds and the correct physiotherapist profile data is returned. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{loginUser()} with valid physiotherapist credentials and verify that authentication succeeds and the returned user object contains the expected role and profile data.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC10 : User Login (Valid Patient Credentials)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} Login screen available; Firestore contains a profile with \texttt{role="patient"}.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid patient credentials.
+	
+	\textbf{Output:} Login returns object with \texttt{uid} and profile data including \texttt{role="patient"}. No errors thrown.
+	
+	\textbf{Test Case Derivation:} Derived from requirements FR1 and FR1.1 in the SRS, which state that registered patients must be able to log in using valid credentials.
+	
+	\textbf{Pass/Fail Criteria:} Pass if login succeeds and the correct patient profile is returned. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{loginUser()} with valid patient credentials and verify that authentication and profile retrieval both succeed.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC11 : User Login (Missing Firestore Profile)}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} Login screen available; valid Firebase Auth credentials exist but no Firestore profile.
+	
+	\textbf{Input:} \texttt{loginUser()} called with valid credentials.
+	
+	\textbf{Output:} Error ``User profile missing in Firestore'' thrown. Login rejected.
+	
+	\textbf{Test Case Derivation:} Derived from requirements FR1 and FR1.1 in the SRS, which require that login depends on both valid authentication credentials and a valid user profile.
+	
+	\textbf{Pass/Fail Criteria:} Pass if login is rejected and the correct error is returned when the Firestore profile is missing. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{loginUser()} for a valid auth account with no corresponding Firestore profile and confirm that login fails as expected.
+	
+	
+	\vspace{0.5em}
+	
+	\item \textbf{test-TC12 : User Logout}
+	
+	\textbf{Control:} Automated
+	
+	\textbf{Initial State:} User session active.
+	
+	\textbf{Input:} \texttt{logoutUser()} called.
+	
+	\textbf{Output:} Auth sign-out called once and completes without error.
+	
+	\textbf{Test Case Derivation:} Derived from requirement FR1 in the SRS, which states that users must be able to securely log out and end their session.
+	
+	\textbf{Pass/Fail Criteria:} Pass if the user is signed out successfully and no error occurs. Fail otherwise.
+	
+	\textbf{How test will be performed:} Call \texttt{logoutUser()} while a user session is active and verify that sign-out completes successfully.
 	
 
-\subsection{Traceability Between Test Cases and Requirements}
+  \vspace{0.5em}
 
-Please refer to the following Microsoft Excel file: \href{https://mcmasteru365-my.sharepoint.com/:x:/g/personal/dieboltc_mcmaster_ca/EYBm9tg_K8JDkVQ9Z3X4dZIBOX3TODsKXdwZCJ0CxEYkqQ?e=aGQzxo}{Traceability Matrix}
+  \item \textbf{test-TC13 : Get User Data}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} Firestore populated with test user documents.
+
+  \textbf{Input:} \texttt{getUserData()} called with a valid uid, a non-existent uid, and an empty uid.
+
+  \textbf{Output:} Valid uid returns \texttt{UserData}. Non-existent uid returns null. Empty uid throws an error.
+
+  \textbf{Test Case Derivation:} Derived from requirement FR21 in the SRS, which states that the system must retrieve and provide user data correctly.
+
+  \textbf{Pass/Fail Criteria:} Pass if valid uid returns correct data, non-existent uid returns null, and empty uid throws an error. Fail otherwise.
+
+  \textbf{How test will be performed:} Call \texttt{getUserData()} with different uid cases and verify returned values and error handling.
+
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC14 : User Lookup by Email}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} Firestore populated with test user documents.
+
+  \textbf{Input:} \texttt{getUserByEmail()} called with a registered email and an unregistered email.
+
+  \textbf{Output:} Registered email returns user object and true. Unregistered email returns null and false.
+
+  \textbf{Test Case Derivation:} Derived from requirement FR21 in the SRS, which specifies that users must be searchable and retrievable by identifying information such as email.
+
+  \textbf{Pass/Fail Criteria:} Pass if valid email returns correct user and invalid email returns null. Fail otherwise.
+
+  \textbf{How test will be performed:} Call \texttt{getUserByEmail()} with both valid and invalid inputs and verify results.
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC15 : Update User Data}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} Firestore populated with test user documents.
+
+  \textbf{Input:} \texttt{updateUser()} called with a valid update payload.
+
+  \textbf{Output:} Update returns true. Changes reflected in Firestore.
+
+  \textbf{Test Case Derivation:} Derived from requirements FR2, FR6, and FR22 in the SRS, which state that users must be able to update their stored profile information.
+
+  \textbf{Pass/Fail Criteria:} Pass if update returns true and Firestore reflects changes. Fail otherwise.
+
+  \textbf{How test will be performed:} Call \texttt{updateUser()} and verify updated values in Firestore.
+
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC16 : Delete User}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} Firestore populated with test user documents.
+
+  \textbf{Input:} \texttt{deleteUser()} called with a valid uid, a valid email, and a non-existent case.
+
+  \textbf{Output:} Valid cases return true. Non-existent case returns false.
+
+  \textbf{Test Case Derivation:} Derived from requirement FR4 in the SRS, which states that users must be removable from the system.
+
+  \textbf{Pass/Fail Criteria:} Pass if valid users are deleted and invalid cases return false. Fail otherwise.
+
+  \textbf{How test will be performed:} Call \texttt{deleteUser()} with different inputs and verify outcomes.
+
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC17 : User Queries}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} Firestore populated with linked PT and patient records.
+
+  \textbf{Input:} \texttt{getPatientsByPhysioId()}, \texttt{searchByName()}, and \texttt{getAllUsers()} called.
+
+  \textbf{Output:} Each function returns correctly filtered arrays. Errors return empty arrays.
+
+  \textbf{Test Case Derivation:} Derived from requirement FR18 in the SRS, which requires that the system support querying and filtering of user data.
+
+  \textbf{Pass/Fail Criteria:} Pass if queries return correct filtered results. Fail otherwise.
+
+  \textbf{How test will be performed:} Call each query function and verify returned datasets.
+
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC18 : User Info Lookup}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} Firestore populated with linked PT and patient records.
+
+  \textbf{Input:} \texttt{getUserdbInfo()} called with name only and with name and birthday filter.
+
+  \textbf{Output:} Returns categorized patients and physiotherapists correctly. Birthday filter works as expected.
+
+  \textbf{Test Case Derivation:} Derived from requirements FR21 and FR25 in the SRS, which specify that the system must support detailed user lookup and filtering.
+
+  \textbf{Pass/Fail Criteria:} Pass if results are correctly categorized and filtered. Fail otherwise.
+
+  \textbf{How test will be performed:} Call function with different filters and verify output.
+
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC19 : PT Account Delete}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} Firestore populated with a valid physiotherapist and linked patient.
+
+  \textbf{Input:} \texttt{deletePTAccount()} called with a valid physio, a non-physio user, and a non-existent patient.
+
+  \textbf{Output:} Valid case deletes patient successfully. Non-physio and non-existent cases throw appropriate errors.
+
+  \textbf{Test Case Derivation:} Derived from requirements FR2, FR4, and FR22 in the SRS, which require that physiotherapists can manage and delete linked patient accounts.
+
+  \textbf{Pass/Fail Criteria:} Pass if valid deletions succeed and invalid cases throw errors. Fail otherwise.
+
+  \textbf{How test will be performed:} Call function with different user types and verify behaviour.
+
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC20 : User Authentication Validation}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} Firestore populated with test user credentials.
+
+  \textbf{Input:} \texttt{usernamePwMatch()} and \texttt{authenticateUser()} called with valid credentials, an invalid password, and a non-existent user.
+
+  \textbf{Output:} Valid credentials return true and user object. Invalid password throws an error. Non-existent user returns null.
+
+  Derived from requirement FR1 and FR1.1 in the SRS, which state that users must be authenticated using valid credentials before accessing the system.
+
+  \textbf{Pass/Fail Criteria:} Pass if valid credentials succeed and invalid ones fail appropriately. Fail otherwise.
+
+  \textbf{How test will be performed:} Call authentication functions with different credential sets and verify responses.
+
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC21 : System Initialization}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} System not yet initialized.
+
+  \textbf{Input:} \texttt{initializeSystem()} called.
+
+  \textbf{Output:} Success message logged to console. No errors thrown.
+
+  \textbf{Test Case Derivation:} Derived from requirement FR1 in the SRS, which implies that the system must initialize correctly to support user authentication and access to core functionality.
+
+  \textbf{Pass/Fail Criteria:} Pass if initialization completes without errors. Fail otherwise.
+
+  \textbf{How test will be performed:} Call initialization function and verify no errors occur.
+
+
+  \vspace{0.5em}
+
+  \item \textbf{test-TC22 : Credential Validation}
+
+  \textbf{Control:} Automated
+
+  \textbf{Initial State:} User account exists in Firestore.
+
+  \textbf{Input:} \texttt{validateCredentials()} called with a correct password and an incorrect password.
+
+  \textbf{Output:} Correct password returns true. Incorrect password returns false.
+
+  \textbf{Test Case Derivation:} Derived from requirement FR1 and FR1.1 in the SRS, which require that user credentials must be validated correctly during authentication.
+
+  \textbf{Pass/Fail Criteria:} Pass if correct password succeeds and incorrect fails. Fail otherwise.
+
+  \textbf{How test will be performed:} Call function with valid and invalid passwords and verify output.
+	
+\end{enumerate}
+
+
+\subsection{Tests for Nonfunctional Requirements}
+\subsubsection{Usability}
+
+\begin{enumerate}
+
+\item \textbf{UT-1 Navigation Clarity}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} LFR-AP1 \\
+\textbf{Initial State:} App installed on a mobile device; user logged in. \\
+\textbf{Input/Condition:} User is asked to find and open the exercise screen, start a recording session, and return to the dashboard without assistance. \\
+\textbf{Output/Result:} User successfully navigates through the required screens without confusion. Labels and buttons are reported as clear. \\
+\textbf{How test will be performed:} A participant will be observed completing navigation tasks independently and their feedback will be recorded. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-2 Instruction Clarity During Exercise}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} UHR-EOU2, UHR-LRN1 \\
+\textbf{Initial State:} User is on the record exercise screen with camera access enabled. \\
+\textbf{Input/Condition:} User initiates an exercise session and follows on-screen feedback prompts. \\
+\textbf{Output/Result:} Instructions are reported as clear and aligned with required actions. Minor wording improvements are identified and updated. \\
+\textbf{How test will be performed:} A participant will perform an exercise session and provide feedback on clarity of instructions. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-3 Survey Questionnaire -- ui\_testing}
+
+\textbf{Type:} Survey Questionnaire\\
+\textbf{Requirements Covered:} UHR-EOU1, LFR-ST1 \\
+\textbf{Initial State:} App accessible to testers on mobile devices. \\
+\textbf{Input/Condition:} Five users complete a usability questionnaire evaluating ease of use, clarity, and navigation. \\
+\textbf{Output/Result:} Average rating across categories is $\geq$ 4/5. Minor UI refinements are identified and implemented. \\
+\textbf{How test will be performed:} Users interact with the application and complete a structured usability survey. \\
+\textbf{Quantifiable Metric:} Average usability score must be $\geq$ 4/5. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-4 Account Creation (Usability)}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} UHR-EOU1, UHR-LRN1 \\
+\textbf{Initial State:} App installed; invite code and PT license provided. \\
+\textbf{Input/Condition:} User completes account creation flow. \\
+\textbf{Output/Result:} Users successfully create accounts without assistance. Fields are completed without confusion. \\
+\textbf{How test will be performed:} A participant will complete account setup while being observed. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-5 Exercise Recording Initiation}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} UHR-EOU2, UHR-AR1 \\
+\textbf{Initial State:} Patient logged in; camera permission granted; backend running. \\
+\textbf{Input/Condition:} User navigates to Record screen and starts recording. \\
+\textbf{Output/Result:} Camera activates successfully and user follows prompts without confusion. \\
+\textbf{How test will be performed:} A participant will initiate recording while being observed. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-6 Real-Time Pose Detection and Feedback}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} UHR-UPL1, UHR-AR1 \\
+\textbf{Initial State:} User positioned in frame; pose detection active. \\
+\textbf{Input/Condition:} User performs exercise repetitions. \\
+\textbf{Output/Result:} Feedback overlays are understandable and rep. counts are perceived as accurate. \\
+\textbf{How test will be performed:} A participant performs exercises and evaluates feedback clarity. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-7 Exercise Page (Instructions)}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} UHR-LRN1, UHR-EOU1\\
+\textbf{Initial State:} Exercises tab accessible. \\
+\textbf{Input/Condition:} User reviews exercise instructions. \\
+\textbf{Output/Result:} Instructions are clear and easy to follow. \\
+\textbf{How test will be performed:} A participant reads instructions and explains them back. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-8 Progress Screen (Session History)}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} UHR-EOU1, LFR-ST1\\
+\textbf{Initial State:} User has recorded session data. \\
+\textbf{Input/Condition:} User views progress screen. \\
+\textbf{Output/Result:} Data is readable and easy to interpret. \\
+\textbf{How test will be performed:} A participant reviews the screen and explains insights. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-9 PT Dashboard (Patient Activity)}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} UHR-EOU1, LFR-AP1\\
+\textbf{Initial State:} Physiotherapist logged in with patient data. \\
+\textbf{Input/Condition:} PT reviews dashboard and selects a patient. \\
+\textbf{Output/Result:} Dashboard is easy to navigate and patient data is clear. \\
+\textbf{How test will be performed:} A physiotherapist interacts with dashboard features. \\
+
+\vspace{0.5em}
+
+\item \textbf{UT-10 PT Feedback Submission}
+
+\textbf{Type:} User Testing \\
+\textbf{Requirements Covered:} UHR-EOU1, UHR-UPL1\\
+\textbf{Initial State:} PT viewing patient session details. \\
+\textbf{Input/Condition:} PT submits written feedback. \\
+\textbf{Output/Result:} Feedback is successfully saved and visible to patient. \\
+\textbf{How test will be performed:} A physiotherapist submits feedback and verifies it appears correctly. \\
+
+\end{enumerate}	
+
+\subsubsection{Performance}
+
+\begin{enumerate}
+
+\item \textbf{PR-1 Exercise Interface Response Time -- ex\_int\_speed}
+
+\textbf{Type:} Manual, Dynamic \\
+\textbf{Requirements Covered:} PR-SL1, PR-SL2\\
+\textbf{Initial State:} User logged in on a mobile device; backend server running. \\
+\textbf{Input/Condition:} User starts recording from the record screen. Screen recording timestamps are used to measure time from tapping ``Start'' to first visible feedback. Five trials are conducted. \\
+\textbf{Output/Result:} Response times recorded as 1.87s, 1.92s, 1.79s, 1.95s, and 1.84s. Average response time is 1.87 seconds ($\leq$ 2 seconds). \\
+\textbf{How test will be performed:} Tester records screen during interaction and calculates time differences across trials. \\
+
+\vspace{0.5em}
+
+\item \textbf{PR-2 Repeated Use Performance}
+
+\textbf{Type:} Manual, Dynamic \\
+\textbf{Requirements Covered:} PR-SL1\\
+\textbf{Initial State:} Application running normally on mobile device. \\
+\textbf{Input/Condition:} User completes 10 consecutive ``Start $\rightarrow$ Record $\rightarrow$ Stop'' cycles. \\
+\textbf{Output/Result:} No slowdown observed. All response times remain within acceptable range and no crashes occur. \\
+\textbf{How test will be performed:} Tester performs repeated cycles and monitors responsiveness and stability. \\
+
+\end{enumerate}
+
+\subsubsection{Reliability and Fault-Tolerance}
+
+\begin{enumerate}
+
+\item \textbf{RFT-1 Backend Failure Handling -- fail\_recovery}
+
+\textbf{Type:} Manual, Dynamic \\
+\textbf{Requirements Covered:} PR-RFT1\\
+\textbf{Initial State:} User actively using application connected to backend. \\
+\textbf{Input/Condition:} Backend server is manually terminated during active analysis. \\
+\textbf{Output/Result:} Application displays error message and remains responsive. After restart, user continues normally. \\
+\textbf{How test will be performed:} Tester shuts down backend during execution and observes system behaviour. \\
+
+\vspace{0.5em}
+
+\item \textbf{RFT-2 Network Interruption During Upload -- Interrupted\_vid}
+
+\textbf{Type:} Manual, Dynamic \\
+\textbf{Requirements Covered:} PR-RFT2\\
+\textbf{Initial State:} User uploading recorded exercise video. \\
+\textbf{Input/Condition:} WiFi is disabled mid-upload and restored after ~10 seconds. \\
+\textbf{Output/Result:} Upload failure detected and retry option shown. Retry succeeds and data remains intact. \\
+\textbf{How test will be performed:} Tester disables network during upload and verifies recovery behaviour. \\
+
+\end{enumerate}
+
+\subsubsection{Security}
+
+\begin{enumerate}
+
+\item \textbf{SR-1 Unauthorized Access to Protected Endpoint}
+
+\textbf{Type:} Manual, Dynamic \\
+\textbf{Requirements Covered:} SR-AR1\\
+\textbf{Initial State:} Backend server running with authentication enabled. \\
+\textbf{Input/Condition:} Request sent to protected endpoint without authentication. \\
+\textbf{Output/Result:} Server returns HTTP 401 Unauthorized and no protected data is exposed. \\
+\textbf{How test will be performed:} Tester sends unauthenticated API request using tools like Postman. \\
+
+\vspace{0.5em}
+
+\item \textbf{SR-2 Invalid Credentials Login}
+
+\textbf{Type:} Manual, Dynamic \\
+\textbf{Requirements Covered:} SR-AR1\\
+\textbf{Initial State:} Login screen available. \\
+\textbf{Input/Condition:} User attempts login with invalid credentials. \\
+\textbf{Output/Result:} Login denied with appropriate error message and no system data exposed. \\
+\textbf{How test will be performed:} Tester inputs invalid credentials and observes system response. \\
+
+\end{enumerate}
+
+\subsubsection{Maintainability and Support}
+
+\begin{enumerate}
+
+\item \textbf{MS-1 Reproducible Setup}
+
+\textbf{Type:} Manual, Dynamic \\
+\textbf{Requirements Covered:} OER-WE1, OER-PR1\\
+\textbf{Initial State:} Fresh machine with no prior setup. \\
+\textbf{Input/Condition:} Repository is cloned and setup instructions are followed. \\
+\textbf{Output/Result:} Application runs successfully with no missing dependencies. \\
+\textbf{How test will be performed:} Tester follows README setup steps and verifies system runs correctly. \\
+
+\vspace{0.5em}
+
+\item \textbf{MS-2 Code Review and Quality Assurance}
+
+\textbf{Type:} Static Analysis and Manual Review \\
+\textbf{Requirements Covered:} N/A\\
+\textbf{Initial State:} Revision 0 completed. \\
+\textbf{Input/Condition:} Peer reviews, unit tests and usability tests are conducted. \\
+\textbf{Output/Result:} Code passes tests, issues are resolved, and the overall code structure remains modular and maintainable. \\
+\textbf{How test will be performed:} Reviewers analyze pull requests, run tests, and verify code quality and usability improvements. \\
+
+\end{enumerate}
+
+\subsection{Traceability Between Test Cases and Requirements}
+\begin{table}[H]
+  \centering
+  \caption{ Functional Requirements and Corresponding Test Cases}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.42\textwidth} >{\raggedright\arraybackslash}p{0.42\textwidth}}
+    \toprule \textbf{Test Section} & \textbf{Functional Requirement(s)} \\
+    \midrule
+
+    Physiotherapist Registration Tests (TC1--TC3) 
+    & FR1.1, FR1.2 \\
+
+    Patient Registration Tests (TC4--TC8) 
+    & FR1.1, FR1.3, FR2, FR3 \\
+
+    User Authentication and Session Tests (TC9--TC12, TC20, TC22) 
+    & FR1, FR1.1 \\
+
+    User Data Management Tests (TC13--TC16) 
+    & FR2, FR4, FR6, FR21, FR22 \\
+
+    User Query and Lookup Tests (TC17--TC18) 
+    & FR18, FR21, FR25 \\
+
+    Physiotherapist Account Management Tests (TC19) 
+    & FR2, FR4, FR22 \\
+
+    System Initialization Tests (TC21) 
+    & FR1 \\
+
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% Usability Tests
+\begin{table}[H]
+  \centering
+  \caption{Usability Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-us}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.58\textwidth}}
+    \toprule
+    \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    UT-1 & LFR-AP1 \\
+    UT-2 & UHR-EOU2, UHR-LRN1 \\
+    UT-3 & UHR-EOU1, LFR-ST1 \\
+    UT-4 & UHR-EOU1, UHR-LRN1 \\
+    UT-5 & UHR-EOU2, UHR-AR1 \\
+    UT-6 & UHR-UPL1, UHR-AR1 \\
+    UT-7 & UHR-LRN1, UHR-EOU1 \\
+    UT-8 & UHR-EOU1, LFR-ST1 \\
+    UT-9 & UHR-EOU1, LFR-AP1 \\
+    UT-10 & UHR-EOU1, UHR-UPL1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% Performance Tests
+\begin{table}[H]
+  \centering
+  \caption{Performance Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-perf}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.58\textwidth}}
+    \toprule
+    \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    PR-1 & PR-SL1, PR-SL2 \\
+    PR-2 & PR-SL1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% RFT Tests
+\begin{table}[H]
+  \centering
+  \caption{Reliability \& Fault-Tolerance Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-rft}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.58\textwidth}}
+    \toprule
+    \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    RFT-1 & PR-RFT1 \\
+    RFT-2 & PR-RFT2 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% Security Tests
+\begin{table}[H]
+  \centering
+  \caption{Security Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-sec}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.58\textwidth}}
+    \toprule
+    \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    SR-1 & SR-AR1 \\
+    SR-2 & SR-AR1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% MST Tests
+\begin{table}[H]
+  \centering
+  \caption{Maintainability \& Support Tests and Corresponding Requirements}
+  \label{tab:nfr-trace-ms}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.58\textwidth}}
+    \toprule
+    \textbf{Test ID} & \textbf{Non-Functional Requirement} \\
+    \midrule
+    MS-1 & OER-WE1, OER-PR1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \section{Unit Test Description}
 
-\subsection{Unit Tests}
+This section outlines the unit testing approach and scope for each of the modules. Please note that the VnV Report contains 
+the detailed individual test cases and expected results, but this section essentially summarizes the plan for the unit testing plan 
+by module as well as the key functionalities that are covered.
+\subsection{Authentication}
 
-This section outlines the unit testing approach, scope, and representative test cases for each module. Detailed input/output data and executable tests are maintained in the project’s testing repository.
+\subsubsection{Account Creation Module Tests}
 
-\subsection{Unit Testing Scope}
+\textbf{Goal:} The account creation module verifies that both physiotherapist and patient registration flows behave correctly under valid and invalid conditions. This includes validating physiotherapist license formats, checking license verification status, validating patient invite codes, and ensuring new users are stored correctly in Firebase Authentication and Firestore.
 
-All major modules developed for the system are within the scope of unit testing, including authentication, organization linking, exercise management, video capture, computer vision, reporting, data storage, and user interface components.
+\textbf{Target requirement(s):} FR1.1, FR1.2, FR1.3, FR2, FR3
 
-Third-party libraries and SDKs (e.g., video encoding, encryption frameworks) are out of scope for direct unit testing. These are verified indirectly through integration and acceptance testing. Modules responsible for UI styling and documentation display are of lower priority since their risk level is minimal; they will be verified primarily through automated UI snapshot tests.
-
-Testing focuses on functional correctness, data integrity, and compliance with fitness criteria. Each module includes both \textbf{black box} (external behavior) and \textbf{white box} (internal logic) tests.
-
-\subsection{Tests for Functional Requirements}
-
-Most verification for the functional requirements will occur through automated unit tests. Each module below outlines representative tests that validate the implementation of key requirements.
-
-\subsubsection{Module 1: Authentication and Account Management}
-
-This module verifies that only authorized users can access protected features and that account creation, login, and security rules comply with FR 1--4 and SR AR 1--4.
-
-\textbf{Test ID: AUTH-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: System with no active user session. \\
-Input: Attempt to access the dashboard without logging in. \\
-Output: Access is denied with an authentication error message (HTTP 401 or equivalent). \\
-Test Case Derivation: From FR 1 --- users must log in before accessing exercises or dashboards. \\
-How Test Will Be Performed: Run automated request simulation; verify the controller response and log entry. \\[6pt]
-
-\textbf{Test ID: AUTH-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Empty user database. \\
-Input: Attempt to register with missing required fields or duplicate credentials. \\
-Output: Registration is rejected; descriptive validation errors are returned. \\
-Test Case Derivation: From FR 1.1 --- all required fields must be completed, and credentials must be unique. \\
-How Test Will Be Performed: Automated validation tests using mocked data submissions. \\[6pt]
-
-\textbf{Test ID: AUTH-UT-003} \\
-Type: Functional, Automatic \\
-Initial State: Active logged-in session. \\
-Input: 60 minutes of inactivity simulated with timers. \\
-Output: Session is automatically terminated; subsequent requests are rejected. \\
-Test Case Derivation: From SR-AR 3 --- system must log out inactive users. \\
-How Test Will Be Performed: Use time mocking; verify session invalidation behavior. \\[10pt]
-
-\subsubsection{Module 2: Organization Linking and Access Codes}
-
-This module ensures physiotherapists and patients connect securely under FR 1.2--1.3 and FR 2--3.
-
-\textbf{Test ID: ORG-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: Unverified physiotherapist profile. \\
-Input: Submit incomplete license or clinic credentials. \\
-Output: Verification denied; PT access blocked until all credentials provided. \\
-Test Case Derivation: From FR 1.2 --- PT access requires all four credential fields. \\
-How Test Will Be Performed: Automated validation of registration form with missing inputs. \\[6pt]
-
-\textbf{Test ID: ORG-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Patient account without an organization link. \\
-Input: Attempt to join with invalid and valid access codes. \\
-Output: Invalid codes rejected; valid code links patient to exactly one PT and clinic. \\
-Test Case Derivation: From FR 1.3 and FR 3 --- patients can only join with a valid PT-issued code. \\
-How Test Will Be Performed: Automated join requests tested against mock organization data. \\[10pt]
-
-\subsubsection{Module 3: Exercise Program Management}
-
-Covers FR 5--6, FR 10--11, FR 22, and FR 27. Ensures exercises can be created, customized, and tracked properly.
-
-\textbf{Test ID: PROG-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: Exercise library initialized. \\
-Input: Request for exercise list by an authorized patient. \\
-Output: At least 10 knee exercises with instructions and media are returned. \\
-Test Case Derivation: From FR 5 --- the system must include a complete knee-exercise library. \\
-How Test Will Be Performed: Automated content verification test querying the exercise repository. \\[6pt]
-
-\textbf{Test ID: PROG-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Existing exercise plan. \\
-Input: PT updates sets, reps, and rest time. \\
-Output: Plan updated immediately; change logged with timestamp. \\
-Test Case Derivation: From FR 6 --- PTs can customize patient exercises. \\
-How Test Will Be Performed: Automated API test comparing new and old plan versions. \\[6pt]
-
-\textbf{Test ID: PROG-UT-003} \\
-Type: Functional, Automatic \\
-Initial State: PT sets weekly limits on exercise metrics. \\
-Input: Patient attempts to exceed limit. \\
-Output: System prevents action and displays a limit-exceeded message. \\
-Test Case Derivation: From FR 27 --- PT-defined daily/weekly limitations must be enforced. \\
-How Test Will Be Performed: Simulate plan execution and validate limit enforcement. \\[10pt]
-
-\subsubsection{Module 4: Video Capture and Review}
-
-Tests FR 7, FR 15, FR 26, and user-environment checks.
-
-\textbf{Test ID: CAP-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: Device camera available. \\
-Input: Begin exercise recording. \\
-Output: Video captured at $\geq$720p @ 30 fps; stored successfully for PT review. \\
-Test Case Derivation: From FR 7 --- video must meet minimum quality standards. \\
-How Test Will Be Performed: Automated hardware simulation verifying metadata fields. \\[6pt]
-
-\textbf{Test ID: CAP-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Patient ready to record in a low-light environment. \\
-Input: System performs pre-capture check. \\
-Output: Warning prompts user to improve lighting before recording. \\
-Test Case Derivation: From UHR-EOU 3 --- app must alert user to poor conditions. \\
-How Test Will Be Performed: Simulated light-level input producing prompt verification. \\[6pt]
-
-\textbf{Test ID: CAP-UT-003} \\
-Type: Functional, Automatic \\
-Initial State: Captured but incomplete exercise data. \\
-Input: Submit out-of-frame video. \\
-Output: System rejects submission, provides retry prompt with reason. \\
-Test Case Derivation: From FR 26 --- retries allowed for insufficient data. \\
-How Test Will Be Performed: Mock analysis engine returning ``insufficient data'' flag. \\[10pt]
-
-\subsubsection{Module 5: Computer Vision and Form Analysis}
-
-Validates FR 8, FR 12--14, FR 16, and related accuracy requirements.
-
-\textbf{Test ID: CV-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: Analysis model loaded. \\
-Input: Test video with known joint angles. \\
-Output: Angles computed within $\pm$5°; range of motion within $\pm$10\%. \\
-Test Case Derivation: From FR 12 and PR-PAR 1 --- measurement accuracy thresholds. \\
-How Test Will Be Performed: Automated comparison with expert-measured reference data. \\[6pt]
-
-\textbf{Test ID: CV-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Exercise attempt with poor form. \\
-Input: Analyze deviation from model. \\
-Output: ``Incorrect form'' message specifying deviation (e.g., insufficient bend) within 1 second. \\
-Test Case Derivation: From FR 13--14 --- system must identify and describe form issues. \\
-How Test Will Be Performed: Simulated exercise data fed to analysis engine; timing measured. \\[6pt]
-
-\textbf{Test ID: CV-UT-003} \\
-Type: Functional, Automatic \\
-Initial State: Detected dangerous deviation. \\
-Input: Critical form violation ($>$30° misalignment). \\
-Output: Exercise halted; warning displayed. \\
-Test Case Derivation: From PR-SCR 1 --- prevent injury by halting unsafe movement. \\
-How Test Will Be Performed: Inject synthetic ``critical'' deviation data; verify halt condition. \\[10pt]
-
-\subsubsection{Module 6: Reporting and Dashboards}
-
-Confirms FR 17--20, FR 25, and FR 18 (PT visibility).
-
-\textbf{Test ID: RPT-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: Completed exercise session. \\
-Input: Generate session report. \\
-Output: Report includes completion rate, form score, pain level, and feedback. \\
-Test Case Derivation: From FR 17 --- PTs receive session reports automatically. \\
-How Test Will Be Performed: Automated generation and field-validation of report content. \\[6pt]
-
-\textbf{Test ID: RPT-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Patient repeatedly fails exercise. \\
-Input: Record 3 failed attempts. \\
-Output: Alert appears in PT dashboard. \\
-Test Case Derivation: From FR 20 --- alerts for repeated incorrect attempts. \\
-How Test Will Be Performed: Simulate consecutive failed submissions and verify dashboard flag. \\[10pt]
-
-\subsubsection{Module 7: Data Security and Privacy}
-
-Ensures data protection as required by FR 21--23 and SR IR 1--SR PR 2.
-
-\textbf{Test ID: DATA-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: Database ready for new patient data. \\
-Input: Save patient profile with personal and medical details. \\
-Output: Data stored in encrypted form; readable only via authorized session. \\
-Test Case Derivation: From FR 21 and SR-IR 1 --- encryption at rest and in transit. \\
-How Test Will Be Performed: Automated write-and-read test confirming ciphertext storage. \\[6pt]
-
-\textbf{Test ID: DATA-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Two patient accounts exist. \\
-Input: Patient A attempts to access Patient B’s records. \\
-Output: Access denied; system logs unauthorized attempt. \\
-Test Case Derivation: From FR 23 and SR-PR 1 --- patients may access only their own data. \\
-How Test Will Be Performed: Automated access attempt verifying access-control policies. \\[10pt]
-
-\subsection{Tests for Nonfunctional Requirements}
-
-These tests focus on performance, robustness, scalability, and maintainability characteristics that affect the overall reliability of the system.
-
-\subsubsection{Module 8: Performance and Latency}
-
-\textbf{Test ID: PERF-UT-001} \\
-Type: Dynamic, Automatic \\
-Initial State: Application idle. \\
-Input/Condition: Load exercise interface. \\
-Output/Result: Interface loads within 2 seconds. \\
-How Test Will Be Performed: Automated timing test using performance hooks. \\[6pt]
-
-\textbf{Test ID: PERF-UT-002} \\
-Type: Dynamic, Automatic \\
-Initial State: Running video analysis. \\
-Input/Condition: Introduce form deviation. \\
-Output/Result: Corrective feedback appears within 1 second. \\
-How Test Will Be Performed: Mock time-stamped analysis results; measure delay to user prompt. \\[10pt]
-
-\subsubsection{Module 9: Reliability and Offline Operation}
-
-\textbf{Test ID: REL-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: Network unavailable. \\
-Input/Condition: Attempt to upload exercise video. \\
-Output/Result: Upload queued locally; auto-retries every 30 seconds until success. \\
-How Test Will Be Performed: Network simulation tests queue persistence and retry logic. \\[6pt]
-
-\textbf{Test ID: REL-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Device offline. \\
-Input/Condition: User opens exercise list. \\
-Output/Result: Cached exercises and instructions load successfully; sync resumes when online. \\
-How Test Will Be Performed: Offline simulation verifying cache and synchronization behavior. \\[10pt]
-
-\subsubsection{Module 10: Security and Backup}
-
-\textbf{Test ID: SEC-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: System with active data records. \\
-Input/Condition: Trigger daily backup job. \\
-Output/Result: Backup created and timestamped successfully. \\
-How Test Will Be Performed: Automated scheduler simulation confirming backup creation. \\[6pt]
-
-\textbf{Test ID: SEC-UT-002} \\
-Type: Functional, Automatic \\
-Initial State: Idle session. \\
-Input/Condition: User inactive for 60 minutes. \\
-Output/Result: Session automatically logs out and prompts for re-authentication. \\
-How Test Will Be Performed: Time-simulation test confirming session timeout. \\[10pt]
-
-\subsubsection{Module 11: Scalability and Extensibility}
-
-\textbf{Test ID: EXT-UT-001} \\
-Type: Functional, Automatic \\
-Initial State: Base application loaded with knee module. \\
-Input/Condition: Add new ``shoulder'' exercise definitions. \\
-Output/Result: System loads new joint without modifying core logic. \\
-How Test Will Be Performed: Add-on simulation validating modular design extensibility. \\[10pt]
-
-\subsection{Traceability Between Test Cases and Modules}
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{p{4cm} p{7cm} p{4cm}}
-		\toprule
-		\textbf{Module} & \textbf{Primary Requirements Covered} & \textbf{Representative Test IDs} \\
-		\midrule
-		1. Authentication \& Account Management & FR 1--4; SR AR 1--4; SR3 & AUTH-UT-001--003 \\
-		2. Organization Linking \& Access Codes & FR 1.2--1.3; FR 2--3 & ORG-UT-001--002 \\
-		3. Exercise Program Management & FR 5--6; FR 10--11; FR 22; FR 27 & PROG-UT-001--003 \\
-		4. Video Capture \& Review & FR 7; FR 15; FR 26 & CAP-UT-001--003 \\
-		5. Computer Vision \& Form Analysis & FR 8; FR 12--14; FR 16; PR-PAR 1--2; PR-SCR 1 & CV-UT-001--003 \\
-		6. Reporting \& Dashboards & FR 17--20; FR 25 & RPT-UT-001--002 \\
-		7. Data Security \& Privacy & FR 21--23; SR-IR 1; SR-PR 1--2 & DATA-UT-001--002 \\
-		8. Performance \& Latency & PR-SL 1--2 & PERF-UT-001--002 \\
-		9. Reliability \& Offline Operation & PR-RFT 2; MS-AD 1 & REL-UT-001--002 \\
-		10. Security \& Backup & SR AR 3; MS-MNT 1 & SEC-UT-001--002 \\
-		11. Scalability \& Extensibility & PR-CR 1; PR-SER 1 & EXT-UT-001 \\
-		\bottomrule
-	\end{tabular}
-	\caption{Traceability Between Test Cases and Modules}
-\end{table}
-
-This matrix demonstrates coverage of all functional and nonfunctional requirements through at least one representative unit test per module.
-
-
-\section{Appendix}
-
-Additional project information to expand on the previous sections. Mostly example or sample information at this time.
-
-\subsection{Example script}
-
-\noindent Example script layout for system testing: \\
-/* \\
-\# Create user account testing \\
-New account creation (user\_acc\_create) \\
-Invalid format of field inputs (invalid\_formatCreate) \\
-Invalid sign up credentials (cannot\_verify\_creds) \\
-Presence of an existing account (acc\_exists) \\ \\
-\# PT focused testing \\
-PT successfully sends invite to patient (PT\_sends\_invite) \\
-PT adds/modified patient exercise (PT\_adjusts\_exercise) \\
-PT deletes patient account (PT\_deletes\_patient\_acc) \\ \\
-\# Patient focused testing \\
-System\_exercise\_overview \\
-Video\_store \\
-Video\_retrieval \\
-System\_analysis\_feedback \\
-Post\_ex\_patient\_feedback \\
-Incorrect\_form\_adjustment \\ \\
-\# NFR testing \\
-Ex\_int\_speed \\
-Fail\_recovery \\
-Interrupted\_vid \\
-\*/
-
-
-\subsection{Usability Survey Questions}
-
-\noindent \textbf{Advisor SRS Questions}:
-\begin{enumerate}
-  \item Are there any sections of the requirements which are found to be confusing or hard to measure?
-  \item Are there any sections of the system you feel the requirements do not expand on?
-  \item Are there any sections of the system you feel the requirements expand on that is out of scope?
-  \item Do you feel the requirements are extensive enough?
-  \item Do you feel the requirements are tracked well?
-\end{enumerate}
-
-\noindent \textbf{Design Questionnaire Questions}:
-
-“Strongly Disagree” to “Strongly Agree” style questioning.
-\begin{enumerate}
-  \item The system navigation is intuitive.
-  \item The system’s functions are all easily accessible.
-  \item The system helped set up your exercises for success.
-  \item The system enables you to complete your exercises with better guidance.
-  \item The system enables you to complete your exercises with better confidence.
-  \item The feedback returned during your exercise was helpful.
-  \item The overview data from your exercise was helpful.
-  \item You would you use this software for your exercises again.
-\end{enumerate}
-Could have a final open-ended question based on user pain points with the system I.e. what did not work well for individuals. \\ \\
-\noindent \textbf{Software Validation Questionnaire Questions}:
-
-“Strongly Disagree” to “Strongly Agree” style questioning.
-\begin{enumerate}
-  \item This software assisted you in completing your exercises.
-  \item This software was easy to use.
-  \item This software was easy to navigate.
-  \item The feedback from the system assisted you in fixing your form.
-  \item The feedback from the system generated greater confidence in your form.
-  \item The feedback from the system was meaningful and helpful.
-  \item The data generated from your exercises was helpful.
-  \item The system responded how you expected it to during usage.
-  \item The system clearly described what was going on.
-  \item You felt adequately trained to use the system from the system dialogues.
-  \item You felt safe while using the system.
-\end{enumerate}
-
-\noindent \textbf{Ui\_testing Survey}:
-\begin{enumerate}
-  \item How would you rate your overall experience with the application (1 - poor, 5 - excellent)?
-  \item How would you rate the visual appeal of the application (1 - poor, 5 - excellent)? 
-  \item How easy was it to navigate through the application? (1 - difficult, 5 - easy)
-  \begin{enumerate}
-    \item Were the tutorials helpful? (1 - not helpful, 5 - very helpful)
-    \item How logical was the arrangement of the different components within the system (1 - very illogical, 5 - very logical)?
-  \end{enumerate}
-  \item Which areas could use some improvement?
-  \begin{enumerate}
-    \item Navigation 
-    \item Menu structure
-    \item Colour/contrast scheme
-    \item Error messages 
-    \item Other (With open text entry)
-  \end{enumerate}
-\end{enumerate}
-
-\noindent \textbf{Patient Post-Exercise Feedback Form}:
-\begin{enumerate}
-  \item How did you feel before the exercise? (1 - good, 5-bad)
-  \begin{enumerate}
-    \item Did you have tightness? Yes/no
-    \item Did you have any pain? Yes/no.
+\begin{itemize}
+    \item \textbf{Physiotherapist registration with valid license:}
     \begin{enumerate}
-      \item How bad was your pain? (1 - no pain, 10 - unbearable pain)
-      \item What was the perceived level of pain/difficulty? (1 - very easy, 10 - very difficult)
-      \item Where was your pain located? (Open text entry)
+        \item Ensures a physiotherapist account is created only when the provided license format is valid and verified.
+        \item Verifies Firestore user data is written with the correct role, fields, and verification status.
     \end{enumerate}
-    \item Have you noticed any recent changes? (Open text entry)
-  \end{enumerate}
-  \item If you had any pain DURING the exercise, how bad was it? (1 - no pain, 10 - unbearable pain)
-  \item How did you feel after the exercise? (1 - good, 5-bad)
-  \begin{enumerate}
-    \item Did you have tightness? Yes/no
-    \item Did you have any pain? Yes/no.
+
+    \item \textbf{Physiotherapist registration failure cases:}
     \begin{enumerate}
-      \item How bad was your pain? (1 - no pain, 10 - unbearable pain)
-      \item What was the perceived level of pain/difficulty? (1 - very easy, 10 - very difficult)
-      \item Where was your pain located? (Open text entry)
+        \item Ensures invalid license formats are rejected with the correct error.
+        \item Verifies that unverified or inactive licenses do not allow account creation.
     \end{enumerate}
-    \item Have you noticed any recent changes? (Open text entry)
-  \end{enumerate}
-  \item How challenging was the exercise today? (1 - easy, 5 - very hard)
-  \begin{enumerate}
-    \item Do you have any feedback for your physiotherapist? (Open text entry)
-  \end{enumerate}
-  \item In your opinion, is this treatment plan helping your health? Yes/no. Choose the option that describes how the plan is helping (Can choose multiple).
-  \begin{enumerate}
-    \item My movement
-    \item My flexibility
-    \item My pain
-    \item My mood
-  \end{enumerate}
-  \item In your opinion, how difficult is the current prescribed exercise plan? (1 - easy, 5 - very difficult)
-  \begin{enumerate}
-    \item Should your physiotherapist change the difficulty of your plan? (1 - no change, 5 - Large increase in difficulty)
-  \end{enumerate}
-\end{enumerate}
- 
+
+    \item \textbf{Patient registration with valid invite code:}
+    \begin{enumerate}
+        \item Ensures a patient can register when the invite code is active, unused, and linked to a physiotherapist.
+        \item Verifies the patient profile and invite-code data are stored correctly.
+    \end{enumerate}
+
+    \item \textbf{Patient registration failure cases:}
+    \begin{enumerate}
+        \item Ensures invalid, inactive, or already-used invite codes are rejected.
+        \item Verifies registration does not proceed when a required link to a physiotherapist is missing.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsubsection{Valid User Module Tests}
+
+\textbf{Goal:} The valid user module verifies user authentication after account creation. These tests ensure that users with valid credentials can log in successfully, that missing profile information is handled correctly, and that logout functionality successfully clears the current active session.
+
+\textbf{Target requirement(s):} FR1, FR1.1, SR-AR1
+
+\begin{itemize}
+    \item \textbf{Valid login behaviour:}
+    \begin{enumerate}
+        \item Ensures physiotherapist and patient accounts can log in using valid credentials.
+        \item Verifies that profile data is returned correctly after authentication.
+    \end{enumerate}
+
+    \item \textbf{Login failure handling:}
+    \begin{enumerate}
+        \item Ensures login is rejected when the expected Firestore user profile is missing.
+    \end{enumerate}
+
+    \item \textbf{Logout behaviour:}
+    \begin{enumerate}
+        \item Verifies the sign-out operation is called once and completes without error.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsection{User Account Module}
+
+\subsubsection{User Management Functions}
+
+\textbf{Goal:} The user account module provides database support for retrieving, updating, and deleting user information. These tests verify correct data retrieval, updates, and deletion logic for valid, invalid, and missing user IDs.
+
+\textbf{Target requirement(s):} FR2, FR4, FR6, FR21, FR22, FR23
+
+\begin{itemize}
+    \item \textbf{User retrieval:}
+    \begin{enumerate}
+        \item Ensures user data can be retrieved using valid uid.
+        \item Verifies null or error states for non-existent or invalid inputs.
+    \end{enumerate}
+
+    \item \textbf{Email-based lookup:}
+    \begin{enumerate}
+        \item Ensures users can be found through registered email addresses.
+        \item Verifies that unknown emails do not incorrectly return data.
+    \end{enumerate}
+
+    \item \textbf{User update behaviour:}
+    \begin{enumerate}
+        \item Ensures valid user profile updates are written correctly.
+        \item Verifies changes are reflected in Firestore after the update operation.
+    \end{enumerate}
+
+    \item \textbf{User deletion behaviour:}
+    \begin{enumerate}
+        \item Ensures valid user deletion requests succeed.
+        \item Verifies deletion attempts for non-existent users fail safely.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsubsection{Query and Lookup Functions}
+
+\textbf{Goal:} These tests verify that the module supports user querying, filtering, and specialized lookup operations needed by the application. This includes retrieving linked patients, searching by name, and applying additional filters such as birthday matching.
+
+\textbf{Target requirement(s):} FR18, FR21, FR25
+
+\begin{itemize}
+    \item \textbf{General query behaviour:}
+    \begin{enumerate}
+        \item Ensures linked patients and search results are filtered correctly.
+    \end{enumerate}
+
+    \item \textbf{Detailed user lookup:}
+    \begin{enumerate}
+        \item Ensures user database lookups return appropriately categorized physiotherapist and patient results.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsubsection{Specialized and Validation Functions}
+
+\textbf{Goal:} These tests verify specialized user-account actions such as physiotherapist-linked account deletion, user authentication functions,and password validation logic.
+
+\textbf{Target requirement(s):} FR1, FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1
+
+\begin{itemize}
+    \item \textbf{Physiotherapist-linked patient account management:}
+    \begin{enumerate}
+        \item Ensures physiotherapists can remove linked patient accounts when appropriate.
+        \item Verifies invalid deletion attempts are rejected with the correct errors.
+    \end{enumerate}
+
+    \item \textbf{Authentication helper validation:}
+    \begin{enumerate}
+        \item Ensures username-password matching and authentication utilities behave correctly for valid and invalid credentials.
+        \item Verifies non-existent users do not incorrectly authenticate.
+    \end{enumerate}
+
+    \item \textbf{Initialization and credential validation:}
+    \begin{enumerate}
+        \item Ensures system initialization routines complete successfully.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsection{Live Feedback Module}
+
+\subsubsection{Corrective Feedback and Rep. Counting}
+
+\textbf{Goal:} The live feedback module verifies that the system generates real-time corrective messages and repetition updates based on incoming joint-angle measurements. These tests cover valid range-of-motion behaviour, insufficient movement, excessive movement, and loss of pose visibility.
+
+\textbf{Target requirement(s):} FR13, FR14
+
+\begin{itemize}
+    \item \textbf{Valid movement detection:}
+    \begin{enumerate}
+        \item Ensures no corrective feedback is generated when joint angles remain within the acceptable range.
+        \item Verifies rep. counting increments correctly for valid repetitions.
+    \end{enumerate}
+
+    \item \textbf{Insufficient or excessive movement:}
+    \begin{enumerate}
+        \item Ensures corrective messages are produced when joint angles fall below the expected range.
+        \item Verifies the system responds appropriately when movement exceeds defined thresholds.
+    \end{enumerate}
+
+    \item \textbf{No pose detected:}
+    \begin{enumerate}
+        \item Ensures the system provides a clear prompt when the user is not detected in frame.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection{Latency Handling}
+
+\textbf{Goal:} These tests that the repeated feedback generation is responsive during the exercise sequences.
+
+\textbf{Target requirement(s):} FR14, FR16, PR-SL2
+
+\begin{itemize}
+    \item \textbf{Repeated feedback latency:}
+    \begin{enumerate}
+        \item Verifies multiple valid repetitions continue to receive feedback within the required latency threshold.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection{Physiotherapist Comment Submission and Retrieval}
+
+\textbf{Goal:} These tests verify the ability of physiotherapists to leave feedback comments on patient sessions and the ability of patients to retrieve those comments later.
+
+\textbf{Target requirement(s):} FR19, FR20, FR25
+
+\begin{itemize}
+    \item \textbf{Comment submission:}
+    \begin{enumerate}
+        \item Ensures physiotherapist comments are saved to the correct session record.
+        \item Verifies comments are associated with the correct, respective patient activity.
+    \end{enumerate}
+
+    \item \textbf{Comment retrieval:}
+    \begin{enumerate}
+        \item Ensures patients can retrieve stored physiotherapist comments for completed sessions.
+        \item Verifies null is returned appropriately when no comment exists.
+    \end{enumerate}
+\end{itemize}
+
+\subsection{Video Capture and Review Module}
+
+\subsubsection{Pose Connection and Landmark Extraction Tests}
+
+\textbf{Goal:} The video capture and review module verifies the pose connection drawing and landmark extractions used for camera processing and visual overlays. These tests ensure that full-body and leg-only connections are returned correctly and that valid pose results are converted into usable landmark lists.
+
+\textbf{Target requirement(s):} FR12, FR26
+
+\begin{itemize}
+    \item \textbf{Pose connection retrieval:}
+    \begin{enumerate}
+        \item Ensures full pose connections and leg-only connections are returned correctly depending on the selected mode.
+    \end{enumerate}
+
+    \item \textbf{Landmark extraction:}
+    \begin{enumerate}
+        \item Ensures valid pose results return the expected landmark lists.
+        \item Verifies missing or empty pose data returns \texttt{None} safely.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection{Camera Initialization and Frame Processing Tests}
+
+\textbf{Goal:} These tests verify the camera and pose detection. This includes initialization, frame capture, pose detection, and the landmark drawing for the live processing.
+
+\textbf{Target requirement(s):} FR7, FR12, FR14
+
+\begin{itemize}
+    \item \textbf{Camera initialization:}
+    \begin{enumerate}
+        \item Ensures the camera is configured with the expected display size and frame properties.
+    \end{enumerate}
+
+    \item \textbf{Frame retrieval:}
+    \begin{enumerate}
+        \item Verifies frames are returned and resized correctly.
+    \end{enumerate}
+
+    \item \textbf{Pose processing:}
+    \begin{enumerate}
+        \item Ensures pose results are generated from valid frames.
+        \item Verifies detection is invoked with correctly transformed image inputs.
+    \end{enumerate}
+
+    \item \textbf{Landmark drawing:}
+    \begin{enumerate}
+        \item Ensures landmarks and connections are drawn correctly on returned frames.
+    \end{enumerate}
+\end{itemize}
+
+\subsection{Computer Vision and Form Analysis Module}
+
+\subsubsection{Angle and Knee-Angle Calculation Tests}
+
+\textbf{Goal:} The computer vision and form analysis module verifies that the angle calculations and computed knee-angle behave correctly across valid and invalid conditions.
+
+\textbf{Target requirement(s):} FR12, FR26
+
+\begin{itemize}
+    \item \textbf{Angle calculation correctness:}
+    \begin{enumerate}
+        \item Ensures known point sets return expected angle values.
+        \item Verifies edge cases such as \texttt{None} inputs are handled safely.
+    \end{enumerate}
+
+    \item \textbf{Knee angle extraction:}
+    \begin{enumerate}
+        \item Ensures left and right knee angles can be computed correctly from valid pose results.
+        \item Verifies missing landmarks and empty pose results do not crash processing.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsubsection{Calibration and Rep Analysis Tests}
+
+\textbf{Goal:} These tests verify the analyzer’s calibration process, range-of-motion updates, rep-state transitions, and rep-counting behaviour over time.
+
+\textbf{Target requirement(s):} FR8, FR11, FR12, FR14, FR16, FR17, FR27
+
+\begin{itemize}
+    \item \textbf{Calibration flow:}
+    \begin{enumerate}
+        \item Ensures calibration begins and ends correctly while tracking min and max observed angles.
+        \item Verifies calibration ignores invalid or missing values safely.
+    \end{enumerate}
+
+    \item \textbf{Rep-state transitions:}
+    \begin{enumerate}
+        \item Ensures the analyzer transitions between flexion and extension states correctly.
+        \item Verifies valid rep-state transition counts and record durations only when appropriate.
+    \end{enumerate}
+
+    \item \textbf{Range-of-motion tracking:}
+    \begin{enumerate}
+        \item Ensures min and max angles expand correctly as new values arrive.
+        \item Verifies that unusual, negative, or out-of-range inputs do not break the analyzer.
+    \end{enumerate}
+
+    \item \textbf{Summary metrics:}
+    \begin{enumerate}
+        \item Ensures summary outputs include expected metrics such as rep. count, ROM, durations, and calibration state.
+        \item Verifies metric rounding and empty-duration handling behave correctly.
+    \end{enumerate}
+\end{itemize}
+
+\subsection{Performance and Latency Module}
+
+\subsubsection{Backend Reset and API Endpoint Tests}
+
+\textbf{Goal:} The performance and latency module verifies that the backend services initialize correctly, reset correctly, and respond appropriately to valid and invalid API requests.
+
+\textbf{Target requirement(s):} FR7, FR8, FR12, FR26
+
+\begin{itemize}
+    \item \textbf{Backend initialization and reset:}
+    \begin{enumerate}
+        \item Ensures the backend starts in the correct state and can be reset safely.
+        \item Verifies reset endpoints return successful responses and replace analyzer state correctly.
+    \end{enumerate}
+
+    \item \textbf{Frame endpoint validation:}
+    \begin{enumerate}
+        \item Ensures invalid or missing image data results in the correct error response.
+        \item Verifies valid frame requests return landmarks and metrics when pose data is present.
+    \end{enumerate}
+
+    \item \textbf{Mirroring and side handling:}
+    \begin{enumerate}
+        \item Ensures mirrored and non-mirrored inputs are processed appropriately.
+        \item Verifies correct side selection is passed into the knee-angle calculation logic.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection{Frontend Service and Storing Metrics Tests}
+
+\textbf{Goal:} These tests verify the frontend service helpers that communicate with the backend and store activity/session metrics to Firestore.
+
+\textbf{Target requirement(s):} FR1, FR1.1, FR7, FR8, FR11, FR17, FR21
+
+\begin{itemize}
+    \item \textbf{Frontend request behaviour:}
+    \begin{enumerate}
+        \item Ensures frontend service calls send the correct payloads based on camera facing, side, and reset operations.
+        \item Verifies network and reset failures are handled correctly.
+    \end{enumerate}
+
+    \item \textbf{Storing Metrics:}
+    \begin{enumerate}
+        \item Ensures metrics are saved only when a valid user is logged in and corresponding Firestore data exists.
+        \item Verifies saved activity documents include expected session fields and default values.
+    \end{enumerate}
+
+    \item \textbf{Session persistence:}
+    \begin{enumerate}
+        \item Ensures session summary data is stored correctly for completed exercise sessions.
+        \item Verifies the default behaviour when optional metric fields are missing.
+    \end{enumerate}
+
+    \item \textbf{User display-name lookup:}
+    \begin{enumerate}
+        \item Ensures the system retrieves a display name from Firestore when available.
+        \item Verifies safe default values are used when the user is missing or lookup fails.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsection{Profile Activity Module}
+
+\subsubsection{Current User and Activity Retrieval Tests}
+
+\textbf{Goal:} The profile activity module verifies retrieval of current user data, current user IDs, activity histories, and summary information from Firestore.
+
+\textbf{Target requirement(s):} FR10, FR11, FR17, FR18, FR21, FR23
+
+\begin{itemize}
+    \item \textbf{Current user retrieval:}
+    \begin{enumerate}
+        \item Ensures current user and current user ID can be retrieved correctly.
+        \item Verifies null is returned safely when no current user exists or Firestore errors occur.
+    \end{enumerate}
+
+    \item \textbf{Activity history retrieval:}
+    \begin{enumerate}
+        \item Ensures activities for a user are returned correctly when records exist.
+        \item Verifies empty arrays are returned when no activity data is found or when an error occurs.
+    \end{enumerate}
+
+    \item \textbf{Summary Data:}
+    \begin{enumerate}
+        \item Ensures summary data is computed correctly from available user activity.
+        \item Verifies duplicate dates and missing data are handled safely.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsubsection{Chart and Comment Data Tests}
+
+\textbf{Goal:} These tests verify chart generation, comment retrieval, comment posting, and user-name lookup functions used throughout the profile and progress pages.
+
+\textbf{Target requirement(s):} FR10, FR11, FR18, FR19, FR21, FR22
+
+\begin{itemize}
+    \item \textbf{Chart generation:}
+    \begin{enumerate}
+        \item Ensures repetition and exercise chart data are generated correctly from activity records.
+        \item Verifies chart functions return safe default values when no data exists or when Firestore fails.
+    \end{enumerate}
+
+    \item \textbf{Comment retrieval and posting:}
+    \begin{enumerate}
+        \item Ensures comments can be retrieved and stored.
+        \item Verifies empty comments and Firestore errors are handled appropriately.
+    \end{enumerate}
+
+    \item \textbf{Name lookup:}
+    \begin{enumerate}
+        \item Ensures user names are returned correctly when present.
+        \item Verifies default values are used for unknown or incomplete users.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsubsection{Selected User State Management Tests}
+
+\textbf{Goal:} These tests verify local storage and retrieval of selected-user state used for physiotherapist-patient interactions.
+
+\textbf{Target requirement(s):} FR17, FR18, FR19, FR22
+
+\begin{itemize}
+    \item \textbf{Selected user storage:}
+    \begin{enumerate}
+        \item Ensures selected user IDs are saved only when valid values are provided.
+    \end{enumerate}
+
+    \item \textbf{Selected user retrieval:}
+    \begin{enumerate}
+        \item Ensures selected user IDs and selected user data are returned correctly when stored.
+        \item Verifies null is returned when no stored state exists.
+    \end{enumerate}
+
+    \item \textbf{Selected user clearing:}
+    \begin{enumerate}
+        \item Ensures stored selected-user state can be removed cleanly.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsubsection{Physiotherapist Invite Code Retrieval Tests}
+
+\textbf{Goal:} These tests verify that the system can retrieve the correct invite code for a physiotherapist user when one exists.
+
+\textbf{Target requirement(s):} FR2, FR3
+
+\begin{itemize}
+    \item \textbf{Invite code retrieval:}
+    \begin{enumerate}
+        \item Ensures a physiotherapist’s invite code is returned when valid data exists.
+        \item Verifies null is returned when no invite code exists, the user is invalid, or lookup fails.
+    \end{enumerate}
+\end{itemize}
+
+
+\subsection{Exercise Data Module}
+
+\subsubsection{Exercise Retrieval Tests}
+
+\textbf{Goal:} The exercise data module verifies storage and retrieval of user-specific and general exercise data used.
+
+\textbf{Target requirement(s):} FR5, FR18, FR21, FR27
+
+\begin{itemize}
+    \item \textbf{User exercise retrieval:}
+    \begin{enumerate}
+        \item Ensures exercises assigned to a user can be retrieved correctly.
+        \item Verifies undefined is returned safely when no exercise data exists or when lookup fails.
+    \end{enumerate}
+
+    \item \textbf{Single exercise retrieval:}
+    \begin{enumerate}
+        \item Ensures an exercise can be retrieved correctly by exercise identifier.
+        \item Verifies invalid identifiers and Firestore errors are handled safely.
+    \end{enumerate}
+
+    \item \textbf{General exercise retrieval:}
+    \begin{enumerate}
+        \item Ensures the shared exercise library is returned correctly when it exists.
+        \item Verifies undefined is returned when no general exercise data is available.
+    \end{enumerate}
+
+    \item \textbf{Selected exercise retrieval:}
+    \begin{enumerate}
+        \item Ensures selected exercise data can be retrieved for a given user.
+        \item Verifies missing data and Firestore errors are handled safely.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection{Exercise Assignment and Modification Tests}
+
+\textbf{Goal:} These tests verify adding, updating, and removing user exercises as part of the physiotherapist exercise assignment workflows.
+
+\textbf{Target requirement(s):} FR6, FR18, FR21
+
+\begin{itemize}
+    \item \textbf{Exercise removal:}
+    \begin{enumerate}
+        \item Ensures valid user exercises can be removed correctly.
+        \item Verifies invalid requests and Firestore failures do not perform unintended deletions.
+    \end{enumerate}
+
+    \item \textbf{Exercise addition:}
+    \begin{enumerate}
+        \item Ensures valid exercises can be assigned to users and written correctly to storage.
+        \item Verifies errors prevent incomplete or inconsistent updates.
+    \end{enumerate}
+
+    \item \textbf{Exercise modification:}
+    \begin{enumerate}
+        \item Ensures valid exercises can be updated with new data.
+        \item Verifies invalid inputs and Firestore errors are handled safely.
+    \end{enumerate}
+\end{itemize}
+
+
 \newpage{}
 \bibliographystyle {plainnat}
 \bibliography{../../refs/References}   
 \newpage{}
-\section*{Appendix --- Reflection}
+\section{Appendix}
+
+Additional project information to expand on the previous sections. 
+
+\subsection{Usability Survey Questions}
+Please refer to the usability testing folder to find the updated survey questions and the other corresponding documents under \href{https://github.com/M9Huynh/technically-functional/tree/main/docs/Extras/UsabilityTesting}{\texttt{docs/Extras/UsabilityTesting}}.
+
+\subsection{Reflection}
 
 The information in this section will be used to evaluate the team members on the
 graduate attribute of Lifelong Learning.
@@ -991,11 +1510,33 @@ graduate attribute of Lifelong Learning.
   member pursue, and why did they make this choice?
 \end{enumerate}
 
-\subsection*{Vaisnavi - Reflection}
+\subsection*{Group Reflection Response:}
+
+\begin{enumerate}
+  \setcounter{enumi}{2} % forces it to start numbering at 3 for the group question
+
+  \item To successfully complete the verification and validation of our project, the team collectively needs to acquire the following knowledge and skills:
+
+  \begin{itemize}
+      \item \textbf{Dynamic Testing (Eman):} Knowledge of unit testing, test case design, edge case identification, and ensuring full module coverage.
+      
+      \item \textbf{System Testing (Maham):} Ability to design and evaluate end-to-end system tests that validate overall system behaviour and integration.
+      
+      \item \textbf{Testing Tools and Frameworks (Cieran):} Experience using tools such as pytest, linters (e.g., pylint), and developing structured test suites.
+      
+      \item \textbf{Computer Vision Validation (Vaisnavi):} Understanding of OpenCV and MediaPipe for pose detection, landmark tracking, and validating motion analysis.
+      
+      \item \textbf{Usability and Stakeholder Testing (Matthew):} Skills in interpreting user needs, conducting usability testing, and validating the system against stakeholder expectations.
+  \end{itemize}
+
+\end{enumerate}
+
+\subsection*{Individual Reflection Responses:}
+\subsubsection*{Vaisnavi - Reflection}
 \begin{enumerate}
   \item I think one main thing that went well while writing this deliverable was our communication as a group and how that played into the division of work. We had two sub-teams where Matthew and I were focusing on the POC, while Cieran, Maham and Eman were focused on this VnV deliverable. Our communication throughout aided in making this process of working on the deliverable seamless as everyone seemed to be very looped in on what each sub-team was working on. We had our weekly meetings to touch base and ask for any help if it was needed, and it worked very well.
   \item I think one of the main pain points we came across was as a result of us working on the POC, it was a little bit hard at the start to fully keep up with updates for the VnV Plan. However, as mentioned above, with sharing our progress and updates during our team meetings, this helped in providing more clarity and consistency between all group members, and it allowed everyone to be on the same page.
-  \item \textbf{GROUP Q}
+  \item \textbf{Please refer to the reflection response above for this group question}
   \item To improve the knowledge of OpenCV and MediaPipe pose detection for accurate testing of body landmark tracing, we could do the two approaches:
   \begin{enumerate}
     \item Follow documentation and existing examples to understand how to properly utilize OpenCV and Mediapipe to accurately detect the varying body landmarks through pose detection.
@@ -1003,29 +1544,29 @@ graduate attribute of Lifelong Learning.
   \end{enumerate}
 \end{enumerate}
 
-\subsection*{Maham - Reflection}
+\subsubsection*{Maham - Reflection}
 \begin{enumerate}
   \item The team was split into two groups: one was responsible for the POC demonstration, and the other was completing the VnV report. All members were in constant communication even though they had other (very) important deadlines to meet. The sub-teams functioned very well, because each team had members who were (somewhat) more comfortable in the area they were responsible for, and others that wanted to expand their skillset. There was a good balance present. In the end, all members delivered work of the highest calibre and I am happy to be a part of such a great team.
   \item I do not think it was a pain point but I had underestimated the amount of thought and importance that my portion would entail. I think it was challenging balancing the high priority of this deliverable (my part) and my other important (health) engagements as well. However, I used all the time management skills that I have learned and effectively managed to chunk my work into more realizable chunks while ensuring I am taking care of my well-being and delivered some good quality work.
-  \item \textbf{GROUP Q}
+  \item \textbf{Please refer to the reflection response above for this group question}
   \item I had previously acquired some knowledge on software testing and have always been fascinated by it. But to really master the application, I had to be very detail oriented. I did a deep dive into the various components of our system. However, I realized that I had to be careful and not make my focus too narrow - because I was developing system tests. I had to look at the overall picture. I did this in 2 ways. Firstly, I researched ‘system testing’ to further increase my knowledge and get a more concrete idea. However, since I had prior knowledge, I found most of the resources online just broke down system testing into different unit tests. I did not want to pursue that because Eman was working on the unit testing component. I spoke to my teammates on the possible overlap between unit and system testing, and was more confident in my (potential) analysis and approach. In the end, I refined my testing knowledge and by designing different test cases for any possible scenario, and making sure the system was approached from various aspects without being too focused on individual modules. 
 \end{enumerate}
 
-\subsection*{Matthew - Reflection}
+\subsubsection*{Matthew - Reflection}
 \begin{enumerate}
   \item I think one thing that went well when writing this deliverable was how we divided these two weeks up. We had taken the advice from the professor to begin development on the POC while working on the VnV plan. The team was divided into myself and Vais on the POC while Cieran, Maham and Eman were working on the VnV plan. This allowed us to do brief check-ins with each other while beginning development and thus more time to develop before the POC demo.
   \item I think some pain points during this deliverable was tied to external workloads. Since half of the deliverable encompassed reading week, this meant that the team had midterms and assignments for other classes due before this deliverable and managing that was more difficult. We resolved this by being transparent with each of our workloads, by letting each other know in our Teams chat if we were going to be busy and when the next time we would be available is. This allowed us to plan the deliverable better and achieve internal deadlines.
-  \item \textbf{GROUP Q}
+  \item \textbf{Please refer to the reflection response above for this group question}
   \item I would like to improve my knowledge of stakeholder understanding. I think that with stakeholder understanding it is important as they are the target audience for the application and their needs are to be met even if it differs from our own since they are the target. My approach for that will consist of understanding interviews as well as conversations with the stakeholder during testing. Another approach will be different user groups to see if our initial persona and ideas for the stakeholder would make sense. \\
   I think the is important since it is easy to develop requirements by making assumptions but to bridge the gap to the target audience is crucial to make a product or service that they would actually use.
 
 \end{enumerate}
 
-\subsection*{Cieran - Reflection}
+\subsubsection*{Cieran - Reflection}
 \begin{enumerate}
   \item Team communication as always but I won’t expand further on that. There was a decision to split the team into two subteams; a proof of concept team to begin the implementation and a verification and validation team to tackle this document. I feel the subteams have both been incredibly efficient in their work and the communication between the two has not faltered. The proof of concept team worked well together in overall and in subteam meetings to grasp an understanding of the software packages we will be utilizing while the verification and validation team ensured the entire system was covered within the tests outlined in this document.
   \item I expanded on it during the last deliverable, that each person had this ‘own version’ of the system in their mind and we were all building towards a different thing when the assignment started. That wasn’t entirely gone here and we hit a few bumps worrying about what each of the others was including within the system while thinking we don’t need that to be included. Through team meetings and a general walkthrough of the flow of the program, we all got on the same page and managed to generate tests and feel as if we’ve properly outlined a system to ensure the system is designed properly.
-  \item \textbf{GROUP Q}
+  \item \textbf{Please refer to the reflection response above for this group question}
   \item I feel my personal interaction with test suite development lacks for the requirements of this project. To advance this I will attempt to do the following:
   \begin{enumerate}
     \item Follow online guides, walkthroughs, and documentation on the software packages (Python Extension, pytest, pylint, etc.) to ensure the software testing suite developed contains both meaningful tests derived from this document while also covering all the software.
@@ -1033,11 +1574,11 @@ graduate attribute of Lifelong Learning.
   \end{enumerate}
 \end{enumerate}
 
-\subsection*{Eman - Reflection}
+\subsubsection*{Eman - Reflection}
     \begin{enumerate}
       \item The team worked together effectively by dividing into two focused groups, one for the POC demonstration and another for the VnV plan. Communication was strong throughout, and everyone contributed their strengths while helping others learn. The collaboration created a good balance where team members could build on their existing skills while developing new ones.
       \item My main challenge was ensuring complete test coverage across all system modules. I initially underestimated how much detail was needed to properly test each component in isolation. Identifying all the edge cases and understanding how to structure effective unit tests took more effort than expected. I resolved this by creating a systematic checklist that mapped each module to its requirements, then worked through them methodically. Collaborating with teammates to review my test cases also helped catch gaps I had missed.
-      \item \textbf{GROUP Q}
+      \item \textbf{Please refer to the reflection response above for this group question}
       \item I focused on mastering unit testing and test coverage. My first approach was working through practical examples to understand fixtures, mocking, and test isolation. My second approach was carefully reviewing our system requirements and architecture to understand what each module should do. I chose this combination because I needed both the technical testing skills and domain knowledge about our system. Understanding the requirements helped me design tests that actually validated meaningful functionality rather than just checking basic operations. This dual approach allowed me to create comprehensive unit tests covering all eleven modules in our system.
     \end{enumerate}
 
