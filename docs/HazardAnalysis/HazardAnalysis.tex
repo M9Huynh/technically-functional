@@ -190,28 +190,29 @@ These system boundaries are included within the scope of the hazard analysis sin
 \begin{center}
 \small
 \begin{xltabular}{\linewidth}{
-    L{1.8cm}  
+    L{1.6cm}  
     L{1.8cm}  
     L{2cm}    
+    L{0.8cm}  
     L{2cm}    
-    L{2.5cm}  
-    L{1.5cm}  
+    L{2.2cm}  
+    L{1.3cm}  
     L{0.8cm}  
 }
 \caption{Failure Modes and Effects Analysis} \\
 \toprule
-\textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Causes of Failure} & \textbf{Recommended Action} & \textbf{SR} & \textbf{Ref.} \\
+\textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Risk} & \textbf{Causes of Failure} & \textbf{Recommended Action} & \textbf{SR} & \textbf{Ref.} \\
 \midrule
 \endfirsthead
 
-\multicolumn{7}{c}{{\tablename\ \thetable{} -- continued from previous page}} \\
+\multicolumn{8}{c}{{\tablename\ \thetable{} -- continued from previous page}} \\
 \toprule
-\textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Causes of Failure} & \textbf{Recommended Action} & \textbf{SR} & \textbf{Ref.} \\
+\textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Risk} & \textbf{Causes of Failure} & \textbf{Recommended Action} & \textbf{SR} & \textbf{Ref.} \\
 \midrule
 \endhead
 
 \bottomrule
-\multicolumn{7}{r}{{Continued on next page}} \\
+\multicolumn{8}{r}{{Continued on next page}} \\
 \endfoot
 
 \bottomrule
@@ -220,282 +221,308 @@ These system boundaries are included within the scope of the hazard analysis sin
 Authenticate user & 
 Unauthorized access to different patient data & 
 Breach in privacy to personal information & 
+High & 
 A. Having a weak password & 
-A. User are required to have to create certain password requirements to create an account and sign in. & 
+A. Users are required to create certain password requirements to create an account and sign in. & 
 A. FR1.4 \newline
 B. SR1 \newline
 C. NFR 2.3 & 
 H1-1 \\
 
-& & & 
+& & & & 
 B. No form of 2FA to protect personal data & 
 B. Users are required to enter an email when creating account for 2FA & 
 & \\
 
-& & & 
+& & & & 
 C. Application keeps user signed in constantly & 
-C. The system will log the user out after 10 minute of inactivity & 
+C. The system logs the user out after 10 minutes of inactivity & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Authenticate user & Unable to access user profile & User unable to log into app & 
+Medium & 
 A. Technical failure (eg database access down) & 
-A. Implement pre-release verification of external library and database connectivity & 
+A. Pre-release verification of external library and database connectivity & 
 A. SR2 \newline
 B. SR3 & 
 H1-2 \\
 
-& & & 
+& & & & 
 B. Too many failed login attempts & 
-B. Implement a change password option by sending email & 
+B. Change password option by sending email & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Detecting user's body (input video stream) & 
 Unable to detect user's starting form (stationary) & 
 App is unable to provide feedback & 
-A. The environment around the user interferes with the system's detection & 
-A. Prompt the user to change their environment to a controlled environment without obstructions to the camera & 
+High & 
+A. Environment around user interferes with system detection & 
+A. Prompt user to change to controlled environment without obstructions & 
 A. SR4 \newline
 B/D. SR5 \newline
 C. SR6 \newline
 E. FR2.5 & 
 H2-1 \\
 
-& & & 
+& & & & 
 B. App is unable to use the camera & 
 B. Close other apps that may be using camera & 
 & \\
 
-& & & 
+& & & & 
 C. Device with insufficient charge & 
-C. Prompt the user that they need sufficient charge to proceed with the analysis & 
+C. Prompt user that sufficient charge is needed to proceed & 
 & \\
 
-& & & 
+& & & & 
 D. App does not have camera access permission & 
 D. Grant permission for app to access camera & 
 & \\
 
-& & & 
+& & & & 
 E. Application does not have sufficient data to analyze user & 
-E. Application support retry attempts for the user’s form if not aligned or has obstructions & 
+E. Application supports retry attempts if form not aligned or has obstructions & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Detecting user's body (input video stream) & 
 Unable to detect user's starting form (stationary) & 
-Application is unable to provide accurate feedback & 
-A. The environment around the user interferes with the system's detection & 
-A. Refer to H2-1A  & 
+Application unable to provide accurate feedback & 
+High & 
+A. Environment around user interferes with system detection & 
+A. Refer to H2-1A & 
 A. SR4 \newline
 B. SR2 &
 H2-2 \\
 
-& & & 
-B. The system places markers incorrectly & 
+& & & & 
+B. System places markers incorrectly & 
 B. Refer to H1-2A & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Detecting user's body (input video stream) & 
 Unable to detect user's starting form (stationary) & 
-Limited, incorrect or no footage  provided for processing different body parts & 
-A. The environment around the user interferes with the system's detection & 
+Limited, incorrect or no footage for processing body parts & 
+Medium & 
+A. Environment around user interferes with system detection & 
 A. Refer to H2-1A & 
 A. SR4 \newline
 B. SR6 \newline
 C. FR2.5 & 
 H2-3 \\
 
-& & & 
+& & & & 
 B. Device with insufficient charge & 
 B. Refer to H2-1C & 
 & \\
 
-& & & 
+& & & & 
 C. Application does not have sufficient data to analyze user & 
 C. Refer to H2-1E & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
+
+Detecting user's body (input video stream) & 
+User moves out of camera frame during exercise & 
+App loses tracking. No feedback until user re-enters frame & 
+Medium & 
+A. User shifts position while exercising & 
+A. Display on-screen boundary guide and play audio alert & 
+A. SR12 & 
+H2-4 \\
+
+& & & & 
+B. Phone/camera moves during exercise & 
+B. Prompt user to place phone on stable surface before starting & 
+& \\
+
+\cmidrule{1-8}
 
 Analyzing exercise form (monitoring) & 
-Unable to calculate metrics properly & 
-May mislead the user  & 
-A. Incorrect placement of the body during exercise  & 
-A. Provide some sort of outline on the screen where the user has to position themselves to make each view standardized & 
-A. SR7 \newline
-B. SR4 \newline
-C. SR8 & 
+Metrics calculation produces incorrect angle values & 
+User receives wrong correction. May perform unsafe movement & 
+High & 
+A. CV model mistakes landmarks due to occlusion or similar clothing colors & 
+A. Provide on-screen skeleton overlay for user to verify correct tracking before starting & 
+A. SR4 \newline
+B. SR7 \newline
+C. SR13 & 
 H3-1 \\
 
-& & & 
-B. Environment is cluttered and there are interferences during analysis & 
-B. Refer to H2-1C & 
+& & & & 
+B. Camera angle distorts perceived joint positions & 
+B. Provide guideline overlay for phone placement & 
 & \\
 
-& & & 
-C. Application does not have sufficient data to analyze user & 
-C. System supports retry attempts if insufficient data & 
+& & & & 
+C. Lighting changes mid-exercise & 
+C. Pause and re-run environment check if confidence drops & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Analyzing exercise form (monitoring) & 
-Unable to calculate metrics properly & 
-Causes feedback to be incorrect and may satisfy the wrong requirements  & 
-A. Incorrect placement of the body during exercise & 
-A. Refer to H3-1A & 
-A. SR7 \newline
-B. SR4 &
+Metrics calculation times out or returns null & 
+App cannot provide feedback. User continues with no guidance & 
+Medium & 
+A. CV processing takes too long on low-end device & 
+A. Implement frame-skipping on low-end devices. Show "Processing..." indicator & 
+A. SR11 \newline
+B. NFR1.3 & 
 H3-2 \\
 
-& & & 
-B. Environment is cluttered and there are interferences during analysis & 
-B. Refer to H2-1A & 
+& & & & 
+B. Too many landmarks missing from frame & 
+B. Prompt user to reposition so full body is visible & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Analyzing exercise form (monitoring) & 
-Unable to calculate metrics properly & 
-App is unable to provide feedback & 
-A. Incorrect placement of the body during exercise  & 
-Refer to H3-1 & 
-A. SR7 \newline
-B. SR4 \newline
-C. SR8 & 
+Metrics calculation uses wrong patient baseline & 
+Feedback does not match prescribed ROM; potential overexertion & 
+High & 
+A. Session token mismatched with patient ID in database & 
+A. Validate patient ID against session token before each query & 
+A. SR2 & 
 H3-3 \\
 
-& & & 
-B. Environment is cluttered and there are interferences during analysis & 
-& 
+& & & & 
+B. Physiotherapist assigned wrong exercise to patient & 
+B. Require PT to confirm exercise assignment; display exercise name to patient before starting & 
 & \\
 
-& & & 
-C. Application does not have sufficient data to analyze user & 
-& 
-& \\
-
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Real-time feedback & 
-Feedback is slow and does not provide it to the user well & 
-Users cannot correct form and delay in verification of the new form may cause poor performance of the movement & 
-A. Implementation of metrics maybe delaying how prompts are generated & 
-Review how the metrics are being generated and when prompts are being given to the user (i.e. running average but it takes many data points) & 
+Feedback is slow and does not reach user in time & 
+User cannot correct form in time. Delay may cause poor performance or injury & 
+High & 
+A. Metrics implementation delays prompt generation (eg running average needs many data points) & 
+A. Use sliding window with max 3-frame latency for critical form violations & 
 A. NFR1.3 \newline
-B. SR8 & 
+B. SR11 & 
 H4-1 \\
 
-& & & 
+& & & & 
 B. Application does not have sufficient data to analyze user & 
-Refer to H3-3C & 
+B. Refer to H3-2B & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Analyzing exercise form (monitoring) & 
 Unable to calculate metrics properly & 
-System provides the users with incorrect feedback outside of their physiotherapist's recommendations & 
-System does not know the limitations set by the physiotherapist & 
-Allow a manual input to set daily/weekly limit on increases in-load & 
+System provides incorrect feedback outside physiotherapist's recommendations & 
+High & 
+A. System does not know limitations set by physiotherapist & 
+A. Allow manual input to set daily/weekly limit on load increases & 
 A/B. SR9 & 
 H4-2 \\
 
-& & & 
-& 
-B. Allow a manual input to set daily/weekly limit on increases on mobility & 
+& & & & 
+B. & 
+B. Allow manual input to set daily/weekly limit on mobility increases & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Analyzing exercise form (monitoring) & 
-Confusing prompts (jargon) & 
-User may not be able to perform the exercise as intended & 
-Prompts are confusing and use jargon in their instructions  & 
-A. The system provides a tutorial of the movement during feedback& 
+Confusing prompts contain clinical jargon & 
+User may not be able to perform exercise as intended & 
+Medium & 
+A. Prompts use technical terms (eg "extend knee 15 degrees") & 
+A. Provide tutorial of movement during feedback using plain language & 
 A. SR10 \newline
 B. SR9 \newline
 C. NFR3.1 & 
 H4-3 \\
 
-& & & 
-& 
+& & & & 
+B. & 
 B. Refer to H4-2 & 
 & \\
 
-& & & 
-& 
-C. Design for accessibility (audio cues and visual cues) & 
+& & & & 
+C. & 
+C. Design for accessibility (audio cues + visual cues) & 
 & \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Analyzing exercise form (monitoring) & 
-Confusing prompts (jargon) & 
-User may harm themselves as a result of the technical jargon & 
-Prompts are confusing and use jargon in their instructions  & 
-Refer to H4-3& 
+Confusing prompts contain clinical jargon & 
+User may harm themselves as a result of misunderstanding & 
+High & 
+A. Prompts use technical terms without explanation & 
+A. Refer to H4-3 & 
 A. SR10 \newline
 B. SR9 \newline
 C. NFR3.1 & 
 H4-4 \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Analyzing exercise form (monitoring) & 
-Confusing prompts (jargon) & 
-User might not know what to correct and become frustrated thus not use the app & 
-Prompts are confusing and use jargon in their instructions  & 
-Refer to H4-3& 
+Confusing prompts contain clinical jargon & 
+User becomes frustrated and stops using the app & 
+Low & 
+A. Prompts are confusing and use jargon & 
+A. Refer to H4-3 & 
 A. SR10 \newline
 B. SR9 \newline
 C. NFR3.1 & 
 H4-5 \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Data Management (database) & 
-The system pulls incorrect patient data & 
-This can lead to a security breach and improper access of other user data & 
-Prompts are confusing and use jargon in their instructions  & 
-A. The system provides a tutorial of the movement during feedback& 
+System pulls incorrect patient data & 
+Security breach and improper access of other user data & 
+High & 
+A. Database query uses wrong patient ID due to session mismatch or race condition & 
+A. Validate patient ID against session token before each database query & 
 A. NFR2.1 & 
 H5-1 \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Data Management (database) & 
-The system pulls incorrect patient data & 
-This can affect how feedback is given and stored for future  & 
-System incorrectly takes from the wrong userID & 
-Refer to H1-2A & 
+System pulls incorrect patient data & 
+Feedback is given based on wrong patient's history & 
+High & 
+A. System incorrectly takes from wrong userID & 
+A. Refer to H1-2A & 
 A. SR4 & 
 H5-2 \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Data Management (database) & 
-The system pulls incorrect patient data & 
-There are duplicate entries & 
-Refer to H5-1A  & 
-Refer to H5-1A & 
+System pulls incorrect patient data & 
+Duplicate entries created in database & 
+Medium & 
+A. Race condition on concurrent writes & 
+A. Implement unique constraints on (patient ID, exercise ID, timestamp) & 
 A. NFR2.1 & 
 H5-3 \\
 
-\cmidrule{1-7}
+\cmidrule{1-8}
 
 Data Management (database) & 
 Unable to access user profile & 
-System is unable to log in user & 
-Refer to H1-2 & 
-Refer to H1-2 & 
+System cannot log in user & 
+Medium & 
+A. Refer to H1-2 & 
+A. Refer to H1-2 & 
 A. SR2 \newline
 B. SR3 & 
 H5-4 \\
@@ -503,7 +530,6 @@ H5-4 \\
 \end{xltabular}
 \end{center}
 \end{landscape}
-
 
 \section{Safety and Security Requirements}
 
@@ -575,6 +601,24 @@ Rationale: Without this requirement, it may be difficult to replicate suggestion
 Risk: Low\\
 Reference: H4-3, H4-4, H4-5\\
 
+\noindent
+SR11: The system shall adjust frame processing rate based on device performance to maintain real-time feedback latency under 500ms. On low-end devices, frame-skipping shall be implemented to prevent processing backlog.\\
+Rationale: Excessive latency prevents users from correcting form in real time, which may lead to repeated poor form and potential injury.\\
+Risk: High\\
+Reference: H3-2, H4-1\\
+
+\noindent
+SR12: The system shall display an on-screen boundary guide during exercise setup and play audio alerts (e.g., "Please center yourself") if the user moves out of the camera frame during active exercise.\\
+Rationale: Loss of tracking means no feedback is provided, leaving the user without guidance for correct form.\\
+Risk: Medium\\
+Reference: H2-4\\
+
+\noindent
+SR13: The system shall monitor landmark confidence scores during exercise. If confidence drops below a threshold (e.g., 0.6) for more than 1 second, the system shall pause feedback and re-run the environment check.\\
+Rationale: Changing conditions mid-exercise (e.g., lighting, occlusion) can cause inaccurate landmark detection and incorrect feedback.\\
+Risk: Medium\\
+Reference: H3-1\\
+
 \section{Hazard Analysis Traceability Matrix}
 The following matrix showcases the dependencies between the hazards listed and all of the requirements. This can be seen in our traceability matrix
 linked in the URL below, which will take you to the excel spreadsheet with the matrix:
@@ -585,30 +629,44 @@ linked in the URL below, which will take you to the excel spreadsheet with the m
 
 \section{Roadmap}
 
-This section outlines which safety requirements that will be implemented within the span of the capstone timeline. It was decided that the measure of severity as well as likeliness of the hazard occurring will dictate which safety requirements are implemented. Above all, the scope of the project is also considered and the outlook on developing different requirements. As a team we have acknowledged that if everything could be implemented during the timeline of the capstone than it would result in a better final product but the limitation on time and developers were taken into account. 
+This section outlines which safety requirements that will be implemented within the span of the capstone timeline. It was decided that the measure of severity as well as likeliness of the hazard occurring will dictate which safety requirements are implemented. Above all, the scope of the project is also considered and the outlook on developing different requirements. As a team we have acknowledged that if everything could be implemented during the timeline of the capstone than it would result in a better final product but the limitation on time and developers were taken into account. Prioritization is based on hazard risk level (severity x likelihood), core functionality impact, and development resource constraints.
 
-The safety requirements that will be part of the capstone time-line include:
+\subsection*{Implemented Safety Requirements}
 
-\begin{itemize}
-    \item SR2 - This is critical to the core functionality of the application and will not be functional without this requirement.
-    \item SR3 - This will be include as it is a relatively simple requirement to implement and has a risk level of medium.
-    \item SR4 - This is within scope as if the user is not within a suitable environment, the application may not be able to provide feedback or provide inaccurate feedback.
-    \item SR5 - This will be within scope as the application will not perform core functionality if the camera is not accessible.
-    \item SR7 - This will be included to promote ease of user interaction with the application.
-    \item SR8 - This will be included as there will be no output from the application if there is insufficient data to analyze.
-\end{itemize}
-
-\noindent
-The requirements that will be implemented in the future include:
+The following safety requirements have been fully implemented as of this document:
 
 \begin{itemize}
-    \item SR1 - This will be outside the capstone timeline since currently it is not integral to the minimum viable product.
-    \item SR6 - This will be outside the capstone timeline as it is a more advanced feature that is not critical for the minimum viable product.
-    \item SR9 - This will be outside the capstone timeline as there must be additional value add from a business standpoint prior to implementing this safety requirement. Additionally, after discussing with our supervisor, this safety requirement does not apply to our initial case of post-operative knee exercises as mobility is necessary during the early stages of recovery.
-    \item SR10 - This will be outside of the capstone timeline as this does not pertain to the core functionality of the program for the capstone and can be seen as an additional safety requirement.
+    \item \textbf{SR2} - Verification of external library and database connectivity within test cases.
+    \item \textbf{SR3} - Password timeout after 5 failed login attempts.
+    \item \textbf{SR4} - Environment check (obstructions, low-light) at start of video streaming.
+    \item \textbf{SR5} - Camera access permission prompt and conflict detection.
+    \item \textbf{SR7} - Guideline overlay for phone placement and user positioning.
 \end{itemize}
 
-Given the importance of SR1, this will likely be addressed in the short term (1-2 months after initial development). The other requirements that are outside of the capstone timeline will be implemented in the medium term (2-4 months after development).
+\subsection*{Future Implementation}
+
+The following safety requirements are deferred beyond the capstone timeline:
+
+\begin{itemize}
+    \item \textbf{SR1} - 2FA for account creation and login. Not integral to the minimum viable product (MVP). Target: 1-2 months post-capstone.
+    \item \textbf{SR6} - Battery life monitoring and low-charge prompts. Low risk (inconvenience only); not critical for MVP.
+    \item \textbf{SR8} - Retry attempts when patient form has insufficient data. This is critical because without sufficient data, the application cannot provide any analysis or feedback.
+    \item \textbf{SR9} - Physiotherapist-configurable daily/weekly limits on metrics. After discussion with supervisor, this does not apply to post-operative knee exercises where mobility gain is the goal. Requires additional business validation.
+    \item \textbf{SR10} - Video tutorial page for motion guidance. Usability enhancement, not core functionality for MVP.
+    \item \textbf{SR11} - Frame-skipping and latency management for low-end devices. Real-time feedback requires processing latency under 500ms; this ensures usability across target devices.
+    \item \textbf{SR12} - On-screen boundary guide and audio alerts when user moves out of frame. Loss of tracking directly impacts feedback quality.
+    \item \textbf{SR13} - Mid-exercise confidence monitoring and environment re-check. Advanced feature requiring additional CV integration.
+\end{itemize}
+
+\subsection*{Post-Capstone Timeline}
+
+\begin{itemize}
+    \item \textbf{Short term (1-2 months after capstone):} SR1
+    \item \textbf{Medium term (2-4 months after capstone):} SR6, SR8, SR10, SR11, SR12
+    \item \textbf{Long term (4-6 months after capstone):} SR9, SR13
+\end{itemize}
+
+Given the importance of SR1, this will likely be addressed in the short term (1-2 months after initial development). The other requirements that are outside of the capstone timeline will be implemented in the medium term (2-4 months after development) and long term (4-6 months after development).
 
 \newpage{}
 
