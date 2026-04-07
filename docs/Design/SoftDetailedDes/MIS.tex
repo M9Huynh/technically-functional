@@ -2606,12 +2606,53 @@ good\_to\_record & String & A message informing user that the system is ready to
 \end{longtable}
 \end{comment}
 
+\section{Appendix A}
+\begin{longtable}{L R}
+\caption{Database Schema}\\
+\toprule
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Tables}} & \textcolor{white}{\textbf{Fields}} \\
+\midrule
+\endfirsthead
+
+\multicolumn{2}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\toprule
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Tables}} & \textcolor{white}{\textbf{Fields}} \\
+\midrule
+\endhead
+
+\bottomrule
+\multicolumn{2}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\textbf{activities} & \texttt{actid, createdAt, duration, email, exercise, timestamp, uid, analysis, avg\_rep\_duration, completed\_reps, completed\_sets, current\_angle, current\_rep\_duration, date\_performed, effort, max\_height, min\_height, name, pain, patient\_feedback, rep\_state, rom\_degree, satisfaction, target\_area, Database location} \\
+\midrule
+\textbf{comments} & \texttt{actid, author, cid, comment, date, uid} \\
+\midrule
+\textbf{exercises} & \texttt{description, reps, sets, title} \\
+\midrule
+\textbf{inviteCodes} & \texttt{active, physioId, used, usedBy} \\
+\midrule
+\textbf{userExercises} & \texttt{description, id, reps, sets, title, userid} \\
+\midrule
+\textbf{users} & \texttt{birthday, createdAt, email, inviteCode, name, physioId, role} \\
+\midrule
+\textbf{validLicenses} & \texttt{active} \\
+
+\end{longtable}
 \section*{Appendix --- Reflection}
 
 The information in this section will be used to evaluate the team members on the
 graduate attribute of Problem Analysis and Design.
 
 \input{../../Reflection.tex}
+
+
 
 \begin{enumerate}
   \item What went well while writing this deliverable? 
