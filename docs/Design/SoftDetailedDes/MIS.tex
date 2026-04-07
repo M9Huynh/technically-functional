@@ -1856,23 +1856,111 @@ NA \\
 \textit{f}: set of video frames\\\
 \textit{c}: calibrating \\
 \textit{cal\_time\_left}: time left for calibration\\
+\textit{p}: frame responses set \\
+\textit{l}: set of landmark arrays\\
+\textit{url}: set of backend urls \\
+\textit{$T_{process}$}: processFrame timeout value = 15000 ms\\
+\textit{$T_{pre_check}$}: precheckFrame timeout value = 10000 ms\\
+\textit{$T_{reset}$}: timeout value for resetBackend() = 15000 ms\\ 
 
 
 \noindent \textbf{State Invariant} \\
 \noindent
 $\forall$ $b \in \text{Base64}: \text{b64\_to\_bgr\_image}(b) \in F \cup \{\emptyset\}$\\
 $\forall$ $\text{operations on pose\_app}: \text{lock must be acquired first}$\\
-$
-resetBackend() \implies analyzer = new Analyzer() \land c = 
-true \cap cal\_time\_left = 10.0$
+$resetBackend() \implies analyzer = new Analyzer() \land c = true \cap cal\_time\_left = 10.0$
+$SERVER\_URL \in url$ $\cap$ $SERVER\_URL$ is immutable at runtime \\
+$\forall response \in P: \text{response.landmarks} \in L \cup \{\emptyset\} \cap response.connections \in C$\\
+$true \implies T_{process} = 15000 \cap T_{precheck} = 10000 \cap T_{reset} = 15000$ \\
+$processFrame endpoint = SERVER\_URL + /process\_frame$\\
+$precheckFrame endpoint = SERVER\_URL + /precheck\_frame$\\
+$resetBackend endpoint = SERVER\_URL + /reset$\\
+
 
 \subsubsection{Environment variables}
-%TODO fix this pls @Maham
-%camera \\
+NA\\
 
 \subsubsection{Assumptions}
+\begin{itemize}
+    \item All frames resize to 640x480 pixels.
+    \item When \texttt{mirrored = true} (front camera), the frame is horizontally flipped. 
+    This assumes the patient is facing the camera and wants natural left-right orientation.
+    \item A single user's frames can be processed at a time (this falls under the overarching assumption that the
+    application can be used by one person at a time only).
+    \item Images are assumed to be base64-encoded JPEG or PNG format. No other formats are supported.
+    \item Timeout values assume reasonable response times.
+    \item Reset function is assumed to be called before re-recording or new recording.
+\end{itemize}
 
-\subsubsection{Access Routine Semantics}
+\subsubsection{Access Routine Semantics - Exported}
+\texttt{f}: set of video frames\\\
+\texttt{c}: calibrating \\
+\texttt{cal\_time\_left}: time left for calibration\\
+\textit{p}: frame responses set \\
+\textit{l}: set of landmark arrays\\
+\textit{url}: set of backend urls \\
+\textit{b}: set of base64 encoded frames\\
+\texttt{s}: {'RIGHT' | 'LEFT'}\\
+\texttt{side}: $\in s$
+\texttt{facing} : {'front' | 'back'}\\
+\texttt{response}: PrecheckFrameResponse \\
+\textit{J}: set of all JSON strings\\
+\texttt{pose\_app}: PoseBackend()\\ 
+\newline
+\textbf{poseService.ts}\\
+\newline
+\textit{processFrame}:\\
+\textbf{Pre-condition}:$\forall j \in J: j.imageBase64 \in b \cap 
+j.side \in s \cap j.mirrored \in \{true, false\} \cap cameraReady = true \cap pose\_app.analyzer \neq \emptyset$ \\
+\textbf{Function}: processFrame(fr, side, facing) \\
+\textbf{Post-condition}:
+$fr \in f \implies pose\_app.analyzer \neq \emptyset
+\cap \{rep\_count\}(t_2) \geq \{rep\_count\}(t_1)
+\forall t_2 > t_1, rom\_degree = max\_degree - min\_degree \geq 0
+\cap angle \in [0, 180] \cap c(t_2) = false \implies c(t_1) = false 
+\cup cal\_time\_left(t_1) \leq 0$
+\textit{precheckFrame}:\\
+\textbf{Pre-condition}: $\forall j \in J: j.imageBase64 \in b \cap
+j.side \in s \cap j.mirrored \in {true, false} \cap cameraReady = true \cap 
+pose\_app.analyzer \neq \emptyset$ \\
+\textbf{Function}: precheckFrame(fr, s, facing)\\
+\textbf{Post-condition}: $\forall j \in J: response.ok \in \{true, false\} \cap response.message \neq \emptyset:
+(response.ok = true \implies response.tooDark = false \cap response.inFrame = true \cap response.kneeVisible = true)$
+$\cup$ $\text{response.ok = false} \implies \text{response.message describes failure reason}$ \\
+\newline
+\textit{resetBackend()}: \\
+\textbf{Pre-condition}: $pose\_app \neq \emptyset$ \\
+\textbf{Function}: resetBackend()\\
+\textbf{Post-condition}: $pose\_app.analyzer = new Analyzer() \cap c = true \cap cal\_time\_left = 10 s
+\cap rep\_count = 0 \cap min\_degree, max\_degree, rom\_degree = 0$\\
+\newline
+\noindent \textbf{server.py}\\
+\newline
+\textit{reset\_backend (POST/reset endpoint)} \\
+\textbf{Pre-condition:} $pose\_app \neq \emptyset$ \\
+\textbf{Function:} reset\_backend() \\
+\textbf{Post-condition:} $ pose\_app.analyzer = new Analyzer()$ \\
+$ is\_calibrating = true$\\
+$ cal\_time\_left = 10.0$\\
+$rep\_count = 0$\\
+
+\noindent \textit{precheck\_frame (POST/precheck\_frame endpoint)}\\
+\textbf{Pre-condition}: $\forall j \in J: j.imageBase64 \in b \cap
+j.side \in s \cap j.mirrored \in {true, false} \cap cameraReady = true$ \\
+\textbf{Function}: precheckFrame() \\
+\textbf{Post-condition}: $response.message \neq \emptyset:
+(response.ok = true \implies response.tooDark = false \cap response.inFrame = true \cap response.kneeVisible = true)$
+$\cup$ $\text{response.ok = false} \implies \text{response.message describes failure reason}$ \\
+
+\noindent \textit{process\_frame(POST/process\_frame endpoint)}\\
+\textbf{Pre-condition}:$\forall j \in J: j.imageBase64 \in b \cap 
+j.side \in s \cap j.mirrored \in \{true, false\} \cap cameraReady = true \cap pose\_app.analyzer \neq \emptyset$ \\
+\textbf{Function}: processFrame()\\
+\textbf{Post-condition}: $\{rep\_count\}(t_2) \geq \{rep\_count\}(t_1)
+\forall t_2 > t_1, rom\_degree = max\_degree - min\_degree \geq 0
+\cap angle \in [0, 180] \cap c(t_2) = false \implies c(t_1) = false 
+\cup cal\_time\_left(t_1) \leq 0$
+
 
 %\noindent \wss{accessProg}():
 %\begin{itemize}
