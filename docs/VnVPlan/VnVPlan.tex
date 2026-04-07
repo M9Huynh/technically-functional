@@ -56,6 +56,9 @@ Vaisnavi S. & April 6th, 2026 & Finalized the final version of the VnV Plan\\
   \toprule		
   \textbf{symbol} & \textbf{description}\\
   \midrule 
+  VnV & Verification and Validation\\
+  SRS & Software Requirements Specification\\
+  API & Application Programming Interface\\
   TC & Test Case\\
   UT & Usability Test\\
   PR & Performance Test\\
@@ -92,7 +95,7 @@ The objectives of the testing expanded upon within this document focus on genera
 
 Usage of the system should be easily explainable for first-time users with simple dialogue popups and limited visible guiding from one function to the next. Additionally, for the video-feed portion of the application’s usage, the user should be reasonably guided through the exercise and process to set them up for successful exercise execution and feedback recommendation acceptance.
 
-User profile and video-feed data should be securely stored, whether locally or within a remote database accessed by the system. User data security has become an increasingly sensitive topic within the software industry of late and users may question how their data is being stored and utilized. Users should be aware of the usage of their data and the system should ensure unauthorized access outside of the communicated plan is never possible.
+User profile and video-feed data should be securely stored, whether locally or within a remote database accessed by the system. User data security has become an increasingly sensitive topic within the software industry and users may question how their data is being stored and utilized \citep{secureflag2026sensitive}. Users should be aware of the usage of their data and the system should ensure unauthorized access outside of the communicated plan is never possible.
 
 Meeting stakeholder requirements, whether they be data restrictive or process flow in nature, is what will validate the core features of the system. If users do not find value in the expected usage expected from the system, then, ultimately, the system has failed to perform its primary goal. Ensuring stakeholder requirements and feedback are incorporated into the system as it is developed, both initially and onward, will ensure the system is both wanted and usable to the intended audience.
 
@@ -148,7 +151,7 @@ Verification of the design will rely on feedback from 4G06 teaching assistants, 
 
 \subsection{Verification and Validation Plan Verification}
 
-This document will also be reviewed by the teaching assistants and provided peer-review by another design team, creating issues within the GitHub repository to be dealt with accordingly. To ensure feedback is properly actioned, the following process is followed:
+This document will also be reviewed by the teaching assistants and provided peer-review by another design team, creating issues within the GitHub repository to be dealt with accordingly. To ensure feedback is properly actioned, the following step-by-step process is followed:
 \begin{itemize}
     \item Feedback is collected during TA and peer review sessions
     \item Each comment is converted into a GitHub issue
@@ -160,29 +163,27 @@ An issue is considered resolved once the required changes have been implemented,
 
 \subsection{Implementation Verification}
 
-The implementation verification plan ensures that the system aligns with the System Requirements Specification (SRS) through both dynamic and non-dynamic testing methodsDynamic testing is conducted through unit testing, integration testing, and system-level validation. Unit tests are implemented for both the frontend and backend components to verify core functionality such as authentication, data handling, and computer vision analysis. Integration testing is used to validate interactions between system components, including Firebase authentication, Firestore database operations, and backend API endpoints such as \texttt{/process\_frame} and \texttt{/precheck\_frame}. Performance testing is also carried out to evaluate response time during exercise recording ($\leq$ 2 seconds), system stability under repeated usage, and handling of real-time data processing. Non-dynamic (static) testing is used to evaluate code and design quality without executing the system. This includes structured peer code reviews on all pull requests to assess correctness, readability, and adherence to best practices. Code walkthroughs are performed for critical modules such as authentication and computer vision analysis to help identify potential issues early. In addition, basic static analysis tools such as \texttt{pylint} are used where applicable to check for common coding issues in the backend. Document reviews are also conducted, with issues tracked and resolved through GitHub. Automated test suites are executed during development to detect regressions and ensure that all existing functionality remains intact. GitHub Actions is used to support automated workflows such as builds and checks on pull requests, helping maintain project stability. Manual testing is also performed for real-time features, including camera-based pose detection and user interaction workflows that cannot be fully automated.
+The implementation verification plan ensures that the system aligns with the System Requirements Specification (SRS) through both dynamic and non-dynamic testing methods.
 
+Dynamic testing is conducted through unit testing, integration testing, and system-level validation. Unit tests are implemented for both the frontend and backend components to verify core functionality such as authentication, data handling, and computer vision analysis. Integration testing is used to validate interactions between system components, including Firebase authentication, Firestore database operations, and backend API endpoints such as \path{/process_frame} and \path{/precheck_frame}. Performance testing is also carried out to evaluate response time during exercise recording ($\leq$ 2 seconds), system stability under repeated usage, and handling of real-time data processing.
+
+Static (non-dynamic) testing is used to evaluate code and design quality without executing the system. This includes peer code reviews on all pull requests to ensure best practices are followed. Code walkthroughs are also conducted for critical modules and functionalities to identify potential issues early. In addition, tools like \texttt{pylint} are used to catch code quality issues such as inconsistent formatting and unused variables. Documentation is regularly reviewed, with issues tracked and resolved through GitHub.
+
+Automated test suites and GitHub Actions are used to ensure functionality remains intact and to help maintain system stability. Manual testing is also carried out for real-time features, including MediaPipe pose detection and user interaction workflows that cannot be fully automated. These combined efforts help ensure that all features and functionality remain reliable.
 \subsection{Automated Testing and Verification Tools}
 
-\textbf{Unit Testing Framework:}
-The project uses standard testing tools for different parts of the system. \texttt{pytest} is used for the Python backend to validate API endpoints, data processing logic, and computer vision functionality. For the frontend, tests are written using \texttt{Jest} to verify UI behavior and component interactions. These tools were selected due to their reliability, documentation support, and compatibility with the development environment.
+\textbf{Unit Testing:}
+The project uses \texttt{pytest} for the Python backend to validate API endpoints, data processing, and computer vision functionality. For the frontend, \texttt{Jest} is used to verify the UI and component interactions. 
 
-\textbf{Code Coverage Tools and Plan:}
-Code coverage is used to measure how much of the system is exercised by the implemented test cases.
+\textbf{Code Coverage:}
+Code coverage is used to measure how much of the system is covered by the test cases.
 
 \begin{itemize}
-    \item \textbf{Python:} \texttt{pytest-cov} is used alongside \texttt{pytest} to track code coverage for backend components. This includes measuring which parts of the API logic and processing functions are executed during testing.
+    \item \textbf{Python:} We use \texttt{pytest-cov} with \texttt{pytest} to keep track of code coverage for the backend. 
     
-    \item \textbf{TypeScript:} \texttt{Jest} provides built-in coverage reporting for frontend components, tracking execution of functions and user interaction flows.
+    \item \textbf{TypeScript:} We use \texttt{Jest} to keep track fo code coverage for the frontend.
 \end{itemize}
-
-The goal is to achieve meaningful coverage across both codebases, focusing on critical functionality such as authentication, data handling, and core processing logic. Coverage results are used during development to identify untested areas and improve test completeness.
-
-\textbf{Linters and Static Analysis:}
-To maintain code quality, basic static analysis tools such as \texttt{pylint} are used for backend code where applicable. In addition, structured peer code reviews and walkthroughs are conducted on pull requests to ensure readability, correctness, and adherence to best practices.
-
-\textbf{Automated Workflows:}
-GitHub Actions is used to support automated workflows such as builds and checks on pull requests. While full test automation through CI is not currently implemented, these workflows help ensure that the project remains stable as changes are introduced.
+Overall, the goal is to achieve meaningful code coverage, and identify any gaps so we know where to focus next. To maintain code quality, we use static analysis tools such as \texttt{pylint} to help with code quality where applicable. In addition, we conduct peer code reviews and walkthroughs consistently to ensure our code is abiding by best practices. In terms of automated workflows, we use GitHub Actions to conduct automated builds and checks on pull requests. Ultimately, these workflows help ensure that the project remains stable as new changes to the code are constantly being introduced.
 
 \subsection{Software Validation}
 
@@ -267,7 +268,7 @@ This section outlines the tests used to verify both the functional requirements 
 	
 	\textbf{Pass/Fail Criteria:} Pass if the patient account is created, the linked physiotherapist is stored, and the invite code is marked as used. Fail otherwise.
 	
-	\textbf{How test will be performed:} Call \texttt{registerPatient()} with a valid invite code and verify account creation, Firestore data, and invite code update behavior.
+	\textbf{How test will be performed:} Call \texttt{registerPatient()} with a valid invite code and verify account creation, Firestore data, and invite code update behaviour.
 	
 	
 	\vspace{0.5em}
@@ -551,7 +552,7 @@ This section outlines the tests used to verify both the functional requirements 
 
   \textbf{Pass/Fail Criteria:} Pass if valid deletions succeed and invalid cases throw errors. Fail otherwise.
 
-  \textbf{How test will be performed:} Call function with different user types and verify behavior.
+  \textbf{How test will be performed:} Call function with different user types and verify behaviour.
 
 
   \vspace{0.5em}
@@ -680,7 +681,7 @@ This section outlines the tests used to verify both the functional requirements 
 \textbf{Requirements Covered:} UHR-UPL1, UHR-AR1 \\
 \textbf{Initial State:} User positioned in frame; pose detection active. \\
 \textbf{Input/Condition:} User performs exercise repetitions. \\
-\textbf{Output/Result:} Feedback overlays are understandable and rep counts are perceived as accurate. \\
+\textbf{Output/Result:} Feedback overlays are understandable and rep. counts are perceived as accurate. \\
 \textbf{How test will be performed:} A participant performs exercises and evaluates feedback clarity. \\
 
 \vspace{0.5em}
@@ -766,7 +767,7 @@ This section outlines the tests used to verify both the functional requirements 
 \textbf{Initial State:} User actively using application connected to backend. \\
 \textbf{Input/Condition:} Backend server is manually terminated during active analysis. \\
 \textbf{Output/Result:} Application displays error message and remains responsive. After restart, user continues normally. \\
-\textbf{How test will be performed:} Tester shuts down backend during execution and observes system behavior. \\
+\textbf{How test will be performed:} Tester shuts down backend during execution and observes system behaviour. \\
 
 \vspace{0.5em}
 
@@ -777,7 +778,7 @@ This section outlines the tests used to verify both the functional requirements 
 \textbf{Initial State:} User uploading recorded exercise video. \\
 \textbf{Input/Condition:} WiFi is disabled mid-upload and restored after ~10 seconds. \\
 \textbf{Output/Result:} Upload failure detected and retry option shown. Retry succeeds and data remains intact. \\
-\textbf{How test will be performed:} Tester disables network during upload and verifies recovery behavior. \\
+\textbf{How test will be performed:} Tester disables network during upload and verifies recovery behaviour. \\
 
 \end{enumerate}
 
@@ -951,7 +952,7 @@ This section outlines the tests used to verify both the functional requirements 
 \section{Unit Test Description}
 
 This section outlines the unit testing approach and scope for each of the modules. Please note that the VnV Report contains 
-the detailed individual test cases and expected results, but this section essentailly summarizes the plan for the unit testing coverage 
+the detailed individual test cases and expected results, but this section essentially summarizes the plan for the unit testing plan 
 by module as well as the key functionalities that are covered.
 \subsection{Authentication}
 
@@ -962,56 +963,54 @@ by module as well as the key functionalities that are covered.
 \textbf{Target requirement(s):} FR1.1, FR1.2, FR1.3, FR2, FR3
 
 \begin{itemize}
-    \item \textbf{Physiotherapist registration with valid license}
-    \begin{itemize}
+    \item \textbf{Physiotherapist registration with valid license:}
+    \begin{enumerate}
         \item Ensures a physiotherapist account is created only when the provided license format is valid and verified.
-        \item Verifies Firestore user data is written with the correct role, normalized fields, and verification status.
-    \end{itemize}
+        \item Verifies Firestore user data is written with the correct role, fields, and verification status.
+    \end{enumerate}
 
-    \item \textbf{Physiotherapist registration failure cases}
-    \begin{itemize}
+    \item \textbf{Physiotherapist registration failure cases:}
+    \begin{enumerate}
         \item Ensures invalid license formats are rejected with the correct error.
-        \item Verifies unverified or inactive licenses do not allow account creation.
-    \end{itemize}
+        \item Verifies that unverified or inactive licenses do not allow account creation.
+    \end{enumerate}
 
-    \item \textbf{Patient registration with valid invite code}
-    \begin{itemize}
+    \item \textbf{Patient registration with valid invite code:}
+    \begin{enumerate}
         \item Ensures a patient can register when the invite code is active, unused, and linked to a physiotherapist.
-        \item Verifies the patient profile and invite-code usage metadata are stored correctly.
-    \end{itemize}
+        \item Verifies the patient profile and invite-code data are stored correctly.
+    \end{enumerate}
 
-    \item \textbf{Patient registration failure cases}
-    \begin{itemize}
-        \item Ensures invalid, inactive, already-used, or malformed invite codes are rejected.
-        \item Verifies registration does not proceed when a required physiotherapist link is missing.
-    \end{itemize}
+    \item \textbf{Patient registration failure cases:}
+    \begin{enumerate}
+        \item Ensures invalid, inactive, or already-used invite codes are rejected.
+        \item Verifies registration does not proceed when a required link to a physiotherapist is missing.
+    \end{enumerate}
 \end{itemize}
 
 
 \subsubsection{Valid User Module Tests}
 
-\textbf{Goal:} The valid user module verifies user authentication behavior after account creation. These tests ensure that users with valid credentials can log in successfully, that missing profile information is handled correctly, and that logout functionality clears the active session without error.
+\textbf{Goal:} The valid user module verifies user authentication after account creation. These tests ensure that users with valid credentials can log in successfully, that missing profile information is handled correctly, and that logout functionality successfully clears the current active session.
 
 \textbf{Target requirement(s):} FR1, FR1.1, SR-AR1
 
 \begin{itemize}
-    \item \textbf{Valid login behavior}
-    \begin{itemize}
+    \item \textbf{Valid login behaviour:}
+    \begin{enumerate}
         \item Ensures physiotherapist and patient accounts can log in using valid credentials.
         \item Verifies that profile data is returned correctly after authentication.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Login failure handling}
-    \begin{itemize}
+    \item \textbf{Login failure handling:}
+    \begin{enumerate}
         \item Ensures login is rejected when the expected Firestore user profile is missing.
-        \item Verifies appropriate error handling for incomplete authenticated user states.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Logout behavior}
-    \begin{itemize}
-        \item Ensures an authenticated session can be terminated safely.
+    \item \textbf{Logout behaviour:}
+    \begin{enumerate}
         \item Verifies the sign-out operation is called once and completes without error.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 
@@ -1019,34 +1018,34 @@ by module as well as the key functionalities that are covered.
 
 \subsubsection{User Management Functions}
 
-\textbf{Goal:} The user account module provides database-facing support for retrieving, updating, and deleting user information. These tests verify correct data retrieval, update behavior, and deletion logic for valid, invalid, and missing user identifiers.
+\textbf{Goal:} The user account module provides database support for retrieving, updating, and deleting user information. These tests verify correct data retrieval, updates, and deletion logic for valid, invalid, and missing user IDs.
 
 \textbf{Target requirement(s):} FR2, FR4, FR6, FR21, FR22, FR23
 
 \begin{itemize}
-    \item \textbf{User retrieval}
-    \begin{itemize}
-        \item Ensures user data can be retrieved using valid identifiers.
-        \item Verifies null or error behavior for non-existent or invalid inputs.
-    \end{itemize}
+    \item \textbf{User retrieval:}
+    \begin{enumerate}
+        \item Ensures user data can be retrieved using valid uid.
+        \item Verifies null or error states for non-existent or invalid inputs.
+    \end{enumerate}
 
-    \item \textbf{Email-based lookup}
-    \begin{itemize}
+    \item \textbf{Email-based lookup:}
+    \begin{enumerate}
         \item Ensures users can be found through registered email addresses.
         \item Verifies that unknown emails do not incorrectly return data.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{User update behavior}
-    \begin{itemize}
+    \item \textbf{User update behaviour:}
+    \begin{enumerate}
         \item Ensures valid user profile updates are written correctly.
         \item Verifies changes are reflected in Firestore after the update operation.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{User deletion behavior}
-    \begin{itemize}
+    \item \textbf{User deletion behaviour:}
+    \begin{enumerate}
         \item Ensures valid user deletion requests succeed.
-        \item Verifies deletion requests for non-existent users fail safely.
-    \end{itemize}
+        \item Verifies deletion attempts for non-existent users fail safely.
+    \end{enumerate}
 \end{itemize}
 
 
@@ -1057,274 +1056,267 @@ by module as well as the key functionalities that are covered.
 \textbf{Target requirement(s):} FR18, FR21, FR25
 
 \begin{itemize}
-    \item \textbf{General query behavior}
-    \begin{itemize}
+    \item \textbf{General query behaviour:}
+    \begin{enumerate}
         \item Ensures linked patients and search results are filtered correctly.
-        \item Verifies errors return safe fallback values such as empty arrays.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Detailed user lookup}
-    \begin{itemize}
+    \item \textbf{Detailed user lookup:}
+    \begin{enumerate}
         \item Ensures user database lookups return appropriately categorized physiotherapist and patient results.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 
 \subsubsection{Specialized and Validation Functions}
 
-\textbf{Goal:} These tests verify specialized user-account behaviors such as physiotherapist-linked account deletion, user authentication helper functions, initialization routines, and password validation logic.
+\textbf{Goal:} These tests verify specialized user-account actions such as physiotherapist-linked account deletion, user authentication functions,and password validation logic.
 
 \textbf{Target requirement(s):} FR1, FR2, FR4, FR22, SR-AR1, SR-AR2, SR-PR1
 
 \begin{itemize}
-    \item \textbf{Physiotherapist-linked patient account management}
-    \begin{itemize}
+    \item \textbf{Physiotherapist-linked patient account management:}
+    \begin{enumerate}
         \item Ensures physiotherapists can remove linked patient accounts when appropriate.
         \item Verifies invalid deletion attempts are rejected with the correct errors.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Authentication helper validation}
-    \begin{itemize}
+    \item \textbf{Authentication helper validation:}
+    \begin{enumerate}
         \item Ensures username-password matching and authentication utilities behave correctly for valid and invalid credentials.
         \item Verifies non-existent users do not incorrectly authenticate.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Initialization and credential validation}
-    \begin{itemize}
+    \item \textbf{Initialization and credential validation:}
+    \begin{enumerate}
         \item Ensures system initialization routines complete successfully.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 
 \subsection{Live Feedback Module}
 
-\subsubsection{Corrective Feedback and Rep Counting}
+\subsubsection{Corrective Feedback and Rep. Counting}
 
-\textbf{Goal:} The live feedback module verifies that the system generates real-time corrective messages and repetition updates based on incoming joint-angle measurements. These tests cover valid range-of-motion behavior, insufficient movement, excessive movement, and loss of pose visibility.
+\textbf{Goal:} The live feedback module verifies that the system generates real-time corrective messages and repetition updates based on incoming joint-angle measurements. These tests cover valid range-of-motion behaviour, insufficient movement, excessive movement, and loss of pose visibility.
 
 \textbf{Target requirement(s):} FR13, FR14
 
 \begin{itemize}
-    \item \textbf{Valid movement detection}
-    \begin{itemize}
+    \item \textbf{Valid movement detection:}
+    \begin{enumerate}
         \item Ensures no corrective feedback is generated when joint angles remain within the acceptable range.
-        \item Verifies rep counting increments correctly for valid repetitions.
-    \end{itemize}
+        \item Verifies rep. counting increments correctly for valid repetitions.
+    \end{enumerate}
 
-    \item \textbf{Insufficient or excessive movement}
-    \begin{itemize}
+    \item \textbf{Insufficient or excessive movement:}
+    \begin{enumerate}
         \item Ensures corrective messages are produced when joint angles fall below the expected range.
         \item Verifies the system responds appropriately when movement exceeds defined thresholds.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{No pose detected}
-    \begin{itemize}
+    \item \textbf{No pose detected:}
+    \begin{enumerate}
         \item Ensures the system provides a clear prompt when the user is not detected in frame.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
-\subsubsection{Safety Warning and Latency Handling}
+\subsubsection{Latency Handling}
 
-\textbf{Goal:} These tests verify that dangerous movement conditions trigger appropriate safety warnings and that repeated feedback generation remains responsive during valid exercise sequences.
+\textbf{Goal:} These tests that the repeated feedback generation is responsive during the exercise sequences.
 
 \textbf{Target requirement(s):} FR14, FR16, PR-SL2
 
 \begin{itemize}
-    \item \textbf{Dangerous movement warning}
-    \begin{itemize}
-        \item Ensures the system halts the session and returns a safety warning when a movement exceeds the dangerous threshold.
-    \end{itemize}
-
-    \item \textbf{Repeated feedback latency}
-    \begin{itemize}
+    \item \textbf{Repeated feedback latency:}
+    \begin{enumerate}
         \item Verifies multiple valid repetitions continue to receive feedback within the required latency threshold.
-        \item Ensures repeated rep processing does not degrade noticeably across a short sequence.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 \subsubsection{Physiotherapist Comment Submission and Retrieval}
 
-\textbf{Goal:} These tests verify the ability of physiotherapists to store feedback comments on patient sessions and the ability of patients to retrieve those comments later.
+\textbf{Goal:} These tests verify the ability of physiotherapists to leave feedback comments on patient sessions and the ability of patients to retrieve those comments later.
 
 \textbf{Target requirement(s):} FR19, FR20, FR25
 
 \begin{itemize}
-    \item \textbf{Comment submission}
-    \begin{itemize}
+    \item \textbf{Comment submission:}
+    \begin{enumerate}
         \item Ensures physiotherapist comments are saved to the correct session record.
-        \item Verifies comments are associated with the intended patient activity.
-    \end{itemize}
+        \item Verifies comments are associated with the correct, respective patient activity.
+    \end{enumerate}
 
-    \item \textbf{Comment retrieval}
-    \begin{itemize}
+    \item \textbf{Comment retrieval:}
+    \begin{enumerate}
         \item Ensures patients can retrieve stored physiotherapist comments for completed sessions.
         \item Verifies null is returned appropriately when no comment exists.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 \subsection{Video Capture and Review Module}
 
 \subsubsection{Pose Connection and Landmark Extraction Tests}
 
-\textbf{Goal:} The video capture and review module verifies the pose-drawing and landmark-extraction utilities used for camera processing and visual overlays. These tests ensure that full-body and leg-only connections are returned correctly and that valid pose results are converted into usable landmark lists.
+\textbf{Goal:} The video capture and review module verifies the pose connection drawing and landmark extractions used for camera processing and visual overlays. These tests ensure that full-body and leg-only connections are returned correctly and that valid pose results are converted into usable landmark lists.
 
 \textbf{Target requirement(s):} FR12, FR26
 
 \begin{itemize}
-    \item \textbf{Pose connection retrieval}
-    \begin{itemize}
+    \item \textbf{Pose connection retrieval:}
+    \begin{enumerate}
         \item Ensures full pose connections and leg-only connections are returned correctly depending on the selected mode.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Landmark extraction}
-    \begin{itemize}
-        \item Ensures valid pose results return the expected landmark list structure.
+    \item \textbf{Landmark extraction:}
+    \begin{enumerate}
+        \item Ensures valid pose results return the expected landmark lists.
         \item Verifies missing or empty pose data returns \texttt{None} safely.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 \subsubsection{Camera Initialization and Frame Processing Tests}
 
-\textbf{Goal:} These tests verify the camera and pose-detection workflow. This includes initialization, frame capture, pose detection, and drawing support for live review.
+\textbf{Goal:} These tests verify the camera and pose detection. This includes initialization, frame capture, pose detection, and the landmark drawing for the live processing.
 
 \textbf{Target requirement(s):} FR7, FR12, FR14
 
 \begin{itemize}
-    \item \textbf{Camera initialization}
-    \begin{itemize}
+    \item \textbf{Camera initialization:}
+    \begin{enumerate}
         \item Ensures the camera is configured with the expected display size and frame properties.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Frame retrieval}
-    \begin{itemize}
+    \item \textbf{Frame retrieval:}
+    \begin{enumerate}
         \item Verifies frames are returned and resized correctly.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Pose processing}
-    \begin{itemize}
+    \item \textbf{Pose processing:}
+    \begin{enumerate}
         \item Ensures pose results are generated from valid frames.
         \item Verifies detection is invoked with correctly transformed image inputs.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Landmark drawing}
-    \begin{itemize}
+    \item \textbf{Landmark drawing:}
+    \begin{enumerate}
         \item Ensures landmarks and connections are drawn correctly on returned frames.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 \subsection{Computer Vision and Form Analysis Module}
 
 \subsubsection{Angle and Knee-Angle Calculation Tests}
 
-\textbf{Goal:} The computer vision and form analysis module verifies that geometric angle calculations and knee-angle extraction behave correctly across valid and invalid conditions.
+\textbf{Goal:} The computer vision and form analysis module verifies that the angle calculations and computed knee-angle behave correctly across valid and invalid conditions.
 
 \textbf{Target requirement(s):} FR12, FR26
 
 \begin{itemize}
-    \item \textbf{Angle calculation correctness}
-    \begin{itemize}
-        \item Ensures known geometric point sets return expected angle values.
+    \item \textbf{Angle calculation correctness:}
+    \begin{enumerate}
+        \item Ensures known point sets return expected angle values.
         \item Verifies edge cases such as \texttt{None} inputs are handled safely.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Knee angle extraction}
-    \begin{itemize}
+    \item \textbf{Knee angle extraction:}
+    \begin{enumerate}
         \item Ensures left and right knee angles can be computed correctly from valid pose results.
         \item Verifies missing landmarks and empty pose results do not crash processing.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 
 \subsubsection{Calibration and Rep Analysis Tests}
 
-\textbf{Goal:} These tests verify the analyzer’s calibration process, range-of-motion updates, rep-state transitions, and rep-counting behavior over time.
+\textbf{Goal:} These tests verify the analyzer’s calibration process, range-of-motion updates, rep-state transitions, and rep-counting behaviour over time.
 
 \textbf{Target requirement(s):} FR8, FR11, FR12, FR14, FR16, FR17, FR27
 
 \begin{itemize}
-    \item \textbf{Calibration flow}
-    \begin{itemize}
+    \item \textbf{Calibration flow:}
+    \begin{enumerate}
         \item Ensures calibration begins and ends correctly while tracking min and max observed angles.
         \item Verifies calibration ignores invalid or missing values safely.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Rep-state transitions}
-    \begin{itemize}
+    \item \textbf{Rep-state transitions:}
+    \begin{enumerate}
         \item Ensures the analyzer transitions between flexion and extension states correctly.
-        \item Verifies valid transitions count reps and record durations only when appropriate.
-    \end{itemize}
+        \item Verifies valid rep-state transition counts and record durations only when appropriate.
+    \end{enumerate}
 
-    \item \textbf{Range-of-motion tracking}
-    \begin{itemize}
+    \item \textbf{Range-of-motion tracking:}
+    \begin{enumerate}
         \item Ensures min and max angles expand correctly as new values arrive.
-        \item Verifies unusual, negative, and out-of-range inputs do not break the analyzer.
-    \end{itemize}
+        \item Verifies that unusual, negative, or out-of-range inputs do not break the analyzer.
+    \end{enumerate}
 
-    \item \textbf{Summary metrics}
-    \begin{itemize}
-        \item Ensures summary outputs include expected metrics such as rep count, ROM, durations, and calibration state.
+    \item \textbf{Summary metrics:}
+    \begin{enumerate}
+        \item Ensures summary outputs include expected metrics such as rep. count, ROM, durations, and calibration state.
         \item Verifies metric rounding and empty-duration handling behave correctly.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 \subsection{Performance and Latency Module}
 
 \subsubsection{Backend Reset and API Endpoint Tests}
 
-\textbf{Goal:} The performance and latency module verifies that backend services initialize correctly, reset correctly, and respond appropriately to valid and invalid API requests.
+\textbf{Goal:} The performance and latency module verifies that the backend services initialize correctly, reset correctly, and respond appropriately to valid and invalid API requests.
 
 \textbf{Target requirement(s):} FR7, FR8, FR12, FR26
 
 \begin{itemize}
-    \item \textbf{Backend initialization and reset}
-    \begin{itemize}
+    \item \textbf{Backend initialization and reset:}
+    \begin{enumerate}
         \item Ensures the backend starts in the correct state and can be reset safely.
         \item Verifies reset endpoints return successful responses and replace analyzer state correctly.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Frame endpoint validation}
-    \begin{itemize}
-        \item Ensures invalid or missing image data produces the correct error response.
+    \item \textbf{Frame endpoint validation:}
+    \begin{enumerate}
+        \item Ensures invalid or missing image data results in the correct error response.
         \item Verifies valid frame requests return landmarks and metrics when pose data is present.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Mirroring and side handling}
-    \begin{itemize}
-        \item Ensures mirrored and non-mirrored inputs are processed correctly.
-        \item Verifies correct side selection is passed into downstream knee-angle logic.
-    \end{itemize}
+    \item \textbf{Mirroring and side handling:}
+    \begin{enumerate}
+        \item Ensures mirrored and non-mirrored inputs are processed appropriately.
+        \item Verifies correct side selection is passed into the knee-angle calculation logic.
+    \end{enumerate}
 \end{itemize}
 
-\subsubsection{Frontend Service and Metrics Persistence Tests}
+\subsubsection{Frontend Service and Storing Metrics Tests}
 
-\textbf{Goal:} These tests verify the frontend service helpers that communicate with the backend and persist activity/session metrics to Firestore.
+\textbf{Goal:} These tests verify the frontend service helpers that communicate with the backend and store activity/session metrics to Firestore.
 
 \textbf{Target requirement(s):} FR1, FR1.1, FR7, FR8, FR11, FR17, FR21
 
 \begin{itemize}
-    \item \textbf{Frontend request behavior}
-    \begin{itemize}
+    \item \textbf{Frontend request behaviour:}
+    \begin{enumerate}
         \item Ensures frontend service calls send the correct payloads based on camera facing, side, and reset operations.
-        \item Verifies network and reset failures are surfaced correctly.
-    \end{itemize}
+        \item Verifies network and reset failures are handled correctly.
+    \end{enumerate}
 
-    \item \textbf{Metrics persistence}
-    \begin{itemize}
+    \item \textbf{Storing Metrics:}
+    \begin{enumerate}
         \item Ensures metrics are saved only when a valid user is logged in and corresponding Firestore data exists.
         \item Verifies saved activity documents include expected session fields and default values.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Session persistence}
-    \begin{itemize}
+    \item \textbf{Session persistence:}
+    \begin{enumerate}
         \item Ensures session summary data is stored correctly for completed exercise sessions.
-        \item Verifies fallback behavior when optional metric fields are missing.
-    \end{itemize}
+        \item Verifies the default behaviour when optional metric fields are missing.
+    \end{enumerate}
 
-    \item \textbf{User display-name lookup}
-    \begin{itemize}
+    \item \textbf{User display-name lookup:}
+    \begin{enumerate}
         \item Ensures the system retrieves a display name from Firestore when available.
-        \item Verifies safe fallback values are used when the user is missing or lookup fails.
-    \end{itemize}
+        \item Verifies safe default values are used when the user is missing or lookup fails.
+    \end{enumerate}
 \end{itemize}
 
 
@@ -1337,75 +1329,75 @@ by module as well as the key functionalities that are covered.
 \textbf{Target requirement(s):} FR10, FR11, FR17, FR18, FR21, FR23
 
 \begin{itemize}
-    \item \textbf{Current user retrieval}
-    \begin{itemize}
+    \item \textbf{Current user retrieval:}
+    \begin{enumerate}
         \item Ensures current user and current user ID can be retrieved correctly.
         \item Verifies null is returned safely when no current user exists or Firestore errors occur.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Activity history retrieval}
-    \begin{itemize}
+    \item \textbf{Activity history retrieval:}
+    \begin{enumerate}
         \item Ensures activities for a user are returned correctly when records exist.
         \item Verifies empty arrays are returned when no activity data is found or when an error occurs.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Summary computation}
-    \begin{itemize}
+    \item \textbf{Summary Data:}
+    \begin{enumerate}
         \item Ensures summary data is computed correctly from available user activity.
         \item Verifies duplicate dates and missing data are handled safely.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 
 \subsubsection{Chart and Comment Data Tests}
 
-\textbf{Goal:} These tests verify chart generation, comment retrieval, comment posting, and user-name lookup functions used throughout the profile and progress views.
+\textbf{Goal:} These tests verify chart generation, comment retrieval, comment posting, and user-name lookup functions used throughout the profile and progress pages.
 
 \textbf{Target requirement(s):} FR10, FR11, FR18, FR19, FR21, FR22
 
 \begin{itemize}
-    \item \textbf{Chart generation}
-    \begin{itemize}
+    \item \textbf{Chart generation:}
+    \begin{enumerate}
         \item Ensures repetition and exercise chart data are generated correctly from activity records.
         \item Verifies chart functions return safe default values when no data exists or when Firestore fails.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Comment retrieval and posting}
-    \begin{itemize}
-        \item Ensures comments can be retrieved and stored for user activities.
+    \item \textbf{Comment retrieval and posting:}
+    \begin{enumerate}
+        \item Ensures comments can be retrieved and stored.
         \item Verifies empty comments and Firestore errors are handled appropriately.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Name lookup}
-    \begin{itemize}
+    \item \textbf{Name lookup:}
+    \begin{enumerate}
         \item Ensures user names are returned correctly when present.
-        \item Verifies fallback values are used for unknown or incomplete users.
-    \end{itemize}
+        \item Verifies default values are used for unknown or incomplete users.
+    \end{enumerate}
 \end{itemize}
 
 
 \subsubsection{Selected User State Management Tests}
 
-\textbf{Goal:} These tests verify local persistence and retrieval of selected-user state used for physiotherapist-patient interactions.
+\textbf{Goal:} These tests verify local storage and retrieval of selected-user state used for physiotherapist-patient interactions.
 
 \textbf{Target requirement(s):} FR17, FR18, FR19, FR22
 
 \begin{itemize}
-    \item \textbf{Selected user storage}
-    \begin{itemize}
+    \item \textbf{Selected user storage:}
+    \begin{enumerate}
         \item Ensures selected user IDs are saved only when valid values are provided.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Selected user retrieval}
-    \begin{itemize}
+    \item \textbf{Selected user retrieval:}
+    \begin{enumerate}
         \item Ensures selected user IDs and selected user data are returned correctly when stored.
         \item Verifies null is returned when no stored state exists.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Selected user clearing}
-    \begin{itemize}
+    \item \textbf{Selected user clearing:}
+    \begin{enumerate}
         \item Ensures stored selected-user state can be removed cleanly.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 
@@ -1416,11 +1408,11 @@ by module as well as the key functionalities that are covered.
 \textbf{Target requirement(s):} FR2, FR3
 
 \begin{itemize}
-    \item \textbf{Invite code retrieval}
-    \begin{itemize}
+    \item \textbf{Invite code retrieval:}
+    \begin{enumerate}
         \item Ensures a physiotherapist’s invite code is returned when valid data exists.
         \item Verifies null is returned when no invite code exists, the user is invalid, or lookup fails.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 
@@ -1433,55 +1425,55 @@ by module as well as the key functionalities that are covered.
 \textbf{Target requirement(s):} FR5, FR18, FR21, FR27
 
 \begin{itemize}
-    \item \textbf{User exercise retrieval}
-    \begin{itemize}
+    \item \textbf{User exercise retrieval:}
+    \begin{enumerate}
         \item Ensures exercises assigned to a user can be retrieved correctly.
         \item Verifies undefined is returned safely when no exercise data exists or when lookup fails.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Single exercise retrieval}
-    \begin{itemize}
+    \item \textbf{Single exercise retrieval:}
+    \begin{enumerate}
         \item Ensures an exercise can be retrieved correctly by exercise identifier.
         \item Verifies invalid identifiers and Firestore errors are handled safely.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{General exercise retrieval}
-    \begin{itemize}
+    \item \textbf{General exercise retrieval:}
+    \begin{enumerate}
         \item Ensures the shared exercise library is returned correctly when it exists.
         \item Verifies undefined is returned when no general exercise data is available.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Selected exercise retrieval}
-    \begin{itemize}
+    \item \textbf{Selected exercise retrieval:}
+    \begin{enumerate}
         \item Ensures selected exercise data can be retrieved for a given user.
         \item Verifies missing data and Firestore errors are handled safely.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 \subsubsection{Exercise Assignment and Modification Tests}
 
-\textbf{Goal:} These tests verify adding, updating, and removing user exercises as part of physiotherapist-controlled exercise assignment workflows.
+\textbf{Goal:} These tests verify adding, updating, and removing user exercises as part of the physiotherapist exercise assignment workflows.
 
 \textbf{Target requirement(s):} FR6, FR18, FR21
 
 \begin{itemize}
-    \item \textbf{Exercise removal}
-    \begin{itemize}
+    \item \textbf{Exercise removal:}
+    \begin{enumerate}
         \item Ensures valid user exercises can be removed correctly.
         \item Verifies invalid requests and Firestore failures do not perform unintended deletions.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Exercise addition}
-    \begin{itemize}
+    \item \textbf{Exercise addition:}
+    \begin{enumerate}
         \item Ensures valid exercises can be assigned to users and written correctly to storage.
         \item Verifies errors prevent incomplete or inconsistent updates.
-    \end{itemize}
+    \end{enumerate}
 
-    \item \textbf{Exercise modification}
-    \begin{itemize}
+    \item \textbf{Exercise modification:}
+    \begin{enumerate}
         \item Ensures valid exercises can be updated with new data.
         \item Verifies invalid inputs and Firestore errors are handled safely.
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 
@@ -1528,7 +1520,7 @@ graduate attribute of Lifelong Learning.
   \begin{itemize}
       \item \textbf{Dynamic Testing (Eman):} Knowledge of unit testing, test case design, edge case identification, and ensuring full module coverage.
       
-      \item \textbf{System Testing (Maham):} Ability to design and evaluate end-to-end system tests that validate overall system behavior and integration.
+      \item \textbf{System Testing (Maham):} Ability to design and evaluate end-to-end system tests that validate overall system behaviour and integration.
       
       \item \textbf{Testing Tools and Frameworks (Cieran):} Experience using tools such as pytest, linters (e.g., pylint), and developing structured test suites.
       
