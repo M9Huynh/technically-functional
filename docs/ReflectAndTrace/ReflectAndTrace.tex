@@ -2,6 +2,14 @@
 
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+}
 
 \title{Reflection and Traceability Report on \progname}
 
@@ -16,6 +24,10 @@
 
 \maketitle
 
+\newpage
+\tableofcontents
+\newpage
+
 \plt{Reflection is an important component of getting the full benefits from a
 learning experience.  Besides the intrinsic benefits of reflection, this
 document will be used to help the TAs grade how well your team responded to
@@ -25,43 +37,43 @@ Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
 on your reflections.}
 
 \section{Changes in Response to Feedback}
-
-\plt{Summarize the changes made over the course of the project in response to
-feedback from TAs, the instructor, teammates, other teams, the project
-supervisor (if present), and from user testers.}
-
-\plt{For those teams with an external supervisor, please highlight how the feedback 
-from the supervisor shaped your project.  In particular, you should highlight the 
-supervisor's response to your Rev 0 demonstration to them.}
-
-\plt{Version control can make the summary relatively easy, if you used issues
-and meaningful commits.  If you feedback is in an issue, and you responded in
-the issue tracker, you can point to the issue as part of explaining your
-changes.  If addressing the issue required changes to code or documentation, you
-can point to the specific commit that made the changes.  Although the links are
-helpful for the details, you should include a label for each item of feedback so
-that the reader has an idea of what each item is about without the need to click
-on everything to find out.}
-
-\plt{If you were not organized with your commits, traceability between feedback
-and commits will not be feasible to capture after the fact.  You will instead
-need to spend time writing down a summary of the changes made in response to
-each item of feedback.}
-
-\plt{You should address EVERY item of feedback.  A table or itemized list is
-recommended.  You should record every item of feedback, along with the source of
-that feedback and the change you made in response to that feedback.  The
-response can be a change to your documentation, code, or development process.
-The response can also be the reason why no changes were made in response to the
-feedback.  To make this information manageable, you will record the feedback and
-response separately for each deliverable in the sections that follow.}
-
-\plt{If the feedback is general or incomplete, the TA (or instructor) will not
-be able to grade your response to feedback.  In that case your grade on this
-document, and likely the Revision 1 versions of the other documents will be
-low.} 
-
 \subsection{SRS and Hazard Analysis}
+
+The hazard analysis document was improved through the peer review along with TA feedback in several areas for enhancement, including clarifying the roadmap with implementation timelines and rationales for safety requirements (\href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144}), adding justification for future work prioritization (\href{https://github.com/M9Huynh/technically-functional/issues/150}{\#150}), and removing problematic assumptions about user familiarity with smart devices (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}). Inconsistencies between the SRS and Hazard Analysis were resolved (\href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129}), while the system boundaries and components section was expanded with lower-level explanations to remove ambiguity (\href{https://github.com/M9Huynh/technically-functional/issues/135}{\#135}). The FMEA table was further decomposed to represent detailed failure modes rather than general effects (\href{https://github.com/M9Huynh/technically-functional/issues/142}{\#142}), and hazard categorization was clarified for technical hazards that could impact safety (\href{https://github.com/M9Huynh/technically-functional/issues/153}{\#153}). Additional improvements included adding rationales for each critical assumption (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}), addressing inconsistencies between assumptions and failure modes (\href{https://github.com/M9Huynh/technically-functional/issues/143}{\#143}), and noting where mitigation strategies would be expanded (\href{https://github.com/M9Huynh/technically-functional/issues/152}{\#152}). TA feedback further reinforced the need for roadmap rationales, which was addressed alongside similar peer feedback. One comment regarding bibliography completeness (\href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151}) was determined to be invalid as the citation and reference were already properly included.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{1.8cm} >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}p{4.8cm} >{\raggedright\arraybackslash}p{3.8cm} >{\raggedright\arraybackslash}p{2cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Corresponding Commit} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151} & Citation "IppolitoWallace1995" appears but bibliography incomplete & No change - comment invalid as bibliography and in-text citation were complete & None \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144} & Unclear description of how/when safety requirements and hazard testing will be implemented & Added section in roadmap outlining rationale for accepting requirements within capstone timeline and rationales for excluded safety requirements & 939b502 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/150}{\#150} & Safety requirements prioritized as "first" vs "in the future" without clear justification or timeline & Added clear rationale for future work prioritization & 470F490 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136} & Missing rationale for each assumption; assumption about user familiarity with smart device should be avoided & Removed assumption about user familiarity; added rationales for each assumption & a103812 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/143}{\#143} & Inconsistency between assumption about user familiarity and "confusing prompts" failure mode & Removed the initial assumption; will update language of "confusing prompts" & None (different commit) \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129} & Inconsistencies between SRS and Hazard Analysis; hazards need prioritization by severity & Updated consistency between SRS and HA & Reference \#410 PR \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/135}{\#135} & System components need lower-level explanation with sample hazards; authentication module lacks detail & Added changes to HA system boundaries, splitting section to remove ambiguity & 4bd898a \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/142}{\#142} & FMEA rows should represent detailed failure modes rather than effects & Included further decomposition of table within FMEA & Different commit \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/153}{\#153} & Technical hazards could also be safety hazards leading to unsafe exercise & Clarified hazard categorization & 4381828 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/152}{\#152} & Document lacks detailed mitigation strategies and implementation specifics & Mitigation included; will add section about effectiveness & None (different section) \\
+\midrule
+TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for which safety requirements to implement and why they are in that time frame & Updated the section with timelines and rationale for why each safety requirement was placed in each term & Similar to \href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144} \\
+\bottomrule
+\caption{Feedback and changes for SRS and Hazard Analysis}
+\label{tab:hazard_feedback}
+\end{longtable}
 
 \subsection{Design and Design Documentation}
 
