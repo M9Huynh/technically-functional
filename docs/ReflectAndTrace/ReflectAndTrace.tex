@@ -1,5 +1,6 @@
 \documentclass{article}
 
+\usepackage{amsmath}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{float}
@@ -110,6 +111,53 @@ sell?  What would you charge for your product?  How many units would you have to
 sell to make money? If your product isn't something that would be sold, like an 
 open source project, how would you go about attracting users?  How many potential 
 users currently exist?}
+\section{Economic Considerations (LO23)}
+
+Yes, there is a clear market for our product. Existing physiotherapy companion apps such as \href{https://www.physiapp.com/}{Physiapp} and \href{https://apps.apple.com/ca/app/physiomobile-physio-rehab/id6749616813}{Physiomobile} offer progress tracking (checklist-based) and gamification (streaks), but they lack real-time exercise form feedback. Our app fills this gap by using OpenCV and MediaPipe pose landmarks to analyze patient movement during home exercises, giving immediate corrective feedback. Additionally, we provide value back to the physiotherapist by automatically sharing tracked metrics (e.g., reps, form quality) together with subjective patient data (pain levels, perceived exertion). This addresses the gap for patients and physios between appointments.
+
+\subsection*{Marketing Approach}
+Marketing would target physiotherapy clinics and independent practitioners. Strategies include:
+\begin{itemize}
+    \item Direct outreach to private clinics via email and informational webinars.
+    \item Free trial periods for clinics to demonstrate improved patient adherence and outcomes.
+    \item Testimonials and case studies from early-adopter clinics.
+\end{itemize}
+
+\subsection*{Cost to Produce Application}
+We estimate the cost to develop our application to a production-ready version (iOS/Android app, backend dashboard for physios, pose-analysis pipeline) at:
+\begin{itemize}
+    \item Development (4 months, 2-3 engineers): \$60,000 - \$80,000.
+    \item Exercise pose analysis expertise (consultation with physiotherapists to validate exercise models and feedback logic): \$10,000 - \$15,000.
+    \item Cloud infrastructure (AWS/GCP for pose inference): \$5,000 initial setup + \$500/month.
+    \item Legal/regulatory (privacy, medical device classification, liability for recording and providing feedback): \$15,000 - \$20,000
+    \item Marketing launch: \$5,000.
+\end{itemize}
+\textbf{Total initial cost: approximately \$95,000 - \$125,000.}
+
+\subsection*{Pricing Model}
+We would not charge individual patients. Instead, we adopt a subscription model for physiotherapy clinics, tiered by the number of active patients per month. A “small private clinic” typically has 2-3 physiotherapists, each seeing 25-50 patients per week. Therefore, reasonable patient tiers are:
+\begin{itemize}
+    \item \textbf{Tier 1 (up to 50 active patients / month):} \$50 / month 
+    \item \textbf{Tier 2 (up to 150 active patients / month):} \$100 / month
+    \item \textbf{Tier 3 (unlimited patients):} \$200 / month 
+\end{itemize}
+
+\subsection*{Breakeven Analysis}
+Assume an average subscription of \$100 / month per clinic (weighted toward Tier 2). Monthly recurring costs (cloud, support) are roughly \$500 for every 100 clinics. Development cost is a one-time \$110,000.
+
+Monthly profit per clinic after variable costs: \$100 - \$5 = \$95.  
+Number of clinic-months needed to recover development cost:  
+\[
+\frac{\$110,000}{\$95 \text{ per clinic-month}} \approx 1,158 \text{ clinic-months}.
+\]  
+If we acquire 100 clinics in the first year, breakeven occurs after about 11.6 months. In terms of total clinics, we would need roughly 97 clinics subscribing for one full year to break even.
+
+\subsection*{Potential Users (TAM / SOM)}
+\begin{itemize}
+    \item \textbf{Total Addressable Market (TAM):} All physiotherapists in Canada - approximately 22,000 registered physiotherapists (Canadian Institute for Health Information). Assuming an average of 5 physiotherapists per private clinic (typical for a medium-sized clinic), that gives roughly 4,400 clinics.
+    \item \textbf{Serviceable Available Market (SAM):} Private clinics in Ontario, where our initial launch would focus. Ontario has roughly 6,000 physiotherapists, translating to about 1,200 private clinics.
+    \item \textbf{Serviceable Obtainable Market (SOM):} In the first two years, with targeted marketing, we could realistically capture 1\% of the Ontario market - about 12 clinics. That would generate monthly revenue of \$1,200 (at \$100 average). With successful promotion and marketing of the application, the application could grow to 5\% (60 clinics) after three years, achieving monthly revenue of \$6,000 and approaching a breakeven point.
+\end{itemize}
 
 \section{Reflection on Project Management (LO24)}
 
