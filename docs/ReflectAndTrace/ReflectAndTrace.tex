@@ -7,7 +7,7 @@
 
 \author{\authname}
 
-\date{}
+\date{\today}
 
 \input{../Comments}
 \input{../Common}
@@ -15,6 +15,34 @@
 \begin{document}
 
 \maketitle
+
+~\newpage
+
+\tableofcontents
+
+\listoftables %if appropriate
+
+\listoffigures %if appropriate
+
+\section{Symbols, Abbreviations and Acronyms}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l} 
+  \toprule		
+  \textbf{symbol} & \textbf{description}\\
+  \midrule 
+  FR & Functional Requirement \\
+  NFR & Non-Functional Requirement \\
+  HA & Hazard Analysis \\
+  MG & Module Guide \\
+  MIS & Module Interface Specification \\
+  SRS & Software Requirement Specification \\
+  TA & Teaching Assistant \\
+  VnV & Verification and Validation \\
+  \bottomrule
+\end{tabular}\\
+
+\newpage
 
 \plt{Reflection is an important component of getting the full benefits from a
 learning experience.  Besides the intrinsic benefits of reflection, this
@@ -69,10 +97,18 @@ low.}
 
 \section{Extras}
 
-\plt{Summarize the extras that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.}
+The extras set out for the system consist of both a Design Thinking Document and a Usability Report. The Design 
+Thinking Document aims to explain the process behind, and work done towards, the final design of the system. This 
+document explains the overall flow of processing through the system and the interfacing elements, external libraries 
+utilized, and more. The document flow is iterative, as is the design process, and aims to communicate the entire 
+design process of the system. The Design Thinking Document can be found in \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Extras/DesignThinking/DesignThinkingWorksheet.pdf}{docs/Extras/DesignThinking/DesignThinkingWorksheet.pdf}.
+The Usability Report aims to focus on evaluating the system from a user perspective. This report documents usability 
+testing conducted with participants to assess ease of navigation, clarity of instructions, and overall user experience. 
+It includes observations, user feedback, and analysis of interaction patterns to identify the key areas to foucs on and 
+address. The findings are used to ensure the system meets the non-functional requirements and to guide improvements 
+to the interface for both patients and physiotherapists. The Usability Report can be found in 
+\href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Extras/UsabilityTesting/UsabilityReport.pdf}{docs/Extras/UsabilityTesting/UsabilityReport.pdf}.
+
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
