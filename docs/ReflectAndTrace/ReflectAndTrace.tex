@@ -78,7 +78,7 @@ TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for whi
 
 \subsection{Design and Design Documentation}
 
-The MG was modified to reflect changes in the overall module design of the project. The MG modules were modified in their responsibilities and locations in the overall design (Refer to \href{https://github.com/M9Huynh/technically-functional/issues/408}{Issue \#408}). There were changes made to not only the modules themselves but the justification for anticipated changes, unlikely changes, and design decisions to further explain the effect they held on the final design of the project. It is hoped this additional level of explanation will help to clarify some of the limitations, assumptions, and constraints that were presented in several of the modules and other documents (Refer to \href{https://github.com/M9Huynh/technically-functional/pull/416}{PR \#416}). Changes to the modules required changes to the uses hierarchy and the traceability sections also found in the MG. Finally, there were modifications to the MG's timelien section to make it more focussed on modules and design documentation with specific dates rather than overall deliverables and general date ranges (Refer to \href{https://github.com/M9Huynh/technically-functional/issues/407}{Issue \#407}).
+In reference to changed made between Rev0 and Rev1, the MG was modified to reflect changes in the overall module design of the project. The MG modules were modified in their responsibilities and locations in the overall design (Refer to \href{https://github.com/M9Huynh/technically-functional/issues/408}{Issue \#408}). There were changes made to not only the modules themselves but the justification for anticipated changes, unlikely changes, and design decisions to further explain the effect they held on the final design of the project. It is hoped this additional level of explanation will help to clarify some of the limitations, assumptions, and constraints that were presented in several of the modules and other documents (Refer to \href{https://github.com/M9Huynh/technically-functional/pull/416}{PR \#416}). Changes to the modules required changes to the uses hierarchy and the traceability sections also found in the MG. Finally, there were modifications to the MG's timelien section to make it more focussed on modules and design documentation with specific dates rather than overall deliverables and general date ranges (Refer to \href{https://github.com/M9Huynh/technically-functional/issues/407}{Issue \#407}). Further changes are documented below in Table \ref{tab:mg_feedback}.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{0.7cm} >{\raggedright\arraybackslash}p{5.5cm} >{\raggedright\arraybackslash}p{4cm} >{\raggedright\arraybackslash}p{2.3cm}}
 \toprule
@@ -88,7 +88,15 @@ The MG was modified to reflect changes in the overall module design of the proje
 \bottomrule
 \endfoot
 
-
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/242}{\#242} & Hardware Hiding Module reference issues and Modules lacking detail & Hardware Hiding Module reference fixed, however module details did not seem to be lacking as per team and TA feedback; no change on this part. & 7edbcd4 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/241}{\#241} & Module names unclear & Module names updated for clarity. Home changed to Profile Activity, Main changed to Analysis Control Flow. & d2b2239 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/244}{\#244} & Home, Main, and Database modules seem multi-purposed. Consider rewording secrets or fracturing modules into several new ones. & The Main module was renamed to the Analysis Control Flow module and handles the overall logic for recording, so was unchanged. The Profile Activity module was updated to reflect the new responsibilities, then eventually scrapped as the UI was redesigned and absorbed the responsibilities. The Database module was decomposed into the Account Creation, Valid User, User Account, User Activity, and Exercise Data modules which helped to split secrets and make modules clearer. & adefa15 \\
+\midrule
+TA & \href{https://github.com/M9Huynh/technically-functional/issues/244}{\#407} & Timeline done at deliverable level rather than module implementation level and ambiguous team member assignments. & Timeline updated to be more specifically focused on module implementation with specific target dates and team member assignments. Design documentation also included in the timeline, but other deliverables were removed. & bef9394 \\
+\midrule
+TA & \href{https://github.com/M9Huynh/technically-functional/issues/408}{\#408} & ACs, UCs, and Design Decisions lacking information. & ACs, UCs, and Design Decisions updated with more rationale and impact on the overall design. & 8648a1c \\
 
 \bottomrule
 \caption{Feedback and changes for Module Guide}
