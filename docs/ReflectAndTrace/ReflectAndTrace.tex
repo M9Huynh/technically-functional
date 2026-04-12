@@ -6,6 +6,7 @@
 \usepackage{float}
 \usepackage{longtable}
 \usepackage{hyperref}
+\usepackage{xltabular}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -66,13 +67,10 @@
 
 The hazard analysis (HA) document was improved through the peer review along with TA feedback in several areas for enhancement, including clarifying the roadmap with implementation timelines and rationales for safety requirements (\href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144}), adding justification for future work prioritization (\href{https://github.com/M9Huynh/technically-functional/issues/150}{\#150}), and removing problematic assumptions about user familiarity with smart devices (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}). Inconsistencies between the SRS and Hazard Analysis were resolved (\href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129}), while the system boundaries and components section was expanded with lower-level explanations to remove ambiguity (\href{https://github.com/M9Huynh/technically-functional/issues/135}{\#135}). The FMEA table was further decomposed to represent detailed failure modes rather than general effects (\href{https://github.com/M9Huynh/technically-functional/issues/142}{\#142}), and hazard categorization was clarified for technical hazards that could impact safety (\href{https://github.com/M9Huynh/technically-functional/issues/153}{\#153}). Additional improvements included adding rationales for each critical assumption (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}), addressing inconsistencies between assumptions and failure modes (\href{https://github.com/M9Huynh/technically-functional/issues/143}{\#143}), and noting where mitigation strategies would be expanded (\href{https://github.com/M9Huynh/technically-functional/issues/152}{\#152}). TA feedback further reinforced the need for roadmap rationales, which was addressed alongside similar peer feedback. One comment regarding bibliography completeness (\href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151}) was determined to be invalid as the citation and reference were already properly included.
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{0.7cm} >{\raggedright\arraybackslash}p{5.5cm} >{\raggedright\arraybackslash}p{4cm} >{\raggedright\arraybackslash}p{2.3cm}}
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
 \toprule
-\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Corresponding Commit} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
 
 Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151} & Citation "IppolitoWallace1995" appears but bibliography incomplete & No change - comment invalid as bibliography and in-text citation were complete & None \\
 \midrule
@@ -98,8 +96,8 @@ TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for whi
 \bottomrule
 \caption{Feedback and changes for SRS and Hazard Analysis}
 \label{tab:hazard_feedback}
-\end{longtable}
-
+\end{xltabular}
+}
 \subsection{Design and Design Documentation}
 
 \subsection{VnV Plan and Report}
