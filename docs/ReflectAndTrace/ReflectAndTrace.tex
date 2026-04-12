@@ -69,7 +69,7 @@ The hazard analysis document was improved through the peer review along with TA 
 \begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
 \toprule
 \textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
-
+\midrule
 Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151} & Citation "IppolitoWallace1995" appears but bibliography incomplete & No change - comment invalid as bibliography and in-text citation were complete & None \\
 \midrule
 Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144} & Unclear description of how/when safety requirements and hazard testing will be implemented & Added section in roadmap outlining rationale for accepting requirements within capstone timeline and rationales for excluded safety requirements & 939b502 \\
@@ -97,7 +97,29 @@ TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for whi
 \end{xltabular}
 }
 \subsection{Design and Design Documentation}
-
+\subsubsection{MIS}
+While the feedback received from the TA about the content was positive, there were a lot of formatting errors 
+present in the original document. There were large spaces, inconsistent headings and sections marked as 'TBD' and 'TODO'.
+These sections' entries are in progress and all the issues relayed in the TA feedback (\href{https://github.com/M9Huynh/technically-functional/issues/370}{\#370}) are being resolved.
+Peer feedback issues were very similar (\href{https://github.com/M9Huynh/technically-functional/issues/243}{\#243}) with the addition of further description being needed for each module(\href{https://github.com/M9Huynh/technically-functional/issues/240}{\#240})
+and clarifying assumptions (\href{https://github.com/M9Huynh/technically-functional/issues/245}{\#245})
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
+\midrule
+TA feedback & \href{https://github.com/M9Huynh/technically-functional/issues/370}{\#370} & Inconsistent formatting and empty entries present & This is a work in progress & None \\
+\midrule
+Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/issues/243}{\#243} & Sections are empty with 'TODO' and 'TBD' labels & Added consistent headings and some completed sections & b81182e, 826d3b1, 64c8c8c, 11d112a, c9b8fc0, 030133a, 6c02172, 680a1b1, c35a5b1\\
+\midrule
+Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/issues/240}{\#240} & UI section incomplete and lack of description under each module & Adding further descriptions and UI module is in progress & None \\
+\midrule
+Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/issues/245}{\#245} & Same as \#240 and \#243; Assumptions not present even thought they are being made & Some assumptions fixed, others are works in progress & b81182e, 826d3b1, 64c8c8c, 11d112a, c9b8fc0, 030133a, 6c02172, 680a1b1, c35a5b1 \\
+\bottomrule
+\caption{Feedback and changes for MIS}
+\label{tab:mis}
+\end{xltabular}
+}
 \subsection{VnV Plan and Report}
 
 \section{Extras}
@@ -284,9 +306,17 @@ and the importance of always keeping the audience in mind. \\
     successfully conduct usability testing and refine our mobile application based 
     on the user feedback.
 \end{itemize}
-
 \textit{\textbf{Matthew}}\\
-Throughout this project, many courses were relevant to our capstone project. More specifically for the documentation, several of my communication and documentation related courses touched on how to effectively communicate the software specifications. For example, SFWRENG 3A04 - Large System Design, where I had to follow and write software specification. Furthermore, with the coding aspect, I applied learning from, SFWRENG 3S03 - Software Testing, to help write the unit tests. SFWRENG 4HC3 - Human Computer Interfaces, helped with how to design with human compatibility as well as how to conduct usability tests for our application effectively. Finally, the design of databases uses practices from SFWRENG 3DB3 - Databases and SFWRENG 2OP3 - Object Oriented Programming was used to help for the design of the backend Python code. Overall, the application of the courses helped us throughout the capstone project.
+Throughout this project, many courses were relevant to our capstone project. More specifically for the 
+documentation, several of my communication and documentation related courses touched on how to effectively 
+communicate the software specifications. For example, \textbf{SFWRENG 3A04 - Large System Design}, 
+where I had to follow and write software specification. 
+Furthermore, with the coding aspect, I applied learning from \textbf{SFWRENG 3S03 - Software Testing} 
+to help write the unit tests. \textbf{SFWRENG 4HC3 - Human Computer Interfaces}, helped with how to 
+design with human compatibility as well as how to conduct usability tests for our application
+effectively. Finally, the design of databases uses practices from \textbf{SFWRENG 3DB3 - Databases} and 
+\textbf{SFWRENG 2OP3 - Object Oriented Programming} was used to help for the design of the backend Python code. 
+Overall, the application of the courses helped us throughout the capstone project.
 
 
 \subsection{Knowledge/Skills Outside of Courses}
@@ -303,8 +333,24 @@ late into the project where it was too late to change everything, but it was a v
 learning experience overall. We learned a lot in terms of adapting to a new skill in a 
 specified timeline and we are super grateful for this opportunity to make the mistakes 
 that we did, but also learn from those mistakes at the same time.\\
-
+\newline
 \textit{\textbf{Matthew}}\\
 Throughout this project, I needed to learn skills outside of my course work. Some of the skills that I needed to learn was working with computer vision and how the pose detection worked. In order to learn these skills, I had to look through the documentation as well as work through tutorials to then try and apply it to the problem of our project. Furthermore, when working on some of the documents for our project, I had to refer to previous course work but also how it is written. \\
+\newline
+\textit{\textbf{Maham}}\\
+Several important lessons emerged throughout this project. From a technical perspective, 
+I learned to use React after determining that only the analysis logic should reside in the backend. 
+Additionally, I experimented with database logic and sought to seamlessly integrate both components 
+into a cohesive system.
+I also recognized the importance of maintaining clear, thorough documentation at each stage of development. 
+This process allowed me to refine my ability to communicate concisely while still providing sufficient detail. 
+This skill proved to be closely tied to my time management abilities. Time management is a lifelong pursuit
+and a skill that is developed through practice and experience.
+As a communicator, I acknowledge that I tend to be somewhat overcommunicative. I had to temper my approach to synchronize
+with the styles of my teammates and ensure that I was not overwhelming them. It was a balancing act between providing
+too little and too much, but in the end, I managed to successfully balance our styles. Similarly, I had to learn to
+navigate different work dynamics. I realize that I may have initially set out to be inflexible because
+I did not want anyone's work to be contingent on mine, but I ultimately delivered on time (mostly). Even when I
+did not, my teammates were gracious enough to offer assistance and additional time when I needed it. 
 
 \end{document}
