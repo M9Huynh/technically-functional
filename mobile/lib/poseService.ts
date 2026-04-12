@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const SERVER_URL = 'http://10.0.0.34:5001'; // Replace with your server's IP address and port
+const SERVER_URL = 'http://172.20.10.6:5001'; // Replace with your server's IP address and port
 
 export type Side = "RIGHT" | "LEFT";
 export type Facing = "front" | "back";

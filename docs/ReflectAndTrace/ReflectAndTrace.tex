@@ -53,22 +53,18 @@
 
 \newpage
 
-\newpage
-\tableofcontents
-\newpage
-
-\plt{Reflection is an important component of getting the full benefits from a
-learning experience.  Besides the intrinsic benefits of reflection, this
-document will be used to help the TAs grade how well your team responded to
-feedback.  Therefore, traceability between Revision 0 and Revision 1 is and
-important part of the reflection exercise.  In addition, several CEAB (Canadian
-Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
-on your reflections.}
+% \plt{Reflection is an important component of getting the full benefits from a
+% learning experience.  Besides the intrinsic benefits of reflection, this
+% document will be used to help the TAs grade how well your team responded to
+% feedback.  Therefore, traceability between Revision 0 and Revision 1 is and
+% important part of the reflection exercise.  In addition, several CEAB (Canadian
+% Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
+% on your reflections.}
 
 \section{Changes in Response to Feedback}
 \subsection{SRS and Hazard Analysis}
 
-The hazard analysis document was improved through the peer review along with TA feedback in several areas for enhancement, including clarifying the roadmap with implementation timelines and rationales for safety requirements (\href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144}), adding justification for future work prioritization (\href{https://github.com/M9Huynh/technically-functional/issues/150}{\#150}), and removing problematic assumptions about user familiarity with smart devices (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}). Inconsistencies between the SRS and Hazard Analysis were resolved (\href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129}), while the system boundaries and components section was expanded with lower-level explanations to remove ambiguity (\href{https://github.com/M9Huynh/technically-functional/issues/135}{\#135}). The FMEA table was further decomposed to represent detailed failure modes rather than general effects (\href{https://github.com/M9Huynh/technically-functional/issues/142}{\#142}), and hazard categorization was clarified for technical hazards that could impact safety (\href{https://github.com/M9Huynh/technically-functional/issues/153}{\#153}). Additional improvements included adding rationales for each critical assumption (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}), addressing inconsistencies between assumptions and failure modes (\href{https://github.com/M9Huynh/technically-functional/issues/143}{\#143}), and noting where mitigation strategies would be expanded (\href{https://github.com/M9Huynh/technically-functional/issues/152}{\#152}). TA feedback further reinforced the need for roadmap rationales, which was addressed alongside similar peer feedback. One comment regarding bibliography completeness (\href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151}) was determined to be invalid as the citation and reference were already properly included.
+The hazard analysis (HA) document was improved through the peer review along with TA feedback in several areas for enhancement, including clarifying the roadmap with implementation timelines and rationales for safety requirements (\href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144}), adding justification for future work prioritization (\href{https://github.com/M9Huynh/technically-functional/issues/150}{\#150}), and removing problematic assumptions about user familiarity with smart devices (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}). Inconsistencies between the SRS and Hazard Analysis were resolved (\href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129}), while the system boundaries and components section was expanded with lower-level explanations to remove ambiguity (\href{https://github.com/M9Huynh/technically-functional/issues/135}{\#135}). The FMEA table was further decomposed to represent detailed failure modes rather than general effects (\href{https://github.com/M9Huynh/technically-functional/issues/142}{\#142}), and hazard categorization was clarified for technical hazards that could impact safety (\href{https://github.com/M9Huynh/technically-functional/issues/153}{\#153}). Additional improvements included adding rationales for each critical assumption (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}), addressing inconsistencies between assumptions and failure modes (\href{https://github.com/M9Huynh/technically-functional/issues/143}{\#143}), and noting where mitigation strategies would be expanded (\href{https://github.com/M9Huynh/technically-functional/issues/152}{\#152}). TA feedback further reinforced the need for roadmap rationales, which was addressed alongside similar peer feedback. One comment regarding bibliography completeness (\href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151}) was determined to be invalid as the citation and reference were already properly included.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{0.7cm} >{\raggedright\arraybackslash}p{5.5cm} >{\raggedright\arraybackslash}p{4cm} >{\raggedright\arraybackslash}p{2.3cm}}
 \toprule
@@ -107,6 +103,11 @@ TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for whi
 \subsection{Design and Design Documentation}
 
 \subsection{VnV Plan and Report}
+The VnV Plan went through significant changes based on the feedback, as well as to ensure it aligned with our revised VnVReport. 
+
+
+   
+    
 
 \section{Extras}
 
@@ -201,10 +202,18 @@ technology you planned on using?}
 
 \plt{What went well for your project management in terms of processes and 
 technology?}
+In terms of what went well throughout our project, the team’s overall organization and collaboration is one of the first few things that come to mind. We utilized GitHub Issues and version control to stay on track of all our deliverables, tasks, and progress. This ultimately allowed us to stay aligned and ensure everyone was held accountable for their assigned tasks.
+We also clearly divided up the respective responsibilities between the frontend and backend components to ensure everything remained as efficient as possible.
+Moreover, we successfully implemented real-time feedback, one of the core features of the app. We were able to successfully process frames continuously and return the relevant metrics (e.g., knee angle, rep count, ROM). This took numerous iterations to refine but we were so happy to see everything starting to finally come together.
 
 \subsection{What Went Wrong?}
 
 \plt{What went wrong in terms of processes and technology?}
+
+One of the main issues we faced was handling the accuracy of the pose detection and real-time motion analysis. Accurately detecting knee movement within a live environment was more difficult than expected, especially when dealing with inconsistent lighting, camera positioning, and partial visibility of the user. In addition to that, another issue we kept coming across was the accuracy of repetition counting. Any small variations in movement or added noise during the pose detection sometimes caused missed, delayed or incorrect rep counts. This required multiple iterations of threshold tuning and logic refinement, which took more time than initially planned. 
+We also encountered numerous issues during the frame processing integration. Since the system relied on the backend for continuous frame processing, this sometimes led to performance issues such as latency or delayed feedback, which posed as a key limitation for us.
+Looking back, some of these technical challenges caused extreme delays and even though we continued to communicate as a team through these hard times, this did affect our pre-planned development schedule. However, regardless of these challenges, this whole experience including both the successes and challenges was all around a valuable learning experience for all of us, one that we will continue to hold very close to our hearts and are grateful for. Moreover, it genuinely helped us better understand the challenges of building real-time, user-based applications, which ultimately has better prepared us for our futures in our post-undergraduate careers.
+
 
 \subsection{What Would you Do Differently Next Time?}
 
