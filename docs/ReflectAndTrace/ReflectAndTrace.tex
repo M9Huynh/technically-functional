@@ -1,7 +1,16 @@
 \documentclass{article}
 
+\usepackage{amsmath}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+}
 
 \title{Reflection and Traceability Report on \progname}
 
@@ -44,6 +53,10 @@
 
 \newpage
 
+\newpage
+\tableofcontents
+\newpage
+
 \plt{Reflection is an important component of getting the full benefits from a
 learning experience.  Besides the intrinsic benefits of reflection, this
 document will be used to help the TAs grade how well your team responded to
@@ -53,43 +66,43 @@ Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
 on your reflections.}
 
 \section{Changes in Response to Feedback}
-
-\plt{Summarize the changes made over the course of the project in response to
-feedback from TAs, the instructor, teammates, other teams, the project
-supervisor (if present), and from user testers.}
-
-\plt{For those teams with an external supervisor, please highlight how the feedback 
-from the supervisor shaped your project.  In particular, you should highlight the 
-supervisor's response to your Rev 0 demonstration to them.}
-
-\plt{Version control can make the summary relatively easy, if you used issues
-and meaningful commits.  If you feedback is in an issue, and you responded in
-the issue tracker, you can point to the issue as part of explaining your
-changes.  If addressing the issue required changes to code or documentation, you
-can point to the specific commit that made the changes.  Although the links are
-helpful for the details, you should include a label for each item of feedback so
-that the reader has an idea of what each item is about without the need to click
-on everything to find out.}
-
-\plt{If you were not organized with your commits, traceability between feedback
-and commits will not be feasible to capture after the fact.  You will instead
-need to spend time writing down a summary of the changes made in response to
-each item of feedback.}
-
-\plt{You should address EVERY item of feedback.  A table or itemized list is
-recommended.  You should record every item of feedback, along with the source of
-that feedback and the change you made in response to that feedback.  The
-response can be a change to your documentation, code, or development process.
-The response can also be the reason why no changes were made in response to the
-feedback.  To make this information manageable, you will record the feedback and
-response separately for each deliverable in the sections that follow.}
-
-\plt{If the feedback is general or incomplete, the TA (or instructor) will not
-be able to grade your response to feedback.  In that case your grade on this
-document, and likely the Revision 1 versions of the other documents will be
-low.} 
-
 \subsection{SRS and Hazard Analysis}
+
+The hazard analysis document was improved through the peer review along with TA feedback in several areas for enhancement, including clarifying the roadmap with implementation timelines and rationales for safety requirements (\href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144}), adding justification for future work prioritization (\href{https://github.com/M9Huynh/technically-functional/issues/150}{\#150}), and removing problematic assumptions about user familiarity with smart devices (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}). Inconsistencies between the SRS and Hazard Analysis were resolved (\href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129}), while the system boundaries and components section was expanded with lower-level explanations to remove ambiguity (\href{https://github.com/M9Huynh/technically-functional/issues/135}{\#135}). The FMEA table was further decomposed to represent detailed failure modes rather than general effects (\href{https://github.com/M9Huynh/technically-functional/issues/142}{\#142}), and hazard categorization was clarified for technical hazards that could impact safety (\href{https://github.com/M9Huynh/technically-functional/issues/153}{\#153}). Additional improvements included adding rationales for each critical assumption (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}), addressing inconsistencies between assumptions and failure modes (\href{https://github.com/M9Huynh/technically-functional/issues/143}{\#143}), and noting where mitigation strategies would be expanded (\href{https://github.com/M9Huynh/technically-functional/issues/152}{\#152}). TA feedback further reinforced the need for roadmap rationales, which was addressed alongside similar peer feedback. One comment regarding bibliography completeness (\href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151}) was determined to be invalid as the citation and reference were already properly included.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{0.7cm} >{\raggedright\arraybackslash}p{5.5cm} >{\raggedright\arraybackslash}p{4cm} >{\raggedright\arraybackslash}p{2.3cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Corresponding Commit} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151} & Citation "IppolitoWallace1995" appears but bibliography incomplete & No change - comment invalid as bibliography and in-text citation were complete & None \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144} & Unclear description of how/when safety requirements and hazard testing will be implemented & Added section in roadmap outlining rationale for accepting requirements within capstone timeline and rationales for excluded safety requirements & 939b502 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/150}{\#150} & Safety requirements prioritized as "first" vs "in the future" without clear justification or timeline & Added clear rationale for future work prioritization & 470F490 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136} & Missing rationale for each assumption; assumption about user familiarity with smart device should be avoided & Removed assumption about user familiarity; added rationales for each assumption & a103812 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/143}{\#143} & Inconsistency between assumption about user familiarity and "confusing prompts" failure mode & Removed the initial assumption; will update language of "confusing prompts" & None (different commit) \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129} & Inconsistencies between SRS and Hazard Analysis; hazards need prioritization by severity & Updated consistency between SRS and HA & Reference \#410 PR \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/135}{\#135} & System components need lower-level explanation with sample hazards; authentication module lacks detail & Added changes to HA system boundaries, splitting section to remove ambiguity & 4bd898a \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/142}{\#142} & FMEA rows should represent detailed failure modes rather than effects & Included further decomposition of table within FMEA & Different commit \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/153}{\#153} & Technical hazards could also be safety hazards leading to unsafe exercise & Clarified hazard categorization & 4381828 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/152}{\#152} & Document lacks detailed mitigation strategies and implementation specifics & Mitigation included; will add section about effectiveness & None (different section) \\
+\midrule
+TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for which safety requirements to implement and why they are in that time frame & Updated the section with timelines and rationale for why each safety requirement was placed in each term & Similar to \href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144} \\
+\bottomrule
+\caption{Feedback and changes for SRS and Hazard Analysis}
+\label{tab:hazard_feedback}
+\end{longtable}
 
 \subsection{Design and Design Documentation}
 
@@ -128,12 +141,51 @@ it led to.}
 
 \section{Economic Considerations (LO23)}
 
-\plt{Is there a market for your product? What would be involved in marketing your 
-product? What is your estimate of the cost to produce a version that you could 
-sell?  What would you charge for your product?  How many units would you have to 
-sell to make money? If your product isn't something that would be sold, like an 
-open source project, how would you go about attracting users?  How many potential 
-users currently exist?}
+Yes, there is a clear market for our product. Existing physiotherapy companion apps such as \href{https://www.physiapp.com/}{Physiapp} and \href{https://apps.apple.com/ca/app/physiomobile-physio-rehab/id6749616813}{Physiomobile} offer progress tracking (checklist-based) and gamification (streaks), but they lack real-time exercise form feedback. Our app fills this gap by using OpenCV and MediaPipe pose landmarks to analyze patient movement during home exercises, giving immediate corrective feedback. Additionally, we provide value back to the physiotherapist by automatically sharing tracked metrics (e.g., reps, form quality) together with subjective patient data (pain levels, perceived exertion). This addresses the gap for patients and physios between appointments.
+
+\subsection*{Marketing Approach}
+Marketing would target physiotherapy clinics and independent practitioners. Strategies include:
+\begin{itemize}
+    \item Direct outreach to private clinics via email and informational webinars.
+    \item Free trial periods for clinics to demonstrate improved patient adherence and outcomes.
+    \item Testimonials and case studies from early-adopter clinics.
+\end{itemize}
+
+\subsection*{Cost to Produce Application}
+We estimate the cost to develop our application to a production-ready version (iOS/Android app, backend dashboard for physios, pose-analysis pipeline) at:
+\begin{itemize}
+    \item Development (4 months, 2-3 engineers): \$60,000 - \$80,000.
+    \item Exercise pose analysis expertise (consultation with physiotherapists to validate exercise models and feedback logic): \$10,000 - \$15,000.
+    \item Cloud infrastructure (AWS/GCP for pose inference): \$5,000 initial setup + \$500/month.
+    \item Legal/regulatory (privacy, medical device classification, liability for recording and providing feedback): \$15,000 - \$20,000
+    \item Marketing launch: \$5,000.
+\end{itemize}
+\textbf{Total initial cost: approximately \$95,000 - \$125,000.}
+
+\subsection*{Pricing Model}
+We would not charge individual patients. Instead, we adopt a subscription model for physiotherapy clinics, tiered by the number of active patients per month. A “small private clinic” typically has 2-3 physiotherapists, each seeing 25-50 patients per week. Therefore, reasonable patient tiers are:
+\begin{itemize}
+    \item \textbf{Tier 1 (up to 50 active patients / month):} \$50 / month 
+    \item \textbf{Tier 2 (up to 150 active patients / month):} \$100 / month
+    \item \textbf{Tier 3 (unlimited patients):} \$200 / month 
+\end{itemize}
+
+\subsection*{Breakeven Analysis}
+Assume an average subscription of \$100 / month per clinic (weighted toward Tier 2). Monthly recurring costs (cloud, support) are roughly \$500 for every 100 clinics. Development cost is a one-time \$110,000.
+
+Monthly profit per clinic after variable costs: \$100 - \$5 = \$95.  
+Number of clinic-months needed to recover development cost:  
+\[
+\frac{\$110,000}{\$95 \text{ per clinic-month}} \approx 1,158 \text{ clinic-months}.
+\]  
+If we acquire 100 clinics in the first year, breakeven occurs after about 11.6 months. In terms of total clinics, we would need roughly 97 clinics subscribing for one full year to break even.
+
+\subsection*{Potential Users (TAM / SOM)}
+\begin{itemize}
+    \item \textbf{Total Addressable Market (TAM):} All physiotherapists in Canada - approximately 22,000 registered physiotherapists (Canadian Institute for Health Information). Assuming an average of 5 physiotherapists per private clinic (typical for a medium-sized clinic), that gives roughly 4,400 clinics.
+    \item \textbf{Serviceable Available Market (SAM):} Private clinics in Ontario, where our initial launch would focus. Ontario has roughly 6,000 physiotherapists, translating to about 1,200 private clinics.
+    \item \textbf{Serviceable Obtainable Market (SOM):} In the first two years, with targeted marketing, we could realistically capture 1\% of the Ontario market - about 12 clinics. That would generate monthly revenue of \$1,200 (at \$100 average). With successful promotion and marketing of the application, the application could grow to 5\% (60 clinics) after three years, achieving monthly revenue of \$6,000 and approaching a breakeven point.
+\end{itemize}
 
 \section{Reflection on Project Management (LO24)}
 
