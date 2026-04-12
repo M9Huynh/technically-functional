@@ -28,6 +28,28 @@
 
 \newpage
 \tableofcontents
+\listoftables %if appropriate
+ 
+\listoffigures %if appropriate
+ 
+\section{Symbols, Abbreviations and Acronyms}
+ 
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l}
+  \toprule      
+  \textbf{symbol} & \textbf{description}\\
+  \midrule
+  FR & Functional Requirement \\
+  NFR & Non-Functional Requirement \\
+  HA & Hazard Analysis \\
+  MG & Module Guide \\
+  MIS & Module Interface Specification \\
+  SRS & Software Requirement Specification \\
+  TA & Teaching Assistant \\
+  VnV & Verification and Validation \\
+  \bottomrule
+\end{tabular}\\
+
 \newpage
 
 \plt{Reflection is an important component of getting the full benefits from a
@@ -47,7 +69,7 @@ The hazard analysis document was improved through the peer review along with TA 
 \begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
 \toprule
 \textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
-
+\midrule
 Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151} & Citation "IppolitoWallace1995" appears but bibliography incomplete & No change - comment invalid as bibliography and in-text citation were complete & None \\
 \midrule
 Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144} & Unclear description of how/when safety requirements and hazard testing will be implemented & Added section in roadmap outlining rationale for accepting requirements within capstone timeline and rationales for excluded safety requirements & 939b502 \\
@@ -75,15 +97,47 @@ TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for whi
 \end{xltabular}
 }
 \subsection{Design and Design Documentation}
-
+\subsubsection{MIS}
+While the feedback received from the TA about the content was positive, there were a lot of formatting errors 
+present in the original document. There were large spaces, inconsistent headings and sections marked as 'TBD' and 'TODO'.
+These sections' entries are in progress and all the issues relayed in the TA feedback (\href{https://github.com/M9Huynh/technically-functional/issues/370}{\#370}) are being resolved.
+Peer feedback issues were very similar (\href{https://github.com/M9Huynh/technically-functional/issues/243}{\#243}) with the addition of further description being needed for each module(\href{https://github.com/M9Huynh/technically-functional/issues/240}{\#240})
+and clarifying assumptions (\href{https://github.com/M9Huynh/technically-functional/issues/245}{\#245})
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
+\midrule
+TA feedback & \href{https://github.com/M9Huynh/technically-functional/issues/370}{\#370} & Inconsistent formatting and empty entries present & This is a work in progress & None \\
+\midrule
+Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/issues/243}{\#243} & Sections are empty with 'TODO' and 'TBD' labels & Added consistent headings and some completed sections & b81182e, 826d3b1, 64c8c8c, 11d112a, c9b8fc0, 030133a, 6c02172, 680a1b1, c35a5b1\\
+\midrule
+Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/issues/240}{\#240} & UI section incomplete and lack of description under each module & Adding further descriptions and UI module is in progress & None \\
+\midrule
+Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/issues/245}{\#245} & Same as \#240 and \#243; Assumptions not present even thought they are being made & Some assumptions fixed, others are works in progress & b81182e, 826d3b1, 64c8c8c, 11d112a, c9b8fc0, 030133a, 6c02172, 680a1b1, c35a5b1 \\
+\bottomrule
+\caption{Feedback and changes for MIS}
+\label{tab:mis}
+\end{xltabular}
+}
 \subsection{VnV Plan and Report}
 
 \section{Extras}
 
-\plt{Summarize the extras that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.}
+The extras set out for the system consist of both a Design Thinking Document and a Usability Report. 
+The Design Thinking Document aims to explain the process behind, and work done towards, 
+the final design of the system. This document explains the overall flow of processing through the 
+system and the interfacing elements, external libraries utilized, and more. The document flow is 
+iterative, as is the design process, and aims to communicate the entire design process of the 
+system. The Design Thinking Document can be found at \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Extras/DesignThinking/DesignThinkingWorksheet.pdf}{docs/Extras/DesignThinking/DesignThinkingWorksheet.pdf}.
+
+The Usability Report aims to focus on evaluating the system from a user perspective. 
+This report documents usability testing conducted with participants to assess ease of navigation, 
+clarity of instructions, and overall user experience. It includes observations, user feedback, and 
+analysis of interaction patterns to identify the key areas to focus on and address. The findings are 
+used to ensure the system meets the non-functional requirements and to guide improvements
+to the interface for both patients and physiotherapists. The Usability Report can be found at
+\href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Extras/UsabilityTesting/UsabilityReport.pdf}{docs/Extras/UsabilityTesting/UsabilityReport.pdf}.
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
@@ -161,12 +215,35 @@ technology you planned on using?}
 
 \subsection{What Went Well?}
 
-\plt{What went well for your project management in terms of processes and 
-technology?}
+In terms of what went well throughout our project, the team’s overall organization and collaboration 
+is one of the first few things that come to mind. We utilized GitHub Issues and version control to stay
+on track of all our deliverables, tasks, and progress. This ultimately allowed us to stay aligned and 
+ensure everyone was held accountable for their assigned tasks. We also clearly divided up the respective
+responsibilities between the frontend and backend components to ensure everything remained as efficient 
+as possible. Moreover, we successfully implemented real-time feedback, one of the core features of 
+the app. We were able to successfully process frames continuously and return the relevant metrics 
+(e.g., knee angle, rep count, ROM). This took numerous iterations to refine but we were so happy to 
+see everything starting to finally come together.
 
 \subsection{What Went Wrong?}
 
-\plt{What went wrong in terms of processes and technology?}
+One of the main issues we faced was handling the accuracy of the pose detection and real-time 
+motion analysis. Accurately detecting knee movement within a live environment was more difficult 
+than expected, especially when dealing with inconsistent lighting, camera positioning, and partial 
+visibility of the user. In addition to that, another issue we kept coming across was the accuracy 
+of repetition counting. Any small variations in movement or added noise during the pose detection 
+sometimes caused missed, delayed or incorrect rep counts. This required multiple iterations of 
+threshold tuning and logic refinement, which took more time than initially planned. We also encountered 
+numerous issues during the frame processing integration. Since the system relied on the backend 
+for continuous frame processing, this sometimes led to performance issues such as latency or 
+delayed feedback, which posed as a key limitation for us. Looking back, some of these technical 
+challenges caused extreme delays and even though we continued to communicate as a team through
+these hard times, this did affect our pre-planned development schedule. However, regardless of 
+these challenges, this whole experience including both the successes and challenges was all around 
+a valuable learning experience for all of us, one that we will continue to hold very close to our 
+hearts and are grateful for. Moreover, it genuinely helped us better understand the challenges of
+building real-time, user-based applications, which ultimately has better prepared us for our futures 
+in our post-undergraduate careers.
 
 \subsection{What Would you Do Differently Next Time?}
 
@@ -183,7 +260,54 @@ to ensure equitable treatment of all stakeholders.}
 
 \subsection{Which Courses Were Relevant}
 
-\plt{Which of the courses you have taken were relevant for the capstone project?}
+\textit{\textbf{Maham}}\\
+\textbf{SFWRENG 2AA4 - Software Design 1} introduced me to viewing software development through
+a more holistic lens. It raised my awareness of and emphasized many important areas such as what
+an MIS is, what software design principles are, and how to define software components mathematically.\\
+\textbf{SFWRENG 2DM3 and 2FA3 - Discrete Math 1 and 2} equipped me with the ability to translate 
+natural language to mathematics. Given the MIS's extensive use of discrete math, proficiency in this 
+area was imperative. \\
+\textbf{SFWRENG 3A04 - Large System Design} introduced software architectural approaches to development. 
+As part of a team, I had to develop a software and it was very similar to what was done in 
+capstone, but at a significantly faster pace. This gave me valuable insight 
+into what capstone entails.\\
+\textbf{SFWRENG 3RA3 - Requirements} was essential to learning how to construct requirements 
+for software that fulfills software quality benchmarks while also being tailored for the correct audience. \\
+\textbf{SFWRENG 3S03 - Software testing} provided a concise introduction to software testing which was
+fundamental to deliver a functional product by the end of development. \\
+\textbf{SFWRENG 4HC3 - Human computer interfaces} was a very important course, since it 
+emphasized designing software with a human-centered approach. It taught us develpment priorities
+and the importance of always keeping the audience in mind. \\
+\newline
+\textit{\textbf{Vaisnavi}}\\
+\textbf{Requirements Engineering (3RA3)}
+\begin{itemize}
+    \item Taught us how to engineer and refine system requirements.
+    \item Helped significantly in defining the functional and non-functional requirements
+\end{itemize}
+\textbf{Software Architecture (3A04)}
+\begin{itemize}
+    \item Taught us how to design larger systems as independent, modular components, which 
+    allowed for separation of concerns within our various modules
+\end{itemize}
+\textbf{Software Testing (3S03)}
+\begin{itemize}
+    \item Taught us how to conduct both unit and integration testing.
+    \item Helped us verify the reliability of key features like pose detection and repetition counting.
+\end{itemize}
+\textbf{Software Development (2AA4 \& 2C03)}
+\begin{itemize}
+    \item Taught us the fundamentals of software development and best practices for building 
+    scalable systems.
+\end{itemize}
+\textbf{Human Computer Interfaces (4HC3)}
+\begin{itemize}
+    \item Taught and provided us with the correct tools to design our user interface, 
+    ensuring it was user-centered and intuitive.
+    \item This course also provided us with the knowledge and tools to allow us to 
+    successfully conduct usability testing and refine our mobile application based 
+    on the user feedback.
+\end{itemize}
 \subsection*{Matthew}
 Throughout this project, many courses were relevant to our capstone project. More specifically for the documentation, several of my communication and documentation related courses touched on how to effectively communicate the software specifications. For example, SFWRENG 3A04 - Large System Design, where I had to follow and write software specification. Furthermore, with the coding aspect, I applied learning from, SFWRENG 3S03 - Software Testing, to help write the unit tests. SFWRENG 4HC3 - Human Computer Interfaces, helped with how to design with human compatibility as well as how to conduct usability tests for our application effectively. Finally, the design of databases uses practices from SFWRENG 3DB3 - Databases and SFWRENG 2OP3 - Object Oriented Programming was used to help for the design of the backend Python code. Overall, the application of the courses helped us throughout the capstone project.
 
@@ -192,7 +316,19 @@ Throughout this project, many courses were relevant to our capstone project. Mor
 
 \plt{What skills/knowledge did you need to acquire for your capstone project
 that was outside of the courses you took?}
-
+\newline
+\textit{\textbf{Vaisnavi}}\\
+One of the most significant areas where we had to do the most learning was for our recording 
+feature of the app, specifically the pose detection and computer vision logic. We used 
+OpenCV and MediaPipe to process the images in our backend, allowing us to display and 
+extract key landmarks and compute the relevant knee angles. However, learning and working 
+with these technologies at the same time was very new and extremely challenging. There were so 
+many different aspects to it and we struggled a lot as mentioned previously with latency. 
+We realized potential better methods to reduce the latency and increase the accuracy a bit too 
+late into the project where it was too late to change everything, but it was a valuable 
+learning experience overall. We learned a lot in terms of adapting to a new skill in a 
+specified timeline and we are super grateful for this opportunity to make the mistakes 
+that we did, but also learn from those mistakes at the same time.
 \subsection*{Matthew}
 Throughout this project, I needed to learn skills outside of my course work. Some of the skills that I needed to learn was working with computer vision and how the pose detection worked. In order to learn these skills, I had to look through the documentation as well as work through tutorials to then try and apply it to the problem of our project. Furthermore, when working on some of the documents for our project, I had to refer to previous course work but also how it is written. 
 
