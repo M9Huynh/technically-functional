@@ -28,6 +28,28 @@
 
 \newpage
 \tableofcontents
+\listoftables %if appropriate
+ 
+\listoffigures %if appropriate
+ 
+\section{Symbols, Abbreviations and Acronyms}
+ 
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l}
+  \toprule      
+  \textbf{symbol} & \textbf{description}\\
+  \midrule
+  FR & Functional Requirement \\
+  NFR & Non-Functional Requirement \\
+  HA & Hazard Analysis \\
+  MG & Module Guide \\
+  MIS & Module Interface Specification \\
+  SRS & Software Requirement Specification \\
+  TA & Teaching Assistant \\
+  VnV & Verification and Validation \\
+  \bottomrule
+\end{tabular}\\
+
 \newpage
 
 \plt{Reflection is an important component of getting the full benefits from a
@@ -80,10 +102,20 @@ TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for whi
 
 \section{Extras}
 
-\plt{Summarize the extras that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.}
+The extras set out for the system consist of both a Design Thinking Document and a Usability Report. 
+The Design Thinking Document aims to explain the process behind, and work done towards, 
+the final design of the system. This document explains the overall flow of processing through the 
+system and the interfacing elements, external libraries utilized, and more. The document flow is 
+iterative, as is the design process, and aims to communicate the entire design process of the 
+system. The Design Thinking Document can be found at \href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Extras/DesignThinking/DesignThinkingWorksheet.pdf}{docs/Extras/DesignThinking/DesignThinkingWorksheet.pdf}.
+
+The Usability Report aims to focus on evaluating the system from a user perspective. 
+This report documents usability testing conducted with participants to assess ease of navigation, 
+clarity of instructions, and overall user experience. It includes observations, user feedback, and 
+analysis of interaction patterns to identify the key areas to focus on and address. The findings are 
+used to ensure the system meets the non-functional requirements and to guide improvements
+to the interface for both patients and physiotherapists. The Usability Report can be found at
+\href{https://github.com/M9Huynh/technically-functional/blob/main/docs/Extras/UsabilityTesting/UsabilityReport.pdf}{docs/Extras/UsabilityTesting/UsabilityReport.pdf}.
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
@@ -161,12 +193,35 @@ technology you planned on using?}
 
 \subsection{What Went Well?}
 
-\plt{What went well for your project management in terms of processes and 
-technology?}
+In terms of what went well throughout our project, the team’s overall organization and collaboration 
+is one of the first few things that come to mind. We utilized GitHub Issues and version control to stay
+on track of all our deliverables, tasks, and progress. This ultimately allowed us to stay aligned and 
+ensure everyone was held accountable for their assigned tasks. We also clearly divided up the respective
+responsibilities between the frontend and backend components to ensure everything remained as efficient 
+as possible. Moreover, we successfully implemented real-time feedback, one of the core features of 
+the app. We were able to successfully process frames continuously and return the relevant metrics 
+(e.g., knee angle, rep count, ROM). This took numerous iterations to refine but we were so happy to 
+see everything starting to finally come together.
 
 \subsection{What Went Wrong?}
 
-\plt{What went wrong in terms of processes and technology?}
+One of the main issues we faced was handling the accuracy of the pose detection and real-time 
+motion analysis. Accurately detecting knee movement within a live environment was more difficult 
+than expected, especially when dealing with inconsistent lighting, camera positioning, and partial 
+visibility of the user. In addition to that, another issue we kept coming across was the accuracy 
+of repetition counting. Any small variations in movement or added noise during the pose detection 
+sometimes caused missed, delayed or incorrect rep counts. This required multiple iterations of 
+threshold tuning and logic refinement, which took more time than initially planned. We also encountered 
+numerous issues during the frame processing integration. Since the system relied on the backend 
+for continuous frame processing, this sometimes led to performance issues such as latency or 
+delayed feedback, which posed as a key limitation for us. Looking back, some of these technical 
+challenges caused extreme delays and even though we continued to communicate as a team through
+these hard times, this did affect our pre-planned development schedule. However, regardless of 
+these challenges, this whole experience including both the successes and challenges was all around 
+a valuable learning experience for all of us, one that we will continue to hold very close to our 
+hearts and are grateful for. Moreover, it genuinely helped us better understand the challenges of
+building real-time, user-based applications, which ultimately has better prepared us for our futures 
+in our post-undergraduate careers.
 
 \subsection{What Would you Do Differently Next Time?}
 
@@ -183,7 +238,12 @@ to ensure equitable treatment of all stakeholders.}
 
 \subsection{Which Courses Were Relevant}
 
-\plt{Which of the courses you have taken were relevant for the capstone project?}
+\textit{\textbf{Maham}}
+\textbf{SFWRENG 2AA4}: This course introduced me to viewing software development with a more 
+holistic lens. There were many important areas that were brought to my awareness, such as what an MIS is,
+what software design priciples are, 
+\textbf{}
+
 
 \subsection{Knowledge/Skills Outside of Courses}
 
