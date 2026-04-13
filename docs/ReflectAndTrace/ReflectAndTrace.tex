@@ -101,13 +101,11 @@ TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for whi
 
 In reference to changed made between Rev0 and Rev1, the MG was modified to reflect changes in the overall module design of the project. The MG modules were modified in their responsibilities and locations in the overall design (Refer to \href{https://github.com/M9Huynh/technically-functional/issues/408}{Issue \#408}). There were changes made to not only the modules themselves but the justification for anticipated changes, unlikely changes, and design decisions to further explain the effect they held on the final design of the project. It is hoped this additional level of explanation will help to clarify some of the limitations, assumptions, and constraints that were presented in several of the modules and other documents (Refer to \href{https://github.com/M9Huynh/technically-functional/pull/416}{PR \#416}). Changes to the modules required changes to the uses hierarchy and the traceability sections also found in the MG. Finally, there were modifications to the MG's timelien section to make it more focussed on modules and design documentation with specific dates rather than overall deliverables and general date ranges (Refer to \href{https://github.com/M9Huynh/technically-functional/issues/407}{Issue \#407}). Further changes are documented below in Table \ref{tab:mg_feedback}.
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{0.7cm} >{\raggedright\arraybackslash}p{5.5cm} >{\raggedright\arraybackslash}p{4cm} >{\raggedright\arraybackslash}p{2.3cm}}
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
 \toprule
-\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Corresponding Commit} \\
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
 \midrule
-\endhead
-\bottomrule
-\endfoot
 
 Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/242}{\#242} & Hardware Hiding Module reference issues and Modules lacking detail & Hardware Hiding Module reference fixed, however module details did not seem to be lacking as per team and TA feedback; no change on this part. & 7edbcd4 \\
 \midrule
@@ -120,9 +118,9 @@ TA & \href{https://github.com/M9Huynh/technically-functional/issues/244}{\#407} 
 TA & \href{https://github.com/M9Huynh/technically-functional/issues/408}{\#408} & ACs, UCs, and Design Decisions lacking information. & ACs, UCs, and Design Decisions updated with more rationale and impact on the overall design. & 8648a1c \\
 
 \bottomrule
-\caption{Feedback and changes for Module Guide}
+\caption{Feedback and changes for MIS}
 \label{tab:mg_feedback}
-\end{longtable}
+\end{xltabular}
 
 \subsubsection{MIS}
 While the feedback received from the TA about the content was positive, there were a lot of formatting errors 
@@ -146,6 +144,7 @@ Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/
 \caption{Feedback and changes for MIS}
 \label{tab:mis}
 \end{xltabular}
+
 }
 \subsection{VnV Plan and Report}
  
@@ -251,19 +250,57 @@ to the interface for both patients and physiotherapists. The Usability Report ca
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
-\plt{Explain how you arrived at your final design and implementation.  How did
-the design evolve from the first version to the final version?} 
+\subsection{Initial Design}
 
-\plt{Don't just say what you changed, say why you changed it.  The needs of the
-client should be part of the explanation.  For example, if you made changes in
-response to usability testing, explain what the testing found and what changes
-it led to.}
+Initially, the system was planned to be a patient-side only application that would support tracking and recording of patients exercises at home to ensure proper form for recovery. However, after several meetings with a physiotherapist advisor, it was determined that this initial design leaned into the grey-area of providing healthcare advice, something that the system nor its developers are entitled to do. It also seemed that the advisor would be interested in seeing the patients results from recordings.
+
+\subsection{Rev-1}
+
+The application was changed to support two-sided interactions from both patients and physiotherapists, however completely asynchronously. During this phase, the application was only meant to support patients recording their exercises which were prescribed by their physiotherapists. However, due to requirements to interact with the MediaPipe and OpenCV APIs, there had to be a data structure that identifies which landmarks on the patient’s body are to be tracked. So, the system limited scope to focus on the knee and locked three landmarks for those measurements: the hip, knee, and ankle. With these three landmarks, the angle across the knee was attainable. There was a basic data structure created for knee-related exercises which stores the exercise instructions so they may be modified later, but this wasn’t implemented until Rev1.
+
+At this point the application is two-sided for both patients and physiotherapists, it supports recording and data gathering on knee-related exercises, but it didn’t feel secure enough. To add a layer of validity for both physiotherapists and patients, physios are required to enter their physiotherapist identification number (something given to all physiotherapists once they pass an accredited physiotherapy program) and patients are required to enter an invite code (given to them by a physiotherapist with a valid account).
+
+Combining the front-end in React to the backend written in Python required a roundabout approach to run .JSON responses across a Flask server. This way the back-end interfacing with the MediaPipe and OpenCV can pass the results of the video-feed analysis to the front-end which handles storing activity data in the database and displaying feedback to the patient on the front-end.
+
+\subsection{Rev0}
+
+After more meetings with the advisor and a meeting with the professor and TA, there was a desire for more communication between patients and physios. This brought about the creation of the feedback page which allows both patients and physios to leave comments on specific exercises if there is a need to address anything not captured by the application. There was also a basic profile page implemented that held contact information for both the patient and physiotherapist if another in-person session had to be booked or a more synchronous form of contact was required.
+
+The progress page introduced a basic graphical overview of patient activities and repetitions done over the last week. These two fields were intended to support physio decision making when it come to exercise instruction modifications or planning another visit in-person. This page is intended to be a quick, ‘at a glance’ update of patient progress.
+
+Otherwise, Rev0 time was spent implementing all of what was defined above to prepare for the Rev0 demo.
+
+\subsection{Rev1}
+
+Once there was a semblance of a finished product, it was easier to see what was lacking for the advisor and patients. The physio advisors requested more user-entered data rather than simply the computer vision gathered data, as well as specific data entry fields for sets and reps. Once exercise modification was implemented so physios could alter exercise instructions and add any level of detail, the two extra fields for sets and reps were added in the exercise modification modal to support expectation setting for both physios and patients during exercise recording and feedback reviewing. For the additional user-entered data, a survey was implemented that appears after each activity recording and prompts the user to rate each of the following on a scale from 0 to 10: pain or discomfort, level of effort, and satisfaction with the activity. Using these fields in combination with the gathered information from the system, the physio advisors felt more confident in their abilities to properly assess if exercise instructions or sets and/or reps required changing after an activity. These fields were also added to the progress page as graphical options so the physio can see trends in the user’s entered data over the previous week.
+
+After usability testing with several users and physios, there was a clear need for some usability tweaks and an explanation of several features. Patients were clearly not aware of all the options available to them on several screens and physios found the experience jarring or disconnected. The interface was modified to have more contrast between elements, and visual indicators such as borders and persistent scrollbars were added to clearly indicate the capabilities of all elements on the UI. There was also additional helper text added to each page to describe at a basic level the purpose of those screens. Helper text was added for certain cases, such as having no assigned exercises or no historical activity data on both the main dashboard and the feedback page.
+
+Also, for the sake of user and physio convenience there was a disable option added to patient and physio accounts. Physios can disable linked patient accounts if they feel it is no longer required or if the patient has been inactive for some time. This can help the physio clean up their main dashboard and focus on users that are actively using the system for their recovery. For patients, if they feel the system isn’t supporting them as well as they had hoped, or they feel they have made adequate recovery, they can disable their own account to stop receiving feedback and recording requests from their physio. Several other UI modifications, such as logout capabilities on the profile page as well as main page and linked physio contact information display were implemented to increase quality of life for both patients and physios.
+
+To prove the scalability of the design, exercise enabling and disabling was also added to the physio side such that individual patients could have different assigned exercises with personalized instructions, sets, and reps. With simply a checkbox and a ‘modify instructions’ button placed on each exercise, the physio could completely personalize a patient’s capabilities within the system. This is the final update that was shown during Rev1 final demonstration and at the Engineering Expo on April 7th, 2026.
 
 \section{Design Decisions (LO12)}
 
-\plt{Reflect and justify your design decisions.  How did limitations,
- assumptions, and constraints influence your decisions?  Discuss each of these
- separately.}
+\subsection{Limitations}
+
+After the Rev0 demonstration, the system was locked to using one camera for pose detection rather than 2 from different angles. This limitation was placed on the system for both ease of implementation as well as user convenience. Under an assumption, every user would have a camera accessible to them on their smart device, however the need for an additional camera which would have to link to the device and be separately identified by the system would cause many changes in the backend implementation and place more responsibility and requirements on the user. Additionally, during the PoC demo, it was determined with the professor that one camera would be enough for pose detection and form correction. This made the implementation for pose detection and form correction much simpler for the team, a far more manageable workload for such a project.
+
+Once the back-end and front-end were linked with a Flask server to pass responses back and forth, the performance of the pose detection suffered drastically. Ultimately unaware of how to improve the performance and whether it was an implementation issue, a design issue, or perhaps an issue of stack selection, the system moved forward and assumed a slower rate of movement for patient recording which increased the accuracy of the pose detection even with such high latency from the Flask response passing. There was a thought that changing the front-end to a python supportive language could reduce latency, however it was discovered so late into the project and with no guarantee that it would solve latency and a definite guarantee of needing to re-implement the entire front-end of the system, this limitation of pose detection latency was accepted as an overall system performance limitation. If there was more time devoted to this project, it would be a good idea to rebuild it from the ground up using a python integrated front-end language to attempt to limit pose detection latency.
+
+\subsection{Assumptions}
+
+It was assumed that patients would only have injuries and limitations related to the knee area, and that users would perform exercises which utilized knee flexion and extension to improve range of motion and strength. This was assumed for the simplicity of implementation for recording and pose detection, and to allow movement along a single plane which would be observable by a single camera. The simplicity of implementation reduced the requirements for the exercise data structure, since the MediaPipe and OpenCV APIs were told to only focus on the hip, knee, and ankle joint locations there was no need to store the landmarks to be tracked in the exercise. This alteration to the data structure would have required a rewriting of all 5 video handling modules and a more intricate data passing of the exercise data structure between these modules to ensure all relevant information was tracked. The single plane movement allowed an ease of use for patients recording their exercises, since all they must do is bend and/or extend their knee along the plane perpendicular to the camera.
+
+User honesty was assumed for patient entered data, that is pain, effort, and satisfaction with the activities. These fields cannot be determined using computer vision as they are all internal and every user handles them differently. Even when interacting with physiotherapists in their office, these data points are still relying on the user’s honesty. Since these fields and their data would be useless to the physiotherapist if they weren’t answered honestly, and therefore irrelevant and unhelpful in the patient’s recovery, the system assumes honesty from the patient to assist in their recovery.
+
+A stable internet connection was assumed from the beginning of implementation to simplify data handling. With a stable internet connection, data can always flow between the database and the user’s device, this created no need for offline backups or delayed uploads to the database. For example, if a user finished an exercise but couldn’t connect to the internet that data should be stored and uploaded when they have internet access again. However, this created an issue as the team was unsure how to implement this and it wasn’t related to the overall idea for the application. This assumption simplified the implementation and narrowed scope to a more patient and physio focused system rather than a data management system that could handle all edge cases.
+
+\subsection{Constraints}
+
+Financial constraints placed on the project kept the system limited to using free APIs and cloud database services for implementation. Usage of MediaPipe and OpenCV’s APIs is publicly available and was enough to support the creation of the system up to the final Rev1 iteration. Google’s Firebase was used as a cloud database system, specifically the Firestore database was used to store user, exercise, and activity data. The limited size of the free Firebase meant we excluded video storage from our solution. Initially, there was intention to draw live feedback from the video-feed and further data collection from the recording after the user had submitted their video, however the size limitation of the cloud database meant the system couldn’t store all that video footage. Instead, both data and feedback are compiled during the live video-feed, and the data is simply saved to the database after recording is complete. 
+
+There was a constraint discovered early for healthcare advice. As the system developed by software engineers is not capable of offering healthcare advice or altering patient exercise programs, this drastically altered the iterations after the proof-of-concept demo. There were initial plans to gamify exercises, allowing users to unlock different exercises by doing enough of their first assigned exercises, or perhaps to switch exercises with an earned in-application currency to increase user interaction and consistency in using the system. However, this had to be abandoned and ultimately drove the application to become the two-sided system embodied in the final iteration. This way, physios can provide healthcare advice through the system and there is no responsibility of instruction or set and rep management done by the application. This constraint heavily impacted the direction that this project went it, limiting the system’s ability to autonomously make exercise decisions or alterations, however the final two-sided resulting application feels more alive with interactions between physios and patients.
 
 \section{Economic Considerations (LO23)}
 
@@ -428,6 +465,31 @@ effectively. Finally, the design of databases uses practices from \textbf{SFWREN
 \textbf{SFWRENG 2OP3 - Object Oriented Programming} was used to help for the design of the backend Python code. 
 Overall, the application of the courses helped us throughout the capstone project.
 
+\subsection{Cieran}
+
+\textbf{SFWRENG 2AA4, 3BB4, 3A04 – Software Development}
+\begin{itemize}
+    \item Extensive knowledge and practice with overall system and module development.
+    \item Breakdown of overall systems into modules with responsibilities and avoidance of circular dependencies.
+    \item -	General logical thinking for system design with an emphasis on scalability, extendibility, and modularity.
+\end{itemize}
+\textbf{SFWRENG 3DB3 – Databases}
+\begin{itemize}
+    \item Proper usage of databases, queries, joins, and data types.
+    \item Proper fields included in database tables, necessary key fields and foreign keys to link tables to each other.
+    \item Aim to reduce redundancy of data, avoid storing and needing to update data in multiple places.
+\end{itemize}
+\textbf{SFWRENG 3SO3 – Software Testing}
+\begin{itemize}
+    \item Unit, usability, functional requirement, and non-functional requirement testing suite development.
+    \item Overall focus on code coverage, branch navigation and coverage, and edge case assurances.
+    \item Helped with learning new test suite development and working to failsafe developed functions, classes, interfaces, and modules.
+\end{itemize}
+\textbf{SFWRENG 4HC3 – Human Computer Interfaces}
+\begin{itemize}
+    \item Development of front-end interfaces for both patient and physio sides of the application.
+    \item Emphasis on understandability and learning of system functionality using visual indicators and assistance text or other materials where required.
+\end{itemize}
 
 \subsection{Knowledge/Skills Outside of Courses}
 
@@ -462,5 +524,7 @@ too little and too much, but in the end, I managed to successfully balance our s
 navigate different work dynamics. I realize that I may have initially set out to be inflexible because
 I did not want anyone's work to be contingent on mine, but I ultimately delivered on time (mostly). Even when I
 did not, my teammates were gracious enough to offer assistance and additional time when I needed it. 
-
+\newline
+\textit{Cieran}\\
+During this project I learned how to apply several API interfaces from MediaPipe, OpenCV, and Firebase. Working with these really made my systems knowledge feel far more extensive than it had in the past, and far more confident about the range of capabilities my systems could accomplish. I had never used React for any extensive project before, so learning all the capabilities and implementing a full front-end of a system was a very interesting educational experience. Working with an actual database, in the form of Firebase, was a very interesting opportunity to use my database knowledge from 3DB3, however it also highlighted how logical the process is working with a database and how systematic thinking has shaped the way I perceive and imagine making and manipulating database tables. Learning Jest, a type script testing suite, was intuitive but also almost a fun exercise in code coverage and branch management within functions and classes. Overall I feel the knowledge I gained outside of courses to advance this project have increased my skill and confidence as a software engineer.
 \end{document}
