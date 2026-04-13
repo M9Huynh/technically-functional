@@ -69,15 +69,15 @@ The hazard analysis document was improved through the peer review along with TA 
 \toprule
 \textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
 \midrule
-Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/156}{\#156} & Safety-critical requirements (FR~14, FR~20) lack quantitative thresholds, making them difficult to test or validate & Added quantitative fit criteria to FR~14 and FR~20 (e.g., feedback delivered within 1 second of deviation detection); added PR-SCR~2 with a 5-minute PT alert delivery threshold & Reference \#410 PR \\\
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/156}{\#156} & Safety-critical requirements (FR~14, FR~20) lack quantitative thresholds, making them difficult to test or validate & Added quantitative fit criteria to FR~14 and FR~20 (e.g., feedback delivered within 1 second of deviation detection); added PR-SCR~2 with a 5-minute PT alert delivery threshold & Reference \#410 PR \\
 \midrule
-Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/148}{\#148} & SRS claims PIPEDA compliance but specifies no data retention periods, deletion procedures, or patient deletion rights for videos and exercise records & Clarified that only metrics are stored server-side (not raw video); updated FR~24 and SR-PR~2 with explicit retention period; added SR-PR~3 for patient data deletion right & Reference \#410 PR \\\
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/148}{\#148} & SRS claims PIPEDA compliance but specifies no data retention periods, deletion procedures, or patient deletion rights for videos and exercise records & Clarified that only metrics are stored server-side (not raw video); updated FR~24 and SR-PR~2 with explicit retention period; added SR-PR~3 for patient data deletion right & Reference \#410 PR \\
 \midrule
-Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/147}{\#147} & SR-AR~4 enforces 2FA now while Waiting Room lists 2FA as a future feature, creating a contradiction & Removed SR-AR~4 from current security requirements; 2FA remains listed in the Waiting Room as a future feature & Reference \#410 PR \\\
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/147}{\#147} & SR-AR~4 enforces 2FA now while Waiting Room lists 2FA as a future feature, creating a contradiction & Removed SR-AR~4 from current security requirements; 2FA remains listed in the Waiting Room as a future feature & Reference \#410 PR \\
 \midrule
-Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/146}{\#146} & No performance requirements or constraints on video upload time, file size, format, or duration & Added PR-SL~3 (50~MB upload within 60 seconds) and FR~28 (MP4/MOV only, max 500~MB, max 10 minutes) & Reference \#410 PR \\\
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/146}{\#146} & No performance requirements or constraints on video upload time, file size, format, or duration & Added PR-SL~3 (50~MB upload within 60 seconds) and FR~28 (MP4/MOV only, max 500~MB, max 10 minutes) & Reference \#410 PR \\
 \midrule
-Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129} & Environmental assumptions (lighting, space, mobility) worded inconsistently between SRS and Hazard Analysis & Aligned assumption wording in SRS Section~5.3 with HA; updated A1, A5, and added A15--A17 to match HA assumptions & Reference \#410 PR \\\
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129} & Environmental assumptions (lighting, space, mobility) worded inconsistently between SRS and Hazard Analysis & Aligned assumption wording in SRS Section~5.3 with HA; updated A1, A5, and added A15--A17 to match HA assumptions & Reference \#410 PR \\
 \midrule
 Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151} & Citation "IppolitoWallace1995" appears but bibliography incomplete & No change - comment invalid as bibliography and in-text citation were complete & None \\
 \midrule
@@ -114,7 +114,6 @@ In reference to changed made between Rev0 and Rev1, the MG was modified to refle
 \toprule
 \textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
 \midrule
-
 Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/242}{\#242} & Hardware Hiding Module reference issues and Modules lacking detail & Hardware Hiding Module reference fixed, however module details did not seem to be lacking as per team and TA feedback; no change on this part. & 7edbcd4 \\
 \midrule
 Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/241}{\#241} & Module names unclear & Module names updated for clarity. Home changed to Profile Activity, Main changed to Analysis Control Flow. & d2b2239 \\
@@ -126,9 +125,10 @@ TA & \href{https://github.com/M9Huynh/technically-functional/issues/244}{\#407} 
 TA & \href{https://github.com/M9Huynh/technically-functional/issues/408}{\#408} & ACs, UCs, and Design Decisions lacking information. & ACs, UCs, and Design Decisions updated with more rationale and impact on the overall design. & 8648a1c \\
 
 \bottomrule
-\caption{Feedback and changes for MIS}
+\caption{Feedback and changes for MG}
 \label{tab:mg_feedback}
 \end{xltabular}
+}
 
 \subsubsection{MIS}
 While the feedback received from the TA about the content was positive, there were a lot of formatting errors 
@@ -152,8 +152,8 @@ Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/
 \caption{Feedback and changes for MIS}
 \label{tab:mis}
 \end{xltabular}
-
 }
+
 \subsection{VnV Plan and Report}
  
 In terms of the Verification and Validation (V\&V) Plan, the feedback was applied based on both the peer review and TA feedback. The main changes that have addressed include adding clear pass/fail criteria for test cases (\href{https://github.com/M9Huynh/technically-functional/issues/167}{\#167}), replacing vague script-based testing descriptions with detailed explanations of implemented unit tests (\href{https://github.com/M9Huynh/technically-functional/issues/168}{\#168}, \href{https://github.com/M9Huynh/technically-functional/issues/428}{\#428}, \href{https://github.com/M9Huynh/technically-functional/issues/429}{\#429}), and improving traceability between requirements and test cases (\href{https://github.com/M9Huynh/technically-functional/issues/172}{\#172}).
