@@ -5,6 +5,7 @@
 \usepackage{booktabs}
 \usepackage{float}
 \usepackage{longtable}
+\usepackage{xltabular}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -104,6 +105,89 @@ TA & \href{https://github.com/M9Huynh/technically-functional/issues/408}{\#408} 
 \end{longtable}
 
 \subsection{VnV Plan and Report}
+ 
+In terms of the Verification and Validation (V\&V) Plan, the feedback was applied based on both the peer review and TA feedback. The main changes that have addressed include adding clear pass/fail criteria for test cases (\href{https://github.com/M9Huynh/technically-functional/issues/167}{\#167}), replacing vague script-based testing descriptions with detailed explanations of implemented unit tests (\href{https://github.com/M9Huynh/technically-functional/issues/168}{\#168}, \href{https://github.com/M9Huynh/technically-functional/issues/428}{\#428}, \href{https://github.com/M9Huynh/technically-functional/issues/429}{\#429}), and improving traceability between requirements and test cases (\href{https://github.com/M9Huynh/technically-functional/issues/172}{\#172}).
+ 
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/167}{\#167} & Add a clear pass/fail criteria & Added clear pass/fail criteria & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/168}{\#168} & Script-based testing lacks detail on how tests are performed & Removed script-based testing and replaced with detailed descriptions of implemented unit test cases, documented individually in the V\&V Report & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/169}{\#169} & Fix revision date history & Updated revision date history & cf936e1 \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/170}{\#170} & Symbols, abbreviations, and acronyms table lacks detail & Expanded and improved table detail & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/171}{\#171} & The document references external LaTeX input files on lines 18-19 that may not exist or be properly linked in the repository structure & No change made & None \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/172}{\#172} & Lack of traceability between requirements and unit tests & Revised to include the correct traceability mapping between both & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/173}{\#173} & Unclear distinction between system testing and functional testing sections & Updated the respective sections and added introductions to specify what will be covered in each section & 8912684 \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/174}{\#174} & Explanations for relevance of documentation are vague & Increased level of detail in explanations & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/175}{\#175} & Lack of detail in the Verification and Validation Plan section & Expanded and clarified section content & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/414}{\#414} & Table formatting could be improved & Cleaned and improved table formatting & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/427}{\#427} & Missing detail in automated testing and implementation verification & Added more specific detail to these sections & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/428}{\#428} & Script-based testing descriptions lack clarity on execution & Replaced script-based testing with detailed descriptions of all of the implemented unit test cases. Each of these test cases are documented individually in the V\&V Report & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/429}{\#429} & Ambiguity in scripting for functional testing & Replaced script-based testing with detailed descriptions of all of the implemented unit test cases. Each of these test cases are documented individually in the V\&V Report & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/430}{\#430} & Missing detail in code walkthroughs and static testing & Added additional detail to these sections & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/431}{\#431} & Missing reference in-text citation in the Objectives section & Added the missing reference & c8aa78e \\
+ 
+ 
+\bottomrule
+\caption{Feedback and changes for Verification and Validation Plan}
+\label{tab:vnv_feedback}
+\end{xltabular}
+}
+ 
+ 
+In terms of the Verification and Validation (V\&V) Report, the feedback was applied based on the TA feedback in several sections. There were no peer review issues found for this document, so we based it solely on the TA feedback provided through Avenue. Some of the changes that we applied included improving the level of detail when comparing the expected vs. actual result of the outputs (\href{https://github.com/M9Huynh/technically-functional/issues/432}{\#432}), fixing the table formatting for section 7 (\href{https://github.com/M9Huynh/technically-functional/issues/433}{\#433}), and ensuring the  traceability between the V\&V Plan and V\&V Report aligned and matched up with one another (\href{https://github.com/M9Huynh/technically-functional/issues/434}{\#434}).
+ 
+ 
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/432}{\#432} & The document would benefit greatly from having additional comparisons between expected output and actual output to put the results in a more meaningful context & The actual result column has been updated to have a more meaningful comparison to the expected output result and provide more detailed context of the actual result & 4353716 \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/433}{\#433} & The tables in section 7 all need to be fixed; the indentation, justification and alignment when compared to the rest of the document makes it seem unprofessional and should be fixed & Fixed formatting of the tables & 4353716 \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/434}{\#434} & Traceability between the V\&V Plan and V\&V Report is inconsistent & Improved traceability between the two documents to ensure alignment and consistency across test cases & e5f3a37 \\
+ 
+\bottomrule
+\caption{Feedback and changes for Verification and Validation Report}
+\label{tab:vnvreport_feedback}
+\end{xltabular}
+}
 
 \section{Extras}
 
