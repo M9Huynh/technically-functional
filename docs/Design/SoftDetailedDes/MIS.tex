@@ -1974,169 +1974,204 @@ j.side \in s \cap j.mirrored \in \{true, false\} \cap cameraReady = true \cap po
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Analyze}
 
-\begin{comment}
+\subsubsection{Uses}
+%Relevant files: analyze.py, server.py (backend)
+\noindent \textbf{\underline{\textit{analyze.py - Variables}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{min\_angle}] 
+    Stores the minimum knee angle observed during calibration of range of motion.
 
-%\subsubsection{Uses}
+\item[\texttt{max\_angle}] 
+    Stores the maximum knee angle observed during calibration of range of motion.
 
-%\subsubsection{Syntax}
+\item[\texttt{rep\_count}] 
+    Tracks the number of completed repetitions.
 
-%\textbf{Exported Constants}
+\item[\texttt{rep\_state}] 
+    Current phase of repetition ("Extension", "Flexion").
 
-%\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
+\item[\texttt{cue\_state}] 
+    Current feedback cue state ("CALIBRATING", "GOOD\_EXTENSION", \\"GOOD\_FLEXION", "GETTING\_READY", "OUT\_OF\_FRAME").
+
+\item[\texttt{smoothed\_angle}] 
+    Exponentially smoothed angle value to reduce jitter.
+
+\item[\texttt{cycle\_min\_angle}] 
+    Minimum angle recorded within the current repetition cycle.
+
+\item[\texttt{cycle\_max\_angle}] 
+    Maximum angle recorded within the current repetition cycle.
+
+\item[\texttt{last\_rep\_time}] 
+    Timestamp of the last completed repetition.
+\end{description}
+
+\noindent \textbf{\underline{\textit{analyze.py - Types}}}\\
+None\\
+
+\noindent \textbf{\underline{\textit{analyze.py - Functions}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{\_smooth\_angle(angle)}] 
+    Applies smoothing to angle measurements/calculates acceptable angle values.
+
+\item[\texttt{\_calibrate\_with\_angle(angle)}] 
+    Updates min/max angle values during calibration window.
+
+\item[\texttt{\_rep\_update(angle)}] 
+    Core repetition detection logic using zone-based thresholds.
+
+\item[\texttt{start\_calibration(duration\_s)}] 
+    Begins calibration phase for specified duration in seconds.
+
+\item[\texttt{update(angle)}] 
+    Main entry point for processing each new angle measurement.
+
+\item[\texttt{calc\_rom()}] 
+    Returns range of motion as max\_angle minus min\_angle.
+
+\item[\texttt{summary()}] 
+    Returns dictionary containing all current analysis metrics.
+\end{description}
+
+\noindent \textbf{\underline{\textit{server.py - Variables}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{pose\_app}] 
+    Global singleton managing analyzer state and camera.
+
+\item[\texttt{analyzer}] 
+    Instance of Analyzer class accessed via pose\_app.analyzer.
+
+\item[\texttt{lock}] 
+    Ensures thread-safe access to analyzer during concurrent requests.
+\end{description}
+
+\noindent \textbf{\underline{\textit{server.py - Types}}}\\
+None\\
+
+\noindent \textbf{\underline{\textit{server.py - Functions}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{Flask}] 
+    Creates the Flask web application instance and defines API routes.
+
+\item[\texttt{jsonify}] 
+    Converts Python dictionaries to JSON HTTP responses.
+
+\item[\texttt{request}] 
+    Accesses incoming request data including JSON body.
+
+\item[\texttt{b64\_to\_bgr\_image(b64\_str)}] 
+    Decodes base64 string to OpenCV BGR image format.
+
+\item[\texttt{process\_frame()}] 
+    Receives frame, calculates knee angle, updates analyzer, returns metrics.
+
+\item[\texttt{check\_side\_visibility(landmarks, side)}] 
+    Determines if specified knee and adjacent joints are visible in frame.
+
+\item[\texttt{Thread}] 
+    Enables concurrent request handling via Flask's threaded=True.
+\end{description}
+
+\subsubsection{Syntax}
+
+\textbf{Exported Constants} \\
+\noindent \textbf{\underline{\textit{analyze.py, server.py}}}\\
+None\\
+
+\noindent \textbf{Exported Access Programs}\\
+\noindent \underline{\textit{\textbf{analyze.py}}}\\
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
 \hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
 \hline
+\endfirsthead
 
-% latest_metrics - gets metrics from metrics module
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} gets metrics from metrics module} \\
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% start_calibration
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{start\_calibration(duration\_s):} Begins calibration phase to record min and max knee angles.} \\
 \hline
 \rowcolor{white}
-latest\_metrics & \makecell[lt]{\textit{rt\_metrics}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{InsufficientDataError} \\
+\texttt{duration\_s: float} &
+\texttt{None} &
+\texttt{None} \\
 \hline
 
-% send_analysis_to_feedback - sends overall analysis to feedback
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} sends overall analysis to Feedback module} \\
+% update
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{update(angle):} Main entry point for processing each new angle measurement. Updates smoothed angle, calibration state, and rep detection.} \\
 \hline
 \rowcolor{white}
-send\_analysis\_to\newline\_feedback & \makecell[lt]{\textit{recent\_analysis}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{AnalysisNotFoundError} \\
+\texttt{angle: float} &
+\texttt{None} &
+\texttt{None} \\
 \hline
 
-% analysis_rt - real time analysis
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} performs real time analysis} \\
+% calc_rom
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{calc\_rom():} Calculates and returns the current range of motion.} \\
 \hline
 \rowcolor{white}
-analysis\_rt & \makecell[lt]{\textit{processed\_frames}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{User\_not\_found\\Download\_error} \\
+\texttt{None} &
+\texttt{float} - Range of motion in degrees &
+\texttt{None} \\
 \hline
 
-% analysis_overall - overall analysis (given at end of recording)
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} overall analysis (given at end of recording)} \\
+% summary
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{summary():} Returns a dictionary containing all current analysis metrics.} \\
 \hline
 \rowcolor{white}
-analysis\_overall & \makecell[lt]{\textit{video}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{ConnectionError\\InsufficientDataError} \\
+\texttt{None} &
+\texttt{dict} - Contains min\_degree, max\_degree, rom\_degree, calibrating, cal\_time\_left, rep\_count, current\_rep\_duration, avg\_rep\_duration, rep\_state, cue\_state &
+\texttt{None} \\
 \hline
-
-% adjust_metrics - module will tell how to fix form (eg. if angle is too small)
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} module will correct form (eg. if angle is too small)} \\
-\hline
-\rowcolor{white}
-adjust\_metrics & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{rt\_metrics} & \makecell[lt]{UndetectedFormError} \\
-\hline
-
-% send_analysis_to_db - send overall analysis for storage into
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} send overall analysis to Database module} \\
-\hline
-\rowcolor{white}
-send\_analysis\_to\_db & \makecell[lt]{\textit{overall\_analysis}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\end{tabular}
 \caption{Access Routines for Analysis Module}
-\label{table:access_routines}
-\end{table}
+\label{table:access_routines_analysis}
+\end{longtable}
+\noindent \underline{\textit{\textbf{server.py}}}\\
+None 
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-TBD
-
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-TBD
-
-\subsubsection{Environment variables} 
-\textit{NA}
-
-\subsubsection{Assumptions}
-
-\subsubsection{Access Routine Semantics}
-
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
+\textit{S}: set containing "Extension" and "Flexion"\\
+\texttt{ex\_state}: Exercise state\\
+\textit{C}: {"CALIBRATING", "GOOD\_EXTENSION", "GOOD\_FLEXION", "GETTING\_READY", "OUT\_OF\_FRAME"} \\
+\texttt{started}: (True, False) indicating whether exercise has started.\\
+\texttt{angle}: angle measurement of landmark vectors \\
+\texttt{min\_angle}: min\_angle\\
+\texttt{max\_angle}: max\_angle\\
+\texttt{is\_calibrating}: (True, False) indicating whether calibration is taking place.\\
+\texttt{cue}: exercise feedback string \\
 
 
-\subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
+\noindent \textbf{State Invariants} \\
+$\forall$ $angle \in \{angles\}, angle \in 0 \leq angle \leq 180$ \\
+$ (\texttt{started} = True \implies \texttt{is\_calibrating} = False \cup (\texttt{ex\_state} \in S$ $|$ $ex\_state = 
+"Flexion" \cup "Extension")) 
+\cup (\texttt{started} = False \implies (is\_calibrating = True))$\\
+$\forall \texttt{ex\_state} \in S, \texttt{cue} \in C, ex\_state = "Extension" \implies \texttt{cue} = "GOOD EXTENSION"
+\cup ex\_state = "Flexion" \implies \texttt{cue} = "GOOD FLEXION"$\\
 
-% get_initial_landmarks
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets initial landmarks from the starting position} \\
-\hline
-\rowcolor{white}
-get\_initial\_landmarks & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\end{tabular}
-\caption{Access Routines for Analysis Module}
-\label{table:access_routines}
-\end{table}
-\end{comment}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Feedback}
 \begin{comment}
-This module is responsible for delivering the feedback (e.g. to adjust form) to the Main module.
-
-\subsubsection{Uses}
-
-\subsubsection{Syntax}
-
-\textbf{Exported Constants}
-
-\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-% ex_feedback_to_main - feedback to user given after analysis
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} feedback to user given after analysis} \\
-\hline
-\rowcolor{white}
-ex\_feedback\_to\_main & \makecell[lt]{\textit{feedback}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{FeedbackEmptyError} \\
-\hline
-
-% given_feedback - instructions given by analysis to construct feedback that will be forwarded to Main
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} instructions given by analysis to construct feedback that will be forwarded to the Main module} \\
-\hline
-\rowcolor{white}
-given\_instruct & \makecell[lt]{\textit{feedback\_instructions}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{InsEmptyError} \\
-\hline
-
-\end{tabular}
-\caption{Access Routines for Analysis Module}
-\label{table:access_routines}
-\end{table}
 
 \subsubsection{Semantics}
 
