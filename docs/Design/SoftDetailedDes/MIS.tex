@@ -207,39 +207,8 @@ comprehensive, multi-functional nature.
   \item Valid licenses (\texttt{validLicenses}): This is used for verification and validation purposes for a physiotherapist
   account creation.
 \end{enumerate}  
+
 \subsubsection{Uses}
-All the variables used in each class related to account creation are described below.\\
-\textbf{\textit{/technically-functional/mobile/app/(auth)/\underline{create-physio.tsx}, \\
-/technically-functional/mobile/app/(auth)/\underline{create-patient.tsx}}}\\
-\textit{Variables used in both of the above files are listed below.}
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const [name, setName] = useState("");}] 
-    Manages the full name input field; initializes as empty string.
-
-\item[\texttt{const [email, setEmail] = useState("");}] 
-    Manages the email address input field; initializes as empty string.
-
-\item[\texttt{const [password, setPassword] = useState("");}] 
-    Manages the password input field; initializes as empty string.
-
-\item[\texttt{const [loading, setLoading] = useState(false);}] 
-    Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
-
-\item[\texttt{const [birthday, setBirthday] = useState("");}] 
-    Manages the birthday input field; initializes as empty string; valid format is YYYY-MM-DD.
-
-  \end{description}
-\textbf{Unique variable in \textit{\underline{create-patient.tsx}}:}
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const [inviteCode, setInviteCode] = useState("");}] 
-    Manages the invitation code input field; initializes as empty string; valid format is 6 capital alphanumeric characters.
-\end{description}
-\textbf{Unique variable in \textit{\underline{create-physio.tsx}}:}
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const [licenseNumber, setLicenseNumber] = useState("");}] 
-    Manages the physiotherapist license number input field; initializes as empty string; Required for physiotherapist verification;
-    valid format is XX-123456.
-\end{description}
 
 \noindent \textbf{\textit{/technically-functional/mobile/lib/\underline{authService.ts}}} \\
 
@@ -279,34 +248,29 @@ All the variables used in each class related to account creation are described b
     Firestore function from "firebase/firestore". Used to set createdAt timestamps on new user documents.
 \end{description}
 
-%Account creation generates one object of the type described in \ref{section:user account}
 \subsubsection{Syntax}
+
 \textbf{Exported Constants}\\
-\textbf{\textit{\underline{authService.ts}}} \label{sec:validexp}
+\noindent \textbf{\textit{\underline{authService.ts}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 
 \item[\texttt{export const registerPatient}] 
-    Async function constant that registers a new patient account. 
+    Async function constant that registers a new patient account. Validates invite code, checks email uniqueness, creates Firebase Auth user, and stores patient data in Firestore.
 
 \item[\texttt{export const registerPhysio}] 
-    Async function constant that registers a new physiotherapist account. 
+    Async function constant that registers a new physiotherapist account. Validates license number format and existence, checks email uniqueness, creates Firebase Auth user, and stores physio data in Firestore.
 
 \item[\texttt{export const checkEmailExists}] 
-    Async function constant that checks if an email address is already registered in the system.
-    
+    Async function constant that checks if an email address is already registered in the system by querying the Firestore users collection.
+
 \item[\texttt{export const licenseFormatValid}] 
-    Async function that validates the format of a physiotherapist license number.
+    Async function that validates the format of a physiotherapist license number against the pattern XX-123456.
+
 \end{description}
 
-\noindent \textbf{\textit{\underline{create-patient.tsx}, \underline{create-physio.tsx}}}\\
-See \ref{sec:ui} for UI export variables.\\
 
 \noindent \textbf{Exported Access Programs} 
 
-\noindent \underline{\textbf{\textit{create-patient.tsx}}} \\
-See \ref{sec:ui} for UI export programs\\
-\noindent \underline{\textbf{\textit{create-physio.tsx}}} \\
-See \ref{sec:ui} for UI export programs\\
 \noindent \underline{\textbf{\textit{authService.ts}}} \\
 
 \begin{longtable}{
@@ -465,92 +429,8 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \textbf{Post-condition:}
   $p \in \texttt{db}$\\
 
-\newpage
-\subsubsection{Local Functions} 
-\noindent \underline{\textbf{\textit{create-patient.tsx}}}
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
+\subsubsection{Local Functions}
 
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
-
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Physiotherapist registration screen component.} \\
-\hline
-\rowcolor{white}
-\texttt{props: none} &
-\texttt{JSX.Element} - Renders patient registration form with validation &
-\begin{tabular}{@{}l@{}}
-\texttt{Validations} \\ \texttt{performed:}\\
-• Password: min 6 \\ chars + at least one \\ number\\
-• Birthday:\\ YYYY-MM-DD format\\
-• Email: existence \\ check via \\ checkEmailExists()\\
-• Invite code \\ validation handled by \\ registerPatient()
-\end{tabular} \\
-\hline
-\caption{Account module: CreatePatient function}
-\end{longtable}
-\noindent \underline{\textbf{\textit{create-physio.tsx}}}
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
-
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
-\hline
-\rowcolor{white}
-\texttt{props: none} &
-\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
-\begin{tabular}{@{}l@{}}
-\texttt{Validations} \\ \texttt{performed:}\\
-• Password: min 6 \\ chars + at least one \\ number\\
-• Birthday:\\ YYYY-MM-DD format\\
-• Email: existence \\ check via \\ checkEmailExists()\\
-• License number \\ validation handled by \\ registerPhysio()
-\end{tabular} \\
-\hline
-\caption{Account module: CreatePhysio function}
-\end{longtable}
-\pagebreak
-\noindent \underline{\textbf{\textit{Both files}}}
 \begin{longtable}{
 |>{\columncolor{softgray}}p{4.2cm}|
 >{\columncolor{white}}p{4.2cm}|
@@ -582,8 +462,8 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \texttt{params: \{password: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Password \\ must be at  least \\ 6 characters long" \\ if length $<$ 6\\
-• Returns "Password \\ must contain at \\ least one number" if \\ no numbers present\\
+• Returns "Password\\ must be at least \\6 characters long"\\ if length $<$ 6\\
+• Returns "Password\\ must contain at least\\ one number" if no\\ numbers present\\
 • Returns null if valid
 \end{tabular} \\
 \hline
@@ -594,13 +474,13 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \texttt{params: \{birthday: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Please enter \\ birthday in YYYY-MM\\-DD format" if format \\entered is invalid\\
+• Returns "Please enter \\birthday in YYYY\\-MM-DD format" if \\format entered is \\invalid\\
 • Returns null if valid
 \end{tabular} \\
 \hline
-\caption{Account module: CreatePatient and CreatePhysio common functions} \label{pwandbdayvalid}
-\end{longtable}
 
+\caption{Account module: Local validation functions}
+\end{longtable}
 \noindent \textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
 CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
 making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
@@ -617,6 +497,8 @@ making a new patient account. CreatePhysio and registerPhysio have the same dist
 \texttt{bday}: user.birthday\\
 \textit{Pc(pw)}: 'passwordCheck(pw)'\\
 \textit{Vb(bday)}: 'validateBirthday(bday)' \\
+\texttt{null}: null value\\
+
 
 \noindent \underline{Function definitions}: \\
 $Pc(pw) \implies pw.length \geq 6 \cap \exists$ $d$ $|$ $d \in \{0 - 9\} \cap d \in pw$ \\
@@ -625,8 +507,14 @@ $Vb(bday) \implies bday \in Date $ \\
 \textit{Note: See \ref{sec:ui} for CreatePhysio and CreatePatient interface specifications.}
 
 \subsubsection{Access Routine Semantics - Local}
-%TODO
-
+\underline{\textit{Vb(bday)}}:\\
+\textbf{Pre-condition}: \texttt{bday} $\notin \emptyset$\\
+\textbf{Function}: Vb(bday)\\
+\textbf{Post-condition}: returns \texttt{null} if valid \\
+\underline{\textit{Pc(pw)}}:\\
+\textbf{Pre-condition}: pw $\notin \emptyset$\\
+\textbf{Function}: Pc(pw)\\
+\textbf{Post-condition}: returns \texttt{null} if valid \\ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Valid user}
 This module's purpose is to check whether a potential user is authorized to create an account.
@@ -757,7 +645,7 @@ Only after all validations pass does the function proceed to:
 \end{enumerate}
 
 \subsubsection{Access Routine Semantics - Local}
-%See \href
+NA \href{sec:acARS}{Account creation access routine semantics}
 
 
 
@@ -818,10 +706,176 @@ Account creation generates a single instance of one of the following objects:\\
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}\\
-Not Applicable\\
+None\\
 
 \noindent \textbf{Exported Access Programs}\\
-Not Applicable. This module consists of an interface.
+\noindent \underline{\textbf{\textit{useraccount.ts}}}
+
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% validateCredentials
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{validateCredentials(email, password):} Authenticates user with Firebase Auth.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string, password: string} &
+\texttt{Promise<boolean>} &
+\texttt{None - returns false on failure} \\
+\hline
+
+% getUserData
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getUserData(uid):} Retrieves user data from Firestore by UID.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} &
+\texttt{Promise<UserData | null>} &
+\texttt{UserAccountField} \texttt{EmptyError} \\
+\hline
+
+% getUserByEmail
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getUserByEmail(email):} Retrieves user data from Firestore by email.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string} &
+\texttt{Promise<UserData | null>} &
+\texttt{None} \\
+\hline
+
+% emailExists
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{emailExists(email):} Checks if an email is already registered.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string} &
+\texttt{Promise<boolean>} &
+\texttt{None} \\
+\hline
+
+% updateUser
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{updateUser(uid, updates):} Updates user data in Firestore.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string, updates: Partial<UserData>} &
+\texttt{Promise<boolean>} &
+\texttt{UserAccountNot} \texttt{FoundError} \\
+\hline
+
+% deleteUser
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{deleteUser(uid):} Soft-deletes a user by setting deleted flag to true.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} &
+\texttt{Promise<boolean>} &
+\texttt{None} \\
+\hline
+
+% deleteUserByEmail
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{deleteUserByEmail(email):} Soft-deletes a user by email address.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string} &
+\texttt{Promise<boolean>} &
+\texttt{UserAccountNot} \texttt{FoundError} \\
+\hline
+
+% getPatientsByPhysio
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getPatientsByPhysio(physioId):} Retrieves all active patients assigned to a physiotherapist.} \\
+\hline
+\rowcolor{white}
+\texttt{physioId: string} &
+\texttt{Promise<UserData[]>} &
+\texttt{None} \\
+\hline
+
+% getUsersByName
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getUsersByName(name):} Searches users by partial name match.} \\
+\hline
+\rowcolor{white}
+\texttt{name: string} &
+\texttt{Promise<UserData[]>} &
+\texttt{None} \\
+\hline
+
+% getAllUsers
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getAllUsers():} Retrieves all users from Firestore.} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{Promise<UserData[]>} &
+\texttt{None} \\
+\hline
+
+% getUserdbInfo
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getUserdbInfo(name, birthday?):} Retrieves users by name and optional birthday, separated by role.} \\
+\hline
+\rowcolor{white}
+\texttt{name: string, birthday?: string} &
+\texttt{Promise<\{patients: UserData[], physios: UserData[]\}>} &
+\texttt{UserAccountNot} \texttt{FoundError} \\
+\hline
+
+% PTaccountDelete
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{PTaccountDelete(physioEmail, patientName, patientEmail):} Allows physiotherapist to soft-delete a linked patient account.} \\
+\hline
+\rowcolor{white}
+\texttt{physioEmail: string, patientName: string, patientEmail: string} &
+\texttt{Promise<void>} &
+\begin{tabular}{@{}l@{}}
+\texttt{UserAccountField}\\ \texttt{EmptyError} \\
+\texttt{UserAccountNot} \\ \texttt{FoundError} \\
+\end{tabular} \\
+\hline
+
+% usernamePwMatch
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{usernamePwMatch(email, password):} Verifies email and password combination.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string, password: string} &
+\texttt{Promise<boolean>} &
+\texttt{UserAccountLogin} \texttt{MatchError} \\
+\hline
+
+% authenticateUser
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{authenticateUser(email, password):} Authenticates user and returns user data if successful.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string, password: string} &
+\texttt{Promise<UserData | null>} &
+\texttt{None} \\
+\hline
+
+% initializeSystem
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{initializeSystem():} Initializes the system (placeholder for future setup).} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{Promise<void>} &
+\texttt{None} \\
+\hline
+
+\caption{UserAccount module: Exported access programs}
+\end{longtable}
 
 \subsubsection{Semantics}
 \noindent \textbf{State Variables} \\
@@ -841,8 +895,13 @@ Not Applicable. This module consists of an interface.
 \texttt{users}: 'users' database table\\
 \texttt{u1}: user 1\\
 \texttt{u2}: user 2\\
+\texttt{uid}: uid\\
+\texttt{email}: email\\
 \texttt{Phy}: set of all users that have role = 'physio' \\
 \texttt{Pt}: set of all users that have role = 'patient' \\
+\textit{U}: set of all UserData objects\\
+\textit{E}: set of valid emails
+\texttt{updates}: part of UserData object 
 
 
 \noindent $\forall$ $u1, u2 \in users, u1 \neq u2 \implies u1.email \neq u2.email$ \\
@@ -866,7 +925,37 @@ Not applicable
 \end{itemize}
 
 \subsubsection{Access Routine Semantics - Exported}
-Not applicable
+\textit{Note: Auth functions access routine semantics are not outlined here.}\\
+\underline{\textit{getUserData(uid)}}\\
+\textbf{Pre-condition}: \texttt{uid} $\notin \emptyset$\\
+\textbf{Function}: getUserData(uid)\\
+\textbf{Post-condition}: returns UserData object | \texttt{uid} = user.uid\\
+
+\noindent \underline{\textit{getUserByEmail(email)}}\\
+\textbf{Pre-condition}: \texttt{email} $\notin \emptyset$\\
+\textbf{Function}: getUserByEmail(email)\\
+\textbf{Post-condition}: returns UserData object | \texttt{email} = user.email\\
+
+\noindent\underline{\textit{emailExists(email)}}\\
+\textbf{Pre-condition}: email is a valid email\\
+\textbf{Function}: emailExists(email)\\
+\textbf{Post-condition}: $True \implies email \in E$\\
+
+\noindent\underline{\textit{updateUser(uid, updates)}}\\
+\textbf{Pre-condition}: $user \in users | \exists user.uid = \texttt{uid}$\\
+\textbf{Function}: emailExists(email)\\
+\textbf{Post-condition}: $True \implies email \in E$\\
+
+\noindent\underline{\textit{deleteUser(uid)}}\\
+\textbf{Pre-condition}: $user \in users$ \\
+\textbf{Function}: deleteUser(uid)\\
+\textbf{Post-condition}: $users' = users - (user[uid])$\\
+
+\noindent\underline{\textit{deleteUserByEmail(email)}}\\
+\textbf{Pre-condition}: $user \in users$ \\
+\textbf{Function}: deleteUserByEmail(email)\\
+\textbf{Post-condition}: $users' = users - (user[uid])$\\
+
 
 \subsubsection{Local Functions}
 Not applicable. All helper functions are defined as private class functions. 
@@ -1483,118 +1572,7 @@ save\_overall\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Profile Activity}
 
-This module displays past exercises, allows viewing of user profile, and directs to the Performance Statistics Generator module. PTs are able to comment on their patient's submissions.
-
-%\subsubsection{Uses}
-\begin{comment}
-\subsubsection{Syntax}
-\textbf{Exported Constants}\\
-\textit{NA} \\
-
-\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays user profile information} \\
-\hline
-\rowcolor{white}
-view\_profile & \makecell[lt]{\textit{Name}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays analysis report for user} \\
-\hline
-\rowcolor{white}
-display\_report & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays summary information} \\
-\hline
-\rowcolor{white}
-display\_summary & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_password} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Shows patient's past exercises} \\
-\hline
-\rowcolor{white}
-p\_past\_exercises & \makecell[lt]{\textit{Email}} & NA & \makecell[lt]{no\_activity} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Provides physical therapist feedback on patient} \\
-\hline
-\rowcolor{white}
-PT\_feedback\_on\_P & \makecell[lt]{\textit{PTcomment}} & \makecell[lt]{NA} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\end{tabularx}
-\caption{Home Exported Access Routines}
-\label{tab:home_routines}
-\end{table}
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-NA \\
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-\textit{NA}
-\subsubsection{Environment Variables}
-\textit{NA} 
-
-\subsubsection{Assumptions}
-%TODO 
-TBD
-\subsubsection{Access Routine Semantics}
-%TODO
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
-TBD
-
-
-\subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets profile from generator} \\
-\hline
-\rowcolor{white}
-get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{Cannot\_access\_db} \\
-\hline
-
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
-\end{table}
-\end{comment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Analysis Control Flow}
 This module is responsible for transmitting frames for analysis and the reverse. 
@@ -1851,11 +1829,11 @@ NA \\
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-\textit{f}: set of video frames\\\
-\textit{c}: calibrating \\
+\textit{F}: set of video frames\\\
+\textit{C}: calibrating \\
 \textit{cal\_time\_left}: time left for calibration\\
-\textit{p}: frame responses set \\
-\textit{l}: set of landmark arrays\\
+\textit{P}: frame responses set \\
+\textit{L}: set of landmark arrays\\
 \textit{url}: set of backend urls \\
 \textit{$T_{process}$}: processFrame timeout value = 15000 ms\\
 \textit{$T_{pre_check}$}: precheckFrame timeout value = 10000 ms\\
@@ -1864,11 +1842,11 @@ NA \\
 
 \noindent \textbf{State Invariant} \\
 \noindent
-$\forall$ $b \in \text{Base64}: \text{b64\_to\_bgr\_image}(b) \in F \cup \{\emptyset\}$\\
+$\forall$ $b \in \text{Base64}: \text{b64\_to\_bgr\_image}(b) \in F$\\
 $\forall$ $\text{operations on pose\_app}: \text{lock must be acquired first}$\\
 $resetBackend() \implies analyzer = new Analyzer() \land c = true \cap cal\_time\_left = 10.0$
 $SERVER\_URL \in url$ $\cap$ $SERVER\_URL$ is immutable at runtime \\
-$\forall response \in P: \text{response.landmarks} \in L \cup \{\emptyset\} \cap response.connections \in C$\\
+$\forall response \in P: \text{response.landmarks} \in l \cup \{\emptyset\} \cap response.connections \in C$\\
 $true \implies T_{process} = 15000 \cap T_{precheck} = 10000 \cap T_{reset} = 15000$ \\
 $processFrame endpoint = SERVER\_URL + /process\_frame$\\
 $precheckFrame endpoint = SERVER\_URL + /precheck\_frame$\\
@@ -2158,6 +2136,8 @@ None
 \texttt{max\_angle}: max\_angle\\
 \texttt{is\_calibrating}: (True, False) indicating whether calibration is taking place.\\
 \texttt{cue}: exercise feedback string \\
+\textit{A}: set of Analyzer instances \\
+
 
 
 \noindent \textbf{State Invariants} \\
@@ -2167,7 +2147,15 @@ $ (\texttt{started} = True \implies \texttt{is\_calibrating} = False \cup (\text
 \cup (\texttt{started} = False \implies (is\_calibrating = True))$\\
 $\forall \texttt{ex\_state} \in S, \texttt{cue} \in C, ex\_state = "Extension" \implies \texttt{cue} = "GOOD EXTENSION"
 \cup ex\_state = "Flexion" \implies \texttt{cue} = "GOOD FLEXION"$\\
+$\forall a \in A, |a| = 1$\\
 
+\textbf{Environment Variables}\\
+NA\\
+
+\textbf{Assumptions}
+\begin{itemize}
+    \item Basic process threading rules apply when using an Analyzer instance. Only one process can function properly.
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Feedback}
