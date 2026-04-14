@@ -5,6 +5,7 @@
 \usepackage{booktabs}
 \usepackage{float}
 \usepackage{longtable}
+\usepackage{xltabular}
 \usepackage{hyperref}
 \usepackage{xltabular}
 \hypersetup{
@@ -28,6 +29,9 @@
 
 \newpage
 \tableofcontents
+
+\newpage
+
 \listoftables
  
 \listoffigures %if appropriate
@@ -52,16 +56,11 @@
 
 \newpage
 
-\plt{Reflection is an important component of getting the full benefits from a
-learning experience.  Besides the intrinsic benefits of reflection, this
-document will be used to help the TAs grade how well your team responded to
-feedback.  Therefore, traceability between Revision 0 and Revision 1 is and
-important part of the reflection exercise.  In addition, several CEAB (Canadian
-Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
-on your reflections.}
 
 \section{Changes in Response to Feedback}
 \subsection{SRS and Hazard Analysis}
+
+The SRS document received peer feedback from Group 14 that led to several targeted improvements. Quantitative thresholds were added to safety-critical requirements that previously described behavior only qualitatively, ensuring that FR~14 and FR~20 are now testable with measurable fit criteria (\href{https://github.com/M9Huynh/technically-functional/issues/156}{\#156}). Data retention and privacy requirements were clarified to reflect that only biomechanical metrics are stored server-side and never raw video recordings, with explicit retention periods and a patient data deletion right added to address PIPEDA compliance gaps in FR~24 and SR-PR~2 (\href{https://github.com/M9Huynh/technically-functional/issues/148}{\#148}). A contradiction between SR-AR~4, which enforced two-factor authentication, and the Waiting Room section, which listed 2FA as a future feature, was resolved by removing SR-AR~4 from the current requirements (\href{https://github.com/M9Huynh/technically-functional/issues/147}{\#147}). Performance and constraint requirements for the video upload process were added, including upload time limits, maximum file size, accepted formats, and maximum video duration (\href{https://github.com/M9Huynh/technically-functional/issues/146}{\#146}). Finally, assumption wording was aligned between the SRS and Hazard Analysis to ensure consistency across documents (\href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129}).
 
 The hazard analysis document was improved through the peer review along with TA feedback in several areas for enhancement, including clarifying the roadmap with implementation timelines and rationales for safety requirements (\href{https://github.com/M9Huynh/technically-functional/issues/144}{\#144}), adding justification for future work prioritization (\href{https://github.com/M9Huynh/technically-functional/issues/150}{\#150}), and removing problematic assumptions about user familiarity with smart devices (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}). Inconsistencies between the SRS and Hazard Analysis were resolved (\href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129}), while the system boundaries and components section was expanded with lower-level explanations to remove ambiguity (\href{https://github.com/M9Huynh/technically-functional/issues/135}{\#135}). The FMEA table was further decomposed to represent detailed failure modes rather than general effects (\href{https://github.com/M9Huynh/technically-functional/issues/142}{\#142}), and hazard categorization was clarified for technical hazards that could impact safety (\href{https://github.com/M9Huynh/technically-functional/issues/153}{\#153}). Additional improvements included adding rationales for each critical assumption (\href{https://github.com/M9Huynh/technically-functional/issues/136}{\#136}), addressing inconsistencies between assumptions and failure modes (\href{https://github.com/M9Huynh/technically-functional/issues/143}{\#143}), and noting where mitigation strategies would be expanded (\href{https://github.com/M9Huynh/technically-functional/issues/152}{\#152}). TA feedback further reinforced the need for roadmap rationales, which was addressed alongside similar peer feedback. One comment regarding bibliography completeness (\href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151}) was determined to be invalid as the citation and reference were already properly included.
 
@@ -69,6 +68,16 @@ The hazard analysis document was improved through the peer review along with TA 
 \begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
 \toprule
 \textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/156}{\#156} & Safety-critical requirements (FR~14, FR~20) lack quantitative thresholds, making them difficult to test or validate & Added quantitative fit criteria to FR~14 and FR~20 (e.g., feedback delivered within 1 second of deviation detection); added PR-SCR~2 with a 5-minute PT alert delivery threshold & Reference \#410 PR \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/148}{\#148} & SRS claims PIPEDA compliance but specifies no data retention periods, deletion procedures, or patient deletion rights for videos and exercise records & Clarified that only metrics are stored server-side (not raw video); updated FR~24 and SR-PR~2 with explicit retention period; added SR-PR~3 for patient data deletion right & Reference \#410 PR \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/147}{\#147} & SR-AR~4 enforces 2FA now while Waiting Room lists 2FA as a future feature, creating a contradiction & Removed SR-AR~4 from current security requirements; 2FA remains listed in the Waiting Room as a future feature & Reference \#410 PR \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/146}{\#146} & No performance requirements or constraints on video upload time, file size, format, or duration & Added PR-SL~3 (50~MB upload within 60 seconds) and FR~28 (MP4/MOV only, max 500~MB, max 10 minutes) & Reference \#410 PR \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/129}{\#129} & Environmental assumptions (lighting, space, mobility) worded inconsistently between SRS and Hazard Analysis & Aligned assumption wording in SRS Section~5.3 with HA; updated A1, A5, and added A15--A17 to match HA assumptions & Reference \#410 PR \\
 \midrule
 Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/151}{\#151} & Citation "IppolitoWallace1995" appears but bibliography incomplete & No change - comment invalid as bibliography and in-text citation were complete & None \\
 \midrule
@@ -97,6 +106,30 @@ TA & N/A & For Section 8 (Roadmap), including rationale would be helpful for whi
 \end{xltabular}
 }
 \subsection{Design and Design Documentation}
+
+In reference to changed made between Rev0 and Rev1, the MG was modified to reflect changes in the overall module design of the project. The MG modules were modified in their responsibilities and locations in the overall design (Refer to \href{https://github.com/M9Huynh/technically-functional/issues/408}{Issue \#408}). There were changes made to not only the modules themselves but the justification for anticipated changes, unlikely changes, and design decisions to further explain the effect they held on the final design of the project. It is hoped this additional level of explanation will help to clarify some of the limitations, assumptions, and constraints that were presented in several of the modules and other documents (Refer to \href{https://github.com/M9Huynh/technically-functional/pull/416}{PR \#416}). Changes to the modules required changes to the uses hierarchy and the traceability sections also found in the MG. Finally, there were modifications to the MG's timelien section to make it more focussed on modules and design documentation with specific dates rather than overall deliverables and general date ranges (Refer to \href{https://github.com/M9Huynh/technically-functional/issues/407}{Issue \#407}). Further changes are documented below in Table \ref{tab:mg_feedback}.
+
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/242}{\#242} & Hardware Hiding Module reference issues and Modules lacking detail & Hardware Hiding Module reference fixed, however module details did not seem to be lacking as per team and TA feedback; no change on this part. & 7edbcd4 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/241}{\#241} & Module names unclear & Module names updated for clarity. Home changed to Profile Activity, Main changed to Analysis Control Flow. & d2b2239 \\
+\midrule
+Peer Review (Group 14) & \href{https://github.com/M9Huynh/technically-functional/issues/244}{\#244} & Home, Main, and Database modules seem multi-purposed. Consider rewording secrets or fracturing modules into several new ones. & The Main module was renamed to the Analysis Control Flow module and handles the overall logic for recording, so was unchanged. The Profile Activity module was updated to reflect the new responsibilities, then eventually scrapped as the UI was redesigned and absorbed the responsibilities. The Database module was decomposed into the Account Creation, Valid User, User Account, User Activity, and Exercise Data modules which helped to split secrets and make modules clearer. & adefa15 \\
+\midrule
+TA & \href{https://github.com/M9Huynh/technically-functional/issues/244}{\#407} & Timeline done at deliverable level rather than module implementation level and ambiguous team member assignments. & Timeline updated to be more specifically focused on module implementation with specific target dates and team member assignments. Design documentation also included in the timeline, but other deliverables were removed. & bef9394 \\
+\midrule
+TA & \href{https://github.com/M9Huynh/technically-functional/issues/408}{\#408} & ACs, UCs, and Design Decisions lacking information. & ACs, UCs, and Design Decisions updated with more rationale and impact on the overall design. & 8648a1c \\
+
+\bottomrule
+\caption{Feedback and changes for MG}
+\label{tab:mg_feedback}
+\end{xltabular}
+}
+
 \subsubsection{MIS}
 While the feedback received from the TA about the content was positive, there were a lot of formatting errors 
 present in the original document. There were large spaces, inconsistent headings and sections marked as 'TBD' and 'TODO'.
@@ -120,7 +153,91 @@ Peer Review (Group 5) & \href{https://github.com/M9Huynh/technically-functional/
 \label{tab:mis}
 \end{xltabular}
 }
+
 \subsection{VnV Plan and Report}
+ 
+In terms of the Verification and Validation (V\&V) Plan, the feedback was applied based on both the peer review and TA feedback. The main changes that have addressed include adding clear pass/fail criteria for test cases (\href{https://github.com/M9Huynh/technically-functional/issues/167}{\#167}), replacing vague script-based testing descriptions with detailed explanations of implemented unit tests (\href{https://github.com/M9Huynh/technically-functional/issues/168}{\#168}, \href{https://github.com/M9Huynh/technically-functional/issues/428}{\#428}, \href{https://github.com/M9Huynh/technically-functional/issues/429}{\#429}), and improving traceability between requirements and test cases (\href{https://github.com/M9Huynh/technically-functional/issues/172}{\#172}).
+ 
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/167}{\#167} & Add a clear pass/fail criteria & Added clear pass/fail criteria & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/168}{\#168} & Script-based testing lacks detail on how tests are performed & Removed script-based testing and replaced with detailed descriptions of implemented unit test cases, documented individually in the V\&V Report & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/169}{\#169} & Fix revision date history & Updated revision date history & cf936e1 \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/170}{\#170} & Symbols, abbreviations, and acronyms table lacks detail & Expanded and improved table detail & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/171}{\#171} & The document references external LaTeX input files on lines 18-19 that may not exist or be properly linked in the repository structure & No change made & None \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/172}{\#172} & Lack of traceability between requirements and unit tests & Revised to include the correct traceability mapping between both & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/173}{\#173} & Unclear distinction between system testing and functional testing sections & Updated the respective sections and added introductions to specify what will be covered in each section & 8912684 \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/174}{\#174} & Explanations for relevance of documentation are vague & Increased level of detail in explanations & c8aa78e \\
+\midrule
+ 
+Peer Review & \href{https://github.com/M9Huynh/technically-functional/issues/175}{\#175} & Lack of detail in the Verification and Validation Plan section & Expanded and clarified section content & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/414}{\#414} & Table formatting could be improved & Cleaned and improved table formatting & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/427}{\#427} & Missing detail in automated testing and implementation verification & Added more specific detail to these sections & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/428}{\#428} & Script-based testing descriptions lack clarity on execution & Replaced script-based testing with detailed descriptions of all of the implemented unit test cases. Each of these test cases are documented individually in the V\&V Report & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/429}{\#429} & Ambiguity in scripting for functional testing & Replaced script-based testing with detailed descriptions of all of the implemented unit test cases. Each of these test cases are documented individually in the V\&V Report & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/430}{\#430} & Missing detail in code walkthroughs and static testing & Added additional detail to these sections & c8aa78e \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/431}{\#431} & Missing reference in-text citation in the Objectives section & Added the missing reference & c8aa78e \\
+ 
+ 
+\bottomrule
+\caption{Feedback and changes for Verification and Validation Plan}
+\label{tab:vnv_feedback}
+\end{xltabular}
+}
+ 
+ 
+In terms of the Verification and Validation (V\&V) Report, the feedback was applied based on the TA feedback in several sections. There were no peer review issues found for this document, so we based it solely on the TA feedback provided through Avenue. Some of the changes that we applied included improving the level of detail when comparing the expected vs. actual result of the outputs (\href{https://github.com/M9Huynh/technically-functional/issues/432}{\#432}), fixing the table formatting for section 7 (\href{https://github.com/M9Huynh/technically-functional/issues/433}{\#433}), and ensuring the  traceability between the V\&V Plan and V\&V Report aligned and matched up with one another (\href{https://github.com/M9Huynh/technically-functional/issues/434}{\#434}).
+ 
+ 
+{\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}}
+\toprule
+\textbf{Source} & \textbf{Issue \#} & \textbf{Issue Description} & \textbf{Changes Made} & \textbf{Commit} \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/432}{\#432} & The document would benefit greatly from having additional comparisons between expected output and actual output to put the results in a more meaningful context & The actual result column has been updated to have a more meaningful comparison to the expected output result and provide more detailed context of the actual result & 4353716 \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/433}{\#433} & The tables in section 7 all need to be fixed; the indentation, justification and alignment when compared to the rest of the document makes it seem unprofessional and should be fixed & Fixed formatting of the tables & 4353716 \\
+\midrule
+ 
+TA Feedback & \href{https://github.com/M9Huynh/technically-functional/issues/434}{\#434} & Traceability between the V\&V Plan and V\&V Report is inconsistent & Improved traceability between the two documents to ensure alignment and consistency across test cases & e5f3a37 \\
+ 
+\bottomrule
+\caption{Feedback and changes for Verification and Validation Report}
+\label{tab:vnvreport_feedback}
+\end{xltabular}
+}
 
 \section{Extras}
 
@@ -141,19 +258,57 @@ to the interface for both patients and physiotherapists. The Usability Report ca
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
-\plt{Explain how you arrived at your final design and implementation.  How did
-the design evolve from the first version to the final version?} 
+\subsection{Initial Design}
 
-\plt{Don't just say what you changed, say why you changed it.  The needs of the
-client should be part of the explanation.  For example, if you made changes in
-response to usability testing, explain what the testing found and what changes
-it led to.}
+Initially, the system was planned to be a patient-side only application that would support tracking and recording of patients exercises at home to ensure proper form for recovery. However, after several meetings with a physiotherapist advisor, it was determined that this initial design leaned into the grey-area of providing healthcare advice, something that the system nor its developers are entitled to do. It also seemed that the advisor would be interested in seeing the patients results from recordings.
+
+\subsection{Rev-1}
+
+The application was changed to support two-sided interactions from both patients and physiotherapists, however completely asynchronously. During this phase, the application was only meant to support patients recording their exercises which were prescribed by their physiotherapists. However, due to requirements to interact with the MediaPipe and OpenCV APIs, there had to be a data structure that identifies which landmarks on the patient’s body are to be tracked. So, the system limited scope to focus on the knee and locked three landmarks for those measurements: the hip, knee, and ankle. With these three landmarks, the angle across the knee was attainable. There was a basic data structure created for knee-related exercises which stores the exercise instructions so they may be modified later, but this wasn’t implemented until Rev1.
+
+At this point the application is two-sided for both patients and physiotherapists, it supports recording and data gathering on knee-related exercises, but it didn’t feel secure enough. To add a layer of validity for both physiotherapists and patients, physios are required to enter their physiotherapist identification number (something given to all physiotherapists once they pass an accredited physiotherapy program) and patients are required to enter an invite code (given to them by a physiotherapist with a valid account).
+
+Combining the front-end in React to the backend written in Python required a roundabout approach to run .JSON responses across a Flask server. This way the back-end interfacing with the MediaPipe and OpenCV can pass the results of the video-feed analysis to the front-end which handles storing activity data in the database and displaying feedback to the patient on the front-end.
+
+\subsection{Rev0}
+
+After more meetings with the advisor and a meeting with the professor and TA, there was a desire for more communication between patients and physios. This brought about the creation of the feedback page which allows both patients and physios to leave comments on specific exercises if there is a need to address anything not captured by the application. There was also a basic profile page implemented that held contact information for both the patient and physiotherapist if another in-person session had to be booked or a more synchronous form of contact was required.
+
+The progress page introduced a basic graphical overview of patient activities and repetitions done over the last week. These two fields were intended to support physio decision making when it come to exercise instruction modifications or planning another visit in-person. This page is intended to be a quick, ‘at a glance’ update of patient progress.
+
+Otherwise, Rev0 time was spent implementing all of what was defined above to prepare for the Rev0 demo.
+
+\subsection{Rev1}
+
+Once there was a semblance of a finished product, it was easier to see what was lacking for the advisor and patients. The physio advisors requested more user-entered data rather than simply the computer vision gathered data, as well as specific data entry fields for sets and reps. Once exercise modification was implemented so physios could alter exercise instructions and add any level of detail, the two extra fields for sets and reps were added in the exercise modification modal to support expectation setting for both physios and patients during exercise recording and feedback reviewing. For the additional user-entered data, a survey was implemented that appears after each activity recording and prompts the user to rate each of the following on a scale from 0 to 10: pain or discomfort, level of effort, and satisfaction with the activity. Using these fields in combination with the gathered information from the system, the physio advisors felt more confident in their abilities to properly assess if exercise instructions or sets and/or reps required changing after an activity. These fields were also added to the progress page as graphical options so the physio can see trends in the user’s entered data over the previous week.
+
+After usability testing with several users and physios, there was a clear need for some usability tweaks and an explanation of several features. Patients were clearly not aware of all the options available to them on several screens and physios found the experience jarring or disconnected. The interface was modified to have more contrast between elements, and visual indicators such as borders and persistent scrollbars were added to clearly indicate the capabilities of all elements on the UI. There was also additional helper text added to each page to describe at a basic level the purpose of those screens. Helper text was added for certain cases, such as having no assigned exercises or no historical activity data on both the main dashboard and the feedback page.
+
+Also, for the sake of user and physio convenience there was a disable option added to patient and physio accounts. Physios can disable linked patient accounts if they feel it is no longer required or if the patient has been inactive for some time. This can help the physio clean up their main dashboard and focus on users that are actively using the system for their recovery. For patients, if they feel the system isn’t supporting them as well as they had hoped, or they feel they have made adequate recovery, they can disable their own account to stop receiving feedback and recording requests from their physio. Several other UI modifications, such as logout capabilities on the profile page as well as main page and linked physio contact information display were implemented to increase quality of life for both patients and physios.
+
+To prove the scalability of the design, exercise enabling and disabling was also added to the physio side such that individual patients could have different assigned exercises with personalized instructions, sets, and reps. With simply a checkbox and a ‘modify instructions’ button placed on each exercise, the physio could completely personalize a patient’s capabilities within the system. This is the final update that was shown during Rev1 final demonstration and at the Engineering Expo on April 7th, 2026.
 
 \section{Design Decisions (LO12)}
 
-\plt{Reflect and justify your design decisions.  How did limitations,
- assumptions, and constraints influence your decisions?  Discuss each of these
- separately.}
+\subsection{Limitations}
+
+After the Rev0 demonstration, the system was locked to using one camera for pose detection rather than 2 from different angles. This limitation was placed on the system for both ease of implementation as well as user convenience. Under an assumption, every user would have a camera accessible to them on their smart device, however the need for an additional camera which would have to link to the device and be separately identified by the system would cause many changes in the backend implementation and place more responsibility and requirements on the user. Additionally, during the PoC demo, it was determined with the professor that one camera would be enough for pose detection and form correction. This made the implementation for pose detection and form correction much simpler for the team, a far more manageable workload for such a project.
+
+Once the back-end and front-end were linked with a Flask server to pass responses back and forth, the performance of the pose detection suffered drastically. Ultimately unaware of how to improve the performance and whether it was an implementation issue, a design issue, or perhaps an issue of stack selection, the system moved forward and assumed a slower rate of movement for patient recording which increased the accuracy of the pose detection even with such high latency from the Flask response passing. There was a thought that changing the front-end to a python supportive language could reduce latency, however it was discovered so late into the project and with no guarantee that it would solve latency and a definite guarantee of needing to re-implement the entire front-end of the system, this limitation of pose detection latency was accepted as an overall system performance limitation. If there was more time devoted to this project, it would be a good idea to rebuild it from the ground up using a python integrated front-end language to attempt to limit pose detection latency.
+
+\subsection{Assumptions}
+
+It was assumed that patients would only have injuries and limitations related to the knee area, and that users would perform exercises which utilized knee flexion and extension to improve range of motion and strength. This was assumed for the simplicity of implementation for recording and pose detection, and to allow movement along a single plane which would be observable by a single camera. The simplicity of implementation reduced the requirements for the exercise data structure, since the MediaPipe and OpenCV APIs were told to only focus on the hip, knee, and ankle joint locations there was no need to store the landmarks to be tracked in the exercise. This alteration to the data structure would have required a rewriting of all 5 video handling modules and a more intricate data passing of the exercise data structure between these modules to ensure all relevant information was tracked. The single plane movement allowed an ease of use for patients recording their exercises, since all they must do is bend and/or extend their knee along the plane perpendicular to the camera.
+
+User honesty was assumed for patient entered data, that is pain, effort, and satisfaction with the activities. These fields cannot be determined using computer vision as they are all internal and every user handles them differently. Even when interacting with physiotherapists in their office, these data points are still relying on the user’s honesty. Since these fields and their data would be useless to the physiotherapist if they weren’t answered honestly, and therefore irrelevant and unhelpful in the patient’s recovery, the system assumes honesty from the patient to assist in their recovery.
+
+A stable internet connection was assumed from the beginning of implementation to simplify data handling. With a stable internet connection, data can always flow between the database and the user’s device, this created no need for offline backups or delayed uploads to the database. For example, if a user finished an exercise but couldn’t connect to the internet that data should be stored and uploaded when they have internet access again. However, this created an issue as the team was unsure how to implement this and it wasn’t related to the overall idea for the application. This assumption simplified the implementation and narrowed scope to a more patient and physio focused system rather than a data management system that could handle all edge cases.
+
+\subsection{Constraints}
+
+Financial constraints placed on the project kept the system limited to using free APIs and cloud database services for implementation. Usage of MediaPipe and OpenCV’s APIs is publicly available and was enough to support the creation of the system up to the final Rev1 iteration. Google’s Firebase was used as a cloud database system, specifically the Firestore database was used to store user, exercise, and activity data. The limited size of the free Firebase meant we excluded video storage from our solution. Initially, there was intention to draw live feedback from the video-feed and further data collection from the recording after the user had submitted their video, however the size limitation of the cloud database meant the system couldn’t store all that video footage. Instead, both data and feedback are compiled during the live video-feed, and the data is simply saved to the database after recording is complete. 
+
+There was a constraint discovered early for healthcare advice. As the system developed by software engineers is not capable of offering healthcare advice or altering patient exercise programs, this drastically altered the iterations after the proof-of-concept demo. There were initial plans to gamify exercises, allowing users to unlock different exercises by doing enough of their first assigned exercises, or perhaps to switch exercises with an earned in-application currency to increase user interaction and consistency in using the system. However, this had to be abandoned and ultimately drove the application to become the two-sided system embodied in the final iteration. This way, physios can provide healthcare advice through the system and there is no responsibility of instruction or set and rep management done by the application. This constraint heavily impacted the direction that this project went it, limiting the system’s ability to autonomously make exercise decisions or alterations, however the final two-sided resulting application feels more alive with interactions between physios and patients.
 
 \section{Economic Considerations (LO23)}
 
@@ -205,13 +360,13 @@ If we acquire 100 clinics in the first year, breakeven occurs after about 11.6 m
 
 \section{Reflection on Project Management (LO24)}
 
-\plt{This question focuses on processes and tools used for project management.}
-
 \subsection{How Does Your Project Management Compare to Your Development Plan}
 
-\plt{Did you follow your Development plan, with respect to the team meeting plan, 
-team communication plan, team member roles and workflow plan.  Did you use the 
-technology you planned on using?}
+The team had largely followed our initial development plan. Although the first version did not include clear details in the early stages, when we revisited the document later, we were able to retain most of its structure. We stuck to our team meeting plan and team communication plan by maintaining open lines of communication among team members and reflecting after each deliverable on what went well and what could be improved.
+
+The workflow plan was helpful for us and had defining team roles assisted us in the division of responsibilities effectively. However, we recognized that the roles would have been even more useful if we had reflected on them after each deliverable, rather than only at the beginning.
+
+One area that we would like to improve on was our use of technology. While we had placed importance on implementing a CI/CD pipeline, due to the way we divided work, it became difficult to prioritize tools such as GitHub Actions or the GitHub Projects tab later in development.
 
 \subsection{What Went Well?}
 
@@ -247,12 +402,19 @@ in our post-undergraduate careers.
 
 \subsection{What Would you Do Differently Next Time?}
 
-\plt{What will you do differently for your next project?}
+Moving forward, we would like to first place a stronger emphasis on early prototyping and the testing of our features. There was a challenge with the pose detection which was more apparent towards the end of development. Initially we had done our testing on python only but when trying to integrate it into the backend, we had to make a lot of adjustments and changes which caused a lot of delays. If we had done more testing earlier on in development, we would have been able to identify these issues sooner and make the necessary adjustments much earlier on. 
+
+We also would like to place a stronger emphasis on the use of tools such as GitHub Projects and GitHub Actions to help with our project management and workflow. We had initially planned to use these tools but due to the way we divided work, it became difficult to prioritize them later on in development. If we had placed more importance on these tools from the beginning, we would have been able to better track our progress and automate some of our processes, which would have ultimately made our development process more efficient.
+
+Finally we would build in time for each team member's schedules and abilities. We had a lot of technical challenges that caused delays and we had to adjust our schedule accordingly. If we had built in more time for these types of challenges, we would have been able to better manage our schedule and avoid some of the stress that came with trying to meet deadlines while also dealing with unexpected issues.
 
 \section{Ethics and Equity (LO18)}
 
-\plt{Describe how your team applied the principle of equity and universal design
-to ensure equitable treatment of all stakeholders.}
+When the team initially formed, the project requested was simply “something to help those in need”. After discussing and finding common ground the team decided to create this physiotherapy companion application to help recovery and consistent healing of physiotherapy patients. Advisors and usability participants were selected and thoroughly questioned to ensure usage of the system was easy and helpful to average patients. All communications systems were tested thoroughly to ensure patients could be in contact with their physios through the system, and external contact methods were stored and presented within the profile page to ensure additional meetings and synchronous contact could occur if required.
+
+Additionally, data collection from users of the system and usability participants was kept as limited as possible to ensure privacy. Names and emails were omitted where possible to ensure privacy within our documents for usability participants. For system users, video feeds were not stored for both data limitations with the cloud database and also personal data privacy. This way there is no video or photography of users to be leaked if a data breach should occur.
+
+Finally, we thanked our physio advisors and usability test participants extensively for their help in the creation and refinement of our labour of love.
 
 \section{Reflection on Capstone}
 
@@ -318,6 +480,31 @@ effectively. Finally, the design of databases uses practices from \textbf{SFWREN
 \textbf{SFWRENG 2OP3 - Object Oriented Programming} was used to help for the design of the backend Python code. 
 Overall, the application of the courses helped us throughout the capstone project.
 
+\subsection{Cieran}
+
+\textbf{SFWRENG 2AA4, 3BB4, 3A04 – Software Development}
+\begin{itemize}
+    \item Extensive knowledge and practice with overall system and module development.
+    \item Breakdown of overall systems into modules with responsibilities and avoidance of circular dependencies.
+    \item -	General logical thinking for system design with an emphasis on scalability, extendibility, and modularity.
+\end{itemize}
+\textbf{SFWRENG 3DB3 – Databases}
+\begin{itemize}
+    \item Proper usage of databases, queries, joins, and data types.
+    \item Proper fields included in database tables, necessary key fields and foreign keys to link tables to each other.
+    \item Aim to reduce redundancy of data, avoid storing and needing to update data in multiple places.
+\end{itemize}
+\textbf{SFWRENG 3SO3 – Software Testing}
+\begin{itemize}
+    \item Unit, usability, functional requirement, and non-functional requirement testing suite development.
+    \item Overall focus on code coverage, branch navigation and coverage, and edge case assurances.
+    \item Helped with learning new test suite development and working to failsafe developed functions, classes, interfaces, and modules.
+\end{itemize}
+\textbf{SFWRENG 4HC3 – Human Computer Interfaces}
+\begin{itemize}
+    \item Development of front-end interfaces for both patient and physio sides of the application.
+    \item Emphasis on understandability and learning of system functionality using visual indicators and assistance text or other materials where required.
+\end{itemize}
 
 \subsection{Knowledge/Skills Outside of Courses}
 
@@ -352,5 +539,7 @@ too little and too much, but in the end, I managed to successfully balance our s
 navigate different work dynamics. I realize that I may have initially set out to be inflexible because
 I did not want anyone's work to be contingent on mine, but I ultimately delivered on time (mostly). Even when I
 did not, my teammates were gracious enough to offer assistance and additional time when I needed it. 
-
+\newline
+\textit{Cieran}\\
+During this project I learned how to apply several API interfaces from MediaPipe, OpenCV, and Firebase. Working with these really made my systems knowledge feel far more extensive than it had in the past, and far more confident about the range of capabilities my systems could accomplish. I had never used React for any extensive project before, so learning all the capabilities and implementing a full front-end of a system was a very interesting educational experience. Working with an actual database, in the form of Firebase, was a very interesting opportunity to use my database knowledge from 3DB3, however it also highlighted how logical the process is working with a database and how systematic thinking has shaped the way I perceive and imagine making and manipulating database tables. Learning Jest, a type script testing suite, was intuitive but also almost a fun exercise in code coverage and branch management within functions and classes. Overall I feel the knowledge I gained outside of courses to advance this project have increased my skill and confidence as a software engineer.
 \end{document}
