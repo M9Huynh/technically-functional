@@ -967,7 +967,7 @@ Not applicable
 \subsection{Module - Exercise Data}
 
 This module manages exercises that will be performed by the patient. It consists of a data layer (\textit{exerciseData.ts})
-and a UI layer (\textit{exercises.tsx, [id].tsx}). The data layer provides database operations using the \texttt{userExercises} table.
+and a UI layer (\textit{exercises.tsx}). The data layer provides database operations using the \texttt{userExercises} and \texttt{exercises} table.
 The UI layer fulfills the purpose of interfacing between the user and the module and is discussed in
 \ref{sec:ui}. This structure was chosen to enable:
 \begin{itemize}
@@ -978,7 +978,7 @@ The UI layer fulfills the purpose of interfacing between the user and the module
 
 
 \subsubsection{Uses}
-\underline{\textbf{\textit{exerciseData.ts - Functions}}}
+\noindent \underline{\textbf{\textit{exerciseData.ts - Functions}}}
 \begin{description}
 \item[\texttt{collection}] 
     Firestore function from "firebase/firestore". Used to reference a database collection for exercise operations.
@@ -1007,172 +1007,23 @@ The UI layer fulfills the purpose of interfacing between the user and the module
 \item[\texttt{updateDoc}] 
     Firestore function from "firebase/firestore". Used to update exercise fields (description, reps, sets, title) in an existing document.
 \end{description}
-\underline{\textbf{\textit{exerciseData.ts - Variables}}}
+
+\noindent \underline{\textbf{\textit{exerciseData.ts - Variables}}}
 \begin{description}
 \item[\texttt{db}] 
     Firestore database instance from "./firebase". Used as the database reference for all Firestore operations related to this file.
 \end{description}
-\underline{\textbf{\textit{exerciseData.ts - Types}}}
+
+\noindent \underline{\textbf{\textit{exerciseData.ts - Types}}}
 \begin{description}
-\item[\texttt{Exercise} (type)] 
+\item[\texttt{Exercise}] 
     Type definition defined locally within this file. Represents the exercise data structure with properties: id, title, subtitle, description, demoText, enabled, tags, sets, reps.
-\end{description}
-
-\noindent \underline{\textbf{\textit{exercises.tsx - Functions}}}
-\begin{description}
-\item[\texttt{useEffect}] 
-    React hook from "react". Used to perform side effects when user data, role, or selected user changes.
-
-\item[\texttt{useState}] 
-    React hook from "react". Used to manage local state for user data, exercises, modal visibility, and form values.
-
-\item[\texttt{getExercisesById}] 
-    Function from \textit{exerciseData.ts}. Used to fetch patient's assigned exercises for the patient view.
-
-\item[\texttt{getGeneralExercises}] 
-    Function from \textit{exerciseData.ts}. Used to fetch the master exercise library for physiotherapists.
-
-\item[\texttt{getSelectedExercises}] 
-    Function from \textit{exerciseData.ts}. Used to fetch currently assigned exercises for checkbox state and modal preloading.
-
-\item[\texttt{addUserExercise}] 
-    Function from \textit{exerciseData.ts}. Used to assign an exercise to a patient when a physiotherapist checks a checkbox.
-
-\item[\texttt{removeUserExercise}] 
-    Function from \textit{exerciseData.ts}. Used to remove an exercise assignment when a physiotherapist unchecks a checkbox.
-
-\item[\texttt{updateUserExercise}] 
-    Function from \textit{exerciseData.ts}. Used to save modified exercise instructions (description, sets, reps).
-
-\item[\texttt{getCurrentUser}] 
-    Function from "@/lib/temp". Used to fetch the currently authenticated user on component mount.
-
-\item[\texttt{getUserRole}] 
-    Function from "@/lib/roleStore". Used to determine if the current user is a patient or physiotherapist.
-
-\item[\texttt{getSelectedUserID}] 
-    Function from "@/lib/profileActivity". Used to get the patient ID selected by a physiotherapist.
-\end{description}
-
-\noindent \textbf{\underline{\textit{exercises.tsx - Variables}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{userData}] 
-    State variable storing current authenticated user. Initialized via getCurrentUser().
-
-\item[\texttt{userRole}] 
-    State variable storing user role. Initialized via getUserRole().
-
-\item[\texttt{selectedUser}] 
-    State variable storing selected patient ID for physio view. Initialized via getSelectedUserID().
-
-\item[\texttt{userExercises}] 
-    State variable storing patient's assigned exercises. Initialized via getExercisesById().
-
-\item[\texttt{selectedIds}] 
-    State variable storing titles of checked exercises. Initialized via getSelectedExercises().
-
-\item[\texttt{physioExercises}] 
-    State variable storing master exercise library. Initialized via getGeneralExercises().
-
-\item[\texttt{roleReady}] 
-    Boolean state variable indicating role has been loaded.
-
-\item[\texttt{modalVisible}] 
-    Boolean state variable controlling modal visibility.
-
-\item[\texttt{modalText}] 
-    State variable storing custom description text in modal.
-
-\item[\texttt{modalSets}] 
-    State variable storing custom sets value in modal.
-
-\item[\texttt{modalReps}] 
-    State variable storing custom reps value in modal.
-
-\item[\texttt{modalExercise}] 
-    State variable storing exercise being modified in modal.
-\end{description} 
-\noindent \underline{\textbf{\textit{exercises.tsx - Types}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{Exercise}] 
-    Type from "../../lib/exerciseData". Used to type exercise objects, exercise lists, and modal exercise state.
-
-\item[\texttt{UserData}] 
-    Type from "@/lib/useraccount". Used to type the current user data state.
-
-\item[\texttt{UserRole}] 
-    Type from "@/lib/roleStore". Used to type the user role state ("patient" | "physio").
-\end{description}
-
-\noindent \textbf{\underline{\textit{[id].tsx - UI Functions (React Native \& Navigation)}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{useLocalSearchParams}] 
-    Expo Router hook from "expo-router". Used to extract the id parameter from the navigation route.
-
-\item[\texttt{useRouter}] 
-    Expo Router hook from "expo-router". Used for navigation (goBack and navigate to record screen).
-
-\item[\texttt{useVideoPlayer}] 
-    Expo Video hook from "expo-video". Used to create and configure the video player instance for exercise demonstration videos.
-
-\item[\texttt{VideoView}] 
-    Component from "expo-video". Used to render the video player UI for exercise demonstrations.
-
-\item[\texttt{View}] 
-    React Native component from "react-native". Used as a container for layout.
-
-\item[\texttt{Text}] 
-    React Native component from "react-native". Used to display exercise title, subtitle, description, sets, reps, and UI text.
-
-\item[\texttt{StyleSheet}] 
-    React Native function from "react-native". Used to create component styles.
-
-\item[\texttt{Pressable}] 
-    React Native component from "react-native". Used to create touchable buttons (Record, Back, Go Back).
-
-\item[\texttt{ScrollView}] 
-    React Native component from "react-native". Used to enable scrolling for exercise details content.
-
-\item[\texttt{require}] 
-    React Native asset loading function. Used to load the local demonstration video file from previously stored tutorial video.
-\end{description}
-
-\noindent \textbf{\underline{\textit{[id].tsx - React Hooks \& Data(Functions)}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{useEffect}] 
-    React hook from "react". Used to fetch exercise data when the component mounts or when the id parameter changes.
-
-\item[\texttt{useState}] 
-    React hook from "react". Used to manage the currentExercise state variable.
-
-\item[\texttt{getExercise}] 
-    Function from "../../lib/exerciseData". Used to fetch a single exercise document by its ID from the Firestore database. This is a data access function, not UI-related.
-\end{description}
-
-
-\noindent \textbf{\underline{\textit{[id.tsx] - Variables}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{id}] 
-    Route parameter extracted from useLocalSearchParams. Contains the exercise ID passed from navigation. Used to fetch the specific exercise from the database.
-
-\item[\texttt{videoSource}] 
-    Local variable that conditionally loads a video asset. Returns require() path only for "Seated Knee Flexion-Extension Exercise", otherwise returns null.
-
-\item[\texttt{player}] 
-    Video player instance created by useVideoPlayer. Used to control video playback (loop, play, pause) in the VideoView component.
-\end{description}
-
-\noindent \textbf{\underline{\textit{[id.tsx] - Imported Types}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{Exercise}] 
-    Type definition imported from "../../lib/exerciseData". Represents the exercise data structure with properties: id, title, subtitle, description, demoText, enabled, tags, sets, reps. Used to type the currentExercise state.
 \end{description}
 
 \subsubsection{Syntax}
 
-\noindent \textbf{Exported Constants}
-
-No exported constants are present in any of the reviewed files (exerciseData.ts, exercises.tsx, [id].tsx.). \\
+\noindent \textbf{Exported Constants}\\
+None \\
 
 \noindent \textbf{Exported Access Programs}\\
 \textit{exerciseData.ts}
@@ -1263,56 +1114,7 @@ No exported constants are present in any of the reviewed files (exerciseData.ts,
 \texttt{Promise<void>} - Returns nothing on successful update &
 \texttt{Error} - Throws error if there is an issue updating the document in Firestore \\
 \hline
-
-\caption{Exported Access Programs - exerciseData.ts} \label{sec: exerciseDataExports}
 \end{longtable}
-\textit{exercises.tsx}
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
-
-% ExercisesTab
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{ExercisesTab():} Default exported React component that renders the exercises interface for both patients and physiotherapists.} \\
-\hline
-\rowcolor{white}
-\texttt{None} - Takes no props &
-\texttt{JSX.Element} - Returns a React component with role-based views (patient exercise list or physiotherapist exercise selection interface) &
-\texttt{None} - No exceptions thrown; returns null while role is loading \\
-\hline
-
-\caption{Exported Access Programs - exercises.tsx} \label{sec: exercisesExports}
-\end{longtable}
-
-\noindent \textit{[id].tsx}
-
-There are no exported access programs in this file. The file exports only the default React component \texttt{ExerciseDetail}, which is a presentation component rather than an access program.
-
-The file \textbf{consumes} the following access programs from \texttt{exerciseData.ts}:
-\begin{itemize}
-    \item \texttt{getExercise()} - Fetches exercise data by ID
-\end{itemize}
-
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \hypertarget{svex} \\
@@ -1411,94 +1213,10 @@ Not applicable
 $\cup$ $ex(u1.uid, ue.sets)$ $\cup$ $ex(u1.uid, ue.reps))$
 
 \subsubsection{Local Functions}
-\textit{\underline{exerciseData.ts}}\\
-There are no local routines/helper functions present in this file. \\
-\textit{\underline{exercises.tsx}}\\
-These functions are UI related. Note that they are included here for readability. They are also in section \ref{sec:ui}.\\
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
-
-% openExercise
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{openExercise(ex):} Navigates to the exercise detail page for the selected exercise.} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise object to view &
-\texttt{void} - Navigates to "/exercise/[id]" route using router.push() &
-\texttt{None} \\
-\hline
-
-% toggleSelection
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{toggleSelection(ex):} Toggles exercise selection for a patient (physiotherapist view only).} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise to toggle &
-\texttt{void} - Updates selectedIds state and calls onChecked() or onUnchecked() &
-\texttt{None} \\
-\hline
-
-% onChecked
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onChecked(ex):} Assigns an exercise to the selected patient.} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise to assign &
-\texttt{void} - Calls addUserExercise(selectedUser, ex) to save to database and logs selection &
-\texttt{None} \\
-\hline
-
-% onUnchecked
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onUnchecked(id):} Removes an exercise assignment from the selected patient.} \\
-\hline
-\rowcolor{white}
-\texttt{id: string} - The exercise title to remove &
-\texttt{void} - Calls removeUserExercise(selectedUser, id) to delete from database and logs deselection &
-\texttt{None} \\
-\hline
-
-% modifyInstructions
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{modifyInstructions(ex):} Opens modal to edit exercise instructions for a patient.} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise to modify &
-\texttt{Promise<void>} - Sets modalExercise state, fetches existing instructions via getSelectedExercises(), and opens modal with preloaded values &
-\texttt{None} \\
-\hline
-
-% updateInstructions
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{updateInstructions(ex, newDesc, newSets, newReps):} Saves modified exercise instructions to the database.} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise being modified, \texttt{newDesc: string} - New description, \texttt{newSets: string} - New sets value, \texttt{newReps: string} - New reps value &
-\texttt{void} - Calls updateUserExercise(selectedUser, ex.title, newDesc, newSets, newReps) and logs the update &
-\texttt{None} \\
-\hline
-
-\caption{Local Routines - exercises.tsx} \label{sec: exercisesLocalRoutines}
-\end{longtable}
+NA \\
 
 \subsubsection{Access Routine Semantics - Local}
-Not Applicable: they are UI related.
+NA: they are UI related.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1575,11 +1293,10 @@ save\_overall\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Analysis Control Flow}
-This module is responsible for transmitting frames for analysis and the reverse. 
+This module manages the video capture pipeline. It is responsible for validating appropriateness of the environment and 
+quality assurance before analysis. Frames are processed directly for transmission. 
 
 \subsubsection{Uses}
-\noindent \textbf{\textit{\underline{server.py}}}
-
 \noindent \textbf{\underline{\textit{server.py - Functions}}}\\
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{Flask}] 
@@ -2159,48 +1876,76 @@ NA\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Feedback}
-\begin{comment}
+This module's role is to generate real-time feedback based on form analysis on exercise that is currently being performed.
+It provides guidance based on form calculations and alerts the user on screen. 
 
-\subsubsection{Semantics}
+%FeedbackOverlay.ts
 
-\noindent \textbf{State Variables} \\
-TODO
+\subsubsection{Uses}
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Functions}}}
+\begin{description}
+\item[\texttt{getFeedback(metrics)}] 
+    Core feedback generation function. Evaluates calibration state, rep state, and normalized angle to return appropriate feedback message, icon, and color.
 
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-TODO
+\item[\texttt{getNormalizedAngle(metrics)}] 
+    Helper function that converts raw angle measurement to a normalized value between 0 and 1 based on the user's calibrated min and max range of motion.
 
-%Environment variables?
+\item[\texttt{useEffect}] 
+    React hook from "react". Used to trigger animation side effects when feedback type changes.
 
-\subsubsection{Assumptions}
-TODO
-\subsubsection{Access Routine Semantics}
-TODO
+\item[\texttt{useRef}] 
+    React hook from "react". Used to maintain a reference to the active animation loop.
 
-\subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
+\item[\texttt{Animated}] 
+    React Native API from "react-native". Used to create animation values for feedback banner pulsing.
 
-% construct_feedback
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Constructs feedback based on instructions from Analyze module} \\
-\hline
-\rowcolor{white}
-construct\_feedback & \makecell[lt]{\textit{feedback\_instructions}} & \makecell[lt]{\textit{feedback}} & \makecell[lt]{InsEmptyError} \\
-\hline
+\item[\texttt{StyleSheet}] 
+    React Native API from "react-native". Used to define visual styling constants for feedback components.
+\end{description}
 
-\end{tabular}
-\caption{Feedback Access Routines}
-\label{tab:feedback_routines}
-\end{table}
-\end{comment}
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Variables}}}
+\begin{description}
+\item[\texttt{pulseAnim}] 
+    Animated value used to control scaling animation timing for warning and error feedback states.
+
+\item[\texttt{loopRef}] 
+    Reference to the active animation loop, used to stop previous animations when feedback type changes.
+
+\item[\texttt{normalized}] 
+    Computed normalized angle value derived from metrics, used to determine feedback threshold comparisons.
+
+\item[\texttt{FLEXION\_THRESHOLD}] 
+    Constant value 0.7. Threshold for detecting when knee is sufficiently bent (normalized angle below 0.3 triggers flexion feedback).
+
+\item[\texttt{EXTENSION\_THRESHOLD}] 
+    Constant value 0.7. Threshold for detecting when knee is sufficiently extended (normalized angle above 0.7 triggers extension feedback).
+
+\item[\texttt{CAL\_DURATION\_S}] 
+    Constant value 10.0. Duration of calibration phase in seconds.
+\end{description}
+
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Types}}}
+\begin{description}
+\item[\texttt{Metrics}] 
+    Type definition representing exercise metrics structure containing angle, min\_degree, max\_degree, rom\_degree, rep\_count, rep\_state, calibrating, cal\_time\_left, current\_rep\_duration, avg\_rep\_duration.
+
+\item[\texttt{FeedbackInfo}] 
+    Type definition representing feedback output structure with fields: type ("error" | "warning" | "info" | "success"), icon (string), title (string), subtitle (string), color (string).
+
+\item[\texttt{FeedbackOverlayProps}] 
+    Type definition for component props containing optional metrics object.
+\end{description}
+
+\noindent \underline{\textbf{\textit{External Libraries}}}
+\begin{description}
+\item[\texttt{React}] 
+    Used for hooks (useEffect, useRef).
+
+\item[\texttt{react-native}] 
+    Used for Animated API and StyleSheet.
+\end{description}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Metrics}
 \begin{comment}
