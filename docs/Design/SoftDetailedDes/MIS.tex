@@ -27,6 +27,7 @@
 \usepackage{longtable}
 \usepackage{centernot}
 \usepackage{verbatim}
+\usepackage[edges]{forest}
 
 \hypersetup{
 bookmarks=true,     % show bookmarks bar?
@@ -87,7 +88,19 @@ urlcolor=cyan          % color of external links
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Nov 6 - Nov 14 & 1.0 & Preliminary Draft\\
-March 17 - ? & 2.0 & Starting final draft\\
+March 17 & 2.0 & Starting final draft\\
+March 17 - March 19 & 2.0 & Started Account Creation module\\
+March 30 - April 2 & 2.0 & Account Creation module work in progress\\
+April 3 & 2.0 & Valid User module started\\
+April 5 & 2.0 & User Account module complete\\
+April 5 & 2.0 & Exercise Data module in progress\\
+April 6 & 2.0 & Working on Analysis control flow module\\
+April 7 & 2.0 & Final touches + database schema added\\
+April 14 & 2.0 & User account, analyzer and feedback modules in progress\\
+
+
+
+
 \bottomrule
 \end{tabularx}
 \\
@@ -194,7 +207,7 @@ The following table is taken directly from the Module Guide document for this pr
 This section describes individual module specifications.\\
 
 \subsection{Module - Account Creation}
-This module enables the creation of an account for users. It uses a database to store any information that 
+This module enables the creation of a new account on the application. It uses a database to store any information that 
 is essential for other modules to perform their actions. A database was used for its ease of manipulation and its 
 comprehensive, multi-functional nature. 
 
@@ -207,43 +220,11 @@ comprehensive, multi-functional nature.
   \item Valid licenses (\texttt{validLicenses}): This is used for verification and validation purposes for a physiotherapist
   account creation.
 \end{enumerate}  
+
+
 \subsubsection{Uses}
-All the variables used in each class related to account creation are described below.\\
-\textbf{\textit{/technically-functional/mobile/app/(auth)/\underline{create-physio.tsx}, \\
-/technically-functional/mobile/app/(auth)/\underline{create-patient.tsx}}}\\
-\textit{Variables used in both of the above files are listed below.}
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const [name, setName] = useState("");}] 
-    Manages the full name input field; initializes as empty string.
 
-\item[\texttt{const [email, setEmail] = useState("");}] 
-    Manages the email address input field; initializes as empty string.
-
-\item[\texttt{const [password, setPassword] = useState("");}] 
-    Manages the password input field; initializes as empty string.
-
-\item[\texttt{const [loading, setLoading] = useState(false);}] 
-    Boolean flag that indicates form submission status. Set to \texttt{true} during API calls to disable inputs and show loading indicators.
-
-\item[\texttt{const [birthday, setBirthday] = useState("");}] 
-    Manages the birthday input field; initializes as empty string; valid format is YYYY-MM-DD.
-
-  \end{description}
-\textbf{Unique variable in \textit{\underline{create-patient.tsx}}:}
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const [inviteCode, setInviteCode] = useState("");}] 
-    Manages the invitation code input field; initializes as empty string; valid format is 6 capital alphanumeric characters.
-\end{description}
-\textbf{Unique variable in \textit{\underline{create-physio.tsx}}:}
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{const [licenseNumber, setLicenseNumber] = useState("");}] 
-    Manages the physiotherapist license number input field; initializes as empty string; Required for physiotherapist verification;
-    valid format is XX-123456.
-\end{description}
-
-\noindent \textbf{\textit{/technically-functional/mobile/lib/\underline{authService.ts}}} \\
-
-\noindent \{Imported Variables\}
+\noindent \underline{\textbf{\textit{authService.ts - Variables}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{auth}] 
     Firebase Authentication instance imported from "./firebase". Used for all authentication operations including email checking, sign-in, sign-out, and account creation.
@@ -252,13 +233,16 @@ All the variables used in each class related to account creation are described b
     Firestore database instance imported from "./firebase". Used for reading and writing user data, license validation, and invite code management.
 \end{description}
 
-\noindent \{Imported Types\}
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{None}] 
-    No external types are imported in this file. All type definitions are inferred or defined inline.
-\end{description}
+\noindent \underline{\textbf{\textit{profileActivity.ts - Variables}}}\\
+None
 
-\noindent \{Imported Functions\}
+\noindent \underline{\textbf{\textit{authService.ts - Types}}}\\
+None\\
+\noindent \underline{\textbf{\textit{profileActivity.ts - Types}}}\\
+None\\
+
+
+\noindent \underline{\textbf{\textit{authService.ts - Functions}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{createUserWithEmailAndPassword}] 
     Firebase Auth function from "firebase/auth". Used to create new user accounts in Firebase Authentication for both physiotherapist and patient registration.
@@ -279,34 +263,38 @@ All the variables used in each class related to account creation are described b
     Firestore function from "firebase/firestore". Used to set createdAt timestamps on new user documents.
 \end{description}
 
-%Account creation generates one object of the type described in \ref{section:user account}
+\noindent \underline{\textbf{\textit{profileActivity.ts - Functions}}}
+\begin{description}
+\item[\texttt{getPhysioInviteCode(physioID)}] 
+    Retrieves the invite code associated with a physiotherapist from the inviteCodes collection. Used during patient account creation to link new accounts to the correct physiotherapist.
+\end{description}
+
 \subsubsection{Syntax}
+
 \textbf{Exported Constants}\\
-\textbf{\textit{\underline{authService.ts}}} \label{sec:validexp}
+\noindent \textbf{\textit{\underline{authService.ts}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 
 \item[\texttt{export const registerPatient}] 
-    Async function constant that registers a new patient account. 
+    Async function constant that registers a new patient account. Validates invite code, checks email uniqueness, creates Firebase Auth user, and stores patient data in Firestore.
 
 \item[\texttt{export const registerPhysio}] 
-    Async function constant that registers a new physiotherapist account. 
+    Async function constant that registers a new physiotherapist account. Validates license number format and existence, checks email uniqueness, creates Firebase Auth user, and stores physio data in Firestore.
 
 \item[\texttt{export const checkEmailExists}] 
-    Async function constant that checks if an email address is already registered in the system.
-    
+    Async function constant that checks if an email address is already registered in the system by querying the Firestore users collection.
+
 \item[\texttt{export const licenseFormatValid}] 
-    Async function that validates the format of a physiotherapist license number.
+    Async function that validates the format of a physiotherapist license number against the pattern XX-123456.
+
 \end{description}
 
-\noindent \textbf{\textit{\underline{create-patient.tsx}, \underline{create-physio.tsx}}}\\
-See \ref{sec:ui} for UI export variables.\\
+\noindent \underline{\textbf{\textit{profileActivity.ts}}} \\
+None\\
+
 
 \noindent \textbf{Exported Access Programs} 
 
-\noindent \underline{\textbf{\textit{create-patient.tsx}}} \\
-See \ref{sec:ui} for UI export programs\\
-\noindent \underline{\textbf{\textit{create-physio.tsx}}} \\
-See \ref{sec:ui} for UI export programs\\
 \noindent \underline{\textbf{\textit{authService.ts}}} \\
 
 \begin{longtable}{
@@ -369,8 +357,11 @@ See \ref{sec:ui} for UI export programs\\
 \texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
 \texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
 \hline
-\caption{Exported functions} \label{sec: accountexpprogs}\\
+\caption{Account Creation Exported functions} \label{sec: accountexpprogs}\\
 \end{longtable}
+
+\noindent \underline{\textbf{\textit{profileActivity.ts}}} \\
+None\\
 
 
 \noindent \textbf{Exported Access Programs} \hypertarget{acexpprogs}\\
@@ -465,92 +456,8 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \textbf{Post-condition:}
   $p \in \texttt{db}$\\
 
-\newpage
-\subsubsection{Local Functions} 
-\noindent \underline{\textbf{\textit{create-patient.tsx}}}
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
+\subsubsection{Local Functions}
 
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
-
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePatient:} Physiotherapist registration screen component.} \\
-\hline
-\rowcolor{white}
-\texttt{props: none} &
-\texttt{JSX.Element} - Renders patient registration form with validation &
-\begin{tabular}{@{}l@{}}
-\texttt{Validations} \\ \texttt{performed:}\\
-• Password: min 6 \\ chars + at least one \\ number\\
-• Birthday:\\ YYYY-MM-DD format\\
-• Email: existence \\ check via \\ checkEmailExists()\\
-• Invite code \\ validation handled by \\ registerPatient()
-\end{tabular} \\
-\hline
-\caption{Account module: CreatePatient function}
-\end{longtable}
-\noindent \underline{\textbf{\textit{create-physio.tsx}}}
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
-
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{CreatePhysio:} Physiotherapist registration screen component.} \\
-\hline
-\rowcolor{white}
-\texttt{props: none} &
-\texttt{JSX.Element} - Renders physiotherapist registration form with validation &
-\begin{tabular}{@{}l@{}}
-\texttt{Validations} \\ \texttt{performed:}\\
-• Password: min 6 \\ chars + at least one \\ number\\
-• Birthday:\\ YYYY-MM-DD format\\
-• Email: existence \\ check via \\ checkEmailExists()\\
-• License number \\ validation handled by \\ registerPhysio()
-\end{tabular} \\
-\hline
-\caption{Account module: CreatePhysio function}
-\end{longtable}
-\pagebreak
-\noindent \underline{\textbf{\textit{Both files}}}
 \begin{longtable}{
 |>{\columncolor{softgray}}p{4.2cm}|
 >{\columncolor{white}}p{4.2cm}|
@@ -582,8 +489,8 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \texttt{params: \{password: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Password \\ must be at  least \\ 6 characters long" \\ if length $<$ 6\\
-• Returns "Password \\ must contain at \\ least one number" if \\ no numbers present\\
+• Returns "Password\\ must be at least \\6 characters long"\\ if length $<$ 6\\
+• Returns "Password\\ must contain at least\\ one number" if no\\ numbers present\\
 • Returns null if valid
 \end{tabular} \\
 \hline
@@ -594,14 +501,14 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \texttt{params: \{birthday: string\}} &
 \texttt{string | null} &
 \begin{tabular}{@{}l@{}}
-• Returns "Please enter \\ birthday in YYYY-MM\\-DD format" if format \\entered is invalid\\
+• Returns "Please enter \\birthday in YYYY\\-MM-DD format" if \\format entered is \\invalid\\
 • Returns null if valid
 \end{tabular} \\
 \hline
-\caption{Account module: CreatePatient and CreatePhysio common functions} \label{pwandbdayvalid}
-\end{longtable}
 
-\noindent \textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
+\caption{Account creation module: Local functions}
+\end{longtable}
+\noindent \textit{Note: CreatePatient and CreatePhysio are in the mobile/app/(auth) folder. CreatePatient and registerPatient have an important distinction although they seem similar. 
 CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
 making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
 
@@ -617,6 +524,8 @@ making a new patient account. CreatePhysio and registerPhysio have the same dist
 \texttt{bday}: user.birthday\\
 \textit{Pc(pw)}: 'passwordCheck(pw)'\\
 \textit{Vb(bday)}: 'validateBirthday(bday)' \\
+\texttt{null}: null value\\
+
 
 \noindent \underline{Function definitions}: \\
 $Pc(pw) \implies pw.length \geq 6 \cap \exists$ $d$ $|$ $d \in \{0 - 9\} \cap d \in pw$ \\
@@ -625,8 +534,14 @@ $Vb(bday) \implies bday \in Date $ \\
 \textit{Note: See \ref{sec:ui} for CreatePhysio and CreatePatient interface specifications.}
 
 \subsubsection{Access Routine Semantics - Local}
-%TODO
-
+\underline{\textit{Vb(bday)}}:\\
+\textbf{Pre-condition}: \texttt{bday} $\notin \emptyset$\\
+\textbf{Function}: Vb(bday)\\
+\textbf{Post-condition}: returns \texttt{null} if valid \\
+\underline{\textit{Pc(pw)}}:\\
+\textbf{Pre-condition}: pw $\notin \emptyset$\\
+\textbf{Function}: Pc(pw)\\
+\textbf{Post-condition}: returns \texttt{null} if valid \\ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Valid user}
 This module's purpose is to check whether a potential user is authorized to create an account.
@@ -634,6 +549,7 @@ For feasible implementation purposes, a file with hard coded invite codes and li
 The actions accomplishing the module's purpose are within the registerPhysio and registerPatient functions,
 which contain internal validation of inviteCode and licenseNumber.
 \subsubsection{Uses}
+\noindent \underline{\textbf{\textit{authService.ts}}} \\
 \begin{description}[style=nextline, leftmargin=4cm]
 
 \item[\texttt{params}] 
@@ -714,7 +630,7 @@ $ \exists p.uid \in \texttt{users} \implies p.licenseNumber \in \texttt{validLic
 See \hyperref[sec:acARS]{account creation semantics} for details of respective functions.
 
 \subsubsection{Local Routines}
-Portions that are pertinent to the module are elaborated on below. \\
+Portions that are pertinent to the module (from \underline{\textbf{\textit{authService.ts}}} \\) are elaborated on below. \\
 
 \noindent \textbf{registerPatient: Internal Validation Steps}\\
 The function performs the following sequential validations on the invite code:
@@ -757,7 +673,8 @@ Only after all validations pass does the function proceed to:
 \end{enumerate}
 
 \subsubsection{Access Routine Semantics - Local}
-%See \href
+NA\\
+See \href{sec:acARS}{Account creation access routine semantics}
 
 
 
@@ -818,10 +735,176 @@ Account creation generates a single instance of one of the following objects:\\
 \subsubsection{Syntax}
 
 \textbf{Exported Constants}\\
-Not Applicable\\
+None\\
 
 \noindent \textbf{Exported Access Programs}\\
-Not Applicable. This module consists of an interface.
+\noindent \underline{\textbf{\textit{useraccount.ts}}}
+
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% validateCredentials
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{validateCredentials(email, password):} Authenticates user with Firebase Auth.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string, password: string} &
+\texttt{Promise<boolean>} &
+\texttt{None - returns false on failure} \\
+\hline
+
+% getUserData
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getUserData(uid):} Retrieves user data from Firestore by UID.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} &
+\texttt{Promise<UserData | null>} &
+\texttt{UserAccountField} \texttt{EmptyError} \\
+\hline
+
+% getUserByEmail
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getUserByEmail(email):} Retrieves user data from Firestore by email.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string} &
+\texttt{Promise<UserData | null>} &
+\texttt{None} \\
+\hline
+
+% emailExists
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{emailExists(email):} Checks if an email is already registered.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string} &
+\texttt{Promise<boolean>} &
+\texttt{None} \\
+\hline
+
+% updateUser
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{updateUser(uid, updates):} Updates user data in Firestore.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string, updates: Partial<UserData>} &
+\texttt{Promise<boolean>} &
+\texttt{UserAccountNot} \texttt{FoundError} \\
+\hline
+
+% deleteUser
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{deleteUser(uid):} Soft-deletes a user by setting deleted flag to true.} \\
+\hline
+\rowcolor{white}
+\texttt{uid: string} &
+\texttt{Promise<boolean>} &
+\texttt{None} \\
+\hline
+
+% deleteUserByEmail
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{deleteUserByEmail(email):} Soft-deletes a user by email address.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string} &
+\texttt{Promise<boolean>} &
+\texttt{UserAccountNot} \texttt{FoundError} \\
+\hline
+
+% getPatientsByPhysio
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getPatientsByPhysio(physioId):} Retrieves all active patients assigned to a physiotherapist.} \\
+\hline
+\rowcolor{white}
+\texttt{physioId: string} &
+\texttt{Promise<UserData[]>} &
+\texttt{None} \\
+\hline
+
+% getUsersByName
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getUsersByName(name):} Searches users by partial name match.} \\
+\hline
+\rowcolor{white}
+\texttt{name: string} &
+\texttt{Promise<UserData[]>} &
+\texttt{None} \\
+\hline
+
+% getAllUsers
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getAllUsers():} Retrieves all users from Firestore.} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{Promise<UserData[]>} &
+\texttt{None} \\
+\hline
+
+% getUserdbInfo
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{getUserdbInfo(name, birthday?):} Retrieves users by name and optional birthday, separated by role.} \\
+\hline
+\rowcolor{white}
+\texttt{name: string, birthday?: string} &
+\texttt{Promise<\{patients: UserData[], physios: UserData[]\}>} &
+\texttt{UserAccountNot} \texttt{FoundError} \\
+\hline
+
+% PTaccountDelete
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{PTaccountDelete(physioEmail, patientName, patientEmail):} Allows physiotherapist to soft-delete a linked patient account.} \\
+\hline
+\rowcolor{white}
+\texttt{physioEmail: string, patientName: string, patientEmail: string} &
+\texttt{Promise<void>} &
+\begin{tabular}{@{}l@{}}
+\texttt{UserAccountField}\\ \texttt{EmptyError} \\
+\texttt{UserAccountNot} \\ \texttt{FoundError} \\
+\end{tabular} \\
+\hline
+
+% usernamePwMatch
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{usernamePwMatch(email, password):} Verifies email and password combination.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string, password: string} &
+\texttt{Promise<boolean>} &
+\texttt{UserAccountLogin} \texttt{MatchError} \\
+\hline
+
+% authenticateUser
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{authenticateUser(email, password):} Authenticates user and returns user data if successful.} \\
+\hline
+\rowcolor{white}
+\texttt{email: string, password: string} &
+\texttt{Promise<UserData | null>} &
+\texttt{None} \\
+\hline
+
+% initializeSystem
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{initializeSystem():} Initializes the system (placeholder for future setup).} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{Promise<void>} &
+\texttt{None} \\
+\hline
+
+\caption{UserAccount module: Exported access programs}
+\end{longtable}
 
 \subsubsection{Semantics}
 \noindent \textbf{State Variables} \\
@@ -841,8 +924,13 @@ Not Applicable. This module consists of an interface.
 \texttt{users}: 'users' database table\\
 \texttt{u1}: user 1\\
 \texttt{u2}: user 2\\
+\texttt{uid}: uid\\
+\texttt{email}: email\\
 \texttt{Phy}: set of all users that have role = 'physio' \\
 \texttt{Pt}: set of all users that have role = 'patient' \\
+\textit{U}: set of all UserData objects\\
+\textit{E}: set of valid emails
+\texttt{updates}: part of UserData object 
 
 
 \noindent $\forall$ $u1, u2 \in users, u1 \neq u2 \implies u1.email \neq u2.email$ \\
@@ -866,7 +954,37 @@ Not applicable
 \end{itemize}
 
 \subsubsection{Access Routine Semantics - Exported}
-Not applicable
+\textit{Note: Auth functions access routine semantics are not outlined here.}\\
+\underline{\textit{getUserData(uid)}}\\
+\textbf{Pre-condition}: \texttt{uid} $\notin \emptyset$\\
+\textbf{Function}: getUserData(uid)\\
+\textbf{Post-condition}: returns UserData object | \texttt{uid} = user.uid\\
+
+\noindent \underline{\textit{getUserByEmail(email)}}\\
+\textbf{Pre-condition}: \texttt{email} $\notin \emptyset$\\
+\textbf{Function}: getUserByEmail(email)\\
+\textbf{Post-condition}: returns UserData object | \texttt{email} = user.email\\
+
+\noindent\underline{\textit{emailExists(email)}}\\
+\textbf{Pre-condition}: email is a valid email\\
+\textbf{Function}: emailExists(email)\\
+\textbf{Post-condition}: $True \implies email \in E$\\
+
+\noindent\underline{\textit{updateUser(uid, updates)}}\\
+\textbf{Pre-condition}: $user \in users | \exists user.uid = \texttt{uid}$\\
+\textbf{Function}: emailExists(email)\\
+\textbf{Post-condition}: $True \implies email \in E$\\
+
+\noindent\underline{\textit{deleteUser(uid)}}\\
+\textbf{Pre-condition}: $user \in users$ \\
+\textbf{Function}: deleteUser(uid)\\
+\textbf{Post-condition}: $users' = users - (user[uid])$\\
+
+\noindent\underline{\textit{deleteUserByEmail(email)}}\\
+\textbf{Pre-condition}: $user \in users$ \\
+\textbf{Function}: deleteUserByEmail(email)\\
+\textbf{Post-condition}: $users' = users - (user[uid])$\\
+
 
 \subsubsection{Local Functions}
 Not applicable. All helper functions are defined as private class functions. 
@@ -878,7 +996,7 @@ Not applicable
 \subsection{Module - Exercise Data}
 
 This module manages exercises that will be performed by the patient. It consists of a data layer (\textit{exerciseData.ts})
-and a UI layer (\textit{exercises.tsx, [id].tsx}). The data layer provides database operations using the \texttt{userExercises} table.
+and a UI layer (\textit{exercises.tsx}). The data layer provides database operations using the \texttt{userExercises} and \texttt{exercises} table.
 The UI layer fulfills the purpose of interfacing between the user and the module and is discussed in
 \ref{sec:ui}. This structure was chosen to enable:
 \begin{itemize}
@@ -889,7 +1007,7 @@ The UI layer fulfills the purpose of interfacing between the user and the module
 
 
 \subsubsection{Uses}
-\underline{\textbf{\textit{exerciseData.ts - Functions}}}
+\noindent \underline{\textbf{\textit{exerciseData.ts - Functions}}}
 \begin{description}
 \item[\texttt{collection}] 
     Firestore function from "firebase/firestore". Used to reference a database collection for exercise operations.
@@ -918,172 +1036,23 @@ The UI layer fulfills the purpose of interfacing between the user and the module
 \item[\texttt{updateDoc}] 
     Firestore function from "firebase/firestore". Used to update exercise fields (description, reps, sets, title) in an existing document.
 \end{description}
-\underline{\textbf{\textit{exerciseData.ts - Variables}}}
+
+\noindent \underline{\textbf{\textit{exerciseData.ts - Variables}}}
 \begin{description}
 \item[\texttt{db}] 
     Firestore database instance from "./firebase". Used as the database reference for all Firestore operations related to this file.
 \end{description}
-\underline{\textbf{\textit{exerciseData.ts - Types}}}
+
+\noindent \underline{\textbf{\textit{exerciseData.ts - Types}}}
 \begin{description}
-\item[\texttt{Exercise} (type)] 
+\item[\texttt{Exercise}] 
     Type definition defined locally within this file. Represents the exercise data structure with properties: id, title, subtitle, description, demoText, enabled, tags, sets, reps.
-\end{description}
-
-\noindent \underline{\textbf{\textit{exercises.tsx - Functions}}}
-\begin{description}
-\item[\texttt{useEffect}] 
-    React hook from "react". Used to perform side effects when user data, role, or selected user changes.
-
-\item[\texttt{useState}] 
-    React hook from "react". Used to manage local state for user data, exercises, modal visibility, and form values.
-
-\item[\texttt{getExercisesById}] 
-    Function from \textit{exerciseData.ts}. Used to fetch patient's assigned exercises for the patient view.
-
-\item[\texttt{getGeneralExercises}] 
-    Function from \textit{exerciseData.ts}. Used to fetch the master exercise library for physiotherapists.
-
-\item[\texttt{getSelectedExercises}] 
-    Function from \textit{exerciseData.ts}. Used to fetch currently assigned exercises for checkbox state and modal preloading.
-
-\item[\texttt{addUserExercise}] 
-    Function from \textit{exerciseData.ts}. Used to assign an exercise to a patient when a physiotherapist checks a checkbox.
-
-\item[\texttt{removeUserExercise}] 
-    Function from \textit{exerciseData.ts}. Used to remove an exercise assignment when a physiotherapist unchecks a checkbox.
-
-\item[\texttt{updateUserExercise}] 
-    Function from \textit{exerciseData.ts}. Used to save modified exercise instructions (description, sets, reps).
-
-\item[\texttt{getCurrentUser}] 
-    Function from "@/lib/temp". Used to fetch the currently authenticated user on component mount.
-
-\item[\texttt{getUserRole}] 
-    Function from "@/lib/roleStore". Used to determine if the current user is a patient or physiotherapist.
-
-\item[\texttt{getSelectedUserID}] 
-    Function from "@/lib/profileActivity". Used to get the patient ID selected by a physiotherapist.
-\end{description}
-
-\noindent \textbf{\underline{\textit{exercises.tsx - Variables}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{userData}] 
-    State variable storing current authenticated user. Initialized via getCurrentUser().
-
-\item[\texttt{userRole}] 
-    State variable storing user role. Initialized via getUserRole().
-
-\item[\texttt{selectedUser}] 
-    State variable storing selected patient ID for physio view. Initialized via getSelectedUserID().
-
-\item[\texttt{userExercises}] 
-    State variable storing patient's assigned exercises. Initialized via getExercisesById().
-
-\item[\texttt{selectedIds}] 
-    State variable storing titles of checked exercises. Initialized via getSelectedExercises().
-
-\item[\texttt{physioExercises}] 
-    State variable storing master exercise library. Initialized via getGeneralExercises().
-
-\item[\texttt{roleReady}] 
-    Boolean state variable indicating role has been loaded.
-
-\item[\texttt{modalVisible}] 
-    Boolean state variable controlling modal visibility.
-
-\item[\texttt{modalText}] 
-    State variable storing custom description text in modal.
-
-\item[\texttt{modalSets}] 
-    State variable storing custom sets value in modal.
-
-\item[\texttt{modalReps}] 
-    State variable storing custom reps value in modal.
-
-\item[\texttt{modalExercise}] 
-    State variable storing exercise being modified in modal.
-\end{description} 
-\noindent \underline{\textbf{\textit{exercises.tsx - Types}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{Exercise}] 
-    Type from "../../lib/exerciseData". Used to type exercise objects, exercise lists, and modal exercise state.
-
-\item[\texttt{UserData}] 
-    Type from "@/lib/useraccount". Used to type the current user data state.
-
-\item[\texttt{UserRole}] 
-    Type from "@/lib/roleStore". Used to type the user role state ("patient" | "physio").
-\end{description}
-
-\noindent \textbf{\underline{\textit{[id].tsx - UI Functions (React Native \& Navigation)}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{useLocalSearchParams}] 
-    Expo Router hook from "expo-router". Used to extract the id parameter from the navigation route.
-
-\item[\texttt{useRouter}] 
-    Expo Router hook from "expo-router". Used for navigation (goBack and navigate to record screen).
-
-\item[\texttt{useVideoPlayer}] 
-    Expo Video hook from "expo-video". Used to create and configure the video player instance for exercise demonstration videos.
-
-\item[\texttt{VideoView}] 
-    Component from "expo-video". Used to render the video player UI for exercise demonstrations.
-
-\item[\texttt{View}] 
-    React Native component from "react-native". Used as a container for layout.
-
-\item[\texttt{Text}] 
-    React Native component from "react-native". Used to display exercise title, subtitle, description, sets, reps, and UI text.
-
-\item[\texttt{StyleSheet}] 
-    React Native function from "react-native". Used to create component styles.
-
-\item[\texttt{Pressable}] 
-    React Native component from "react-native". Used to create touchable buttons (Record, Back, Go Back).
-
-\item[\texttt{ScrollView}] 
-    React Native component from "react-native". Used to enable scrolling for exercise details content.
-
-\item[\texttt{require}] 
-    React Native asset loading function. Used to load the local demonstration video file from previously stored tutorial video.
-\end{description}
-
-\noindent \textbf{\underline{\textit{[id].tsx - React Hooks \& Data(Functions)}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{useEffect}] 
-    React hook from "react". Used to fetch exercise data when the component mounts or when the id parameter changes.
-
-\item[\texttt{useState}] 
-    React hook from "react". Used to manage the currentExercise state variable.
-
-\item[\texttt{getExercise}] 
-    Function from "../../lib/exerciseData". Used to fetch a single exercise document by its ID from the Firestore database. This is a data access function, not UI-related.
-\end{description}
-
-
-\noindent \textbf{\underline{\textit{[id.tsx] - Variables}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{id}] 
-    Route parameter extracted from useLocalSearchParams. Contains the exercise ID passed from navigation. Used to fetch the specific exercise from the database.
-
-\item[\texttt{videoSource}] 
-    Local variable that conditionally loads a video asset. Returns require() path only for "Seated Knee Flexion-Extension Exercise", otherwise returns null.
-
-\item[\texttt{player}] 
-    Video player instance created by useVideoPlayer. Used to control video playback (loop, play, pause) in the VideoView component.
-\end{description}
-
-\noindent \textbf{\underline{\textit{[id.tsx] - Imported Types}}}\\
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{Exercise}] 
-    Type definition imported from "../../lib/exerciseData". Represents the exercise data structure with properties: id, title, subtitle, description, demoText, enabled, tags, sets, reps. Used to type the currentExercise state.
 \end{description}
 
 \subsubsection{Syntax}
 
-\noindent \textbf{Exported Constants}
-
-No exported constants are present in any of the reviewed files (exerciseData.ts, exercises.tsx, [id].tsx.). \\
+\noindent \textbf{Exported Constants}\\
+None \\
 
 \noindent \textbf{Exported Access Programs}\\
 \textit{exerciseData.ts}
@@ -1174,56 +1143,7 @@ No exported constants are present in any of the reviewed files (exerciseData.ts,
 \texttt{Promise<void>} - Returns nothing on successful update &
 \texttt{Error} - Throws error if there is an issue updating the document in Firestore \\
 \hline
-
-\caption{Exported Access Programs - exerciseData.ts} \label{sec: exerciseDataExports}
 \end{longtable}
-\textit{exercises.tsx}
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
-
-% ExercisesTab
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{ExercisesTab():} Default exported React component that renders the exercises interface for both patients and physiotherapists.} \\
-\hline
-\rowcolor{white}
-\texttt{None} - Takes no props &
-\texttt{JSX.Element} - Returns a React component with role-based views (patient exercise list or physiotherapist exercise selection interface) &
-\texttt{None} - No exceptions thrown; returns null while role is loading \\
-\hline
-
-\caption{Exported Access Programs - exercises.tsx} \label{sec: exercisesExports}
-\end{longtable}
-
-\noindent \textit{[id].tsx}
-
-There are no exported access programs in this file. The file exports only the default React component \texttt{ExerciseDetail}, which is a presentation component rather than an access program.
-
-The file \textbf{consumes} the following access programs from \texttt{exerciseData.ts}:
-\begin{itemize}
-    \item \texttt{getExercise()} - Fetches exercise data by ID
-\end{itemize}
-
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \hypertarget{svex} \\
@@ -1322,94 +1242,10 @@ Not applicable
 $\cup$ $ex(u1.uid, ue.sets)$ $\cup$ $ex(u1.uid, ue.reps))$
 
 \subsubsection{Local Functions}
-\textit{\underline{exerciseData.ts}}\\
-There are no local routines/helper functions present in this file. \\
-\textit{\underline{exercises.tsx}}\\
-These functions are UI related. Note that they are included here for readability. They are also in section \ref{sec:ui}.\\
-\begin{longtable}{
-|>{\columncolor{softgray}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
->{\columncolor{white}}p{4.2cm}|
-}
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endfirsthead
-
-\hline
-\rowcolor{headerblue}
-\textcolor{white}{\textbf{Input}} & 
-\textcolor{white}{\textbf{Output}} & 
-\textcolor{white}{\textbf{Exceptions}} \\
-\hline
-\endhead
-
-\multicolumn{3}{c}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
-
-% openExercise
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{openExercise(ex):} Navigates to the exercise detail page for the selected exercise.} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise object to view &
-\texttt{void} - Navigates to "/exercise/[id]" route using router.push() &
-\texttt{None} \\
-\hline
-
-% toggleSelection
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{toggleSelection(ex):} Toggles exercise selection for a patient (physiotherapist view only).} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise to toggle &
-\texttt{void} - Updates selectedIds state and calls onChecked() or onUnchecked() &
-\texttt{None} \\
-\hline
-
-% onChecked
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onChecked(ex):} Assigns an exercise to the selected patient.} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise to assign &
-\texttt{void} - Calls addUserExercise(selectedUser, ex) to save to database and logs selection &
-\texttt{None} \\
-\hline
-
-% onUnchecked
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{onUnchecked(id):} Removes an exercise assignment from the selected patient.} \\
-\hline
-\rowcolor{white}
-\texttt{id: string} - The exercise title to remove &
-\texttt{void} - Calls removeUserExercise(selectedUser, id) to delete from database and logs deselection &
-\texttt{None} \\
-\hline
-
-% modifyInstructions
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{modifyInstructions(ex):} Opens modal to edit exercise instructions for a patient.} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise to modify &
-\texttt{Promise<void>} - Sets modalExercise state, fetches existing instructions via getSelectedExercises(), and opens modal with preloaded values &
-\texttt{None} \\
-\hline
-
-% updateInstructions
-\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{updateInstructions(ex, newDesc, newSets, newReps):} Saves modified exercise instructions to the database.} \\
-\hline
-\rowcolor{white}
-\texttt{ex: Exercise} - The exercise being modified, \texttt{newDesc: string} - New description, \texttt{newSets: string} - New sets value, \texttt{newReps: string} - New reps value &
-\texttt{void} - Calls updateUserExercise(selectedUser, ex.title, newDesc, newSets, newReps) and logs the update &
-\texttt{None} \\
-\hline
-
-\caption{Local Routines - exercises.tsx} \label{sec: exercisesLocalRoutines}
-\end{longtable}
+NA \\
 
 \subsubsection{Access Routine Semantics - Local}
-Not Applicable: they are UI related.
+NA: they are UI related.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1483,125 +1319,13 @@ save\_overall\_analysis & \makecell[lt]{\textit{user\_acc\_p}\\\textit{date}} & 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Profile Activity}
 
-This module displays past exercises, allows viewing of user profile, and directs to the Performance Statistics Generator module. PTs are able to comment on their patient's submissions.
-
-%\subsubsection{Uses}
-\begin{comment}
-\subsubsection{Syntax}
-\textbf{Exported Constants}\\
-\textit{NA} \\
-
-\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays user profile information} \\
-\hline
-\rowcolor{white}
-view\_profile & \makecell[lt]{\textit{Name}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays analysis report for user} \\
-\hline
-\rowcolor{white}
-display\_report & \makecell[lt]{\textit{Name}\\\textit{email}} & NA & \makecell[lt]{required\_field\_empty\\patient\_not\_found} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Displays summary information} \\
-\hline
-\rowcolor{white}
-display\_summary & \makecell[lt]{\textit{Email}\\\textit{Password}} & NA & \makecell[lt]{wrong\_email\_password} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Shows patient's past exercises} \\
-\hline
-\rowcolor{white}
-p\_past\_exercises & \makecell[lt]{\textit{Email}} & NA & \makecell[lt]{no\_activity} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Provides physical therapist feedback on patient} \\
-\hline
-\rowcolor{white}
-PT\_feedback\_on\_P & \makecell[lt]{\textit{PTcomment}} & \makecell[lt]{NA} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\end{tabularx}
-\caption{Home Exported Access Routines}
-\label{tab:home_routines}
-\end{table}
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-NA \\
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-\textit{NA}
-\subsubsection{Environment Variables}
-\textit{NA} 
-
-\subsubsection{Assumptions}
-%TODO 
-TBD
-\subsubsection{Access Routine Semantics}
-%TODO
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
-TBD
-
-
-\subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\rowcolors{2}{tableblue}{white}
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets profile from generator} \\
-\hline
-\rowcolor{white}
-get\_profile\_gen & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{Cannot\_access\_db} \\
-\hline
-
-\end{tabularx}
-\caption{Account Management Access Routines}
-\label{tab:account_routines}
-\end{table}
-\end{comment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Analysis Control Flow}
-This module is responsible for transmitting frames for analysis and the reverse. 
+This module manages the video capture pipeline. It is responsible for validating appropriateness of the environment and 
+quality assurance before analysis. Frames are processed directly for transmission. 
 
 \subsubsection{Uses}
-\noindent \textbf{\textit{\underline{server.py}}}
-
 \noindent \textbf{\underline{\textit{server.py - Functions}}}\\
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{Flask}] 
@@ -1732,7 +1456,7 @@ This module is responsible for transmitting frames for analysis and the reverse.
 \noindent \underline{\textit{poseService.ts}}\\
 There are no exported constants.\\
 \noindent \underline{\textit{server.py}}\\
-NA \\
+No relevant exported constants\\
 
 
 \noindent \textbf{Exported Access Programs}\\
@@ -1851,11 +1575,11 @@ NA \\
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-\textit{f}: set of video frames\\\
-\textit{c}: calibrating \\
+\textit{F}: set of video frames\\\
+\textit{C}: calibrating \\
 \textit{cal\_time\_left}: time left for calibration\\
-\textit{p}: frame responses set \\
-\textit{l}: set of landmark arrays\\
+\textit{P}: frame responses set \\
+\textit{L}: set of landmark arrays\\
 \textit{url}: set of backend urls \\
 \textit{$T_{process}$}: processFrame timeout value = 15000 ms\\
 \textit{$T_{pre_check}$}: precheckFrame timeout value = 10000 ms\\
@@ -1864,11 +1588,10 @@ NA \\
 
 \noindent \textbf{State Invariant} \\
 \noindent
-$\forall$ $b \in \text{Base64}: \text{b64\_to\_bgr\_image}(b) \in F \cup \{\emptyset\}$\\
+$\forall$ $b \in \text{Base64}: \text{b64\_to\_bgr\_image}(b) \in F$\\
 $\forall$ $\text{operations on pose\_app}: \text{lock must be acquired first}$\\
 $resetBackend() \implies analyzer = new Analyzer() \land c = true \cap cal\_time\_left = 10.0$
-$SERVER\_URL \in url$ $\cap$ $SERVER\_URL$ is immutable at runtime \\
-$\forall response \in P: \text{response.landmarks} \in L \cup \{\emptyset\} \cap response.connections \in C$\\
+$\forall response \in P: \text{response.landmarks} \in L | response.connections \in C$\\
 $true \implies T_{process} = 15000 \cap T_{precheck} = 10000 \cap T_{reset} = 15000$ \\
 $processFrame endpoint = SERVER\_URL + /process\_frame$\\
 $precheckFrame endpoint = SERVER\_URL + /precheck\_frame$\\
@@ -1960,224 +1683,332 @@ j.side \in s \cap j.mirrored \in \{true, false\} \cap cameraReady = true \cap po
 \cup cal\_time\_left(t_1) \leq 0$ \\
 
 
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
 
-
-%\subsubsection{Local Functions}
-
+\subsubsection{Local Functions}
+\subsubsection{Access Routine Semantics - Local}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Analyze}
 
-\begin{comment}
-
-%\subsubsection{Uses}
-
-%\subsubsection{Syntax}
-
-%\textbf{Exported Constants}
-
-%\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-% latest_metrics - gets metrics from metrics module
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} gets metrics from metrics module} \\
-\hline
-\rowcolor{white}
-latest\_metrics & \makecell[lt]{\textit{rt\_metrics}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{InsufficientDataError} \\
-\hline
-
-% send_analysis_to_feedback - sends overall analysis to feedback
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} sends overall analysis to Feedback module} \\
-\hline
-\rowcolor{white}
-send\_analysis\_to\newline\_feedback & \makecell[lt]{\textit{recent\_analysis}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{AnalysisNotFoundError} \\
-\hline
-
-% analysis_rt - real time analysis
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} performs real time analysis} \\
-\hline
-\rowcolor{white}
-analysis\_rt & \makecell[lt]{\textit{processed\_frames}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-% analysis_overall - overall analysis (given at end of recording)
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} overall analysis (given at end of recording)} \\
-\hline
-\rowcolor{white}
-analysis\_overall & \makecell[lt]{\textit{video}} & \makecell[lt]{recent\_analysis} & \makecell[lt]{ConnectionError\\InsufficientDataError} \\
-\hline
-
-% adjust_metrics - module will tell how to fix form (eg. if angle is too small)
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} module will correct form (eg. if angle is too small)} \\
-\hline
-\rowcolor{white}
-adjust\_metrics & \makecell[lt]{\textit{processed\_frame}} & \makecell[lt]{rt\_metrics} & \makecell[lt]{UndetectedFormError} \\
-\hline
-
-% send_analysis_to_db - send overall analysis for storage into
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} send overall analysis to Database module} \\
-\hline
-\rowcolor{white}
-send\_analysis\_to\_db & \makecell[lt]{\textit{overall\_analysis}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\end{tabular}
-\caption{Access Routines for Analysis Module}
-\label{table:access_routines}
-\end{table}
-
-\subsubsection{Semantics}
-
-\noindent \textbf{State Variables} \\
-TBD
-
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-TBD
-
-\subsubsection{Environment variables} 
-\textit{NA}
-
-\subsubsection{Assumptions}
-
-\subsubsection{Access Routine Semantics}
-
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
-
-
-\subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
-
-% get_initial_landmarks
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Gets initial landmarks from the starting position} \\
-\hline
-\rowcolor{white}
-get\_initial\_landmarks & \makecell[lt]{\textit{NA}} & \makecell[lt]{UserAccount\_P\\OR\\UserAccount\_PT} & \makecell[lt]{User\_not\_found\\Download\_error} \\
-\hline
-
-\end{tabular}
-\caption{Access Routines for Analysis Module}
-\label{table:access_routines}
-\end{table}
-\end{comment}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Module - Feedback}
-\begin{comment}
-This module is responsible for delivering the feedback (e.g. to adjust form) to the Main module.
-
 \subsubsection{Uses}
+%Relevant files: analyze.py, server.py (backend)
+\noindent \textbf{\underline{\textit{analyze.py - Variables}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{min\_angle}] 
+    Stores the minimum knee angle observed during calibration of range of motion.
+
+\item[\texttt{max\_angle}] 
+    Stores the maximum knee angle observed during calibration of range of motion.
+
+\item[\texttt{rep\_count}] 
+    Tracks the number of completed repetitions.
+
+\item[\texttt{rep\_state}] 
+    Current phase of repetition ("Extension", "Flexion").
+
+\item[\texttt{cue\_state}] 
+    Current feedback cue state ("CALIBRATING", "GOOD\_EXTENSION", \\"GOOD\_FLEXION", "GETTING\_READY", "OUT\_OF\_FRAME").
+
+\item[\texttt{smoothed\_angle}] 
+    Exponentially smoothed angle value to reduce jitter.
+
+\item[\texttt{cycle\_min\_angle}] 
+    Minimum angle recorded within the current repetition cycle.
+
+\item[\texttt{cycle\_max\_angle}] 
+    Maximum angle recorded within the current repetition cycle.
+
+\item[\texttt{last\_rep\_time}] 
+    Timestamp of the last completed repetition.
+\end{description}
+
+\noindent \textbf{\underline{\textit{analyze.py - Types}}}\\
+None\\
+
+\noindent \textbf{\underline{\textit{analyze.py - Functions}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{\_smooth\_angle(angle)}] 
+    Applies smoothing to angle measurements/calculates acceptable angle values.
+
+\item[\texttt{\_calibrate\_with\_angle(angle)}] 
+    Updates min/max angle values during calibration window.
+
+\item[\texttt{\_rep\_update(angle)}] 
+    Core repetition detection logic using zone-based thresholds.
+
+\item[\texttt{start\_calibration(duration\_s)}] 
+    Begins calibration phase for specified duration in seconds.
+
+\item[\texttt{update(angle)}] 
+    Main entry point for processing each new angle measurement.
+
+\item[\texttt{calc\_rom()}] 
+    Returns range of motion as max\_angle minus min\_angle.
+
+\item[\texttt{summary()}] 
+    Returns dictionary containing all current analysis metrics.
+\end{description}
+
+\noindent \textbf{\underline{\textit{server.py - Variables}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{pose\_app}] 
+    Global singleton managing analyzer state and camera.
+
+\item[\texttt{analyzer}] 
+    Instance of Analyzer class accessed via pose\_app.analyzer.
+
+\item[\texttt{lock}] 
+    Ensures thread-safe access to analyzer during concurrent requests.
+\end{description}
+
+\noindent \textbf{\underline{\textit{server.py - Types}}}\\
+None\\
+
+\noindent \textbf{\underline{\textit{server.py - Functions}}}\\
+\begin{description}[style=nextline, leftmargin=2.5cm]
+\item[\texttt{Flask}] 
+    Creates the Flask web application instance and defines API routes.
+
+\item[\texttt{jsonify}] 
+    Converts Python dictionaries to JSON HTTP responses.
+
+\item[\texttt{request}] 
+    Accesses incoming request data including JSON body.
+
+\item[\texttt{b64\_to\_bgr\_image(b64\_str)}] 
+    Decodes base64 string to OpenCV BGR image format.
+
+\item[\texttt{process\_frame()}] 
+    Receives frame, calculates knee angle, updates analyzer, returns metrics.
+
+\item[\texttt{check\_side\_visibility(landmarks, side)}] 
+    Determines if specified knee and adjacent joints are visible in frame.
+
+\item[\texttt{Thread}] 
+    Enables concurrent request handling via Flask's threaded=True.
+\end{description}
 
 \subsubsection{Syntax}
 
-\textbf{Exported Constants}
+\textbf{Exported Constants} \\
+\noindent \textbf{\underline{\textit{analyze.py, server.py}}}\\
+None\\
 
-\noindent \textbf{Exported Access Programs}
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
+\noindent \textbf{Exported Access Programs}\\
+\noindent \underline{\textit{\textbf{analyze.py}}}\\
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
 \hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
 \hline
+\endfirsthead
 
-% ex_feedback_to_main - feedback to user given after analysis
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} feedback to user given after analysis} \\
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endhead
+
+\multicolumn{3}{c}{\textit{Continued on next page}} \\
+\endfoot
+\endlastfoot
+
+% start_calibration
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{start\_calibration(duration\_s):} Begins calibration phase to record min and max knee angles.} \\
 \hline
 \rowcolor{white}
-ex\_feedback\_to\_main & \makecell[lt]{\textit{feedback}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{FeedbackEmptyError} \\
+\texttt{duration\_s: float} &
+\texttt{None} &
+\texttt{None} \\
 \hline
 
-% given_feedback - instructions given by analysis to construct feedback that will be forwarded to Main
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} instructions given by analysis to construct feedback that will be forwarded to the Main module} \\
+% update
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{update(angle):} Main entry point for processing each new angle measurement. Updates smoothed angle, calibration state, and rep detection.} \\
 \hline
 \rowcolor{white}
-given\_instruct & \makecell[lt]{\textit{feedback\_instructions}} & \makecell[lt]{\textit{NA}} & \makecell[lt]{InsEmptyError} \\
+\texttt{angle: float} &
+\texttt{None} &
+\texttt{angle: float} \\
 \hline
 
-\end{tabular}
+% calc_rom
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{calc\_rom():} Calculates and returns the current range of motion.} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{None} &
+\texttt{float} - Range of motion in degrees \\
+\hline
+
+% summary
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{summary():} Returns a dictionary containing all current analysis metrics.} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{dict} - Contains min\_degree, max\_degree, rom\_degree, calibrating, cal\_time\_left, rep\_count, current\_rep\_duration, avg\_rep\_duration, rep\_state, cue\_state &
+\texttt{None} \\
+\hline
 \caption{Access Routines for Analysis Module}
-\label{table:access_routines}
-\end{table}
+\label{table:access_routines_analysis}
+\end{longtable}
+\noindent \underline{\textit{\textbf{server.py}}}\\
+None 
 
 \subsubsection{Semantics}
 
 \noindent \textbf{State Variables} \\
-TODO
+\textit{S}: set containing "Extension" and "Flexion"\\
+\texttt{ex\_state}: Exercise state\\
+\textit{C}: {"CALIBRATING", "GOOD\_EXTENSION", "GOOD\_FLEXION", "GETTING\_READY", "OUT\_OF\_FRAME"} \\
+\texttt{started}: (True, False) indicating whether exercise has started.\\
+\texttt{angle}: angle measurement of landmark vectors \\
+\texttt{min\_angle}: min\_angle\\
+\texttt{max\_angle}: max\_angle\\
+\texttt{is\_calibrating}: (True, False) indicating whether calibration is taking place.\\
+\texttt{cue}: exercise feedback string \\
+\textit{A}: set of Analyzer instances \\
 
-%Check requirements doc
-\noindent \textbf{State Invariant} \\
-TODO
 
-%Environment variables?
+
+\noindent \textbf{State Invariants} \\
+$\forall$ $angle \in \{angles\}, angle \in 0 \leq angle \leq 180$ \\
+$ (\texttt{started} = True \implies \texttt{is\_calibrating} = False \cup (\texttt{ex\_state} \in S$ $|$ $ex\_state = 
+"Flexion" \cup "Extension")) 
+\cup (\texttt{started} = False \implies (is\_calibrating = True))$\\
+$\forall \texttt{ex\_state} \in S, \texttt{cue} \in C, ex\_state = "Extension" \implies \texttt{cue} = "GOOD EXTENSION"
+\cup ex\_state = "Flexion" \implies \texttt{cue} = "GOOD FLEXION"$\\
+$\forall a \in A, |a| = 1$\\
+
+\subsubsection{Environment Variables}
+NA\\
 
 \subsubsection{Assumptions}
-TODO
-\subsubsection{Access Routine Semantics}
-TODO
+\begin{itemize}
+    \item Basic process threading rules apply when using an Analyzer instance. Only one process can function properly.
+\end{itemize}
+
+\subsubsection{Access Routine Semantics - Exported}
 
 \subsubsection{Local Functions}
-\begin{table}[h]
-\centering
-\setlength{\extrarowheight}{3pt}
-\setlength{\arrayrulewidth}{1.2pt}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\rowcolor{darkpurple}
-\color{white}\textbf{Access Routine Name} & \color{white}\textbf{Input} & \color{white}\textbf{Output} & \color{white}\textbf{Exceptions} \\
-\hline
 
-% construct_feedback
-\rowcolor{lavender}
-\multicolumn{4}{|p{\dimexpr\textwidth-2\tabcolsep}|}{\textbf{Description:} Constructs feedback based on instructions from Analyze module} \\
+\subsubsection{Access Routine Sematics - Local}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Module - Feedback}
+This module's role is to generate real-time feedback based on form analysis of the exercise that is currently being performed.
+It provides guidance based on form calculations and alerts the user on screen. 
+
+%FeedbackOverlay.ts
+
+\subsubsection{Uses}
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Variables}}}
+\begin{description}
+
+\item[\texttt{normalized}] 
+    Computed normalized angle value derived from metrics, used to determine feedback threshold comparisons.
+
+\item[\texttt{FLEXION\_THRESHOLD}] 
+    Constant value 0.7. Threshold for detecting when knee is sufficiently bent (normalized angle below 0.3 triggers flexion feedback).
+
+\item[\texttt{EXTENSION\_THRESHOLD}] 
+    Constant value 0.7. Threshold for detecting when knee is sufficiently extended (normalized angle above 0.7 triggers extension feedback).
+
+\item[\texttt{CAL\_DURATION\_S}] 
+    Constant value 10.0. Duration of calibration phase in seconds.
+\end{description}
+\noindent \underline{\textbf{\textit{analyze.py - Variables}}}
+\begin{description}
+\item[\texttt{cue\_state}] 
+    String variable indicating current feedback cue ("CALIBRATING", "GOOD\_EXTENSION", "GOOD\_FLEXION", "GETTING\_READY", "OUT\_OF\_FRAME"). Generates user-readable messages.
+
+\item[\texttt{rep\_state}] 
+    String variable indicating current repetition phase ("Extension", "Flexion", "Ready"). Used to determine appropriate guidance message.
+
+\item[\texttt{rep\_count}] 
+    Integer tracking number of completed repetitions. Displayed in feedback subtitle.
+
+\item[\texttt{calibrating}] 
+    Boolean indicating whether calibration phase is active. Determines feedback type.
+
+\item[\texttt{cal\_time\_left}] 
+    Float indicating seconds remaining in calibration. Displayed in calibration feedback.
+
+\item[\texttt{min\_angle}, \texttt{max\_angle}] 
+    Float values representing calibrated range of motion. Used to calculate normalized angle for threshold comparisons.
+\end{description}
+
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Types}}}
+\begin{description}
+\item[\texttt{Metrics}] 
+    Type definition representing exercise metrics structure containing angle, min\_degree, max\_degree, rom\_degree, rep\_count, rep\_state, calibrating, cal\_time\_left, current\_rep\_duration, avg\_rep\_duration.
+
+\item[\texttt{FeedbackInfo}] 
+    Type definition representing feedback output structure with fields: type ("error" | "warning" | "info" | "success"), icon (string), title (string), subtitle (string), color (string).
+\end{description}
+\noindent \underline{\textbf{\textit{analyze.py - Functions}}}
+\begin{description}
+\item[\texttt{summary()}] 
+    Returns dictionary containing all current metrics including cue\_state, rep\_state, rep\_count, calibrating, cal\_time\_left, min\_angle, max\_angle, rom\_degree.
+
+\item[\texttt{update(angle)}] 
+    Processes angle measurements and updates internal state including cue\_state.
+\end{description}
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Functions}}}
+\begin{description}
+\item[\texttt{getFeedback(metrics)}] 
+    Core feedback generation function. Evaluates calibration state, rep state, and normalized angle to return appropriate feedback message, icon, and color.
+
+\item[\texttt{getNormalizedAngle(metrics)}] 
+    Helper function that converts raw angle measurement to a normalized value between 0 and 1 based on the user's calibrated min and max range of motion.
+\end{description}
+
+\subsubsection{Syntax}
+\textbf{Exported Constants} \\
+None\\
+
+\noindent \textbf{Exported Access Programs}\\
+
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts}}}\\
+None\\
+\noindent \underline{\textbf{\textit{analyze.py}}}\\
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{summary():} Returns dictionary containing cue\_state, rep\_state, rep\_count, calibrating, cal\_time\_left, min\_angle, max\_angle, rom\_degree, current\_rep\_duration, avg\_rep\_duration.} \\
 \hline
 \rowcolor{white}
-construct\_feedback & \makecell[lt]{\textit{feedback\_instructions}} & \makecell[lt]{\textit{feedback}} & \makecell[lt]{InsEmptyError} \\
+\texttt{None} &
+\texttt{dict} &
+\texttt{None} \\
 \hline
+\end{longtable}
 
-\end{tabular}
-\caption{Feedback Access Routines}
-\label{tab:feedback_routines}
-\end{table}
-\end{comment}
+\subsubsection{Sematics}
+\textbf{State Variables}\\
+\subsubsection{Environment Variables}
+\subsubsection{Assumptions}
+\subsubsection{Access Routine Semantics - Exported}
+\subsubsection{Local Functions}
+\subsubsection{Access Routine Semantics - Local}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Metrics}
 \begin{comment}
@@ -2606,7 +2437,7 @@ good\_to\_record & String & A message informing user that the system is ready to
 \end{longtable}
 \end{comment}
 
-\section{Appendix A}
+\section*{Appendix A}
 \begin{longtable}{L R}
 \caption{Database Schema}\\
 \toprule
