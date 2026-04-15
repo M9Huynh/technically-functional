@@ -27,6 +27,7 @@
 \usepackage{longtable}
 \usepackage{centernot}
 \usepackage{verbatim}
+\usepackage[edges]{forest}
 
 \hypersetup{
 bookmarks=true,     % show bookmarks bar?
@@ -87,7 +88,19 @@ urlcolor=cyan          % color of external links
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Nov 6 - Nov 14 & 1.0 & Preliminary Draft\\
-March 17 - ? & 2.0 & Starting final draft\\
+March 17 & 2.0 & Starting final draft\\
+March 17 - March 19 & 2.0 & Started Account Creation module\\
+March 30 - April 2 & 2.0 & Account Creation module work in progress\\
+April 3 & 2.0 & Valid User module started\\
+April 5 & 2.0 & User Account module complete\\
+April 5 & 2.0 & Exercise Data module in progress\\
+April 6 & 2.0 & Working on Analysis control flow module\\
+April 7 & 2.0 & Final touches + database schema added\\
+April 14 & 2.0 & User account, analyzer and feedback modules in progress\\
+
+
+
+
 \bottomrule
 \end{tabularx}
 \\
@@ -194,7 +207,7 @@ The following table is taken directly from the Module Guide document for this pr
 This section describes individual module specifications.\\
 
 \subsection{Module - Account Creation}
-This module enables the creation of an account for users. It uses a database to store any information that 
+This module enables the creation of a new account on the application. It uses a database to store any information that 
 is essential for other modules to perform their actions. A database was used for its ease of manipulation and its 
 comprehensive, multi-functional nature. 
 
@@ -208,11 +221,10 @@ comprehensive, multi-functional nature.
   account creation.
 \end{enumerate}  
 
+
 \subsubsection{Uses}
 
-\noindent \textbf{\textit{/technically-functional/mobile/lib/\underline{authService.ts}}} \\
-
-\noindent \{Imported Variables\}
+\noindent \underline{\textbf{\textit{authService.ts - Variables}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{auth}] 
     Firebase Authentication instance imported from "./firebase". Used for all authentication operations including email checking, sign-in, sign-out, and account creation.
@@ -221,13 +233,16 @@ comprehensive, multi-functional nature.
     Firestore database instance imported from "./firebase". Used for reading and writing user data, license validation, and invite code management.
 \end{description}
 
-\noindent \{Imported Types\}
-\begin{description}[style=nextline, leftmargin=2.5cm]
-\item[\texttt{None}] 
-    No external types are imported in this file. All type definitions are inferred or defined inline.
-\end{description}
+\noindent \underline{\textbf{\textit{profileActivity.ts - Variables}}}\\
+None
 
-\noindent \{Imported Functions\}
+\noindent \underline{\textbf{\textit{authService.ts - Types}}}\\
+None\\
+\noindent \underline{\textbf{\textit{profileActivity.ts - Types}}}\\
+None\\
+
+
+\noindent \underline{\textbf{\textit{authService.ts - Functions}}}
 \begin{description}[style=nextline, leftmargin=2.5cm]
 \item[\texttt{createUserWithEmailAndPassword}] 
     Firebase Auth function from "firebase/auth". Used to create new user accounts in Firebase Authentication for both physiotherapist and patient registration.
@@ -246,6 +261,12 @@ comprehensive, multi-functional nature.
 
 \item[\texttt{serverTimestamp}] 
     Firestore function from "firebase/firestore". Used to set createdAt timestamps on new user documents.
+\end{description}
+
+\noindent \underline{\textbf{\textit{profileActivity.ts - Functions}}}
+\begin{description}
+\item[\texttt{getPhysioInviteCode(physioID)}] 
+    Retrieves the invite code associated with a physiotherapist from the inviteCodes collection. Used during patient account creation to link new accounts to the correct physiotherapist.
 \end{description}
 
 \subsubsection{Syntax}
@@ -267,6 +288,9 @@ comprehensive, multi-functional nature.
     Async function that validates the format of a physiotherapist license number against the pattern XX-123456.
 
 \end{description}
+
+\noindent \underline{\textbf{\textit{profileActivity.ts}}} \\
+None\\
 
 
 \noindent \textbf{Exported Access Programs} 
@@ -333,8 +357,11 @@ comprehensive, multi-functional nature.
 \texttt{Promise<\{uid: string, role: "patient"\}>} - Returns user ID and role, marks invite code as used &
 \texttt{Error} - Invalid invite code, inactive/used code, missing physio link, or Firebase Auth error \\
 \hline
-\caption{Exported functions} \label{sec: accountexpprogs}\\
+\caption{Account Creation Exported functions} \label{sec: accountexpprogs}\\
 \end{longtable}
+
+\noindent \underline{\textbf{\textit{profileActivity.ts}}} \\
+None\\
 
 
 \noindent \textbf{Exported Access Programs} \hypertarget{acexpprogs}\\
@@ -479,9 +506,9 @@ See \hyperlink{acexpprogs}{here} for state variables being used.
 \end{tabular} \\
 \hline
 
-\caption{Account module: Local validation functions}
+\caption{Account creation module: Local functions}
 \end{longtable}
-\noindent \textit{Note: CreatePatient and registerPatient have an important distinction although they seem similar. 
+\noindent \textit{Note: CreatePatient and CreatePhysio are in the mobile/app/(auth) folder. CreatePatient and registerPatient have an important distinction although they seem similar. 
 CreatePatient is the React component which manages the interface, while registerPatient handles the backend logic for
 making a new patient account. CreatePhysio and registerPhysio have the same distinction.} \\
 
@@ -522,6 +549,7 @@ For feasible implementation purposes, a file with hard coded invite codes and li
 The actions accomplishing the module's purpose are within the registerPhysio and registerPatient functions,
 which contain internal validation of inviteCode and licenseNumber.
 \subsubsection{Uses}
+\noindent \underline{\textbf{\textit{authService.ts}}} \\
 \begin{description}[style=nextline, leftmargin=4cm]
 
 \item[\texttt{params}] 
@@ -602,7 +630,7 @@ $ \exists p.uid \in \texttt{users} \implies p.licenseNumber \in \texttt{validLic
 See \hyperref[sec:acARS]{account creation semantics} for details of respective functions.
 
 \subsubsection{Local Routines}
-Portions that are pertinent to the module are elaborated on below. \\
+Portions that are pertinent to the module (from \underline{\textbf{\textit{authService.ts}}} \\) are elaborated on below. \\
 
 \noindent \textbf{registerPatient: Internal Validation Steps}\\
 The function performs the following sequential validations on the invite code:
@@ -645,7 +673,8 @@ Only after all validations pass does the function proceed to:
 \end{enumerate}
 
 \subsubsection{Access Routine Semantics - Local}
-NA \href{sec:acARS}{Account creation access routine semantics}
+NA\\
+See \href{sec:acARS}{Account creation access routine semantics}
 
 
 
@@ -1427,7 +1456,7 @@ quality assurance before analysis. Frames are processed directly for transmissio
 \noindent \underline{\textit{poseService.ts}}\\
 There are no exported constants.\\
 \noindent \underline{\textit{server.py}}\\
-NA \\
+No relevant exported constants\\
 
 
 \noindent \textbf{Exported Access Programs}\\
@@ -1562,8 +1591,7 @@ NA \\
 $\forall$ $b \in \text{Base64}: \text{b64\_to\_bgr\_image}(b) \in F$\\
 $\forall$ $\text{operations on pose\_app}: \text{lock must be acquired first}$\\
 $resetBackend() \implies analyzer = new Analyzer() \land c = true \cap cal\_time\_left = 10.0$
-$SERVER\_URL \in url$ $\cap$ $SERVER\_URL$ is immutable at runtime \\
-$\forall response \in P: \text{response.landmarks} \in l \cup \{\emptyset\} \cap response.connections \in C$\\
+$\forall response \in P: \text{response.landmarks} \in L | response.connections \in C$\\
 $true \implies T_{process} = 15000 \cap T_{precheck} = 10000 \cap T_{reset} = 15000$ \\
 $processFrame endpoint = SERVER\_URL + /process\_frame$\\
 $precheckFrame endpoint = SERVER\_URL + /precheck\_frame$\\
@@ -1655,16 +1683,9 @@ j.side \in s \cap j.mirrored \in \{true, false\} \cap cameraReady = true \cap po
 \cup cal\_time\_left(t_1) \leq 0$ \\
 
 
-%\noindent \wss{accessProg}():
-%\begin{itemize}
-%\item transition: \wss{if appropriate} 
-%\item output: \wss{if appropriate} 
-%\item exception: \wss{if appropriate} 
-%\end{itemize}
 
-
-%\subsubsection{Local Functions}
-
+\subsubsection{Local Functions}
+\subsubsection{Access Routine Semantics - Local}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Analyze}
@@ -1815,7 +1836,7 @@ None\\
 \rowcolor{white}
 \texttt{angle: float} &
 \texttt{None} &
-\texttt{None} \\
+\texttt{angle: float} \\
 \hline
 
 % calc_rom
@@ -1823,8 +1844,8 @@ None\\
 \hline
 \rowcolor{white}
 \texttt{None} &
-\texttt{float} - Range of motion in degrees &
-\texttt{None} \\
+\texttt{None} &
+\texttt{float} - Range of motion in degrees \\
 \hline
 
 % summary
@@ -1866,50 +1887,30 @@ $\forall \texttt{ex\_state} \in S, \texttt{cue} \in C, ex\_state = "Extension" \
 \cup ex\_state = "Flexion" \implies \texttt{cue} = "GOOD FLEXION"$\\
 $\forall a \in A, |a| = 1$\\
 
-\textbf{Environment Variables}\\
+\subsubsection{Environment Variables}
 NA\\
 
-\textbf{Assumptions}
+\subsubsection{Assumptions}
 \begin{itemize}
     \item Basic process threading rules apply when using an Analyzer instance. Only one process can function properly.
 \end{itemize}
 
+\subsubsection{Access Routine Semantics - Exported}
+
+\subsubsection{Local Functions}
+
+\subsubsection{Access Routine Sematics - Local}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Feedback}
-This module's role is to generate real-time feedback based on form analysis on exercise that is currently being performed.
+This module's role is to generate real-time feedback based on form analysis of the exercise that is currently being performed.
 It provides guidance based on form calculations and alerts the user on screen. 
 
 %FeedbackOverlay.ts
 
 \subsubsection{Uses}
-\noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Functions}}}
-\begin{description}
-\item[\texttt{getFeedback(metrics)}] 
-    Core feedback generation function. Evaluates calibration state, rep state, and normalized angle to return appropriate feedback message, icon, and color.
-
-\item[\texttt{getNormalizedAngle(metrics)}] 
-    Helper function that converts raw angle measurement to a normalized value between 0 and 1 based on the user's calibrated min and max range of motion.
-
-\item[\texttt{useEffect}] 
-    React hook from "react". Used to trigger animation side effects when feedback type changes.
-
-\item[\texttt{useRef}] 
-    React hook from "react". Used to maintain a reference to the active animation loop.
-
-\item[\texttt{Animated}] 
-    React Native API from "react-native". Used to create animation values for feedback banner pulsing.
-
-\item[\texttt{StyleSheet}] 
-    React Native API from "react-native". Used to define visual styling constants for feedback components.
-\end{description}
-
 \noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Variables}}}
 \begin{description}
-\item[\texttt{pulseAnim}] 
-    Animated value used to control scaling animation timing for warning and error feedback states.
-
-\item[\texttt{loopRef}] 
-    Reference to the active animation loop, used to stop previous animations when feedback type changes.
 
 \item[\texttt{normalized}] 
     Computed normalized angle value derived from metrics, used to determine feedback threshold comparisons.
@@ -1923,6 +1924,26 @@ It provides guidance based on form calculations and alerts the user on screen.
 \item[\texttt{CAL\_DURATION\_S}] 
     Constant value 10.0. Duration of calibration phase in seconds.
 \end{description}
+\noindent \underline{\textbf{\textit{analyze.py - Variables}}}
+\begin{description}
+\item[\texttt{cue\_state}] 
+    String variable indicating current feedback cue ("CALIBRATING", "GOOD\_EXTENSION", "GOOD\_FLEXION", "GETTING\_READY", "OUT\_OF\_FRAME"). Generates user-readable messages.
+
+\item[\texttt{rep\_state}] 
+    String variable indicating current repetition phase ("Extension", "Flexion", "Ready"). Used to determine appropriate guidance message.
+
+\item[\texttt{rep\_count}] 
+    Integer tracking number of completed repetitions. Displayed in feedback subtitle.
+
+\item[\texttt{calibrating}] 
+    Boolean indicating whether calibration phase is active. Determines feedback type.
+
+\item[\texttt{cal\_time\_left}] 
+    Float indicating seconds remaining in calibration. Displayed in calibration feedback.
+
+\item[\texttt{min\_angle}, \texttt{max\_angle}] 
+    Float values representing calibrated range of motion. Used to calculate normalized angle for threshold comparisons.
+\end{description}
 
 \noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Types}}}
 \begin{description}
@@ -1931,20 +1952,62 @@ It provides guidance based on form calculations and alerts the user on screen.
 
 \item[\texttt{FeedbackInfo}] 
     Type definition representing feedback output structure with fields: type ("error" | "warning" | "info" | "success"), icon (string), title (string), subtitle (string), color (string).
-
-\item[\texttt{FeedbackOverlayProps}] 
-    Type definition for component props containing optional metrics object.
 \end{description}
-
-\noindent \underline{\textbf{\textit{External Libraries}}}
+\noindent \underline{\textbf{\textit{analyze.py - Functions}}}
 \begin{description}
-\item[\texttt{React}] 
-    Used for hooks (useEffect, useRef).
+\item[\texttt{summary()}] 
+    Returns dictionary containing all current metrics including cue\_state, rep\_state, rep\_count, calibrating, cal\_time\_left, min\_angle, max\_angle, rom\_degree.
 
-\item[\texttt{react-native}] 
-    Used for Animated API and StyleSheet.
+\item[\texttt{update(angle)}] 
+    Processes angle measurements and updates internal state including cue\_state.
+\end{description}
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts - Functions}}}
+\begin{description}
+\item[\texttt{getFeedback(metrics)}] 
+    Core feedback generation function. Evaluates calibration state, rep state, and normalized angle to return appropriate feedback message, icon, and color.
+
+\item[\texttt{getNormalizedAngle(metrics)}] 
+    Helper function that converts raw angle measurement to a normalized value between 0 and 1 based on the user's calibrated min and max range of motion.
 \end{description}
 
+\subsubsection{Syntax}
+\textbf{Exported Constants} \\
+None\\
+
+\noindent \textbf{Exported Access Programs}\\
+
+\noindent \underline{\textbf{\textit{FeedbackOverlay.ts}}}\\
+None\\
+\noindent \underline{\textbf{\textit{analyze.py}}}\\
+\begin{longtable}{
+|>{\columncolor{softgray}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+>{\columncolor{white}}p{4.2cm}|
+}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Input}} & 
+\textcolor{white}{\textbf{Output}} & 
+\textcolor{white}{\textbf{Exceptions}} \\
+\hline
+\endfirsthead
+
+\multicolumn{3}{|>{\columncolor{lightblue}}p{13.5cm}|}{\textbf{summary():} Returns dictionary containing cue\_state, rep\_state, rep\_count, calibrating, cal\_time\_left, min\_angle, max\_angle, rom\_degree, current\_rep\_duration, avg\_rep\_duration.} \\
+\hline
+\rowcolor{white}
+\texttt{None} &
+\texttt{dict} &
+\texttt{None} \\
+\hline
+\end{longtable}
+
+\subsubsection{Sematics}
+\textbf{State Variables}\\
+\subsubsection{Environment Variables}
+\subsubsection{Assumptions}
+\subsubsection{Access Routine Semantics - Exported}
+\subsubsection{Local Functions}
+\subsubsection{Access Routine Semantics - Local}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Module - Metrics}
@@ -2374,7 +2437,7 @@ good\_to\_record & String & A message informing user that the system is ready to
 \end{longtable}
 \end{comment}
 
-\section{Appendix A}
+\section*{Appendix A}
 \begin{longtable}{L R}
 \caption{Database Schema}\\
 \toprule
